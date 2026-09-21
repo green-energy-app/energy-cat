@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat - Cute Box Edition</title>
+    <title>Energy Cat - Kawaii Edition</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
@@ -11,7 +11,10 @@
         * { font-family: 'Plus Jakarta Sans', sans-serif; }
 
         body {
-            background: linear-gradient(135deg, #FFF7ED 0%, #FEF3C7 40%, #FCE7F3 100%);
+            background: linear-gradient(135deg, #FFF5F5 0%, #FEF3C7 50%, #FCE7F3 100%);
+            background-image: radial-gradient(#F59E0B 0.75px, transparent 0.75px), radial-gradient(#F59E0B 0.75px, #FFF5F5 0.75px);
+            background-size: 30px 30px;
+            background-position: 0 0, 15px 15px;
             min-height: 100vh;
             user-select: none;
             overflow-x: hidden;
@@ -60,9 +63,9 @@
 
         .btn-cute {
             transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 4px 0 0 rgba(0,0,0,0.1);
+            box-shadow: 0 4px 0 0 rgba(180, 83, 9, 0.2);
         }
-        .btn-cute:active { transform: translateY(3px); box-shadow: 0 1px 0 0 rgba(0,0,0,0.1); }
+        .btn-cute:active { transform: translateY(3px); box-shadow: 0 1px 0 0 rgba(180, 83, 9, 0.2); }
 
         ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #FEF3C7; border-radius: 10px; }
@@ -123,7 +126,7 @@
                     </div>
                 </div>
 
-                <!-- Box Cat Stage Vector Graphic (Orange Tabby) -->
+                <!-- Box Cat Stage Vector Graphic (High Quality Kawaii Art) -->
                 <div id="catStage" class="relative bg-gradient-to-b from-amber-50 via-orange-50 to-pink-50 rounded-3xl p-3 flex flex-col items-center justify-center border-2 border-amber-200 shadow-inner h-[290px] cursor-pointer group" onclick="petCat(event)">
                     
                     <!-- Sleep Floating Zzz Effect -->
@@ -132,82 +135,95 @@
                     </div>
 
                     <div class="animate-breathe relative flex items-center justify-center mt-2">
-                        <svg width="220" height="210" viewBox="0 0 100 100" class="drop-shadow-xl transition-transform duration-300 group-hover:scale-105">
+                        <svg width="230" height="220" viewBox="0 0 100 100" class="drop-shadow-xl transition-transform duration-300 group-hover:scale-105">
+                            <defs>
+                                <radialGradient id="blushGlow" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="#FB7185" stop-opacity="0.6"/>
+                                    <stop offset="100%" stop-color="#FB7185" stop-opacity="0"/>
+                                </radialGradient>
+                                <linearGradient id="boxGrad" x1="0%" y1="0%" x2="0%" y2="100%">
+                                    <stop offset="0%" stop-color="#FCD34D"/>
+                                    <stop offset="100%" stop-color="#F59E0B"/>
+                                </linearGradient>
+                            </defs>
                             
                             <!-- Cat Tail Outside Box -->
-                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#D97706" stroke-width="7" fill="none" stroke-linecap="round" />
-                            <path d="M 75 42 L 79 46" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
-
+                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#E11D48" stroke-width="0" fill="none" />
+                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#5A3E2B" stroke-width="6" fill="none" stroke-linecap="round" />
+                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#F59E0B" stroke-width="3.5" fill="none" stroke-linecap="round" />
+                            
                             <!-- Cardboard Box Back Flaps -->
-                            <polygon points="12,48 50,38 88,48 50,56" fill="#D97706" />
-                            <polygon points="12,48 30,32 50,38" fill="#B45309" />
-                            <polygon points="88,48 70,32 50,38" fill="#B45309" />
+                            <polygon points="12,48 50,38 88,48 50,56" fill="#D97706" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
+                            <polygon points="12,48 30,32 50,38" fill="#B45309" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
+                            <polygon points="88,48 70,32 50,38" fill="#B45309" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
 
                             <!-- Cat Body & Head Sitting inside Box -->
                             <!-- Ears -->
                             <g class="animate-ear-left">
-                                <polygon points="22,34 28,6 48,24" fill="#F59E0B" />
-                                <polygon points="25,30 30,12 43,23" fill="#F472B6" opacity="0.65" />
-                                <polygon points="24,25 27,15 35,22" fill="#78350F" />
+                                <polygon points="20,34 27,4 48,24" fill="#F59E0B" stroke="#5A3E2B" stroke-width="2" stroke-linejoin="round" />
+                                <polygon points="24,28 29,10 43,23" fill="#F472B6" opacity="0.8" />
+                                <polygon points="22,23 25,12 33,20" fill="#78350F" />
                             </g>
                             <g class="animate-ear-right">
-                                <polygon points="78,34 72,6 52,24" fill="#F59E0B" />
-                                <polygon points="75,30 70,12 57,23" fill="#F472B6" opacity="0.65" />
-                                <polygon points="76,25 73,15 65,22" fill="#78350F" />
+                                <polygon points="80,34 73,4 52,24" fill="#F59E0B" stroke="#5A3E2B" stroke-width="2" stroke-linejoin="round" />
+                                <polygon points="76,28 71,10 57,23" fill="#F472B6" opacity="0.8" />
+                                <polygon points="78,23 75,12 67,20" fill="#78350F" />
                             </g>
 
                             <!-- Head Circle -->
-                            <circle cx="50" cy="40" r="30" fill="#F59E0B" />
-                            <ellipse cx="50" cy="45" rx="20" ry="16" fill="#FEF3C7" />
+                            <circle cx="50" cy="40" r="30" fill="#F59E0B" stroke="#5A3E2B" stroke-width="2" />
+                            <ellipse cx="50" cy="46" rx="20" ry="15" fill="#FEF3C7" />
 
                             <!-- Orange Tabby Stripes on Head -->
                             <path d="M 46 12 L 50 22 L 54 12" stroke="#78350F" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M 38 16 L 42 24" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
-                            <path d="M 62 16 L 58 24" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
+                            <path d="M 37 16 L 42 24" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
+                            <path d="M 63 16 L 58 24" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
 
-                            <!-- Cheeks Blush -->
-                            <ellipse cx="30" cy="44" rx="5" ry="3.5" fill="#F472B6" opacity="0.65" />
-                            <ellipse cx="70" cy="44" rx="5" ry="3.5" fill="#F472B6" opacity="0.65" />
+                            <!-- Soft Blush Cheeks -->
+                            <circle cx="28" cy="44" r="6" fill="url(#blushGlow)" />
+                            <circle cx="72" cy="44" r="6" fill="url(#blushGlow)" />
 
-                            <!-- AWAKE EYES (Big Cute Anime Eyes) -->
+                            <!-- AWAKE EYES (Kawaii Eyes) -->
                             <g id="catEyesAwake">
-                                <circle cx="35" cy="38" r="6" fill="#0F172A" />
-                                <circle cx="65" cy="38" r="6" fill="#0F172A" />
-                                <circle cx="33" cy="36" r="2.5" fill="#FFFFFF" />
-                                <circle cx="63" cy="36" r="2.5" fill="#FFFFFF" />
-                                <circle cx="36" cy="40" r="1" fill="#FFFFFF" />
-                                <circle cx="66" cy="40" r="1" fill="#FFFFFF" />
+                                <circle cx="34" cy="38" r="6.5" fill="#5A3E2B" />
+                                <circle cx="66" cy="38" r="6.5" fill="#5A3E2B" />
+                                <circle cx="32" cy="35.5" r="2.8" fill="#FFFFFF" />
+                                <circle cx="64" cy="35.5" r="2.8" fill="#FFFFFF" />
+                                <circle cx="35.5" cy="40" r="1.2" fill="#FFFFFF" />
+                                <circle cx="67.5" cy="40" r="1.2" fill="#FFFFFF" />
                             </g>
 
                             <!-- SLEEPING EYES (Closed Arcs) -->
                             <g id="catEyesSleep" class="hidden">
-                                <path d="M 30 39 Q 35 44 40 39" stroke="#0F172A" stroke-width="2.2" fill="none" stroke-linecap="round" />
-                                <path d="M 60 39 Q 65 44 70 39" stroke="#0F172A" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                                <path d="M 29 39 Q 34 45 39 39" stroke="#5A3E2B" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                                <path d="M 61 39 Q 66 45 71 39" stroke="#5A3E2B" stroke-width="2.5" fill="none" stroke-linecap="round" />
                             </g>
 
                             <!-- Whiskers -->
-                            <path d="M 18 38 L 27 40" stroke="#78350F" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 17 44 L 26 44" stroke="#78350F" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 82 38 L 73 40" stroke="#78350F" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 83 44 L 74 44" stroke="#78350F" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 16 38 L 26 40" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 15 44 L 25 44" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 84 38 L 74 40" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 85 44 L 75 44" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
 
-                            <!-- Nose & Mouth -->
-                            <polygon points="50,42 47,45 53,45" fill="#FB7185" />
-                            <path d="M 44 46 Q 50 52 56 46" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round" />
+                            <!-- Nose & Open Mouth -->
+                            <polygon points="50,42 47,45 53,45" fill="#FB7185" stroke="#5A3E2B" stroke-width="0.8" />
+                            <path d="M 44 46 Q 50 54 56 46 Z" fill="#FB7185" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
 
                             <!-- Gold Bell Collar -->
-                            <path d="M 36 56 Q 50 62 64 56" stroke="#EF4444" stroke-width="3" fill="none" stroke-linecap="round" />
-                            <circle cx="50" cy="60" r="4" fill="#FBBF24" stroke="#B45309" stroke-width="1" />
+                            <path d="M 36 56 Q 50 62 64 56" stroke="#EF4444" stroke-width="3.5" fill="none" stroke-linecap="round" />
+                            <circle cx="50" cy="60" r="4.5" fill="#FBBF24" stroke="#5A3E2B" stroke-width="1.2" />
+                            <circle cx="48.5" cy="58.5" r="1" fill="#FFFFFF" />
 
                             <!-- Front Paws Resting on Box Edge -->
-                            <ellipse cx="36" cy="58" rx="6" ry="4" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1" />
-                            <ellipse cx="64" cy="58" rx="6" ry="4" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1" />
+                            <ellipse cx="36" cy="58" rx="6.5" ry="4.5" fill="#FEF3C7" stroke="#5A3E2B" stroke-width="1.5" />
+                            <ellipse cx="64" cy="58" rx="6.5" ry="4.5" fill="#FEF3C7" stroke="#5A3E2B" stroke-width="1.5" />
 
                             <!-- Cardboard Box Front Body -->
-                            <polygon points="12,52 50,62 88,52 88,88 50,96 12,88" fill="#F59E0B" />
+                            <polygon points="12,52 50,62 88,52 88,88 50,96 12,88" fill="url(#boxGrad)" stroke="#5A3E2B" stroke-width="2" stroke-linejoin="round" />
                             <polygon points="12,52 50,62 50,96 12,88" fill="#D97706" opacity="0.25" />
-                            <!-- Box Tape Decor -->
-                            <polygon points="44,61 56,64 56,95 44,93" fill="#FEF3C7" opacity="0.7" />
+                            <!-- Box Tape Decor & Heart Sticker -->
+                            <polygon points="44,61 56,64 56,95 44,93" fill="#FEF3C7" opacity="0.8" stroke="#5A3E2B" stroke-width="1" />
+                            <path d="M 28 72 C 28 69, 24 67, 22 70 C 20 67, 16 69, 16 72 C 16 76, 22 79, 22 79 C 22 79, 28 76, 28 72 Z" fill="#F472B6" stroke="#5A3E2B" stroke-width="1" />
                         </svg>
                     </div>
 
