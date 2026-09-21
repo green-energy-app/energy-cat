@@ -3,1034 +3,1178 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat Studio 🐾</title>
+    <title>Energy Cat - Kawaii Dress-Up & Weight Studio</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts: Quicksand -->
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@500;600;700;800&display=swap" rel="stylesheet">
-    
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mitr:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * {
-            font-family: 'Quicksand', sans-serif;
+        * { font-family: 'Fredoka', 'Mitr', sans-serif; }
+
+        body {
+            background: radial-gradient(circle at 50% 30%, #FFE5EC 0%, #FFC2D1 50%, #B5FFFC 100%);
+            min-height: 100vh;
             user-select: none;
-            -webkit-user-select: none;
+            overflow: hidden;
         }
 
-        /* Claymorphism Effects */
+        /* Claymorphism Styling */
         .clay-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(12px);
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 36px;
+            box-shadow: 
+                0 20px 40px -12px rgba(255, 182, 193, 0.5),
+                inset 0 4px 10px rgba(255, 255, 255, 1),
+                inset 0 -5px 10px rgba(255, 154, 162, 0.2);
+            border: 4px solid #FFFFFF;
+        }
+
+        .clay-inner {
+            background: linear-gradient(180deg, #FFFDF9 0%, #FFF5F7 100%);
             border-radius: 28px;
-            box-shadow: 12px 12px 24px rgba(210, 180, 220, 0.4),
-                        -12px -12px 24px rgba(255, 255, 255, 0.9),
-                        inset 2px 2px 4px rgba(255, 255, 255, 1),
-                        inset -2px -2px 4px rgba(180, 150, 200, 0.15);
-            border: 2px solid rgba(255, 255, 255, 0.6);
+            box-shadow: 
+                inset 0 5px 12px rgba(251, 113, 133, 0.12),
+                inset 0 -5px 10px rgba(255, 255, 255, 0.9);
+            border: 2.5px solid #FFE4E6;
         }
 
         .clay-btn {
-            border-radius: 20px;
-            box-shadow: 6px 6px 12px rgba(200, 160, 210, 0.4),
-                        -4px -4px 8px rgba(255, 255, 255, 0.9),
-                        inset 2px 2px 3px rgba(255, 255, 255, 0.8);
-            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            border-radius: 18px;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 5px 0 0 rgba(225, 29, 72, 0.25),
+                0 8px 12px -3px rgba(244, 63, 94, 0.3),
+                inset 0 2px 5px rgba(255, 255, 255, 0.9);
         }
-
+        .clay-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
         .clay-btn:active {
-            transform: scale(0.94);
-            box-shadow: inset 4px 4px 8px rgba(180, 140, 190, 0.4),
-                        inset -2px -2px 4px rgba(255, 255, 255, 0.8);
+            transform: translateY(3px);
+            box-shadow: 
+                0 2px 0 0 rgba(225, 29, 72, 0.25),
+                inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .clay-input {
-            background: rgba(245, 240, 250, 0.8);
-            box-shadow: inset 4px 4px 8px rgba(200, 170, 210, 0.3),
-                        inset -4px -4px 8px rgba(255, 255, 255, 0.9);
-            border-radius: 16px;
+        .glass-modal {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(10px);
         }
 
-        /* Floating Animation */
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            50% { transform: translateY(-10px) rotate(1deg); }
+        /* Animations */
+        @keyframes breathe {
+            0%, 100% { transform: translateY(0) scale(1, 1); }
+            50% { transform: translateY(-5px) scale(1.02, 0.98); }
         }
+        .animate-breathe { animation: breathe 3.5s ease-in-out infinite; }
 
-        .animate-float {
-            animation: float 4s ease-in-out infinite;
+        @keyframes tailWag {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(16deg); }
         }
+        .animate-tail { transform-origin: 155px 165px; animation: tailWag 2s ease-in-out infinite; }
 
-        /* Heart Floating Effects */
-        @keyframes heartFloat {
-            0% { opacity: 1; transform: translateY(0) scale(0.8); }
-            100% { opacity: 0; transform: translateY(-80px) scale(1.3); }
+        @keyframes catBlink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
         }
+        .eye-blink { transform-origin: center 82px; animation: catBlink 4s infinite; }
 
-        .floating-heart {
+        @keyframes floatHeart {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) translateY(0); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4) translateY(-60px); }
+        }
+        .heart-pop {
             position: absolute;
             pointer-events: none;
-            animation: heartFloat 1.2s ease-out forwards;
+            animation: floatHeart 0.9s ease-out forwards;
+            font-size: 26px;
+            z-index: 30;
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+        @keyframes zzzFloat {
+            0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
+            50% { opacity: 1; transform: translate(12px, -16px) scale(1.1); }
+            100% { opacity: 0; transform: translate(24px, -32px) scale(0.8); }
         }
-        ::-webkit-scrollbar-track {
-            background: rgba(240, 230, 250, 0.5);
-            border-radius: 10px;
+        .animate-zzz { animation: zzzFloat 2.4s infinite ease-in-out; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: popIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.97) translateY(4px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
         }
-        ::-webkit-scrollbar-thumb {
-            background: #f472b6;
-            border-radius: 10px;
-        }
+
+        ::-webkit-scrollbar { width: 5px; }
+        ::-webkit-scrollbar-track { background: #FFF1F2; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #FB7185; border-radius: 10px; }
     </style>
 </head>
-<body class="bg-gradient-to-br from-pink-100 via-purple-100 to-indigo-100 min-h-screen flex flex-col justify-between p-3 sm:p-6 overflow-x-hidden text-gray-700">
+<body class="flex justify-center items-center min-h-screen p-2 md:p-4">
 
-    <!-- Top Bar Navigation -->
-    <header class="max-w-4xl mx-auto w-full flex flex-wrap items-center justify-between gap-3 mb-4">
-        <div class="flex items-center gap-3">
-            <div class="w-12 h-12 clay-card flex items-center justify-center text-2xl text-pink-500 shadow-md">
-                🐾
-            </div>
-            <div>
-                <h1 class="text-2xl font-extrabold text-pink-600 tracking-wide">Energy Cat Studio</h1>
-                <p id="userStatusTag" class="text-xs text-purple-500 font-semibold">Not logged in</p>
-            </div>
-        </div>
-
-        <div class="flex items-center gap-2">
-            <button id="authModalBtn" onclick="openAuthModal()" class="clay-btn bg-pink-500 text-white font-bold px-4 py-2 text-sm hover:bg-pink-600 transition flex items-center gap-2">
-                <i class="fa-solid fa-user-gear"></i> <span id="authBtnText">Login / Register</span>
-            </button>
-        </div>
-    </header>
-
-    <!-- Main Content Grid -->
-    <main class="max-w-4xl mx-auto w-full grid grid-cols-1 md:grid-cols-12 gap-6 flex-grow">
-        
-        <!-- Left Side: Interactive Cat Scene -->
-        <section class="md:col-span-7 flex flex-col items-center justify-start gap-4">
-            
-            <!-- Cat Card Stage -->
-            <div class="clay-card w-full p-6 flex flex-col items-center relative overflow-hidden min-h-[380px] justify-center">
-                
-                <!-- Currency & Sleep Floating Status -->
-                <div class="w-full flex justify-between items-center mb-2 z-10">
-                    <div class="bg-amber-100 text-amber-800 font-bold px-4 py-1.5 rounded-full text-sm flex items-center gap-2 shadow-inner border border-amber-200">
-                        <span>🐟</span> <span id="fishCount">0</span> Fish
-                    </div>
-                    <button id="sleepToggleBtn" onclick="toggleSleepMode()" class="clay-btn bg-indigo-500 text-white font-bold px-3 py-1.5 text-xs flex items-center gap-1.5 hover:bg-indigo-600">
-                        <i class="fa-solid fa-moon"></i> <span id="sleepBtnText">Rest</span>
-                    </button>
-                </div>
-
-                <!-- Heart Container -->
-                <div id="heartContainer" class="absolute inset-0 pointer-events-none z-20"></div>
-
-                <!-- SVG Interactive Cat Asset -->
-                <div id="catStage" onclick="petCat(event)" class="relative cursor-pointer animate-float my-4 transition-transform active:scale-95">
-                    
-                    <!-- SVG Cat Graphics -->
-                    <svg id="catSvg" width="220" height="220" viewBox="0 0 200 200" class="drop-shadow-xl">
-                        <!-- Ears -->
-                        <path d="M 45 75 L 25 25 L 85 50 Z" fill="#FCA5A5" stroke="#F87171" stroke-width="4" stroke-linejoin="round"/>
-                        <path d="M 155 75 L 175 25 L 115 50 Z" fill="#FCA5A5" stroke="#F87171" stroke-width="4" stroke-linejoin="round"/>
-                        <path d="M 50 68 L 35 35 L 78 50 Z" fill="#FECDD3"/>
-                        <path d="M 150 68 L 165 35 L 122 50 Z" fill="#FECDD3"/>
-                        
-                        <!-- Cat Body -->
-                        <ellipse cx="100" cy="140" rx="65" ry="50" fill="#FFF1F2" stroke="#F87171" stroke-width="4"/>
-                        <!-- Cat Head -->
-                        <circle cx="100" cy="95" r="55" fill="#FFFFFF" stroke="#F87171" stroke-width="4"/>
-                        
-                        <!-- Cheeks Blush -->
-                        <circle cx="65" cy="110" r="10" fill="#FECDD3" opacity="0.8"/>
-                        <circle cx="135" cy="110" r="10" fill="#FECDD3" opacity="0.8"/>
-                        
-                        <!-- Nose & Mouth -->
-                        <polygon points="96,104 104,104 100,108" fill="#F43F5E"/>
-                        <path d="M 94 112 Q 100 117 100 112 Q 100 117 106 112" fill="none" stroke="#991B1B" stroke-width="3" stroke-linecap="round"/>
-
-                        <!-- EYES LAYER -->
-                        <!-- Normal Happy Eyes -->
-                        <g id="catEyesNormal" class="block">
-                            <circle cx="70" cy="92" r="7" fill="#1E293B"/>
-                            <circle cx="130" cy="92" r="7" fill="#1E293B"/>
-                            <circle cx="72" cy="89" r="2.5" fill="#FFFFFF"/>
-                            <circle cx="132" cy="89" r="2.5" fill="#FFFFFF"/>
-                        </g>
-
-                        <!-- Sleep / Tired Eyes (<20% energy or Sleeping Mode) -->
-                        <g id="catEyesSleep" class="hidden">
-                            <path d="M 62 93 Q 70 100 78 93" fill="none" stroke="#1E293B" stroke-width="4" stroke-linecap="round"/>
-                            <path d="M 122 93 Q 130 100 138 93" fill="none" stroke="#1E293B" stroke-width="4" stroke-linecap="round"/>
-                        </g>
-
-                        <!-- Paws -->
-                        <ellipse cx="70" cy="175" rx="14" ry="10" fill="#FFFFFF" stroke="#F87171" stroke-width="3"/>
-                        <ellipse cx="130" cy="175" rx="14" ry="10" fill="#FFFFFF" stroke="#F87171" stroke-width="3"/>
-                    </svg>
-
-                    <!-- Wardrobe Layer: Headwear SVG overlay -->
-                    <div id="headwearOverlay" class="absolute top-1 left-1/2 -translate-x-1/2 pointer-events-none text-4xl transform -translate-y-2"></div>
-                    
-                    <!-- Wardrobe Layer: Apron/Bib overlay -->
-                    <div id="apronOverlay" class="absolute bottom-6 left-1/2 -translate-x-1/2 pointer-events-none text-3xl"></div>
-                </div>
-
-                <p class="text-xs text-purple-400 font-bold mb-2">Tap cat to pet & restore energy! ✨</p>
-
-                <!-- Energy Gauge -->
-                <div class="w-full mt-2">
-                    <div class="flex justify-between items-center text-xs font-bold text-gray-600 mb-1">
-                        <span class="flex items-center gap-1"><i class="fa-solid fa-bolt text-amber-500"></i> Energy</span>
-                        <span id="energyText">100%</span>
-                    </div>
-                    <div class="w-full bg-gray-200 h-4 rounded-full overflow-hidden p-0.5 shadow-inner">
-                        <div id="energyBar" class="bg-gradient-to-r from-amber-400 to-pink-500 h-full rounded-full transition-all duration-300" style="width: 100%;"></div>
-                    </div>
-                </div>
-
-                <!-- Weight Info -->
-                <div class="mt-3 flex items-center gap-2 text-xs font-bold text-gray-500 bg-purple-50 px-3 py-1.5 rounded-xl border border-purple-100">
-                    <i class="fa-solid fa-weight-scale text-pink-400"></i> Cat Weight: <span id="catWeightText" class="text-pink-600 font-extrabold">3.50 kg</span>
-                </div>
-            </div>
-
-            <!-- Action Buttons Bar -->
-            <div class="grid grid-cols-2 gap-3 w-full">
-                <button onclick="feedCat()" class="clay-btn bg-pink-500 text-white font-bold py-3 px-4 flex items-center justify-center gap-2 text-sm hover:bg-pink-600">
-                    <i class="fa-solid fa-utensils"></i> Feed Treat (-10 🐟)
-                </button>
-                <button onclick="openEcoModal()" class="clay-btn bg-emerald-500 text-white font-bold py-3 px-4 flex items-center justify-center gap-2 text-sm hover:bg-emerald-600">
-                    <i class="fa-solid fa-leaf"></i> Eco Missions (+🐟)
-                </button>
-            </div>
-        </section>
-
-        <!-- Right Side: Leaderboard & Wardrobe Tabs -->
-        <section class="md:col-span-5 flex flex-col gap-4">
-            
-            <!-- Navigation Tabs -->
-            <div class="flex bg-white/60 p-1.5 rounded-2xl gap-2 border border-white/80 shadow-sm">
-                <button id="tabLeaderboardBtn" onclick="switchTab('leaderboard')" class="flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-white text-pink-600 shadow-sm">
-                    🏆 Leaderboard
-                </button>
-                <button id="tabWardrobeBtn" onclick="switchTab('wardrobe')" class="flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition text-gray-500 hover:text-gray-700">
-                    🎀 Wardrobe
-                </button>
-            </div>
-
-            <!-- TAB 1: LEADERBOARD -->
-            <div id="leaderboardTab" class="clay-card p-5 flex flex-col flex-grow min-h-[350px]">
-                <div class="flex justify-between items-center mb-3">
-                    <h3 class="font-extrabold text-gray-700 flex items-center gap-2 text-base">
-                        <i class="fa-solid fa-trophy text-amber-400"></i> Real Cat Rankings
-                    </h3>
-                    <span class="text-xs bg-pink-100 text-pink-700 font-bold px-2.5 py-1 rounded-full">
-                        Users: <span id="totalUsersCount">0</span>
-                    </span>
-                </div>
-                <p class="text-[11px] text-gray-400 mb-3">Ranked live by actual registered players and their cat's current weight.</p>
-
-                <!-- Users Leaderboard List -->
-                <div id="leaderboardList" class="flex flex-col gap-2 overflow-y-auto max-h-[320px] pr-1">
-                    <!-- Populated dynamically from localStorage registered users ONLY -->
-                </div>
-            </div>
-
-            <!-- TAB 2: WARDROBE (SHOP & DRESS UP) -->
-            <div id="wardrobeTab" class="clay-card p-5 hidden flex-col flex-grow min-h-[350px]">
-                <div class="flex justify-between items-center mb-2">
-                    <h3 class="font-extrabold text-gray-700 flex items-center gap-2 text-base">
-                        <i class="fa-solid fa-shirt text-purple-400"></i> Cat Wardrobe
-                    </h3>
-                    <button onclick="unequipAll()" class="text-xs bg-gray-200 hover:bg-gray-300 text-gray-700 font-bold px-2.5 py-1 rounded-lg">
-                        Unequip All
-                    </button>
-                </div>
-
-                <!-- Subtabs: Headwear vs Apron -->
-                <div class="flex gap-2 my-2 border-b border-gray-200 pb-2 text-xs font-bold">
-                    <button id="subtabHeadwearBtn" onclick="switchWardrobeCategory('headwear')" class="text-pink-600 underline">Headwear (10)</button>
-                    <button id="subtabApronBtn" onclick="switchWardrobeCategory('apron')" class="text-gray-400">Aprons/Bibs (10)</button>
-                </div>
-
-                <!-- Wardrobe Items Grid -->
-                <div id="wardrobeGrid" class="grid grid-cols-2 gap-2 overflow-y-auto max-h-[290px] pr-1 pt-1">
-                    <!-- Populated dynamically via JS -->
-                </div>
-            </div>
-
-        </section>
-
-    </main>
-
-    <!-- AUTHENTICATION / ACCOUNT MODAL -->
-    <div id="authModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="clay-card w-full max-w-md p-6 relative animate-float" style="animation-duration: 8s;">
-            <button onclick="closeAuthModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
-            
-            <h2 id="authModalTitle" class="text-xl font-extrabold text-pink-600 mb-1 text-center">Account Center</h2>
-            <p id="authModalSubtitle" class="text-xs text-gray-500 text-center mb-4">Register or login to participate in the real player leaderboard.</p>
-
-            <!-- AUTH FORMS CONTAINER -->
-            <div id="authFormsContainer">
-                
-                <!-- LOGIN FORM -->
-                <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-3">
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-1">Username</label>
-                        <input type="text" id="loginUsername" required class="w-full p-2.5 clay-input text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-400" placeholder="Enter username">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-1">Password</label>
-                        <input type="password" id="loginPassword" required class="w-full p-2.5 clay-input text-sm text-gray-700 focus:outline-none focus:ring-2 focus:ring-pink-400" placeholder="••••••••">
-                    </div>
-                    <button type="submit" class="w-full clay-btn bg-pink-500 text-white font-bold py-2.5 text-sm hover:bg-pink-600 mt-2">
-                        Login Account
-                    </button>
-                    
-                    <div class="flex justify-between text-xs text-purple-600 font-bold pt-2">
-                        <button type="button" onclick="showAuthView('register')" class="hover:underline">Create Real Account</button>
-                        <button type="button" onclick="showAuthView('forgot')" class="hover:underline">Forgot Password?</button>
-                    </div>
-                    <div class="border-t border-gray-200 pt-3 mt-2 text-center">
-                        <button type="button" onclick="showAuthView('sync')" class="text-xs font-bold text-indigo-600 hover:underline">
-                            🔑 Import Account Key
-                        </button>
-                    </div>
-                </form>
-
-                <!-- REGISTER FORM -->
-                <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-3 hidden">
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-1">Username</label>
-                        <input type="text" id="regUsername" required class="w-full p-2.5 clay-input text-sm text-gray-700 focus:outline-none" placeholder="Unique account name">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-1">Cat Name</label>
-                        <input type="text" id="regCatName" required class="w-full p-2.5 clay-input text-sm text-gray-700 focus:outline-none" placeholder="e.g. Buttercup">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-1">Password</label>
-                        <input type="password" id="regPassword" required class="w-full p-2.5 clay-input text-sm text-gray-700 focus:outline-none" placeholder="Password">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-1">Security Question (For Reset)</label>
-                        <input type="text" id="regSecQ" required class="w-full p-2.5 clay-input text-sm text-gray-700 focus:outline-none" placeholder="e.g. My favorite food?">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-1">Security Answer</label>
-                        <input type="text" id="regSecA" required class="w-full p-2.5 clay-input text-sm text-gray-700 focus:outline-none" placeholder="Answer">
-                    </div>
-                    <button type="submit" class="w-full clay-btn bg-emerald-500 text-white font-bold py-2.5 text-sm hover:bg-emerald-600 mt-2">
-                        Register Account
-                    </button>
-                    <div class="text-center pt-2">
-                        <button type="button" onclick="showAuthView('login')" class="text-xs font-bold text-gray-500 hover:underline">Already registered? Login</button>
-                    </div>
-                </form>
-
-                <!-- FORGOT PASSWORD FORM -->
-                <form id="forgotForm" onsubmit="handleForgot(event)" class="space-y-3 hidden">
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-1">Username</label>
-                        <input type="text" id="forgotUsername" required class="w-full p-2.5 clay-input text-sm text-gray-700 focus:outline-none" placeholder="Enter registered username">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-1">Security Answer</label>
-                        <input type="text" id="forgotAnswer" required class="w-full p-2.5 clay-input text-sm text-gray-700 focus:outline-none" placeholder="Your answer">
-                    </div>
-                    <div>
-                        <label class="text-xs font-bold text-gray-600 block mb-1">New Password</label>
-                        <input type="password" id="forgotNewPass" required class="w-full p-2.5 clay-input text-sm text-gray-700 focus:outline-none" placeholder="New Password">
-                    </div>
-                    <button type="submit" class="w-full clay-btn bg-purple-500 text-white font-bold py-2.5 text-sm hover:bg-purple-600 mt-2">
-                        Reset Password
-                    </button>
-                    <div class="text-center pt-2">
-                        <button type="button" onclick="showAuthView('login')" class="text-xs font-bold text-gray-500 hover:underline">Back to Login</button>
-                    </div>
-                </form>
-
-                <!-- SYNC IMPORT / EXPORT VIEW -->
-                <div id="syncView" class="space-y-3 hidden">
-                    <div class="bg-indigo-50 p-3 rounded-xl border border-indigo-100">
-                        <p class="text-xs text-indigo-700 font-semibold mb-2">Export Current Account Key:</p>
-                        <button onclick="exportAccountKey()" class="w-full clay-btn bg-indigo-500 text-white font-bold py-2 text-xs hover:bg-indigo-600">
-                            Copy Account Sync Key
-                        </button>
-                    </div>
-
-                    <div class="border-t border-gray-200 pt-2">
-                        <label class="text-xs font-bold text-gray-600 block mb-1">Import Account Key String</label>
-                        <textarea id="importKeyInput" rows="3" class="w-full p-2 clay-input text-xs text-gray-700 focus:outline-none" placeholder="Paste sync key code here..."></textarea>
-                        <button onclick="importAccountKey()" class="w-full clay-btn bg-pink-500 text-white font-bold py-2 text-xs hover:bg-pink-600 mt-2">
-                            Import Account Data
-                        </button>
-                    </div>
-                    <div class="text-center pt-2">
-                        <button type="button" onclick="showAuthView('login')" class="text-xs font-bold text-gray-500 hover:underline">Back to Login</button>
-                    </div>
-                </div>
-
-                <!-- LOGGED IN USER STATE -->
-                <div id="userLoggedInView" class="space-y-3 hidden">
-                    <div class="bg-pink-50 p-4 rounded-2xl border border-pink-100 text-center">
-                        <div class="text-3xl mb-1">🐱</div>
-                        <h4 id="profileCatName" class="font-extrabold text-pink-600 text-base">Cat Name</h4>
-                        <p class="text-xs text-gray-500">Account: <span id="profileUsername" class="font-bold text-gray-700">user</span></p>
-                    </div>
-
-                    <div class="bg-purple-50 p-3 rounded-xl text-xs space-y-1">
-                        <div class="flex justify-between"><span>Current Weight:</span><b id="profileWeight">3.5 kg</b></div>
-                        <div class="flex justify-between"><span>Fish Balance:</span><b id="profileFish">0 🐟</b></div>
-                    </div>
-
-                    <button onclick="exportAccountKey()" class="w-full clay-btn bg-indigo-500 text-white font-bold py-2 text-xs hover:bg-indigo-600">
-                        Export Account Key 🔑
-                    </button>
-
-                    <button onclick="handleLogout()" class="w-full clay-btn bg-gray-400 text-white font-bold py-2 text-xs hover:bg-gray-500">
-                        Logout
-                    </button>
-                </div>
-
-            </div>
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-6">
+        <div class="bg-slate-900/95 text-white px-5 py-2.5 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-2 font-bold text-xs tracking-wide">
+            <span id="toastIcon" class="text-lg">✨</span>
+            <span id="toastMessage">Notification</span>
         </div>
     </div>
 
-    <!-- ECO MISSION & PHOTO VERIFICATION MODAL -->
-    <div id="ecoModal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4">
-        <div class="clay-card w-full max-w-md p-6 relative">
-            <button onclick="closeEcoModal()" class="absolute top-4 right-4 text-gray-400 hover:text-gray-600 font-bold text-lg">✕</button>
-            
-            <h2 class="text-xl font-extrabold text-emerald-600 mb-1 flex items-center gap-2">
-                <i class="fa-solid fa-seedling"></i> Eco Energy Missions
-            </h2>
-            <p class="text-xs text-gray-500 mb-4">Upload a photo verification to earn fish and boost energy!</p>
+    <!-- AUTH MODAL (LOGIN / REGISTER / FORGOT PASSWORD / SYNC DEVICE) -->
+    <div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-pink-300">
+            <div class="text-center">
+                <span class="text-4xl inline-block animate-bounce">🐱</span>
+                <h2 class="text-lg font-black text-rose-600 mt-1">Energy Cat Studio</h2>
+                <p class="text-[11px] font-bold text-slate-500">Sign in to track weight & dress up your cat</p>
+            </div>
 
-            <form onsubmit="handleEcoSubmit(event)" class="space-y-3">
+            <!-- Tabs -->
+            <div class="flex bg-rose-100 p-1 rounded-2xl" id="authTabsContainer">
+                <button onclick="switchAuthTab('login')" id="authTabLogin" class="w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition">Login</button>
+                <button onclick="switchAuthTab('register')" id="authTabRegister" class="w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-2.5">
                 <div>
-                    <label class="text-xs font-bold text-gray-600 block mb-1">Select Eco Mission</label>
-                    <select id="ecoTaskSelect" class="w-full p-2.5 clay-input text-xs font-bold text-gray-700 focus:outline-none">
-                        <option value="1">🌱 Turn off unused lights (+15 🐟, +20% Energy)</option>
-                        <option value="2">🚲 Walk or cycle instead of driving (+25 🐟, +30% Energy)</option>
-                        <option value="3">🥤 Use reusable mug/tumbler (+10 🐟, +15% Energy)</option>
-                        <option value="4">♻️ Separate recyclable waste (+20 🐟, +25% Energy)</option>
+                    <label class="text-[11px] font-black text-slate-700">Username</label>
+                    <input type="text" id="loginUsername" required placeholder="Enter username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-1.5 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+                </div>
+                <div>
+                    <label class="text-[11px] font-black text-slate-700">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-1.5 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+                </div>
+                <div class="flex justify-between items-center text-[10px] font-bold">
+                    <button type="button" onclick="switchAuthTab('sync')" class="text-purple-600 hover:underline">📲 Sync Account</button>
+                    <button type="button" onclick="switchAuthTab('forgot')" class="text-rose-500 hover:underline">Forgot Password?</button>
+                </div>
+                <button type="submit" class="clay-btn w-full bg-rose-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Login 🐾</button>
+            </form>
+
+            <!-- Cross-Device Sync Form -->
+            <form id="syncForm" onsubmit="handleImportData(event)" class="space-y-2.5 hidden">
+                <div class="bg-purple-50 p-2 rounded-xl border border-purple-200 text-[10px] font-bold text-purple-900">
+                    Paste your Sync Key to import your account onto this device:
+                </div>
+                <div>
+                    <label class="text-[11px] font-black text-slate-700">Account Sync Key</label>
+                    <textarea id="syncDataInput" required rows="3" placeholder="Paste key code..." class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl p-2 text-[10px] font-mono mt-0.5 focus:outline-none focus:border-rose-400"></textarea>
+                </div>
+                <button type="submit" class="clay-btn w-full bg-purple-600 text-white font-black py-2 text-xs border-2 border-white">Import Account 📲</button>
+                <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-0.5">Back to Login</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-2 hidden">
+                <div>
+                    <label class="text-[11px] font-black text-slate-700">Username</label>
+                    <input type="text" id="regUsername" required placeholder="Create username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+                </div>
+                <div>
+                    <label class="text-[11px] font-black text-slate-700">Cat Name</label>
+                    <input type="text" id="regCatName" required placeholder="Name your cat" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+                </div>
+                <div>
+                    <label class="text-[11px] font-black text-slate-700">Password</label>
+                    <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+                </div>
+                <div>
+                    <label class="text-[11px] font-black text-slate-700">Security Question</label>
+                    <select id="regSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+                        <option value="" disabled selected>Select a question</option>
+                        <option value="pet">What was your first pet's name?</option>
+                        <option value="city">What city were you born in?</option>
+                        <option value="color">What is your favorite color?</option>
                     </select>
                 </div>
-
                 <div>
-                    <label class="text-xs font-bold text-gray-600 block mb-1">Photo Evidence Attachment</label>
-                    <input type="file" id="ecoPhotoInput" accept="image/*" required class="w-full text-xs text-gray-500 file:mr-3 file:py-2 file:px-4 file:rounded-xl file:border-0 file:text-xs file:font-bold file:bg-emerald-100 file:text-emerald-700 hover:file:bg-emerald-200">
+                    <label class="text-[11px] font-black text-slate-700">Security Answer</label>
+                    <input type="text" id="regSecurityAnswer" required placeholder="Your answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                 </div>
+                <button type="submit" class="clay-btn w-full bg-emerald-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Create Account ✨</button>
+            </form>
 
-                <div id="photoPreviewContainer" class="hidden my-2 text-center">
-                    <img id="photoPreview" class="max-h-32 mx-auto rounded-xl border-2 border-emerald-300 shadow-sm object-cover">
+            <!-- Forgot Password Form -->
+            <form id="forgotForm" onsubmit="handleForgotPassword(event)" class="space-y-2 hidden">
+                <div>
+                    <label class="text-[11px] font-black text-slate-700">Username</label>
+                    <input type="text" id="forgotUsername" required placeholder="Enter username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                 </div>
-
-                <button type="submit" class="w-full clay-btn bg-emerald-500 text-white font-bold py-2.5 text-sm hover:bg-emerald-600">
-                    Submit Verification & Collect
-                </button>
+                <div>
+                    <label class="text-[11px] font-black text-slate-700">Security Question</label>
+                    <select id="forgotSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+                        <option value="" disabled selected>Select registered question</option>
+                        <option value="pet">What was your first pet's name?</option>
+                        <option value="city">What city were you born in?</option>
+                        <option value="color">What is your favorite color?</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-[11px] font-black text-slate-700">Security Answer</label>
+                    <input type="text" id="forgotSecurityAnswer" required placeholder="Enter answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+                </div>
+                <div>
+                    <label class="text-[11px] font-black text-slate-700">New Password</label>
+                    <input type="password" id="forgotNewPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+                </div>
+                <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Reset Password 🔑</button>
+                <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-0.5">Back to Login</button>
             </form>
         </div>
     </div>
 
-    <!-- Notification Toast Container -->
-    <div id="toast" class="fixed bottom-4 right-4 z-50 transform translate-y-20 opacity-0 transition-all duration-300 clay-card bg-white px-4 py-3 text-xs font-bold text-gray-700 border-l-4 border-pink-500 flex items-center gap-2 shadow-lg">
-        <span id="toastMsg">Notification message</span>
-    </div>
-
-    <!-- Footer -->
-    <footer class="max-w-4xl mx-auto w-full text-center text-xs font-semibold text-purple-400 my-2">
-        Energy Cat Studio &copy; 2026 — Kawaii Eco Companion
-    </footer>
-
-    <script>
-        /* ==========================================================================
-           WARDROBE DATA (10 Headwear & 10 Aprons)
-           ========================================================================== */
-        const HEADWEAR_LIST = [
-            { id: 'h1', name: 'Golden Crown', icon: '👑', price: 30 },
-            { id: 'h2', name: 'Pink Ribbon', icon: '🎀', price: 10 },
-            { id: 'h3', name: 'Party Hat', icon: '🎉', price: 15 },
-            { id: 'h4', name: 'Flower Clip', icon: '🌸', price: 20 },
-            { id: 'h5', name: 'Chef Hat', icon: '👩‍🍳', price: 25 },
-            { id: 'h6', name: 'Wizard Hat', icon: '🧙‍♂️', price: 40 },
-            { id: 'h7', name: 'Frog Beanie', icon: '🐸', price: 35 },
-            { id: 'h8', name: 'Angel Halo', icon: '😇', price: 50 },
-            { id: 'h9', name: 'Cat Ears Headband', icon: '🐱', price: 15 },
-            { id: 'h10', name: 'Graduation Cap', icon: '🎓', price: 45 }
-        ];
-
-        const APRON_LIST = [
-            { id: 'a1', name: 'Strawberry Bib', icon: '🍓', price: 15 },
-            { id: 'a2', name: 'Cute Apron', icon: '🎽', price: 20 },
-            { id: 'a3', name: 'Red Bowtie', icon: '🎀', price: 10 },
-            { id: 'a4', name: 'Gold Medal', icon: '🏅', price: 30 },
-            { id: 'a5', name: 'Heart Necklace', icon: '💖', price: 25 },
-            { id: 'a6', name: 'Bell Collar', icon: '🔔', price: 15 },
-            { id: 'a7', name: 'Eco Leaf Badge', icon: '🍃', price: 12 },
-            { id: 'a8', name: 'Artist Palette', icon: '🎨', price: 35 },
-            { id: 'a9', name: 'Flower Garland', icon: '🌺', price: 25 },
-            { id: 'a10', name: 'Hero Cape', icon: '🦸‍♀️', price: 50 }
-        ];
-
-        /* ==========================================================================
-           GLOBAL APPLICATION STATE & LOCALSTORAGE MANAGEMENT
-           ========================================================================== */
-        let state = {
-            currentUser: null, // Logged in username or null
-            fish: 20,
-            energy: 100,
-            weight: 3.50,
-            isSleeping: false,
-            equippedHeadwear: null,
-            equippedApron: null,
-            inventory: [], // Array of item IDs
-            lastTimestamp: Date.now()
-        };
-
-        let currentWardrobeCategory = 'headwear';
-
-        // STORAGE KEYS
-        const USERS_STORAGE_KEY = 'energy_cat_registered_users';
-        const APP_STATE_KEY = 'energy_cat_app_state';
-
-        window.addEventListener('DOMContentLoaded', () => {
-            loadState();
-            checkOfflineEnergyLoss();
-            initNotificationPermission();
-            renderUI();
-            
-            // Background energy drain loop (every 3 seconds)
-            setInterval(() => {
-                if (!state.isSleeping && state.energy > 0) {
-                    updateEnergy(-1);
-                } else if (state.isSleeping && state.energy < 100) {
-                    updateEnergy(2); // Regenerate energy while resting
-                }
-            }, 3000);
-
-            // Setup Photo preview listener
-            document.getElementById('ecoPhotoInput').addEventListener('change', function(e) {
-                const file = e.target.files[0];
-                if (file) {
-                    const reader = new FileReader();
-                    reader.onload = function(evt) {
-                        document.getElementById('photoPreview').src = evt.target.result;
-                        document.getElementById('photoPreviewContainer').classList.remove('hidden');
-                    };
-                    reader.readAsDataURL(file);
-                }
-            });
-        });
-
-        /* ==========================================================================
-           OFFLINE ENERGY LOSS CALCULATOR
-           ========================================================================== */
-        function checkOfflineEnergyLoss() {
-            const now = Date.now();
-            const elapsedSeconds = Math.floor((now - state.lastTimestamp) / 1000);
-            
-            if (elapsedSeconds > 10) {
-                // Drain 1% energy per 30 seconds offline
-                const energyToDrain = Math.floor(elapsedSeconds / 30);
-                if (energyToDrain > 0) {
-                    updateEnergy(-energyToDrain);
-                    showToast(`Cat lost ${energyToDrain}% energy while you were away! 🐾`);
-                }
-            }
-            state.lastTimestamp = now;
-            saveState();
-        }
-
-        function updateEyeExpression() {
-            const eyesNormal = document.getElementById('catEyesNormal');
-            const eyesSleep = document.getElementById('catEyesSleep');
-
-            // Requirement: When resting OR energy < 20%, show sleeping eyes
-            if (state.isSleeping || state.energy < 20) {
-                eyesNormal.classList.add('hidden');
-                eyesNormal.classList.remove('block');
-                eyesSleep.classList.remove('hidden');
-                eyesSleep.classList.add('block');
-            } else {
-                eyesSleep.classList.add('hidden');
-                eyesSleep.classList.remove('block');
-                eyesNormal.classList.remove('hidden');
-                eyesNormal.classList.add('block');
-            }
-        }
-
-        function updateEnergy(delta) {
-            state.energy = Math.max(0, Math.min(100, state.energy + delta));
-            
-            // Browser notification if energy drops below 20%
-            if (state.energy < 20 && delta < 0) {
-                sendLowEnergyNotification();
-            }
-
-            renderEnergyBar();
-            updateEyeExpression();
-            saveState();
-        }
-
-        function renderEnergyBar() {
-            document.getElementById('energyText').innerText = `${state.energy}%`;
-            document.getElementById('energyBar').style.width = `${state.energy}%`;
-        }
-
-        /* ==========================================================================
-           REGISTERED USERS & LEADERBOARD SYSTEM (NO FAKE DATA)
-           ========================================================================== */
-        function getRegisteredUsers() {
-            const data = localStorage.getItem(USERS_STORAGE_KEY);
-            return data ? JSON.parse(data) : {};
-        }
-
-        function saveRegisteredUsers(users) {
-            localStorage.setItem(USERS_STORAGE_KEY, JSON.stringify(users));
-        }
-
-        function renderLeaderboard() {
-            const usersObj = getRegisteredUsers();
-            const userList = Object.values(usersObj);
-            const container = document.getElementById('leaderboardList');
-            document.getElementById('totalUsersCount').innerText = userList.length;
-
-            if (userList.length === 0) {
-                container.innerHTML = `
-                    <div class="text-center py-8 text-gray-400 text-xs">
-                        <i class="fa-solid fa-users-slash text-2xl mb-2"></i>
-                        <p>No registered players yet.</p>
-                        <p class="font-bold text-pink-500 mt-1 cursor-pointer hover:underline" onclick="openAuthModal()">Be the first to register!</p>
+    <!-- MAIN GAME CONTAINER (MOBILE COMPACT FIT) -->
+    <div class="clay-card w-full max-w-sm h-[720px] max-h-[100dvh] flex flex-col justify-between relative z-10 overflow-hidden p-3 border-4 border-white">
+        
+        <!-- Header Bar -->
+        <div class="bg-gradient-to-r from-rose-200 via-pink-200 to-amber-100 p-2.5 rounded-2xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-2">
+                <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-xl shadow-md border-2 border-pink-200">
+                    🐱
+                </div>
+                <div>
+                    <div class="flex items-center gap-1">
+                        <span id="displayUser" class="text-xs font-black text-slate-800">Agent</span>
+                        <button onclick="exportAccountKey()" class="text-[9px] font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-md hover:bg-purple-700">Key 🔑</button>
+                        <button onclick="logout()" class="text-[10px] font-black text-rose-600 hover:underline">(Logout)</button>
                     </div>
-                `;
-                return;
-            }
+                    <div class="text-[10px] font-black text-purple-700">
+                        Cat: <span id="displayCatName" class="text-rose-600">Mikan</span>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-1 bg-white px-3 py-1 rounded-xl border-2 border-rose-300 shadow-sm">
+                <span class="text-lg">🐟</span>
+                <span id="fishCount" class="text-xs font-black text-rose-600">100</span>
+            </div>
+        </div>
 
-            // Sort users by Cat Weight (Descending)
-            userList.sort((a, b) => (b.weight || 0) - (a.weight || 0));
+        <!-- MAIN CONTENT AREA -->
+        <div class="flex-grow overflow-y-auto py-2">
+            
+            <!-- PAGE 1: HOME (CAT CARE & WEIGHT GROWTH) -->
+            <div id="tab-home" class="tab-content active space-y-2">
+                
+                <!-- Weight & Level Banner -->
+                <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 border-2 border-purple-300 rounded-2xl p-2 shadow-sm">
+                    <div class="flex justify-between items-center mb-0.5">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-[10px] font-black bg-purple-600 text-white px-2 py-0.5 rounded-full shadow-sm" id="catLevelBadge">LVL 1</span>
+                            <span class="text-xs font-black text-purple-900" id="catWeightBadge">⚖️ 2.00 kg</span>
+                        </div>
+                        <span id="expText" class="text-[10px] font-black bg-white text-purple-700 px-2 py-0.5 rounded-full border border-purple-300">0/50 EXP</span>
+                    </div>
+                    <div class="w-full bg-purple-200 h-2.5 rounded-full overflow-hidden p-0.5 border border-purple-300">
+                        <div id="expBar" class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+                    </div>
+                </div>
 
-            container.innerHTML = userList.map((usr, idx) => {
-                const isCurrent = state.currentUser === usr.username;
-                const medal = idx === 0 ? '🥇' : idx === 1 ? '🥈' : idx === 2 ? '🥉' : `#${idx + 1}`;
-                return `
-                    <div class="flex items-center justify-between p-2.5 rounded-2xl ${isCurrent ? 'bg-pink-100/80 border-2 border-pink-400' : 'bg-white/70'} shadow-sm text-xs">
-                        <div class="flex items-center gap-2.5">
-                            <span class="font-extrabold w-6 text-center ${idx < 3 ? 'text-base' : 'text-gray-400'}">${medal}</span>
-                            <div>
-                                <p class="font-extrabold text-gray-800">${usr.catName || 'Unnamed Cat'} ${isCurrent ? '🌟' : ''}</p>
-                                <p class="text-[10px] text-gray-500">Player: @${usr.username}</p>
+                <!-- Energy Bar -->
+                <div class="bg-white border-2 border-rose-300 rounded-2xl p-2 shadow-sm">
+                    <div class="flex justify-between items-center mb-0.5">
+                        <span class="text-xs font-black text-rose-700 flex items-center gap-1">
+                            <span>⚡</span> Energy
+                        </span>
+                        <span id="energyText" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full border border-rose-300">100/100</span>
+                    </div>
+                    <div class="w-full bg-rose-100 h-2.5 rounded-full overflow-hidden p-0.5 border border-rose-200">
+                        <div id="energyBar" class="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <!-- Low Energy Warning Banner -->
+                <div id="sadWarningBanner" class="hidden bg-amber-100 border-2 border-amber-400 text-amber-900 px-2.5 py-1 rounded-xl text-[10px] font-black flex items-center gap-1.5">
+                    <span class="text-base">😿</span> Energy below 20%! Your cat is hungry and sad!
+                </div>
+
+                <!-- Kawaii Cat Stage Screen -->
+                <div id="catStage" class="relative clay-inner p-1 flex flex-col items-center justify-center border-2 border-pink-200 h-[240px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
+                    
+                    <div class="absolute top-2 left-3 text-lg opacity-70">☁️</div>
+                    <div class="absolute top-3 right-4 text-lg opacity-70">✨</div>
+
+                    <!-- Sleep FX -->
+                    <div id="sleepEffect" class="hidden absolute top-4 right-10 z-20 pointer-events-none">
+                        <span class="text-xl font-black text-indigo-500 animate-zzz inline-block">Zzz...</span>
+                    </div>
+
+                    <!-- CAT SVG WRAPPER -->
+                    <div id="catScaleWrapper" class="relative flex items-center justify-center transition-all duration-500 transform scale-95">
+                        <div class="animate-breathe relative flex items-center justify-center z-10 w-[200px] h-[200px]">
+                            
+                            <!-- ORIGINAL KAWAII CAT SVG -->
+                            <svg width="200" height="200" viewBox="0 0 200 200" class="drop-shadow-lg relative z-10">
+                                <defs>
+                                    <radialGradient id="catBody3D" cx="35%" cy="30%" r="70%">
+                                        <stop offset="0%" stop-color="#FFFFFF"/>
+                                        <stop offset="55%" stop-color="#FFEAD5"/>
+                                        <stop offset="100%" stop-color="#FDCEAB"/>
+                                    </radialGradient>
+                                    <radialGradient id="earInner" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#FFB6C1"/>
+                                        <stop offset="100%" stop-color="#FF69B4"/>
+                                    </radialGradient>
+                                </defs>
+
+                                <!-- Tail -->
+                                <g class="animate-tail">
+                                    <path d="M 140 145 C 175 140, 185 105, 170 85 C 158 70, 145 88, 152 105 C 158 118, 142 135, 132 138 Z" 
+                                          fill="#FCB584" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" />
+                                </g>
+
+                                <!-- Feet -->
+                                <ellipse cx="65" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
+                                <ellipse cx="135" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
+
+                                <!-- Body -->
+                                <path d="M 50 120 C 42 155, 45 172, 65 172 C 85 172, 115 172, 135 172 C 155 172, 158 155, 150 120 Z" 
+                                      fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
+                                <ellipse cx="100" cy="148" rx="28" ry="20" fill="#FFFFFF" opacity="0.9"/>
+
+                                <!-- Raised Paws -->
+                                <ellipse cx="72" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
+                                <ellipse cx="128" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
+
+                                <!-- Head -->
+                                <path d="M 35 80 C 22 55, 42 22, 68 32 C 85 22, 115 22, 132 32 C 158 22, 178 55, 165 80 C 175 110, 155 128, 100 128 C 45 128, 25 110, 35 80 Z" 
+                                      fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
+
+                                <!-- Inner Ears -->
+                                <path d="M 48 42 C 43 32, 58 28, 64 36 Z" fill="url(#earInner)"/>
+                                <path d="M 152 42 C 157 32, 142 28, 136 36 Z" fill="url(#earInner)"/>
+
+                                <!-- Calico Patch -->
+                                <path d="M 35 80 C 30 60, 45 35, 62 34 C 52 55, 55 70, 58 82 Z" fill="#FB923C"/>
+
+                                <!-- Whiskers -->
+                                <path d="M 22 82 L 42 85 M 18 92 L 40 92" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M 178 82 L 158 85 M 182 92 L 160 92" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
+
+                                <!-- AWAKE / HAPPY EYES -->
+                                <g id="catEyesAwake">
+                                    <g class="eye-blink">
+                                        <circle cx="72" cy="82" r="11" fill="#3B170B"/>
+                                        <circle cx="69" cy="78" r="4" fill="#FFFFFF"/>
+                                        <circle cx="128" cy="82" r="11" fill="#3B170B"/>
+                                        <circle cx="125" cy="78" r="4" fill="#FFFFFF"/>
+                                    </g>
+                                    <ellipse cx="58" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
+                                    <ellipse cx="142" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
+                                    <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
+                                    <path d="M 92 92 Q 100 100 100 92 Q 100 100 108 92" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                                </g>
+
+                                <!-- SAD / LOW ENERGY EYES (<20%) -->
+                                <g id="catEyesSad" class="hidden">
+                                    <path d="M 62 88 Q 72 78 82 88" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <path d="M 118 88 Q 128 78 138 88" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <path d="M 60 74 L 75 78" stroke="#5C2C16" stroke-width="3" stroke-linecap="round"/>
+                                    <path d="M 140 74 L 125 78" stroke="#5C2C16" stroke-width="3" stroke-linecap="round"/>
+                                    <path d="M 94 96 Q 100 90 106 96" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                                    <path d="M 142 86 C 146 92, 142 98, 140 98 C 138 98, 138 92, 142 86 Z" fill="#60A5FA"/>
+                                </g>
+
+                                <!-- SLEEPING EYES -->
+                                <g id="catEyesSleep" class="hidden">
+                                    <path d="M 62 84 Q 72 94 82 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <path d="M 118 84 Q 128 94 138 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
+                                    <path d="M 95 92 Q 100 96 105 92" stroke="#5C2C16" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                </g>
+                            </svg>
+
+                            <!-- OVERLAY CLOTHES (HEAD ACCESSORIES & BODY APRON) -->
+                            <div class="absolute inset-0 pointer-events-none z-20">
+                                <div id="slot-head" class="absolute inset-0"></div>
+                                <div id="slot-apron" class="absolute inset-0"></div>
                             </div>
                         </div>
-                        <div class="font-extrabold text-pink-600 bg-pink-50 px-2.5 py-1 rounded-xl">
-                            ${(usr.weight || 3.5).toFixed(2)} kg
+                    </div>
+
+                    <p id="catStatusLabel" class="text-[10px] font-black text-rose-600 bg-white px-3 py-0.5 rounded-full border border-rose-300 shadow-sm z-10">
+                        ✨ Tap Cat to Show Love 💕
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-2 pt-0.5">
+                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 to-orange-400 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md">
+                        <span class="text-base">🍱</span> Feed (-5🐟 / +0.15kg)
+                    </button>
+                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md">
+                        <span class="text-base">😴</span> Rest (+30⚡ / +0.05kg)
+                    </button>
+                </div>
+            </div>
+
+            <!-- PAGE 2: ECO MISSIONS -->
+            <div id="tab-missions" class="tab-content space-y-2.5">
+                <div class="bg-gradient-to-br from-emerald-100 to-teal-100 border-2 border-emerald-300 rounded-2xl p-3 shadow-sm">
+                    <div class="flex items-center gap-1.5 mb-1">
+                        <span class="text-xl">🌱</span>
+                        <p class="text-xs font-black text-emerald-950 uppercase">Eco Energy Missions (Attach Photo)</p>
+                    </div>
+                    <p class="text-[10px] font-extrabold text-emerald-800 mb-2.5">Complete eco tasks and upload photos to earn fish & energy!</p>
+
+                    <div class="space-y-1.5 text-xs font-black">
+                        <button onclick="openMissionUploadModal('Turn off unused lights & screens', 15, 20)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+                            <span>💡 Turn off lights/screens</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+15🐟 / +20⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Turn off AC before leaving room', 20, 30)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+                            <span>❄️ Turn off AC when leaving</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+20🐟 / +30⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Unplug idle electronics', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+                            <span>🔌 Unplug idle devices</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+10🐟 / +15⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Use stairs instead of elevator', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+                            <span>🚶 Take stairs over elevator</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+10🐟 / +15⚡</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 3: DRESS-UP STUDIO (HEAD ACCESSORIES & FRONT APRONS) -->
+            <div id="tab-dressup" class="tab-content space-y-2">
+                <div class="bg-white rounded-2xl p-2.5 border-2 border-pink-300 shadow-sm flex flex-col h-[400px]">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <div class="flex items-center gap-1">
+                            <span class="text-xl">🎀</span>
+                            <h3 class="font-black text-xs text-pink-900">Wardrobe Catalog</h3>
+                        </div>
+                        <button onclick="resetOutfit()" class="text-[9px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full border border-rose-300">
+                            🔄 Take off all
+                        </button>
+                    </div>
+
+                    <!-- Category Selector Tabs -->
+                    <div class="grid grid-cols-2 gap-1.5 mb-1.5">
+                        <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300">
+                            👑 Headwear (10)
+                        </button>
+                        <button onclick="switchDressCategory('apron')" id="cat-apron-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200">
+                            🎽 Front Aprons (10)
+                        </button>
+                    </div>
+
+                    <!-- Items Grid Scroll Area -->
+                    <div id="dressItemsGrid" class="flex-grow overflow-y-auto grid grid-cols-2 gap-1.5 p-0.5">
+                        <!-- Dynamic Item Cards -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 4: CAT WEIGHT LEADERBOARD (REAL PLAYERS & MONTHLY CHAMPION) -->
+            <div id="tab-ranks" class="tab-content space-y-2">
+                
+                <!-- Monthly Winner Banner & Reward Claim Form -->
+                <div class="bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400 rounded-2xl p-2.5 border-2 border-white shadow-md text-white">
+                    <div class="flex items-center gap-1.5 mb-1">
+                        <span class="text-2xl animate-bounce">👑</span>
+                        <div>
+                            <h4 class="text-xs font-black uppercase tracking-wider">Monthly Champion Rewards</h4>
+                            <p class="text-[9px] font-extrabold text-amber-100">Top player wins monthly cat care prizes!</p>
                         </div>
                     </div>
-                `;
-            }).join('');
-        }
 
-        /* ==========================================================================
-           WARDROBE SYSTEM
-           ========================================================================== */
-        function renderWardrobe() {
-            const grid = document.getElementById('wardrobeGrid');
-            const items = currentWardrobeCategory === 'headwear' ? HEADWEAR_LIST : APRON_LIST;
-
-            grid.innerHTML = items.map(item => {
-                const isBought = state.inventory.includes(item.id);
-                const isEquipped = state.equippedHeadwear === item.id || state.equippedApron === item.id;
-
-                return `
-                    <div class="bg-white/80 p-3 rounded-2xl flex flex-col items-center justify-between text-center border border-purple-100 shadow-sm">
-                        <div class="text-3xl mb-1">${item.icon}</div>
-                        <p class="font-bold text-xs text-gray-700">${item.name}</p>
-                        <p class="text-[10px] text-amber-600 font-extrabold mb-2">${isBought ? 'Owned' : `${item.price} 🐟`}</p>
-                        
-                        ${isEquipped ? `
-                            <button onclick="unequipItem('${item.id}')" class="w-full clay-btn bg-gray-200 text-gray-700 font-bold py-1 text-[11px]">Equipped</button>
-                        ` : isBought ? `
-                            <button onclick="equipItem('${item.id}', '${currentWardrobeCategory}')" class="w-full clay-btn bg-pink-500 text-white font-bold py-1 text-[11px] hover:bg-pink-600">Equip</button>
-                        ` : `
-                            <button onclick="buyItem('${item.id}', ${item.price})" class="w-full clay-btn bg-amber-500 text-white font-bold py-1 text-[11px] hover:bg-amber-600">Buy</button>
-                        `}
+                    <div id="monthlyWinnerInfo" class="bg-white/20 backdrop-blur-md p-1.5 rounded-xl text-[10px] font-bold text-slate-900 border border-white/30 mb-1">
+                        🏆 Current #1 Champion: <span id="monthlyChampionName" class="text-rose-900 font-black">No real players yet</span>
                     </div>
-                `;
-            }).join('');
-        }
 
-        function switchWardrobeCategory(cat) {
-            currentWardrobeCategory = cat;
-            document.getElementById('subtabHeadwearBtn').className = cat === 'headwear' ? 'text-pink-600 underline' : 'text-gray-400';
-            document.getElementById('subtabApronBtn').className = cat === 'apron' ? 'text-pink-600 underline' : 'text-gray-400';
-            renderWardrobe();
-        }
+                    <!-- Contact Form for Monthly Champion -->
+                    <div id="winnerContactFormBox" class="bg-white/95 p-2 rounded-xl text-slate-800 shadow-sm hidden">
+                        <p class="text-[10px] font-black text-amber-900 mb-1">🎉 You are in 1st Place! Enter contact info for prize:</p>
+                        <form onsubmit="handleSaveContactInfo(event)" class="space-y-1">
+                            <input type="text" id="championContactInput" required placeholder="Email / Phone / LINE ID" class="w-full bg-slate-50 border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold outline-none focus:border-amber-500">
+                            <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-1 text-[11px]">Submit Contact Info 📩</button>
+                        </form>
+                    </div>
+                </div>
 
-        function buyItem(itemId, price) {
-            if (state.fish < price) {
-                showToast("Not enough fish! Complete Eco missions 🐟");
-                return;
+                <!-- Leaderboard Table -->
+                <div class="bg-white rounded-2xl p-2.5 border-2 border-rose-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-black text-rose-900">📊 Registered Players Ranking</span>
+                        <span id="totalPlayersCount" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">0 Players</span>
+                    </div>
+                    <div class="overflow-y-auto max-h-[190px]">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[10px] uppercase">
+                                    <th class="p-1">Rank</th>
+                                    <th class="p-1">Player & Cat</th>
+                                    <th class="p-1 text-right">Weight ⚖️</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardRows"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- NAVIGATION BAR -->
+        <div class="bg-white p-1.5 rounded-2xl border-2 border-rose-200 grid grid-cols-4 gap-1 shrink-0 shadow-md">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-1.5 rounded-xl text-rose-600 bg-rose-100 font-black text-[10px]">
+                <span class="text-base">🏠</span> Home
+            </button>
+            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]">
+                <span class="text-base">🌱</span> Missions
+            </button>
+            <button onclick="switchTab('dressup')" id="nav-dressup" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]">
+                <span class="text-base">👗</span> Dress Up
+            </button>
+            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]">
+                <span class="text-base">🏆</span> Rank
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Hidden File Input for Mission Upload -->
+    <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
+
+    <!-- PHOTO PROOF MODAL -->
+    <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-4 w-full max-w-xs flex flex-col gap-2.5 shadow-2xl border-4 border-emerald-300">
+            <h3 class="font-black text-xs text-slate-800">📸 Upload Eco Proof Photo</h3>
+            <p id="modalMissionName" class="text-[11px] font-black text-emerald-800 bg-emerald-50 p-2 rounded-xl border border-emerald-200">Mission</p>
+            
+            <div onclick="triggerFileSelect()" class="w-full h-36 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
+                <img id="photoPreview" class="w-full h-full object-cover hidden" />
+                <div id="uploadPlaceholder" class="text-center p-2">
+                    <span class="text-2xl">📷</span>
+                    <p class="text-[11px] font-black text-emerald-700 mt-1">Click to choose image</p>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2 rounded-xl">Cancel</button>
+                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-2 rounded-xl border-2 border-white">Submit Photo</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- GAME ENGINE JAVASCRIPT -->
+    <script>
+        // Global LocalStorage Database Key
+        const DB_KEY = 'ENERGY_CAT_ACCOUNTS_V2';
+
+        // 10 HEAD ACCESSORIES & 10 FRONT BODY APRONS CATALOG
+        const dressItems = {
+            head: [
+                { id: 'h1', name: 'Red Bow', price: 10, icon: '🎀', html: '<span style="font-size: 36px; position: absolute; top: 12px; left: 45px; transform: rotate(-15deg);">🎀</span>' },
+                { id: 'h2', name: 'Golden Crown', price: 20, icon: '👑', html: '<span style="font-size: 32px; position: absolute; top: 6px; left: 70px;">👑</span>' },
+                { id: 'h3', name: 'Party Hat', price: 15, icon: '🎉', html: '<span style="font-size: 34px; position: absolute; top: 4px; left: 68px;">🎉</span>' },
+                { id: 'h4', name: 'Graduation Cap', price: 25, icon: '🎓', html: '<span style="font-size: 34px; position: absolute; top: 4px; left: 66px;">🎓</span>' },
+                { id: 'h5', name: 'Flower Crown', price: 15, icon: '🌸', html: '<span style="font-size: 32px; position: absolute; top: 12px; left: 66px;">🌸</span>' },
+                { id: 'h6', name: 'Bear Ears', price: 12, icon: '🐻', html: '<span style="font-size: 32px; position: absolute; top: 8px; left: 68px;">🐻</span>' },
+                { id: 'h7', name: 'Witch Hat', price: 18, icon: '🧙‍♀️', html: '<span style="font-size: 36px; position: absolute; top: 2px; left: 65px;">🧙‍♀️</span>' },
+                { id: 'h8', name: 'Chef Hat', price: 15, icon: '👨‍🍳', html: '<span style="font-size: 36px; position: absolute; top: 0px; left: 68px;">👨‍🍳</span>' },
+                { id: 'h9', name: 'Cowboy Hat', price: 18, icon: '🤠', html: '<span style="font-size: 34px; position: absolute; top: 6px; left: 66px;">🤠</span>' },
+                { id: 'h10', name: 'Santa Hat', price: 15, icon: '🎅', html: '<span style="font-size: 36px; position: absolute; top: 2px; left: 68px;">🎅</span>' }
+            ],
+            apron: [
+                { id: 'a1', name: 'Strawberry Apron', price: 15, icon: '🍓', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FF4D6D; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🍓</div>' },
+                { id: 'a2', name: 'Bee Bib', price: 15, icon: '🐝', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FFCA3A; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🐝</div>' },
+                { id: 'a3', name: 'Star Bib', price: 12, icon: '⭐', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FFD166; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">⭐</div>' },
+                { id: 'a4', name: 'Heart Apron', price: 15, icon: '💖', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FF8FA3; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">💖</div>' },
+                { id: 'a5', name: 'Fish Bib', price: 18, icon: '🐟', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #4EA8DE; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🐟</div>' },
+                { id: 'a6', name: 'Flower Apron', price: 15, icon: '🌻', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #8AC926; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🌻</div>' },
+                { id: 'a7', name: 'Clover Apron', price: 12, icon: '🍀', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #52B788; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🍀</div>' },
+                { id: 'a8', name: 'Ribbon Bib', price: 15, icon: '🎀', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #F72585; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🎀</div>' },
+                { id: 'a9', name: 'Paw Print Bib', price: 20, icon: '🐾', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #B5179E; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🐾</div>' },
+                { id: 'a10', name: 'Rainbow Apron', price: 22, icon: '🌈', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: linear-gradient(90deg, #ffadad,#ffd6a5,#fdffb6,#caffbf,#9bf6ff,#a0c4ff,#bdb2ff); border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🌈</div>' }
+            ]
+        };
+
+        // App State Variables
+        let currentUser = null;
+        let accounts = {};
+        let currentDressCategory = 'head';
+        let activeMission = null;
+
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            loadAccounts();
+            checkAutoLogin();
+            setupEnergyDecayLoop();
+        });
+
+        // Sync local storage across devices / sessions
+        window.addEventListener('storage', () => {
+            loadAccounts();
+            if (currentUser && accounts[currentUser]) {
+                updateUI();
+                renderDressUpGrid();
+                renderLeaderboard();
             }
-            state.fish -= price;
-            state.inventory.push(itemId);
-            saveState();
-            renderUI();
-            showToast("Item purchased! 🎉");
+        });
+
+        function loadAccounts() {
+            const raw = localStorage.getItem(DB_KEY);
+            accounts = raw ? JSON.parse(raw) : {};
         }
 
-        function equipItem(itemId, category) {
-            if (category === 'headwear') {
-                state.equippedHeadwear = itemId;
+        function saveAccounts() {
+            localStorage.setItem(DB_KEY, JSON.stringify(accounts));
+        }
+
+        function checkAutoLogin() {
+            const sessionUser = localStorage.getItem('ENERGY_CAT_ACTIVE_USER');
+            if (sessionUser && accounts[sessionUser]) {
+                currentUser = sessionUser;
+                document.getElementById('authModal').classList.add('hidden');
+                initUserSession();
             } else {
-                state.equippedApron = itemId;
+                document.getElementById('authModal').classList.remove('hidden');
             }
-            saveState();
-            renderUI();
         }
 
-        function unequipItem(itemId) {
-            if (state.equippedHeadwear === itemId) state.equippedHeadwear = null;
-            if (state.equippedApron === itemId) state.equippedApron = null;
-            saveState();
-            renderUI();
-        }
+        /* --- AUTHENTICATION & CROSS-DEVICE SYNC --- */
+        function switchAuthTab(tab) {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('forgotForm').classList.add('hidden');
+            document.getElementById('syncForm').classList.add('hidden');
 
-        function unequipAll() {
-            state.equippedHeadwear = null;
-            state.equippedApron = null;
-            saveState();
-            renderUI();
-            showToast("Unequipped all accessories!");
-        }
+            const tabContainer = document.getElementById('authTabsContainer');
+            const loginBtn = document.getElementById('authTabLogin');
+            const regBtn = document.getElementById('authTabRegister');
 
-        function updateWardrobeOverlays() {
-            const headwear = HEADWEAR_LIST.find(i => i.id === state.equippedHeadwear);
-            const apron = APRON_LIST.find(i => i.id === state.equippedApron);
-
-            document.getElementById('headwearOverlay').innerText = headwear ? headwear.icon : '';
-            document.getElementById('apronOverlay').innerText = apron ? apron.icon : '';
-        }
-
-        /* ==========================================================================
-           CAT INTERACTIONS
-           ========================================================================== */
-        function petCat(e) {
-            if (state.isSleeping) {
-                showToast("Shh... Cat is resting! 💤");
-                return;
-            }
-
-            // Restore energy
-            updateEnergy(2);
-
-            // Tap Heart Animation Effect
-            const heart = document.createElement('div');
-            heart.className = 'floating-heart text-2xl';
-            heart.innerText = '💖';
-            heart.style.left = `${e.clientX - 15}px`;
-            heart.style.top = `${e.clientY - 20}px`;
-            document.getElementById('heartContainer').appendChild(heart);
-
-            setTimeout(() => heart.remove(), 1200);
-        }
-
-        function feedCat() {
-            if (state.fish < 10) {
-                showToast("Need 10 fish to feed! Earn fish via Eco Missions.");
-                return;
-            }
-            state.fish -= 10;
-            state.weight += 0.05;
-            updateEnergy(15);
-            saveState();
-            renderUI();
-            showToast("Nom nom! Cat weight +0.05kg 🐟");
-        }
-
-        function toggleSleepMode() {
-            state.isSleeping = !state.isSleeping;
-            document.getElementById('sleepBtnText').innerText = state.isSleeping ? 'Wake Up' : 'Rest';
-            document.getElementById('sleepToggleBtn').className = state.isSleeping 
-                ? 'clay-btn bg-amber-500 text-white font-bold px-3 py-1.5 text-xs flex items-center gap-1.5 hover:bg-amber-600'
-                : 'clay-btn bg-indigo-500 text-white font-bold px-3 py-1.5 text-xs flex items-center gap-1.5 hover:bg-indigo-600';
-            
-            updateEyeExpression();
-            showToast(state.isSleeping ? "Cat is now resting... 💤" : "Cat woke up! ☀️");
-        }
-
-        /* ==========================================================================
-           ECO MISSION SYSTEM
-           ========================================================================== */
-        function openEcoModal() {
-            document.getElementById('ecoModal').classList.remove('hidden');
-        }
-
-        function closeEcoModal() {
-            document.getElementById('ecoModal').classList.add('hidden');
-            document.getElementById('photoPreviewContainer').classList.add('hidden');
-            document.getElementById('ecoPhotoInput').value = '';
-        }
-
-        function handleEcoSubmit(e) {
-            e.preventDefault();
-            const task = document.getElementById('ecoTaskSelect').value;
-            
-            let rewardFish = 15;
-            let rewardEnergy = 20;
-
-            if (task === '2') { rewardFish = 25; rewardEnergy = 30; }
-            if (task === '3') { rewardFish = 10; rewardEnergy = 15; }
-            if (task === '4') { rewardFish = 20; rewardEnergy = 25; }
-
-            state.fish += rewardFish;
-            updateEnergy(rewardEnergy);
-            
-            closeEcoModal();
-            renderUI();
-            showToast(`Eco Verification Verified! Earned +${rewardFish} 🐟 and +${rewardEnergy}% Energy! 🌿`);
-        }
-
-        /* ==========================================================================
-           AUTH SYSTEM & ACCOUNT SYNC
-           ========================================================================== */
-        function openAuthModal() {
-            document.getElementById('authModal').classList.remove('hidden');
-            showAuthView(state.currentUser ? 'profile' : 'login');
-        }
-
-        function closeAuthModal() {
-            document.getElementById('authModal').classList.add('hidden');
-        }
-
-        function showAuthView(view) {
-            const loginF = document.getElementById('loginForm');
-            const regF = document.getElementById('registerForm');
-            const forgotF = document.getElementById('forgotForm');
-            const syncV = document.getElementById('syncView');
-            const profileV = document.getElementById('userLoggedInView');
-
-            [loginF, regF, forgotF, syncV, profileV].forEach(el => el.classList.add('hidden'));
-
-            if (view === 'login') loginF.classList.remove('hidden');
-            if (view === 'register') regF.classList.remove('hidden');
-            if (view === 'forgot') forgotF.classList.remove('hidden');
-            if (view === 'sync') syncV.classList.remove('hidden');
-            if (view === 'profile') {
-                profileV.classList.remove('hidden');
-                const users = getRegisteredUsers();
-                const cur = users[state.currentUser] || {};
-                document.getElementById('profileUsername').innerText = state.currentUser;
-                document.getElementById('profileCatName').innerText = cur.catName || 'My Cat';
-                document.getElementById('profileWeight').innerText = `${state.weight.toFixed(2)} kg`;
-                document.getElementById('profileFish').innerText = `${state.fish} 🐟`;
+            if (tab === 'login') {
+                tabContainer.classList.remove('hidden');
+                loginBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
+                regBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition";
+                document.getElementById('loginForm').classList.remove('hidden');
+            } else if (tab === 'register') {
+                tabContainer.classList.remove('hidden');
+                regBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
+                loginBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition";
+                document.getElementById('registerForm').classList.remove('hidden');
+            } else if (tab === 'forgot') {
+                tabContainer.classList.add('hidden');
+                document.getElementById('forgotForm').classList.remove('hidden');
+            } else if (tab === 'sync') {
+                tabContainer.classList.add('hidden');
+                document.getElementById('syncForm').classList.remove('hidden');
             }
         }
 
         function handleRegister(e) {
             e.preventDefault();
+            loadAccounts();
             const username = document.getElementById('regUsername').value.trim();
             const catName = document.getElementById('regCatName').value.trim();
             const password = document.getElementById('regPassword').value;
-            const secQ = document.getElementById('regSecQ').value.trim();
-            const secA = document.getElementById('regSecA').value.trim().toLowerCase();
+            const question = document.getElementById('regSecurityQuestion').value;
+            const answer = document.getElementById('regSecurityAnswer').value.trim().toLowerCase();
 
-            const users = getRegisteredUsers();
-            if (users[username]) {
-                showToast("Username already exists!");
+            if (accounts[username]) {
+                showToast('❌ Username already exists!', '⚠️');
                 return;
             }
 
-            users[username] = {
+            accounts[username] = {
                 username,
                 catName,
                 password,
-                secQ,
-                secA,
-                weight: state.weight
+                question,
+                answer,
+                fish: 100,
+                weight: 2.00,
+                level: 1,
+                exp: 0,
+                energy: 100,
+                contactInfo: '',
+                lastDecayTime: Date.now(),
+                unlockedItems: [],
+                equipped: { head: null, apron: null }
             };
 
-            saveRegisteredUsers(users);
-            state.currentUser = username;
-            
-            saveState();
-            renderUI();
-            closeAuthModal();
-            showToast(`Welcome ${catName}! Registered successfully 🎉`);
+            saveAccounts();
+            showToast('✨ Account created successfully! Please login.', '🎉');
+            switchAuthTab('login');
+            document.getElementById('registerForm').reset();
         }
 
         function handleLogin(e) {
             e.preventDefault();
+            loadAccounts();
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
 
-            const users = getRegisteredUsers();
-            if (!users[username] || users[username].password !== password) {
-                showToast("Invalid username or password!");
+            if (!accounts[username] || accounts[username].password !== password) {
+                showToast('❌ Invalid username or password', '⚠️');
                 return;
             }
 
-            state.currentUser = username;
-            saveState();
-            renderUI();
-            closeAuthModal();
-            showToast(`Logged in as @${username}! 🐾`);
+            currentUser = username;
+            localStorage.setItem('ENERGY_CAT_ACTIVE_USER', username);
+            document.getElementById('authModal').classList.add('hidden');
+            document.getElementById('loginForm').reset();
+            initUserSession();
+            showToast(`Welcome back, ${username}!`, '😸');
         }
 
-        function handleForgot(e) {
+        function handleForgotPassword(e) {
             e.preventDefault();
+            loadAccounts();
             const username = document.getElementById('forgotUsername').value.trim();
-            const answer = document.getElementById('forgotAnswer').value.trim().toLowerCase();
-            const newPass = document.getElementById('forgotNewPass').value;
+            const question = document.getElementById('forgotSecurityQuestion').value;
+            const answer = document.getElementById('forgotSecurityAnswer').value.trim().toLowerCase();
+            const newPassword = document.getElementById('forgotNewPassword').value;
 
-            const users = getRegisteredUsers();
-            if (!users[username] || users[username].secA !== answer) {
-                showToast("Incorrect username or security answer!");
+            if (!accounts[username]) {
+                showToast('❌ Username not found', '⚠️');
                 return;
             }
 
-            users[username].password = newPass;
-            saveRegisteredUsers(users);
-            showToast("Password reset successfully! Please login.");
-            showAuthView('login');
-        }
+            const acc = accounts[username];
+            if (acc.question !== question || acc.answer !== answer) {
+                showToast('❌ Incorrect security question or answer', '⚠️');
+                return;
+            }
 
-        function handleLogout() {
-            state.currentUser = null;
-            saveState();
-            renderUI();
-            closeAuthModal();
-            showToast("Logged out successfully.");
+            acc.password = newPassword;
+            saveAccounts();
+            showToast('🔑 Password reset successfully! Logging in...', '✨');
+            switchAuthTab('login');
+            document.getElementById('forgotForm').reset();
         }
 
         function exportAccountKey() {
-            const dataStr = btoa(JSON.stringify(state));
-            
-            // Native iframe clipboard copy standard fallback
-            const el = document.createElement('textarea');
-            el.value = dataStr;
-            document.body.appendChild(el);
-            el.select();
-            document.execCommand('copy');
-            document.body.removeChild(el);
-
-            showToast("Sync Key copied to clipboard! 🔑");
+            if (!currentUser || !accounts[currentUser]) return;
+            const accData = JSON.stringify(accounts[currentUser]);
+            const encodedKey = btoa(unescape(encodeURIComponent(accData)));
+            navigator.clipboard.writeText(encodedKey);
+            showToast('📋 Account Sync Key copied to clipboard!', '🔑');
         }
 
-        function importAccountKey() {
-            const keyStr = document.getElementById('importKeyInput').value.trim();
-            if (!keyStr) return;
-
+        function handleImportData(e) {
+            e.preventDefault();
+            const key = document.getElementById('syncDataInput').value.trim();
             try {
-                const parsed = JSON.parse(atob(keyStr));
-                state = { ...state, ...parsed };
-                saveState();
-                renderUI();
-                closeAuthModal();
-                showToast("Account Data imported successfully! ✨");
+                const decoded = decodeURIComponent(escape(atob(key)));
+                const accObj = JSON.parse(decoded);
+                if (!accObj.username || !accObj.password) throw new Error();
+
+                loadAccounts();
+                accounts[accObj.username] = accObj;
+                saveAccounts();
+
+                showToast('📲 Account imported successfully! Please login.', '✨');
+                switchAuthTab('login');
+                document.getElementById('syncForm').reset();
             } catch (err) {
-                showToast("Invalid Account Sync Key!");
+                showToast('❌ Invalid Sync Key Data!', '⚠️');
             }
         }
 
-        /* ==========================================================================
-           PERSISTENCE & RENDERING HELPERS
-           ========================================================================== */
-        function saveState() {
-            state.lastTimestamp = Date.now();
-            localStorage.setItem(APP_STATE_KEY, JSON.stringify(state));
-
-            // Sync cat weight to user record for Leaderboard
-            if (state.currentUser) {
-                const users = getRegisteredUsers();
-                if (users[state.currentUser]) {
-                    users[state.currentUser].weight = state.weight;
-                    saveRegisteredUsers(users);
-                }
-            }
+        function logout() {
+            localStorage.removeItem('ENERGY_CAT_ACTIVE_USER');
+            currentUser = null;
+            document.getElementById('authModal').classList.remove('hidden');
+            switchAuthTab('login');
+            showToast('Logged out successfully', '👋');
         }
 
-        function loadState() {
-            const saved = localStorage.getItem(APP_STATE_KEY);
-            if (saved) {
-                state = { ...state, ...JSON.parse(saved) };
-            }
-        }
-
-        function renderUI() {
-            document.getElementById('fishCount').innerText = state.fish;
-            document.getElementById('catWeightText').innerText = `${state.weight.toFixed(2)} kg`;
-            
-            // Header auth button
-            if (state.currentUser) {
-                document.getElementById('userStatusTag').innerText = `@${state.currentUser}`;
-                document.getElementById('authBtnText').innerText = 'Account';
-            } else {
-                document.getElementById('userStatusTag').innerText = 'Guest Account';
-                document.getElementById('authBtnText').innerText = 'Login / Register';
-            }
-
-            renderEnergyBar();
-            updateEyeExpression();
-            updateWardrobeOverlays();
+        function initUserSession() {
+            calculateDecay();
+            updateUI();
+            renderDressUpGrid();
             renderLeaderboard();
-            renderWardrobe();
         }
 
-        function switchTab(tab) {
-            const lbTab = document.getElementById('leaderboardTab');
-            const wdTab = document.getElementById('wardrobeTab');
-            const lbBtn = document.getElementById('tabLeaderboardBtn');
-            const wdBtn = document.getElementById('tabWardrobeBtn');
+        /* --- ENERGY DECAY MECHANICS --- */
+        function calculateDecay() {
+            if (!currentUser || !accounts[currentUser]) return;
+            const acc = accounts[currentUser];
+            const now = Date.now();
+            const diffMinutes = Math.floor((now - acc.lastDecayTime) / (1000 * 60));
+            const decayPoints = Math.floor(diffMinutes / 3);
 
-            if (tab === 'leaderboard') {
-                lbTab.classList.remove('hidden');
-                lbTab.classList.add('flex');
-                wdTab.classList.add('hidden');
-                wdTab.classList.remove('flex');
+            if (decayPoints > 0) {
+                acc.energy = Math.max(0, acc.energy - decayPoints);
+                acc.lastDecayTime = now;
+                saveAccounts();
+            }
+        }
 
-                lbBtn.className = 'flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-white text-pink-600 shadow-sm';
-                wdBtn.className = 'flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition text-gray-500 hover:text-gray-700';
+        function setupEnergyDecayLoop() {
+            setInterval(() => {
+                calculateDecay();
+                updateUI();
+            }, 30000);
+        }
+
+        /* --- UI RENDER & CAT EXPRESSIONS --- */
+        function updateUI() {
+            if (!currentUser || !accounts[currentUser]) return;
+            const acc = accounts[currentUser];
+
+            document.getElementById('displayUser').innerText = acc.username;
+            document.getElementById('displayCatName').innerText = acc.catName;
+            document.getElementById('fishCount').innerText = acc.fish;
+
+            // Level & EXP
+            document.getElementById('catLevelBadge').innerText = `LVL ${acc.level}`;
+            document.getElementById('catWeightBadge').innerText = `⚖️ ${acc.weight.toFixed(2)} kg`;
+            document.getElementById('expText').innerText = `${acc.exp}/50 EXP`;
+            document.getElementById('expBar').style.width = `${Math.min(100, (acc.exp / 50) * 100)}%`;
+
+            // Energy Bar
+            document.getElementById('energyText').innerText = `${acc.energy}/100`;
+            document.getElementById('energyBar').style.width = `${acc.energy}%`;
+
+            // Cat Expressions & Warning Banner (<20% Sad Face)
+            const awakeEyes = document.getElementById('catEyesAwake');
+            const sadEyes = document.getElementById('catEyesSad');
+            const sleepEyes = document.getElementById('catEyesSleep');
+            const sadBanner = document.getElementById('sadWarningBanner');
+
+            awakeEyes.classList.add('hidden');
+            sadEyes.classList.add('hidden');
+            sleepEyes.classList.add('hidden');
+
+            if (acc.energy < 20) {
+                sadEyes.classList.remove('hidden');
+                sadBanner.classList.remove('hidden');
+                document.getElementById('catStatusLabel').innerText = '😿 Hungry & Sad... (Low Energy!)';
             } else {
-                wdTab.classList.remove('hidden');
-                wdTab.classList.add('flex');
-                lbTab.classList.add('hidden');
-                lbTab.classList.remove('flex');
+                awakeEyes.classList.remove('hidden');
+                sadBanner.classList.add('hidden');
+                document.getElementById('catStatusLabel').innerText = '✨ Tap Cat to Show Love 💕';
+            }
 
-                wdBtn.className = 'flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition bg-white text-pink-600 shadow-sm';
-                lbBtn.className = 'flex-1 py-2 rounded-xl text-xs sm:text-sm font-bold transition text-gray-500 hover:text-gray-700';
+            // Render Clothes
+            renderEquippedOverlay();
+        }
+
+        function renderEquippedOverlay() {
+            const acc = accounts[currentUser];
+            const headSlot = document.getElementById('slot-head');
+            const apronSlot = document.getElementById('slot-apron');
+
+            headSlot.innerHTML = '';
+            apronSlot.innerHTML = '';
+
+            if (acc.equipped.head) {
+                const item = dressItems.head.find(i => i.id === acc.equipped.head);
+                if (item) headSlot.innerHTML = item.html;
+            }
+            if (acc.equipped.apron) {
+                const item = dressItems.apron.find(i => i.id === acc.equipped.apron);
+                if (item) apronSlot.innerHTML = item.html;
             }
         }
 
-        function showToast(msg) {
-            const toast = document.getElementById('toast');
-            document.getElementById('toastMsg').innerText = msg;
-            toast.classList.remove('translate-y-20', 'opacity-0');
+        /* --- GAME ACTIONS --- */
+        function addExp(pts) {
+            const acc = accounts[currentUser];
+            acc.exp += pts;
+            if (acc.exp >= 50) {
+                acc.level += 1;
+                acc.exp -= 50;
+                acc.fish += 20; // Gain +20 Fish currency per Level Up
+                showToast(`🎉 Level Up! Level ${acc.level}! Earned +20 🐟 Fish!`, '🌟');
+            }
+            saveAccounts();
+        }
+
+        function petCat(e) {
+            if (!currentUser) return;
+
+            // NO EXP / NO LEVEL INCREASE ON HEART TAP
+            // Pop Heart Effect only for animation
+            const rect = document.getElementById('catStage').getBoundingClientRect();
+            const heart = document.createElement('div');
+            heart.className = 'heart-pop';
+            heart.innerText = '💖';
+            heart.style.left = `${e.clientX - rect.left}px`;
+            heart.style.top = `${e.clientY - rect.top}px`;
+            document.getElementById('catStage').appendChild(heart);
+            setTimeout(() => heart.remove(), 900);
+        }
+
+        function feedCat() {
+            const acc = accounts[currentUser];
+
+            if (acc.energy >= 100) {
+                showToast('❌ Cat is full! Energy is already at 100%.', '🥣');
+                return;
+            }
+
+            if (acc.fish < 5) {
+                showToast('❌ Not enough Fish tokens!', '🐟');
+                return;
+            }
+
+            acc.fish -= 5;
+            acc.weight += 0.15;
+            acc.energy = Math.min(100, acc.energy + 15);
+            addExp(10);
+
+            saveAccounts();
+            updateUI();
+            renderLeaderboard();
+            showToast('🍱 Yum! Fed your cat (+0.15kg / +15⚡)', '😋');
+        }
+
+        function restCat() {
+            const acc = accounts[currentUser];
+
+            if (acc.energy >= 100) {
+                showToast('⚡ Energy is already fully restored!', '😴');
+                return;
+            }
+
+            acc.energy = Math.min(100, acc.energy + 30);
+            acc.weight += 0.05;
+            addExp(5);
+
+            // Sleep Animation
+            document.getElementById('catEyesAwake').classList.add('hidden');
+            document.getElementById('catEyesSad').classList.add('hidden');
+            document.getElementById('catEyesSleep').classList.remove('hidden');
+            document.getElementById('sleepEffect').classList.remove('hidden');
+
             setTimeout(() => {
-                toast.classList.add('translate-y-20', 'opacity-0');
-            }, 3000);
+                document.getElementById('sleepEffect').classList.add('hidden');
+                updateUI();
+            }, 2000);
+
+            saveAccounts();
+            updateUI();
+            renderLeaderboard();
+            showToast('😴 Rested well! (+30⚡ / +0.05kg)', '✨');
         }
 
-        function initNotificationPermission() {
-            if ("Notification" in window && Notification.permission !== "granted") {
-                Notification.requestPermission();
+        /* --- ECO MISSIONS WITH PHOTO PROOF --- */
+        function openMissionUploadModal(name, rewardFish, rewardEnergy) {
+            activeMission = { name, rewardFish, rewardEnergy };
+            document.getElementById('modalMissionName').innerText = `Mission: ${name}`;
+            document.getElementById('photoPreview').classList.add('hidden');
+            document.getElementById('uploadPlaceholder').classList.remove('hidden');
+            document.getElementById('photoModal').classList.remove('hidden');
+        }
+
+        function closePhotoModal() {
+            document.getElementById('photoModal').classList.add('hidden');
+            activeMission = null;
+        }
+
+        function triggerFileSelect() {
+            document.getElementById('photoFileInput').click();
+        }
+
+        function handlePhotoUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    const img = document.getElementById('photoPreview');
+                    img.src = evt.target.result;
+                    img.classList.remove('hidden');
+                    document.getElementById('uploadPlaceholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        function sendLowEnergyNotification() {
-            if ("Notification" in window && Notification.permission === "granted") {
-                new Notification("Energy Cat Studio 🐾", {
-                    body: "Your Energy Cat needs rest or treats! Energy is below 20%.",
-                    icon: "https://placehold.co/100x100/f472b6/ffffff?text=🐾"
-                });
+        function submitMissionWithPhoto() {
+            const img = document.getElementById('photoPreview');
+            if (img.classList.contains('hidden')) {
+                showToast('⚠️ Please choose a photo proof first!', '📷');
+                return;
             }
+
+            const acc = accounts[currentUser];
+            acc.fish += activeMission.rewardFish;
+            acc.energy = Math.min(100, acc.energy + activeMission.rewardEnergy);
+            addExp(20);
+
+            saveAccounts();
+            updateUI();
+            closePhotoModal();
+            showToast(`🌱 Mission completed! Received +${activeMission.rewardFish} 🐟 & +${activeMission.rewardEnergy}⚡`, '🎉');
+        }
+
+        /* --- DRESS-UP STUDIO --- */
+        function switchDressCategory(cat) {
+            currentDressCategory = cat;
+            document.getElementById('cat-head-btn').className = cat === 'head' 
+                ? "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300"
+                : "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200";
+            document.getElementById('cat-apron-btn').className = cat === 'apron' 
+                ? "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300"
+                : "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200";
+            renderDressUpGrid();
+        }
+
+        function renderDressUpGrid() {
+            if (!currentUser) return;
+            const acc = accounts[currentUser];
+            const grid = document.getElementById('dressItemsGrid');
+            grid.innerHTML = '';
+
+            const items = dressItems[currentDressCategory];
+            items.forEach(item => {
+                const isUnlocked = acc.unlockedItems.includes(item.id);
+                const isEquipped = acc.equipped[currentDressCategory] === item.id;
+
+                const card = document.createElement('div');
+                card.className = `p-2 rounded-xl border-2 flex flex-col items-center justify-between transition ${isEquipped ? 'bg-pink-100 border-pink-500' : 'bg-slate-50 border-rose-100'}`;
+                
+                card.innerHTML = `
+                    <div class="text-2xl my-0.5">${item.icon}</div>
+                    <div class="text-[10px] font-black text-slate-800 text-center truncate w-full">${item.name}</div>
+                    <div class="mt-1 w-full">
+                        ${isEquipped ? `
+                            <button onclick="unequipItem('${currentDressCategory}')" class="clay-btn w-full bg-rose-500 text-white font-black text-[9px] py-1 rounded-lg">Unequip</button>
+                        ` : isUnlocked ? `
+                            <button onclick="equipItem('${currentDressCategory}', '${item.id}')" class="clay-btn w-full bg-emerald-500 text-white font-black text-[9px] py-1 rounded-lg">Equip</button>
+                        ` : `
+                            <button onclick="buyItem('${currentDressCategory}', '${item.id}',${item.price})" class="clay-btn w-full bg-amber-400 text-slate-900 font-black text-[9px] py-1 rounded-lg">Buy (${item.price}🐟)</button>
+                        `}
+                    </div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function buyItem(category, itemId, price) {
+            const acc = accounts[currentUser];
+            if (acc.fish < price) {
+                showToast('❌ Not enough Fish tokens!', '🐟');
+                return;
+            }
+            acc.fish -= price;
+            acc.unlockedItems.push(itemId);
+            acc.equipped[category] = itemId;
+            saveAccounts();
+            updateUI();
+            renderDressUpGrid();
+            showToast('🛍️ Outfit purchased and equipped!', '✨');
+        }
+
+        function equipItem(category, itemId) {
+            const acc = accounts[currentUser];
+            acc.equipped[category] = itemId;
+            saveAccounts();
+            updateUI();
+            renderDressUpGrid();
+            showToast('✨ Outfit equipped!', '👗');
+        }
+
+        function unequipItem(category) {
+            const acc = accounts[currentUser];
+            acc.equipped[category] = null;
+            saveAccounts();
+            updateUI();
+            renderDressUpGrid();
+            showToast('🔄 Outfit unequipped', '👕');
+        }
+
+        function resetOutfit() {
+            const acc = accounts[currentUser];
+            acc.equipped.head = null;
+            acc.equipped.apron = null;
+            saveAccounts();
+            updateUI();
+            renderDressUpGrid();
+            showToast('🔄 All outfits removed!', '✨');
+        }
+
+        /* --- REAL PLAYER LEADERBOARD & MONTHLY CHAMPION FORM --- */
+        function renderLeaderboard() {
+            loadAccounts();
+            const rows = document.getElementById('leaderboardRows');
+            rows.innerHTML = '';
+
+            // REAL REGISTERED PLAYERS ONLY (NO MOCK DATA)
+            const playerList = Object.values(accounts).sort((a, b) => b.weight - a.weight);
+            document.getElementById('totalPlayersCount').innerText = `${playerList.length} Players`;
+
+            if (playerList.length > 0) {
+                const champ = playerList[0];
+                document.getElementById('monthlyChampionName').innerText = `${champ.username} (Cat: ${champ.catName} - ${champ.weight.toFixed(2)}kg)`;
+                
+                // Show contact submission form if current logged-in user is #1
+                const formBox = document.getElementById('winnerContactFormBox');
+                if (champ.username === currentUser) {
+                    formBox.classList.remove('hidden');
+                    if (champ.contactInfo) {
+                        document.getElementById('championContactInput').value = champ.contactInfo;
+                    }
+                } else {
+                    formBox.classList.add('hidden');
+                }
+            } else {
+                document.getElementById('monthlyChampionName').innerText = 'No registered players yet';
+                document.getElementById('winnerContactFormBox').classList.add('hidden');
+            }
+
+            playerList.forEach((p, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = `border-b border-rose-50 ${p.username === currentUser ? 'bg-pink-50 font-black' : ''}`;
+                tr.innerHTML = `
+                    <td class="p-1 font-black text-rose-600">#${idx + 1}</td>
+                    <td class="p-1">
+                        <div class="font-black text-slate-800">${p.username} ${p.username === currentUser ? '⭐' : ''}</div>
+                        <div class="text-[9px] text-purple-600 font-bold">Cat: ${p.catName}</div>
+                    </td>
+                    <td class="p-1 text-right font-black text-purple-900">${p.weight.toFixed(2)} kg</td>
+                `;
+                rows.appendChild(tr);
+            });
+        }
+
+        function handleSaveContactInfo(e) {
+            e.preventDefault();
+            const contact = document.getElementById('championContactInput').value.trim();
+            const acc = accounts[currentUser];
+            acc.contactInfo = contact;
+            saveAccounts();
+            showToast('📩 Champion contact details saved!', '🎉');
+        }
+
+        /* --- NAVIGATION TABS --- */
+        function switchTab(tab) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]";
+            });
+
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            const activeBtn = document.getElementById(`nav-${tab}`);
+            activeBtn.className = "nav-btn active flex flex-col items-center py-1.5 rounded-xl text-rose-600 bg-rose-100 font-black text-[10px]";
+
+            if (tab === 'dressup') renderDressUpGrid();
+            if (tab === 'ranks') renderLeaderboard();
+        }
+
+        /* --- TOAST NOTIFICATIONS --- */
+        function showToast(msg, icon = '✨') {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = msg;
+            document.getElementById('toastIcon').innerText = icon;
+
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-6');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-6');
+            }, 2500);
         }
     </script>
 </body>
