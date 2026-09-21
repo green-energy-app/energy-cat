@@ -3,11 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Energy Cat 2D: Care, Eco-Missions & Leaderboard</title>
+    <title>Eco Energy Cat: Kawaii Wardrobe & Eco Tracker</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- Chart.js -->
-    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
@@ -19,16 +17,14 @@
             --primary-dark: #ff4d6d;
             --secondary: #8ac926;
             --accent: #ffca3a;
-            --bg-soft: #fff0f5;
             --card-bg: rgba(255, 255, 255, 0.95);
-            --text-main: #4a4e69;
         }
 
         body {
             font-family: 'Nunito', sans-serif;
             background: linear-gradient(135deg, #ffdee9 0%, #b5fffc 100%);
             min-height: 100vh;
-            color: var(--text-main);
+            color: #4a4e69;
         }
 
         h1, h2, h3, .font-heading {
@@ -42,41 +38,48 @@
             backdrop-filter: blur(10px);
         }
 
-        /* 2D Cat Avatar Custom Styling */
-        .cat-avatar-container {
+        /* --- 2D CAT CANVAS AVATAR --- */
+        .cat-avatar-stage {
             position: relative;
-            width: 180px;
-            height: 180px;
+            width: 220px;
+            height: 220px;
             margin: 0 auto;
-            background: #fff;
+            background: #ffffff;
             border-radius: 50%;
             border: 6px solid var(--primary);
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
+            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
+            overflow: visible;
         }
 
-        .cat-face {
-            font-size: 5.5rem;
+        /* 2D Cat Elements Base */
+        .cat-body-layer {
+            font-size: 6.5rem;
+            position: relative;
+            z-index: 1;
             transition: all 0.3s ease;
         }
 
-        .cat-accessory {
+        /* Hat Position (Top of Head) */
+        .layer-hat {
             position: absolute;
-            top: 5px;
-            font-size: 2.8rem;
+            top: -15px;
+            font-size: 3.2rem;
             z-index: 10;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
         }
 
-        .cat-glasses {
+        /* Apron / Bib Position (Front Cover of Body) */
+        .layer-apron {
             position: absolute;
-            top: 62px;
-            font-size: 2.5rem;
-            z-index: 11;
+            bottom: 30px;
+            font-size: 3.5rem;
+            z-index: 5;
+            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
         }
 
-        /* Energy Bar Animation */
         .energy-progress {
             transition: width 0.5s ease-in-out, background-color 0.5s ease;
         }
@@ -84,12 +87,12 @@
 </head>
 <body class="flex flex-col min-h-screen">
 
-    <!-- AUTHENTICATION OVERLAY -->
+    <!-- AUTH OVERLAY -->
     <div id="auth-overlay" class="fixed inset-0 bg-pink-500 bg-opacity-90 z-50 flex items-center justify-center p-4">
         <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center">
             <div class="text-6xl text-pink-500 mb-3"><i class="fa-solid fa-cat"></i></div>
             <h2 class="text-3xl font-heading text-gray-800 mb-2">Eco Energy Cat</h2>
-            <p class="text-sm text-gray-500 mb-6">Log in to care for your eco-pet & track green weight!</p>
+            <p class="text-sm text-gray-500 mb-6">Care for your eco-pet & collect 20 cute outfits!</p>
 
             <!-- Tabs -->
             <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
@@ -141,59 +144,59 @@
     <!-- NAVBAR -->
     <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-40 px-6 py-4 shadow-sm flex justify-between items-center">
         <div class="flex items-center gap-3 text-pink-500 font-heading text-2xl">
-            <i class="fa-solid fa-seedling text-green-500"></i>
-            <span>EcoCat Energy</span>
+            <i class="fa-solid fa-leaf text-green-500"></i>
+            <span>EcoCat Studio</span>
         </div>
         <div class="flex gap-2">
-            <button onclick="navTo('home')" class="nav-btn bg-pink-500 text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-cat"></i> Pet</button>
-            <button onclick="navTo('missions')" class="nav-btn text-gray-600 hover:bg-pink-100 px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-solar-panel"></i> Eco Proof</button>
-            <button onclick="navTo('wardrobe')" class="nav-btn text-gray-600 hover:bg-pink-100 px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-shirt"></i> Closet</button>
+            <button onclick="navTo('home')" class="nav-btn bg-pink-500 text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-cat"></i> Home</button>
+            <button onclick="navTo('wardrobe')" class="nav-btn text-gray-600 hover:bg-pink-100 px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-shirt"></i> Wardrobe (20)</button>
+            <button onclick="navTo('missions')" class="nav-btn text-gray-600 hover:bg-pink-100 px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-camera"></i> Eco Proof</button>
             <button onclick="navTo('leaderboard')" class="nav-btn text-gray-600 hover:bg-pink-100 px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-trophy"></i> Rank</button>
             <button onclick="logout()" class="text-red-400 hover:text-red-600 px-3 py-2"><i class="fa-solid fa-right-from-bracket"></i></button>
         </div>
     </nav>
 
-    <!-- MAIN CONTENT CONTAINER -->
+    <!-- MAIN APP CONTAINER -->
     <main class="flex-1 max-w-5xl w-full mx-auto p-6">
 
-        <!-- VIEW 1: 2D PET HOME -->
+        <!-- VIEW 1: PET HOME -->
         <section id="view-home" class="view-panel space-y-6">
             <div class="grid md:grid-cols-3 gap-6">
-                <!-- 2D Cat Viewport -->
-                <div class="md:col-span-2 kawaii-card p-6 text-center flex flex-col justify-between items-center relative min-h-[380px]">
+                <!-- Cat Display -->
+                <div class="md:col-span-2 kawaii-card p-6 text-center flex flex-col justify-between items-center relative min-h-[400px]">
                     <div class="w-full flex justify-between items-center">
-                        <div class="bg-yellow-400 text-yellow-900 font-bold px-4 py-2 rounded-full flex items-center gap-2 text-sm">
+                        <div class="bg-yellow-400 text-yellow-900 font-bold px-4 py-2 rounded-full flex items-center gap-2 text-sm shadow-sm">
                             <i class="fa-solid fa-fish"></i> <span id="display-fish">0</span> Fish Currency
                         </div>
-                        <div class="text-xs text-gray-400">Decay: -1 Energy / 3 mins</div>
+                        <div class="text-xs text-gray-400 font-semibold">Decay: -1 Energy / 3 Mins</div>
                     </div>
 
-                    <!-- 2D Cat Visual -->
-                    <div class="cat-avatar-container my-4">
-                        <div id="cat-hat" class="cat-accessory"></div>
-                        <div id="cat-glasses" class="cat-glasses"></div>
-                        <div id="cat-emoji" class="cat-face">🐱</div>
+                    <!-- 2D Cat Avatar Stage -->
+                    <div class="cat-avatar-stage my-4">
+                        <div id="cat-hat" class="layer-hat"></div>
+                        <div id="cat-apron" class="layer-apron"></div>
+                        <div id="cat-body" class="cat-body-layer">🐱</div>
                     </div>
 
-                    <!-- Energy Bar -->
+                    <!-- Energy Bar & Sad Reaction -->
                     <div class="w-full space-y-2">
                         <div class="flex justify-between text-sm font-bold">
-                            <span>Energy Level</span>
+                            <span>Energy Status</span>
                             <span id="energy-text">100 / 100%</span>
                         </div>
                         <div class="w-full bg-gray-200 h-5 rounded-full overflow-hidden p-1">
                             <div id="energy-bar" class="energy-progress bg-green-500 h-full rounded-full w-full"></div>
                         </div>
-                        <p id="cat-mood" class="text-xs font-semibold text-gray-500">Mood: Energetic & Happy! ✨</p>
+                        <p id="cat-mood" class="text-xs font-semibold text-gray-500">Mood: Happy & Energetic! ✨</p>
                     </div>
                 </div>
 
-                <!-- Pet Actions & Stats -->
+                <!-- Care Controls & Weight -->
                 <div class="space-y-6">
                     <div class="kawaii-card p-6 space-y-3">
-                        <h3 class="font-heading text-lg text-gray-700">Care Actions</h3>
+                        <h3 class="font-heading text-lg text-gray-700">Pet Care</h3>
                         <button onclick="careAction('feed')" class="w-full bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 shadow-sm">
-                            <i class="fa-solid fa-bowl-food"></i> Feed Cat (+20 Energy)
+                            <i class="fa-solid fa-bowl-food"></i> Feed Snack (+20 Energy)
                         </button>
                         <button onclick="careAction('play')" class="w-full bg-purple-400 hover:bg-purple-500 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 shadow-sm">
                             <i class="fa-solid fa-baseball"></i> Play Toy (+10 Energy, +2 Fish)
@@ -204,7 +207,7 @@
                     </div>
 
                     <div class="kawaii-card p-6 space-y-2">
-                        <h3 class="font-heading text-lg text-gray-700">Personal Weight</h3>
+                        <h3 class="font-heading text-lg text-gray-700">Weight Log</h3>
                         <div class="flex justify-between items-center text-sm">
                             <span>Current Weight:</span>
                             <span id="stat-weight" class="font-bold text-pink-500">-- kg</span>
@@ -218,19 +221,40 @@
             </div>
         </section>
 
-        <!-- VIEW 2: ECO PHOTO MISSIONS -->
+        <!-- VIEW 2: 20-ITEM WARDROBE SHOP -->
+        <section id="view-wardrobe" class="view-panel space-y-6 hidden">
+            <div class="kawaii-card p-6">
+                <div class="flex justify-between items-center mb-6">
+                    <div>
+                        <h2 class="font-heading text-2xl text-pink-500">2D Custom Wardrobe</h2>
+                        <p class="text-xs text-gray-500">Equip 1 Hat and 1 Front Apron to style your cat!</p>
+                    </div>
+                    <!-- Filter Tabs -->
+                    <div class="flex bg-pink-100 p-1 rounded-xl">
+                        <button onclick="filterWardrobe('all')" id="filter-all" class="px-3 py-1 text-xs font-bold rounded-lg bg-white text-pink-500">All (20)</button>
+                        <button onclick="filterWardrobe('hat')" id="filter-hat" class="px-3 py-1 text-xs font-bold rounded-lg text-gray-500">Hats (10)</button>
+                        <button onclick="filterWardrobe('apron')" id="filter-apron" class="px-3 py-1 text-xs font-bold rounded-lg text-gray-500">Aprons (10)</button>
+                    </div>
+                </div>
+
+                <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="wardrobe-grid">
+                    <!-- Dynamic 20 Outfit Cards -->
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: ECO MISSIONS -->
         <section id="view-missions" class="view-panel space-y-6 hidden">
             <div class="kawaii-card p-6">
                 <h2 class="font-heading text-2xl text-green-600 mb-2">Eco-Photo Proof Missions</h2>
-                <p class="text-sm text-gray-500 mb-6">Complete green eco-activities, upload photo proof, and earn Fish Currency for your cat!</p>
+                <p class="text-sm text-gray-500 mb-6">Take green actions, upload photo proof, and earn Fish Currency for outfits!</p>
 
                 <div class="grid md:grid-cols-2 gap-4">
-                    <!-- Mission 1 -->
                     <div class="border-2 border-green-100 bg-green-50/50 p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h3 class="font-bold text-green-800">1. Unplug Unused Electronics</h3>
-                                <p class="text-xs text-gray-500">Save energy at home. Reward: +15 Fish 🐟</p>
+                                <h3 class="font-bold text-green-800">1. Unplug Unused Appliances</h3>
+                                <p class="text-xs text-gray-500">Reward: +15 Fish Currency 🐟</p>
                             </div>
                             <span class="text-2xl">🔌</span>
                         </div>
@@ -238,12 +262,11 @@
                         <button onclick="submitMission('M1', 15)" class="w-full bg-green-500 text-white font-bold py-2 rounded-xl text-xs hover:bg-green-600">Upload & Claim Reward</button>
                     </div>
 
-                    <!-- Mission 2 -->
                     <div class="border-2 border-green-100 bg-green-50/50 p-4 rounded-2xl space-y-3">
                         <div class="flex justify-between items-start">
                             <div>
-                                <h3 class="font-bold text-green-800">2. Plant & Garden Care</h3>
-                                <p class="text-xs text-gray-500">Water plants or plant seeds. Reward: +20 Fish 🐟</p>
+                                <h3 class="font-bold text-green-800">2. Plant Care & Watering</h3>
+                                <p class="text-xs text-gray-500">Reward: +20 Fish Currency 🐟</p>
                             </div>
                             <span class="text-2xl">🌱</span>
                         </div>
@@ -254,20 +277,10 @@
             </div>
         </section>
 
-        <!-- VIEW 3: 2D WARDROBE SHOP -->
-        <section id="view-wardrobe" class="view-panel space-y-6 hidden">
-            <div class="kawaii-card p-6">
-                <h2 class="font-heading text-2xl text-pink-500 mb-4">2D Dress-Up Closet</h2>
-                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="wardrobe-grid">
-                    <!-- Closet Items Injected dynamically -->
-                </div>
-            </div>
-        </section>
-
-        <!-- VIEW 4: WEIGHT LEADERBOARD -->
+        <!-- VIEW 4: LEADERBOARD -->
         <section id="view-leaderboard" class="view-panel space-y-6 hidden">
             <div class="kawaii-card p-6">
-                <h2 class="font-heading text-2xl text-purple-600 mb-4">Real Player Weight Leaderboard</h2>
+                <h2 class="font-heading text-2xl text-purple-600 mb-4">Player Weight Leaderboard</h2>
                 <div class="overflow-x-auto">
                     <table class="w-full text-left border-collapse">
                         <thead>
@@ -275,7 +288,7 @@
                                 <th class="p-3">Rank</th>
                                 <th class="p-3">Player</th>
                                 <th class="p-3">Logged Weight</th>
-                                <th class="p-3">Fish Earned</th>
+                                <th class="p-3">Fish Currency</th>
                             </tr>
                         </thead>
                         <tbody id="leaderboard-body" class="divide-y text-sm font-semibold">
@@ -288,7 +301,7 @@
 
     </main>
 
-    <!-- JS SCRIPT LOGIC -->
+    <!-- JS APP LOGIC -->
     <script>
         /* APP STATE */
         let activeUser = null;
@@ -298,21 +311,43 @@
             question: '',
             answer: '',
             energy: 100,
-            fish: 20,
+            fish: 30,
             weight: 0,
             equippedHat: null,
-            equippedGlasses: null,
+            equippedApron: null,
             lastDecayTime: Date.now()
         };
 
+        /* 20 WARDROBE ITEMS (10 HATS + 10 FRONT APRONS) */
         const wardrobeCatalog = [
-            { id: 'party', name: 'Party Cone', type: 'hat', icon: '🎉', price: 10 },
-            { id: 'crown', name: 'Royal Crown', type: 'hat', icon: '👑', price: 25 },
-            { id: 'sunglasses', name: 'Cool Shades', type: 'glasses', icon: '🕶️', price: 15 },
-            { id: 'bow', name: 'Pink Bow', type: 'hat', icon: '🎀', price: 12 }
+            // 10 HATS
+            { id: 'h1', name: 'Party Cone', type: 'hat', icon: '🎉', price: 5 },
+            { id: 'h2', name: 'Royal Crown', type: 'hat', icon: '👑', price: 15 },
+            { id: 'h3', name: 'Chef Hat', type: 'hat', icon: '👨‍🍳', price: 10 },
+            { id: 'h4', name: 'Witch Hat', type: 'hat', icon: '🧙‍♀️', price: 12 },
+            { id: 'h5', name: 'Cowboy Hat', type: 'hat', icon: '🤠', price: 12 },
+            { id: 'h6', name: 'Graduate Cap', type: 'hat', icon: '🎓', price: 15 },
+            { id: 'h7', name: 'Cute Bow', type: 'hat', icon: '🎀', price: 8 },
+            { id: 'h8', name: 'Flower Crown', type: 'hat', icon: '🌸', price: 10 },
+            { id: 'h9', name: 'Santa Cap', type: 'hat', icon: '🎅', price: 10 },
+            { id: 'h10', name: 'Bear Ears', type: 'hat', icon: '🐻', price: 10 },
+
+            // 10 FRONT APRONS / BIBS
+            { id: 'a1', name: 'Strawberry Bib', type: 'apron', icon: '🍓', price: 8 },
+            { id: 'a2', name: 'Honey Bee Bib', type: 'apron', icon: '🐝', price: 10 },
+            { id: 'a3', name: 'Star Apron', type: 'apron', icon: '⭐', price: 8 },
+            { id: 'a4', name: 'Chef Apron', type: 'apron', icon: '🎽', price: 12 },
+            { id: 'a5', name: 'Heart Apron', type: 'apron', icon: '💖', price: 10 },
+            { id: 'a6', name: 'Flower Apron', type: 'apron', icon: '🌻', price: 10 },
+            { id: 'a7', name: 'Fish Bib', type: 'apron', icon: '🐟', price: 12 },
+            { id: 'a8', name: 'Clover Bib', type: 'apron', icon: '🍀', price: 10 },
+            { id: 'a9', name: 'Cat Paw Apron', type: 'apron', icon: '🐾', price: 15 },
+            { id: 'a10', name: 'Rainbow Bib', type: 'apron', icon: '🌈', price: 15 }
         ];
 
-        /* AUTH LOGIC */
+        let activeFilter = 'all';
+
+        /* AUTHENTICATION SYSTEM */
         function switchAuth(mode) {
             document.getElementById('form-login').classList.add('hidden');
             document.getElementById('form-register').classList.add('hidden');
@@ -350,10 +385,10 @@
                 question: q,
                 answer: a,
                 energy: 100,
-                fish: 20,
+                fish: 30, // Gift starter fish
                 weight: 60.0,
                 equippedHat: null,
-                equippedGlasses: null,
+                equippedApron: null,
                 lastDecayTime: Date.now()
             };
 
@@ -403,7 +438,7 @@
 
             parsed.password = newP;
             localStorage.setItem('ec_user_' + u, JSON.stringify(parsed));
-            alert('Password successfully updated! Logging in...');
+            alert('Password successfully reset! Logging in...');
             userData = parsed;
             loginSuccess(u);
         }
@@ -413,7 +448,7 @@
             document.getElementById('auth-overlay').classList.add('hidden');
             calculateEnergyDecay();
             updateUI();
-            setInterval(calculateEnergyDecay, 30000); // Check decay every 30s
+            setInterval(calculateEnergyDecay, 30000);
         }
 
         function logout() {
@@ -426,7 +461,7 @@
             }
         }
 
-        /* ENERGY TIMED DECAY (1 point per 3 mins) */
+        /* ENERGY TIMED DECAY (1 point / 3 mins) */
         function calculateEnergyDecay() {
             const now = Date.now();
             const elapsedMins = (now - userData.lastDecayTime) / (1000 * 60);
@@ -449,29 +484,30 @@
             const bar = document.getElementById('energy-bar');
             bar.style.width = userData.energy + '%';
 
-            const catEmoji = document.getElementById('cat-emoji');
+            const catBody = document.getElementById('cat-body');
             const catMood = document.getElementById('cat-mood');
 
-            // Sad expression when Energy < 20%
+            // Low energy <20% triggers sad expression 😿
             if (userData.energy < 20) {
                 bar.className = 'energy-progress bg-red-500 h-full rounded-full';
-                catEmoji.innerText = '😿';
-                catMood.innerText = 'Mood: Sad & Hungry... (-20% Energy) 💔';
+                catBody.innerText = '😿';
+                catMood.innerText = 'Mood: Sad & Exhausted... (<20% Energy) 💔';
             } else if (userData.energy < 60) {
                 bar.className = 'energy-progress bg-yellow-500 h-full rounded-full';
-                catEmoji.innerText = '🐱';
+                catBody.innerText = '🐱';
                 catMood.innerText = 'Mood: Normal / Needs a snack 🍃';
             } else {
                 bar.className = 'energy-progress bg-green-500 h-full rounded-full';
-                catEmoji.innerText = '😸';
-                catMood.innerText = 'Mood: Energetic & Happy! ✨';
+                catBody.innerText = '😸';
+                catMood.innerText = 'Mood: Happy & Energetic! ✨';
             }
 
-            // Equipped items
+            // Render Layers on Cat
             const hatItem = wardrobeCatalog.find(i => i.id === userData.equippedHat);
-            const glassItem = wardrobeCatalog.find(i => i.id === userData.equippedGlasses);
+            const apronItem = wardrobeCatalog.find(i => i.id === userData.equippedApron);
+
             document.getElementById('cat-hat').innerText = hatItem ? hatItem.icon : '';
-            document.getElementById('cat-glasses').innerText = glassItem ? glassItem.icon : '';
+            document.getElementById('cat-apron').innerText = apronItem ? apronItem.icon : '';
 
             renderWardrobe();
             renderLeaderboard();
@@ -491,7 +527,7 @@
             updateUI();
         }
 
-        /* WEIGHT LOGGING */
+        /* WEIGHT LOG */
         function logWeight(e) {
             e.preventDefault();
             const w = parseFloat(document.getElementById('input-weight').value);
@@ -501,40 +537,49 @@
                 document.getElementById('input-weight').value = '';
                 saveData();
                 updateUI();
-                alert('Weight logged! You earned +5 Fish 🐟');
+                alert('Weight logged! Claimed +5 Fish Currency 🐟');
             }
         }
 
-        /* MISSION PHOTO PROOF */
+        /* ECO MISSION */
         function submitMission(mCode, reward) {
             const input = document.getElementById(mCode === 'M1' ? 'file-m1' : 'file-m2');
             if (input.files.length === 0) {
-                alert('Please select a photo proof first!');
+                alert('Please upload photo proof first!');
                 return;
             }
             userData.fish += reward;
             input.value = '';
             saveData();
             updateUI();
-            alert(`Proof uploaded! Mission completed. Claimed +${reward} Fish Currency! 🌿`);
+            alert(`Proof uploaded! Claimed +${reward} Fish Currency! 🌿`);
         }
 
-        /* WARDROBE SHOP */
+        /* WARDROBE SYSTEM (20 ITEMS) */
+        function filterWardrobe(type) {
+            activeFilter = type;
+            document.getElementById('filter-all').className = "px-3 py-1 text-xs font-bold rounded-lg " + (type==='all' ? 'bg-white text-pink-500' : 'text-gray-500');
+            document.getElementById('filter-hat').className = "px-3 py-1 text-xs font-bold rounded-lg " + (type==='hat' ? 'bg-white text-pink-500' : 'text-gray-500');
+            document.getElementById('filter-apron').className = "px-3 py-1 text-xs font-bold rounded-lg " + (type==='apron' ? 'bg-white text-pink-500' : 'text-gray-500');
+            renderWardrobe();
+        }
+
         function renderWardrobe() {
             const grid = document.getElementById('wardrobe-grid');
             grid.innerHTML = '';
 
-            wardrobeCatalog.forEach(item => {
-                const isHatEquipped = userData.equippedHat === item.id;
-                const isGlassEquipped = userData.equippedGlasses === item.id;
-                const isEquipped = isHatEquipped || isGlassEquipped;
+            const list = wardrobeCatalog.filter(i => activeFilter === 'all' || i.type === activeFilter);
+
+            list.forEach(item => {
+                const isEquipped = (userData.equippedHat === item.id) || (userData.equippedApron === item.id);
 
                 const card = document.createElement('div');
-                card.className = `p-4 border-2 rounded-2xl text-center cursor-pointer transition ${isEquipped ? 'border-green-400 bg-green-50' : 'border-gray-100 bg-white'}`;
+                card.className = `p-4 border-2 rounded-2xl text-center cursor-pointer transition ${isEquipped ? 'border-pink-500 bg-pink-50' : 'border-gray-100 bg-white'}`;
                 card.innerHTML = `
                     <div class="text-4xl mb-2">${item.icon}</div>
-                    <div class="font-bold text-sm">${item.name}</div>
-                    <div class="text-xs text-yellow-600 mb-2">${item.price} Fish</div>
+                    <div class="font-bold text-xs truncate">${item.name}</div>
+                    <div class="text-[10px] text-gray-400 capitalize mb-1">${item.type}</div>
+                    <div class="text-xs text-yellow-600 font-bold mb-2">${item.price} Fish</div>
                     <button class="w-full text-xs font-bold py-1 px-2 rounded-lg ${isEquipped ? 'bg-red-400 text-white' : 'bg-pink-400 text-white'}">
                         ${isEquipped ? 'Unequip' : 'Equip'}
                     </button>
@@ -551,10 +596,10 @@
                     if (userData.fish >= item.price) userData.equippedHat = item.id;
                     else return alert('Not enough Fish Currency!');
                 }
-            } else if (item.type === 'glasses') {
-                if (userData.equippedGlasses === item.id) userData.equippedGlasses = null;
+            } else if (item.type === 'apron') {
+                if (userData.equippedApron === item.id) userData.equippedApron = null;
                 else {
-                    if (userData.fish >= item.price) userData.equippedGlasses = item.id;
+                    if (userData.fish >= item.price) userData.equippedApron = item.id;
                     else return alert('Not enough Fish Currency!');
                 }
             }
