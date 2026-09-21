@@ -3,171 +3,156 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat - Eco Save Energy Edition</title>
+    <title>Energy Cat - Modern Eco Edition</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
         body {
-            font-family: 'Fredoka', cursive, sans-serif;
-            background-color: #E6FFFA;
+            font-family: 'Plus Jakarta Sans', sans-serif;
+            background: linear-gradient(135deg, #0F172A 0%, #064E3B 50%, #022C22 100%);
+            min-h: 100vh;
             user-select: none;
         }
 
-        /* Animate Cat Tail */
+        .glass-card {
+            background: rgba(255, 255, 255, 0.85);
+            backdrop-filter: blur(16px);
+            -webkit-backdrop-filter: blur(16px);
+            border: 1px solid rgba(255, 255, 255, 0.4);
+        }
+
+        .glass-modal {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+        }
+
         @keyframes tailWag {
             0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(15deg); }
+            50% { transform: rotate(18deg); }
         }
         .animate-tail {
             transform-origin: bottom left;
-            animation: tailWag 1.5s ease-in-out infinite;
+            animation: tailWag 1.8s ease-in-out infinite;
         }
 
-        /* Animate Breathing Cat */
         @keyframes catBreathe {
-            0%, 100% { transform: scale(1); }
-            50% { transform: scale(1.03); }
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-4px) scale(1.02); }
         }
         .animate-breathe {
-            animation: catBreathe 3s ease-in-out infinite;
+            animation: catBreathe 3.5s ease-in-out infinite;
         }
 
-        /* Floating Text Animation */
         @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(1); }
-            100% { opacity: 0; transform: translateY(-50px) scale(1.2); }
+            0% { opacity: 1; transform: translateY(0) scale(0.9); }
+            100% { opacity: 0; transform: translateY(-60px) scale(1.1); }
         }
         .float-text {
             position: absolute;
-            animation: floatUp 0.8s ease-out forwards;
+            animation: floatUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
             pointer-events: none;
-            font-weight: bold;
-            color: #D97706;
+            font-weight: 800;
+        }
+
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: rgba(0, 0, 0, 0.05);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: rgba(16, 185, 129, 0.3);
+            border-radius: 10px;
         }
     </style>
 </head>
-<body class="flex justify-center items-center min-h-screen p-4 bg-emerald-50">
+<body class="flex justify-center items-center min-h-screen p-3 md:p-6 text-slate-800">
 
-    <div class="bg-white rounded-3xl shadow-2xl border-4 border-emerald-300 w-full max-w-md p-5 flex flex-col gap-3 relative overflow-hidden">
+    <!-- Custom In-App Notification Toast (No More Browser Alert) -->
+    <div id="toastNotification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-5">
+        <div class="glass-card bg-emerald-900/90 text-white px-5 py-3 rounded-2xl shadow-2xl border border-emerald-400/30 flex items-center gap-3">
+            <span id="toastIcon" class="text-xl">✨</span>
+            <span id="toastMessage" class="text-xs font-bold tracking-wide">Success Notification!</span>
+        </div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="glass-card rounded-[32px] shadow-2xl border border-white/50 w-full max-w-md p-5 flex flex-col gap-4 relative overflow-hidden">
         
-        <!-- Header Zone: Player ID & Leaderboard Toggle -->
-        <div class="flex justify-between items-center bg-emerald-100/70 p-3 rounded-2xl border border-emerald-200">
-            <div>
-                <p class="text-[10px] tracking-wider font-bold text-emerald-600 uppercase">Player ID</p>
-                <div class="flex items-center gap-1">
-                    <span id="displayPlayerId" class="text-sm font-extrabold text-emerald-900">CAT-XXXX</span>
-                    <button onclick="copyPlayerId()" class="text-xs text-emerald-600 hover:text-emerald-800 ml-1" title="Copy ID">📋</button>
+        <!-- Top Navigation: Anonymous Alias & Stats -->
+        <div class="flex justify-between items-center bg-white/60 p-3.5 rounded-2xl border border-emerald-100 shadow-sm">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white text-lg shadow-md shadow-emerald-500/20">
+                    🐾
+                </div>
+                <div>
+                    <p class="text-[10px] tracking-wider font-extrabold text-emerald-600 uppercase">ECO AGENT</p>
+                    <button onclick="openAliasModal()" class="text-xs font-extrabold text-slate-800 hover:text-emerald-600 flex items-center gap-1 transition">
+                        <span id="displayAlias">Silent Saver #0000</span>
+                        <span class="text-[10px] text-slate-400">✏️</span>
+                    </button>
                 </div>
             </div>
-            <div class="flex gap-1.5">
-                <button onclick="toggleLeaderboard()" class="bg-amber-500 hover:bg-amber-600 active:scale-95 text-white text-xs font-bold px-2.5 py-1.5 rounded-xl shadow transition flex items-center gap-1">
-                    🏆 Leaderboard
-                </button>
-                <button onclick="switchPlayerId()" class="bg-emerald-500 hover:bg-emerald-600 active:scale-95 text-white text-xs font-bold px-2.5 py-1.5 rounded-xl shadow transition">
-                    🔄 Switch
-                </button>
-            </div>
-        </div>
-
-        <!-- Status Bars: Fish & Energy -->
-        <div class="grid grid-cols-2 gap-3">
-            <!-- Fish Counter -->
-            <div class="bg-amber-50 border-2 border-amber-200 rounded-2xl p-2.5 flex items-center justify-between shadow-sm">
-                <div class="flex items-center gap-2">
-                    <span class="text-2xl">🐟</span>
-                    <div>
-                        <p class="text-[10px] text-amber-600 font-bold uppercase">Fish Points</p>
-                        <p id="fishCount" class="text-xl font-black text-amber-700">0</p>
-                    </div>
-                </div>
-            </div>
-
-            <!-- Energy Bar -->
-            <div class="bg-emerald-50 border-2 border-emerald-200 rounded-2xl p-2.5 flex flex-col justify-center shadow-sm">
-                <div class="flex justify-between items-center mb-1">
-                    <span class="text-[10px] text-emerald-700 font-bold uppercase">⚡ Cat Energy</span>
-                    <span id="energyText" class="text-xs font-bold text-emerald-800">100/100</span>
-                </div>
-                <div class="w-full bg-emerald-200 h-3 rounded-full overflow-hidden border border-emerald-300">
-                    <div id="energyBar" class="bg-emerald-500 h-full transition-all duration-300" style="width: 100%;"></div>
-                </div>
-            </div>
-        </div>
-
-        <!-- Real Office Save Energy Missions Section -->
-        <div class="bg-emerald-50 border-2 border-emerald-300 rounded-2xl p-3 shadow-sm">
-            <p class="text-[11px] font-bold text-emerald-800 mb-2 uppercase flex items-center gap-1 tracking-wider">
-                <span>🌱</span> Real Office Save Energy Missions
-            </p>
-            <div class="grid grid-cols-1 gap-1.5 text-xs">
-                <button onclick="completeEcoMission('Turned off unused lights/monitors', 15)" class="bg-white hover:bg-emerald-100 active:scale-98 text-emerald-800 font-semibold py-1.5 px-3 border border-emerald-200 rounded-xl transition text-left flex justify-between items-center shadow-sm">
-                    <span>💡 Turn Off Lights / Monitor</span>
-                    <span class="text-amber-600 font-bold">+15 🐟</span>
-                </button>
-                <button onclick="completeEcoMission('Set AC to 25°C', 20)" class="bg-white hover:bg-emerald-100 active:scale-98 text-emerald-800 font-semibold py-1.5 px-3 border border-emerald-200 rounded-xl transition text-left flex justify-between items-center shadow-sm">
-                    <span>🌡️ Keep AC at 25°C</span>
-                    <span class="text-amber-600 font-bold">+20 🐟</span>
-                </button>
-                <button onclick="completeEcoMission('Unplugged unused devices', 10)" class="bg-white hover:bg-emerald-100 active:scale-98 text-emerald-800 font-semibold py-1.5 px-3 border border-emerald-200 rounded-xl transition text-left flex justify-between items-center shadow-sm">
-                    <span>🔌 Unplug Idle Electronics</span>
-                    <span class="text-amber-600 font-bold">+10 🐟</span>
-                </button>
-                <button onclick="completeEcoMission('Used stairs instead of elevator', 10)" class="bg-white hover:bg-emerald-100 active:scale-98 text-emerald-800 font-semibold py-1.5 px-3 border border-emerald-200 rounded-xl transition text-left flex justify-between items-center shadow-sm">
-                    <span>🚶 Take Stairs Instead of Lift</span>
-                    <span class="text-amber-600 font-bold">+10 🐟</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Cat Stage Area -->
-        <div id="catStage" class="relative bg-gradient-to-b from-emerald-100 to-teal-50 rounded-3xl p-4 flex justify-center items-center border-2 border-emerald-200 min-h-[190px] shadow-inner cursor-pointer" onclick="petCat(event)">
             
-            <!-- Click Floating Effect Container -->
+            <button onclick="toggleLeaderboard()" class="bg-amber-500 hover:bg-amber-600 active:scale-95 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md shadow-amber-500/20 transition flex items-center gap-1.5">
+                <span>🏆</span> Ranks
+            </button>
+        </div>
+
+        <!-- Dashboard Stats Grid -->
+        <div class="grid grid-cols-2 gap-3">
+            <div class="bg-gradient-to-br from-amber-50 to-orange-50/60 border border-amber-200/60 rounded-2xl p-3 shadow-sm flex items-center gap-3">
+                <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-2xl">🐟</div>
+                <div>
+                    <p class="text-[10px] text-amber-600/80 font-extrabold tracking-wide uppercase">Fish Points</p>
+                    <p id="fishCount" class="text-2xl font-black text-amber-600 leading-none">0</p>
+                </div>
+            </div>
+
+            <div class="bg-gradient-to-br from-emerald-50 to-teal-50/60 border border-emerald-200/60 rounded-2xl p-3 shadow-sm flex flex-col justify-center">
+                <div class="flex justify-between items-center mb-1.5">
+                    <span class="text-[10px] text-emerald-700 font-extrabold tracking-wide uppercase">⚡ Cat Energy</span>
+                    <span id="energyText" class="text-xs font-extrabold text-emerald-800">100/100</span>
+                </div>
+                <div class="w-full bg-emerald-200/60 h-2.5 rounded-full overflow-hidden p-0.5 border border-emerald-300/40">
+                    <div id="energyBar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Cat Display Stage -->
+        <div id="catStage" class="relative bg-gradient-to-b from-emerald-50/80 via-teal-50/40 to-white/90 rounded-3xl p-4 flex flex-col items-center justify-center border border-emerald-100 shadow-inner min-h-[190px] cursor-pointer group" onclick="petCat(event)">
+            
             <div id="effectLayer" class="absolute inset-0 pointer-events-none"></div>
 
-            <!-- Animated SVG Cat -->
             <div class="animate-breathe relative">
-                <svg width="140" height="140" viewBox="0 0 100 100">
-                    <!-- Tail -->
+                <svg width="130" height="130" viewBox="0 0 100 100" class="drop-shadow-xl transition-transform duration-300 group-hover:scale-105">
                     <path class="animate-tail" d="M 25 75 Q 10 70 15 50 Q 18 45 22 55" stroke="#059669" stroke-width="6" fill="none" stroke-linecap="round" />
-                    
-                    <!-- Ears -->
                     <polygon points="25,35 32,12 48,28" fill="#10B981" />
                     <polygon points="27,33 33,16 45,28" fill="#6EE7B7" />
-                    
                     <polygon points="75,35 68,12 52,28" fill="#10B981" />
                     <polygon points="73,33 67,16 55,28" fill="#6EE7B7" />
-
-                    <!-- Cat Body -->
                     <ellipse cx="50" cy="65" rx="30" ry="22" fill="#34D399" />
-
-                    <!-- Cat Head -->
                     <circle cx="50" cy="45" r="28" fill="#34D399" />
                     <circle cx="50" cy="45" r="26" fill="#6EE7B7" />
-
-                    <!-- Cheeks -->
-                    <circle cx="34" cy="50" r="4" fill="#F472B6" opacity="0.5" />
-                    <circle cx="66" cy="50" r="4" fill="#F472B6" opacity="0.5" />
-
-                    <!-- Eyes -->
+                    <circle cx="34" cy="50" r="4" fill="#F472B6" opacity="0.6" />
+                    <circle cx="66" cy="50" r="4" fill="#F472B6" opacity="0.6" />
                     <circle cx="38" cy="42" r="3.5" fill="#064E3B" />
                     <circle cx="39" cy="41" r="1" fill="#FFFFFF" />
-                    
                     <circle cx="62" cy="42" r="3.5" fill="#064E3B" />
                     <circle cx="63" cy="41" r="1" fill="#FFFFFF" />
-
-                    <!-- Nose & Mouth -->
                     <polygon points="50,48 47,51 53,51" fill="#047857" />
                     <path d="M 45 53 Q 50 57 55 53" stroke="#047857" stroke-width="1.5" fill="none" stroke-linecap="round" />
 
-                    <!-- Accessories Overlay -->
-                    <!-- Red Bow Hat -->
+                    <!-- Accessories -->
                     <g id="acc-bow" class="hidden">
                         <path d="M 42 20 Q 50 25 58 20 Q 50 15 42 20 Z" fill="#EF4444" />
                         <circle cx="50" cy="18" r="3" fill="#B91C1C" />
                     </g>
-                    <!-- Glasses -->
                     <g id="acc-glasses" class="hidden">
                         <circle cx="38" cy="42" r="6" stroke="#1E293B" stroke-width="1.5" fill="none" />
                         <circle cx="62" cy="42" r="6" stroke="#1E293B" stroke-width="1.5" fill="none" />
@@ -175,109 +160,183 @@
                     </g>
                 </svg>
             </div>
+            <p class="text-[10px] font-bold text-emerald-600/70 mt-1">Tap cat to pet ❤️</p>
+        </div>
+
+        <!-- Real Office Missions Section -->
+        <div class="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-300/50 rounded-2xl p-3.5 shadow-sm">
+            <div class="flex justify-between items-center mb-2.5">
+                <p class="text-[11px] font-black text-emerald-900 uppercase flex items-center gap-1.5 tracking-wider">
+                    <span>🌱</span> Photo Proof Save Energy
+                </p>
+                <span class="text-[9px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">Proof Needed</span>
+            </div>
+
+            <!-- Missions Buttons -->
+            <div class="grid grid-cols-1 gap-2 text-xs">
+                <button onclick="triggerMissionUpload('Turned off unused lights/monitors', 15, 20)" class="bg-white hover:bg-emerald-50 active:scale-98 text-slate-700 font-bold py-2 px-3 border border-emerald-200/80 rounded-xl transition flex justify-between items-center shadow-sm">
+                    <span class="flex items-center gap-1.5">💡 Turn Off Light / Monitor</span>
+                    <span class="text-emerald-600 font-extrabold">+15🐟 / +20⚡</span>
+                </button>
+                <button onclick="triggerMissionUpload('Set AC to 25°C', 20, 30)" class="bg-white hover:bg-emerald-50 active:scale-98 text-slate-700 font-bold py-2 px-3 border border-emerald-200/80 rounded-xl transition flex justify-between items-center shadow-sm">
+                    <span class="flex items-center gap-1.5">🌡️ Keep AC at 25°C</span>
+                    <span class="text-emerald-600 font-extrabold">+20🐟 / +30⚡</span>
+                </button>
+                <button onclick="triggerMissionUpload('Unplugged unused devices', 10, 15)" class="bg-white hover:bg-emerald-50 active:scale-98 text-slate-700 font-bold py-2 px-3 border border-emerald-200/80 rounded-xl transition flex justify-between items-center shadow-sm">
+                    <span class="flex items-center gap-1.5">🔌 Unplug Idle Electronics</span>
+                    <span class="text-emerald-600 font-extrabold">+10🐟 / +15⚡</span>
+                </button>
+            </div>
         </div>
 
         <!-- Action Grid Buttons -->
-        <div class="grid grid-cols-2 gap-3">
-            <button onclick="feedCat()" class="bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-bold py-2.5 px-3 rounded-2xl shadow-md transition flex items-center justify-center gap-1.5 text-sm">
+        <div class="grid grid-cols-2 gap-2.5">
+            <button onclick="feedCat()" class="bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-extrabold py-2.5 rounded-2xl shadow-md shadow-amber-500/20 transition text-xs flex items-center justify-center gap-1.5">
                 <span>🍱</span> Feed (-5⚡/+10🐟)
             </button>
-            <button onclick="restCat()" class="bg-teal-500 hover:bg-teal-600 active:scale-95 text-white font-bold py-2.5 px-3 rounded-2xl shadow-md transition flex items-center justify-center gap-1.5 text-sm">
+            <button onclick="restCat()" class="bg-teal-600 hover:bg-teal-700 active:scale-95 text-white font-extrabold py-2.5 rounded-2xl shadow-md shadow-teal-600/20 transition text-xs flex items-center justify-center gap-1.5">
                 <span>😴</span> Sleep (+30⚡)
             </button>
         </div>
 
         <!-- Mini-Game & Shop Navigation Buttons -->
-        <div class="grid grid-cols-2 gap-3">
-            <button onclick="toggleMiniGame()" class="bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold py-2.5 rounded-2xl shadow-md transition flex items-center justify-center gap-2 text-sm">
+        <div class="grid grid-cols-2 gap-2.5">
+            <button onclick="toggleMiniGame()" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold py-2.5 rounded-2xl shadow-md shadow-emerald-600/20 transition text-xs flex items-center justify-center gap-1.5">
                 <span>🎣</span> Catch Fish Game
             </button>
-            <button onclick="toggleShop()" class="bg-purple-600 hover:bg-purple-700 text-white font-extrabold py-2.5 rounded-2xl shadow-md transition flex items-center justify-center gap-2 text-sm">
+            <button onclick="toggleShop()" class="bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-extrabold py-2.5 rounded-2xl shadow-md shadow-purple-600/20 transition text-xs flex items-center justify-center gap-1.5">
                 <span>🛒</span> Accessory Shop
             </button>
         </div>
 
-        <!-- Leaderboard Modal -->
-        <div id="leaderboardModal" class="hidden absolute inset-0 bg-white/95 rounded-3xl p-5 flex flex-col justify-between z-20 border-4 border-amber-400">
+    </div>
+
+    <!-- Hidden File Input for Mission Photo Proof -->
+    <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
+
+    <!-- Photo Verification Modal -->
+    <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-40">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border border-white/50 animate-breathe">
+            <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-1.5">
+                📸 Verify Photo Proof
+            </h3>
+            <p id="modalMissionName" class="text-xs font-semibold text-emerald-700 bg-emerald-50 p-2 rounded-xl border border-emerald-100">
+                Mission: Turn Off Lights
+            </p>
+            <div class="w-full h-40 bg-slate-100 rounded-2xl border-2 border-dashed border-slate-300 overflow-hidden flex items-center justify-center relative">
+                <img id="photoPreview" class="w-full h-full object-cover hidden" />
+                <span id="uploadPlaceholder" class="text-xs font-bold text-slate-400">Clicking camera...</span>
+            </div>
+            <div class="flex gap-2">
+                <button onclick="closePhotoModal()" class="w-1/2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold py-2.5 rounded-xl transition">
+                    Cancel
+                </button>
+                <button onclick="submitMissionWithPhoto()" class="w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 rounded-xl transition shadow-md shadow-emerald-600/20">
+                    Confirm & Earn
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Custom Edit Alias Modal -->
+    <div id="aliasModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-40">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border border-white/50">
+            <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-1.5">
+                ✏️ Change Anonymous Alias
+            </h3>
+            <p class="text-[11px] text-slate-500 font-medium">Choose a pseudonym to hide your real identity on the leaderboard.</p>
+            <input type="text" id="aliasInput" maxlength="18" placeholder="e.g. Green Ninja Cat" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500" />
+            <div class="flex gap-2">
+                <button onclick="closeAliasModal()" class="w-1/2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold py-2.5 rounded-xl transition">
+                    Cancel
+                </button>
+                <button onclick="saveAlias()" class="w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 rounded-xl transition shadow-md shadow-emerald-600/20">
+                    Save Alias
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Leaderboard Modal -->
+    <div id="leaderboardModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-40">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-sm flex flex-col justify-between max-h-[85vh] shadow-2xl border border-white/50">
             <div class="flex justify-between items-center mb-2">
-                <h3 class="font-bold text-lg text-amber-800 flex items-center gap-2">
+                <h3 class="font-extrabold text-base text-slate-800 flex items-center gap-2">
                     <span>🏆</span> Eco Energy Leaderboard
                 </h3>
-                <button onclick="toggleLeaderboard()" class="text-gray-400 font-bold text-xl hover:text-gray-600">✕</button>
+                <button onclick="toggleLeaderboard()" class="text-slate-400 font-bold text-lg hover:text-slate-600">✕</button>
             </div>
+            <p class="text-[11px] text-slate-500 font-semibold mb-3">Ranking by Eco Fish Points (Anonymous Pseudonyms)</p>
 
-            <p class="text-[11px] text-gray-500 font-medium mb-2">Compare your Eco Fish Points with other office players!</p>
-
-            <div class="bg-amber-50 border border-amber-200 rounded-2xl p-2 flex-grow overflow-y-auto max-h-[300px]">
+            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-2 flex-grow overflow-y-auto max-h-[320px]">
                 <table class="w-full text-left text-xs">
                     <thead>
-                        <tr class="border-b border-amber-200 text-amber-800 font-bold">
-                            <th class="p-1.5">Rank</th>
-                            <th class="p-1.5">Player ID</th>
-                            <th class="p-1.5 text-right">Fish 🐟</th>
+                        <tr class="border-b border-slate-200 text-slate-500 font-extrabold text-[10px] uppercase">
+                            <th class="p-2">Rank</th>
+                            <th class="p-2">Agent Alias</th>
+                            <th class="p-2 text-right">Fish 🐟</th>
                         </tr>
                     </thead>
-                    <tbody id="leaderboardRows">
-                        <!-- Dynamic Leaderboard Rows -->
-                    </tbody>
+                    <tbody id="leaderboardRows"></tbody>
                 </table>
             </div>
 
-            <button onclick="toggleLeaderboard()" class="w-full bg-amber-500 hover:bg-amber-600 text-white text-xs font-bold py-2 rounded-xl mt-3 transition shadow">
+            <button onclick="toggleLeaderboard()" class="w-full bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold py-2.5 rounded-xl mt-3 transition">
                 Close
             </button>
         </div>
+    </div>
 
-        <!-- Mini-Game Modal -->
-        <div id="miniGameModal" class="hidden absolute inset-0 bg-white/95 rounded-3xl p-5 flex flex-col justify-between z-20 border-4 border-emerald-400">
+    <!-- Mini-Game Modal -->
+    <div id="miniGameModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-40">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col justify-between h-[360px] shadow-2xl border border-white/50">
             <div class="flex justify-between items-center">
-                <h3 class="font-bold text-lg text-emerald-800">🎣 Mini-Game: Catch Fish!</h3>
-                <button onclick="toggleMiniGame()" class="text-gray-400 font-bold text-xl hover:text-gray-600">✕</button>
+                <h3 class="font-extrabold text-sm text-slate-800">🎣 Catch Fish Game</h3>
+                <button onclick="toggleMiniGame()" class="text-slate-400 font-bold text-lg hover:text-slate-600">✕</button>
             </div>
             
-            <div id="gameBox" class="relative bg-sky-100 rounded-2xl border-2 border-sky-300 h-48 overflow-hidden flex items-center justify-center">
-                <p id="gameStartText" class="text-xs font-bold text-sky-600">Click start button below to play!</p>
-                <button id="targetFish" onclick="catchFish()" class="hidden absolute text-3xl transition-all duration-200 active:scale-75">🐟</button>
+            <div id="gameBox" class="relative bg-sky-50 rounded-2xl border border-sky-200 h-48 overflow-hidden flex items-center justify-center">
+                <p id="gameStartText" class="text-xs font-extrabold text-sky-600">Tap start below to play!</p>
+                <button id="targetFish" onclick="catchFish()" class="hidden absolute text-3xl transition-all duration-150 active:scale-75">🐟</button>
             </div>
 
             <div class="flex justify-between items-center">
-                <p class="text-xs font-bold text-gray-600">Caught: <span id="gameScore" class="text-amber-600 font-extrabold text-base">0</span> fish</p>
-                <button id="startGameBtn" onclick="startMiniGame()" class="bg-emerald-500 hover:bg-emerald-600 text-white text-sm font-bold px-4 py-2 rounded-xl shadow">
+                <p class="text-xs font-extrabold text-slate-600">Caught: <span id="gameScore" class="text-amber-600 font-black text-sm">0</span></p>
+                <button id="startGameBtn" onclick="startMiniGame()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-md">
                     Start (10s)
                 </button>
             </div>
         </div>
+    </div>
 
-        <!-- Shop Modal -->
-        <div id="shopModal" class="hidden absolute inset-0 bg-white/95 rounded-3xl p-5 flex flex-col justify-between z-20 border-4 border-purple-400">
-            <div class="flex justify-between items-center">
-                <h3 class="font-bold text-lg text-purple-800">🛒 Accessory Shop</h3>
-                <button onclick="toggleShop()" class="text-gray-400 font-bold text-xl hover:text-gray-600">✕</button>
+    <!-- Shop Modal -->
+    <div id="shopModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-40">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col justify-between shadow-2xl border border-white/50">
+            <div class="flex justify-between items-center mb-3">
+                <h3 class="font-extrabold text-sm text-slate-800">🛒 Accessory Shop</h3>
+                <button onclick="toggleShop()" class="text-slate-400 font-bold text-lg hover:text-slate-600">✕</button>
             </div>
 
-            <div class="grid grid-cols-2 gap-3 my-auto">
-                <!-- Item 1: Bow -->
-                <div class="border-2 border-purple-200 rounded-2xl p-3 flex flex-col items-center gap-2 bg-purple-50">
+            <div class="grid grid-cols-2 gap-3 mb-3">
+                <div class="border border-purple-200 rounded-2xl p-3 flex flex-col items-center gap-2 bg-purple-50/50">
                     <span class="text-3xl">🎀</span>
                     <p class="text-xs font-bold text-purple-900">Red Ribbon</p>
-                    <button id="btn-buy-bow" onclick="buyItem('bow', 30)" class="w-full bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-1.5 rounded-xl transition">
+                    <button id="btn-buy-bow" onclick="buyItem('bow', 30)" class="w-full bg-purple-600 text-white text-xs font-bold py-1.5 rounded-xl">
                         Buy (30 🐟)
                     </button>
                 </div>
 
-                <!-- Item 2: Glasses -->
-                <div class="border-2 border-purple-200 rounded-2xl p-3 flex flex-col items-center gap-2 bg-purple-50">
+                <div class="border border-purple-200 rounded-2xl p-3 flex flex-col items-center gap-2 bg-purple-50/50">
                     <span class="text-3xl">👓</span>
                     <p class="text-xs font-bold text-purple-900">Cool Glasses</p>
-                    <button id="btn-buy-glasses" onclick="buyItem('glasses', 50)" class="w-full bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-1.5 rounded-xl transition">
+                    <button id="btn-buy-glasses" onclick="buyItem('glasses', 50)" class="w-full bg-purple-600 text-white text-xs font-bold py-1.5 rounded-xl">
                         Buy (50 🐟)
                     </button>
                 </div>
             </div>
 
-            <p class="text-[11px] text-center text-purple-600 font-semibold">Equip or unequip accessories anytime after buying.</p>
+            <button onclick="toggleShop()" class="w-full bg-slate-200 text-slate-700 text-xs font-bold py-2 rounded-xl">Close</button>
         </div>
-
     </div>
 
     <!-- JavaScript Logic -->
@@ -299,16 +358,36 @@
             } catch(e) {}
         }
 
-        function meowSound() {
-            playSound(700, 'sine', 0.15);
-            setTimeout(() => playSound(500, 'sine', 0.2), 100);
+        // Custom In-App Toast System (Replaces browser alert)
+        function showToast(message, icon = '✨') {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = message;
+            document.getElementById('toastIcon').innerText = icon;
+
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-5');
+            toast.classList.add('opacity-100', 'translate-y-0');
+
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-5');
+            }, 3000);
         }
 
-        // State Management & Player ID System
-        let playerId = localStorage.getItem('energycat_player_id');
-        if (!playerId) {
-            playerId = 'CAT-' + Math.floor(1000 + Math.random() * 9000);
-            localStorage.setItem('energycat_player_id', playerId);
+        // Anonymous Aliases
+        const catAdjectives = ['Silent', 'Green', 'Eco', 'Solar', 'Power', 'Ninja', 'Cyber'];
+        const catNouns = ['Saver', 'Paws', 'Guardian', 'Agent', 'Whiskers', 'Ranger'];
+
+        function generateRandomAlias() {
+            const adj = catAdjectives[Math.floor(Math.random() * catAdjectives.length)];
+            const noun = catNouns[Math.floor(Math.random() * catNouns.length)];
+            const num = Math.floor(1000 + Math.random() * 9000);
+            return `${adj} ${noun} #${num}`;
+        }
+
+        let userAlias = localStorage.getItem('energycat_user_alias');
+        if (!userAlias) {
+            userAlias = generateRandomAlias();
+            localStorage.setItem('energycat_user_alias', userAlias);
         }
 
         let gameState = {
@@ -318,17 +397,16 @@
             equipped: { bow: false, glasses: false }
         };
 
-        // Sample Players for Leaderboard Comparison
         const samplePlayers = [
-            { id: 'CAT-1024', fish: 250 },
-            { id: 'CAT-5582', fish: 180 },
-            { id: 'CAT-9911', fish: 120 },
-            { id: 'CAT-3340', fish: 75 }
+            { alias: 'Eco Guardian #4810', fish: 280 },
+            { alias: 'Solar Whiskers #1029', fish: 210 },
+            { alias: 'Ninja Saver #9031', fish: 145 },
+            { alias: 'Cyber Paws #2284', fish: 80 }
         ];
 
         function loadData() {
-            document.getElementById('displayPlayerId').innerText = playerId;
-            const saved = localStorage.getItem('data_' + playerId);
+            document.getElementById('displayAlias').innerText = userAlias;
+            const saved = localStorage.getItem('data_' + userAlias);
             if (saved) {
                 gameState = JSON.parse(saved);
             }
@@ -336,7 +414,7 @@
         }
 
         function saveData() {
-            localStorage.setItem('data_' + playerId, JSON.stringify(gameState));
+            localStorage.setItem('data_' + userAlias, JSON.stringify(gameState));
             updateUI();
         }
 
@@ -345,67 +423,114 @@
             document.getElementById('energyText').innerText = `${gameState.energy}/100`;
             document.getElementById('energyBar').style.width = `${gameState.energy}%`;
 
-            // Render Equipped Items
             document.getElementById('acc-bow').classList.toggle('hidden', !gameState.equipped.bow);
             document.getElementById('acc-glasses').classList.toggle('hidden', !gameState.equipped.glasses);
 
-            // Update Shop Buttons Status
             updateShopButton('bow', 30);
             updateShopButton('glasses', 50);
 
-            // Render Leaderboard
             renderLeaderboard();
         }
 
         function renderLeaderboard() {
-            // Combine Current Player with Sample Players
-            let leaderboardData = [...samplePlayers];
-            const existingIndex = leaderboardData.findIndex(p => p.id === playerId);
-            if (existingIndex >= 0) {
-                leaderboardData[existingIndex].fish = gameState.fish;
+            let data = [...samplePlayers];
+            const idx = data.findIndex(p => p.alias === userAlias);
+            if (idx >= 0) {
+                data[idx].fish = gameState.fish;
             } else {
-                leaderboardData.push({ id: playerId, fish: gameState.fish });
+                data.push({ alias: userAlias, fish: gameState.fish });
             }
 
-            // Sort Descending by Fish Points
-            leaderboardData.sort((a, b) => b.fish - a.fish);
+            data.sort((a, b) => b.fish - a.fish);
 
-            const rowsContainer = document.getElementById('leaderboardRows');
-            rowsContainer.innerHTML = '';
+            const container = document.getElementById('leaderboardRows');
+            container.innerHTML = '';
 
-            leaderboardData.forEach((player, index) => {
-                const isCurrent = player.id === playerId;
-                const row = document.createElement('tr');
-                row.className = `border-b border-amber-100 ${isCurrent ? 'bg-amber-200/60 font-bold text-amber-900' : 'text-gray-700'}`;
-                
-                let rankBadge = `${index + 1}`;
-                if (index === 0) rankBadge = '🥇 1st';
-                if (index === 1) rankBadge = '🥈 2nd';
-                if (index === 2) rankBadge = '🥉 3rd';
+            data.forEach((p, index) => {
+                const isYou = p.alias === userAlias;
+                const tr = document.createElement('tr');
+                tr.className = `border-b border-slate-100 ${isYou ? 'bg-emerald-50 font-bold text-emerald-900' : 'text-slate-700'}`;
 
-                row.innerHTML = `
-                    <td class="p-1.5 font-bold">${rankBadge}</td>
-                    <td class="p-1.5">${player.id} ${isCurrent ? '<span class="text-[10px] bg-amber-500 text-white px-1 rounded ml-1">YOU</span>' : ''}</td>
-                    <td class="p-1.5 text-right font-extrabold text-amber-700">${player.fish}</td>
+                let rankBadge = `#${index + 1}`;
+                if (index === 0) rankBadge = '🥇';
+                if (index === 1) rankBadge = '🥈';
+                if (index === 2) rankBadge = '🥉';
+
+                tr.innerHTML = `
+                    <td class="p-2 font-bold">${rankBadge}</td>
+                    <td class="p-2 flex items-center gap-1">${p.alias} ${isYou ? '<span class="text-[9px] bg-emerald-600 text-white px-1.5 py-0.5 rounded-full font-extrabold">YOU</span>' : ''}</td>
+                    <td class="p-2 text-right font-black text-amber-600">${p.fish}</td>
                 `;
-                rowsContainer.appendChild(row);
+                container.appendChild(tr);
             });
         }
 
-        function updateShopButton(item, price) {
-            const btn = document.getElementById(`btn-buy-${item}`);
-            if (gameState.inventory[item]) {
-                btn.innerText = gameState.equipped[item] ? 'Unequip' : 'Equip';
-                btn.className = "w-full bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-1.5 rounded-xl transition";
-            } else {
-                btn.innerText = `Buy (${price} 🐟)`;
-                btn.className = "w-full bg-purple-600 hover:bg-purple-700 text-white text-xs font-bold py-1.5 rounded-xl transition";
+        // Photo Upload Mission Flow
+        let currentActiveMission = null;
+
+        function triggerMissionUpload(name, rewardFish, rewardEnergy) {
+            currentActiveMission = { name, rewardFish, rewardEnergy };
+            document.getElementById('modalMissionName').innerText = `Mission: ${name}`;
+            document.getElementById('photoPreview').classList.add('hidden');
+            document.getElementById('uploadPlaceholder').classList.remove('hidden');
+            document.getElementById('photoInput').click();
+        }
+
+        function handlePhotoUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    document.getElementById('photoPreview').src = event.target.result;
+                    document.getElementById('photoPreview').classList.remove('hidden');
+                    document.getElementById('uploadPlaceholder').classList.add('hidden');
+                    document.getElementById('photoModal').classList.remove('hidden');
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        // Actions: Pet, Feed, Rest
+        function closePhotoModal() {
+            document.getElementById('photoModal').classList.add('hidden');
+            document.getElementById('photoInput').value = '';
+        }
+
+        function submitMissionWithPhoto() {
+            if (!currentActiveMission) return;
+            
+            playSound(600, 'sine', 0.2);
+            gameState.fish += currentActiveMission.rewardFish;
+            gameState.energy = Math.min(100, gameState.energy + currentActiveMission.rewardEnergy);
+            saveData();
+            closePhotoModal();
+
+            showToast(`Proof Verified! +${currentActiveMission.rewardFish} 🐟 & +${currentActiveMission.rewardEnergy}⚡ Energy!`, '🌿');
+        }
+
+        // Alias Modal Functions
+        function openAliasModal() {
+            document.getElementById('aliasInput').value = userAlias;
+            document.getElementById('aliasModal').classList.remove('hidden');
+        }
+
+        function closeAliasModal() {
+            document.getElementById('aliasModal').classList.add('hidden');
+        }
+
+        function saveAlias() {
+            const val = document.getElementById('aliasInput').value.trim();
+            if (val) {
+                userAlias = val;
+                localStorage.setItem('energycat_user_alias', userAlias);
+                loadData();
+                closeAliasModal();
+                showToast(`Alias changed to "${userAlias}"`, '✏️');
+            }
+        }
+
+        // Pet, Feed, Rest
         function petCat(e) {
-            meowSound();
+            playSound(700, 'sine', 0.15);
             createFloatingEffect(e.clientX, e.clientY, "❤️ +1");
             gameState.energy = Math.min(100, gameState.energy + 1);
             saveData();
@@ -413,110 +538,84 @@
 
         function feedCat() {
             if (gameState.energy < 5) {
-                alert('Not enough energy! Let the cat rest first.');
+                showToast('Not enough energy! Let the cat sleep first.', '⚠️');
                 return;
             }
             playSound(400, 'triangle', 0.1);
             gameState.energy -= 5;
             gameState.fish += 10;
             saveData();
+            showToast('Fed the cat! (-5⚡ / +10 🐟)', '🍱');
         }
 
         function restCat() {
             playSound(300, 'sine', 0.3);
             gameState.energy = Math.min(100, gameState.energy + 30);
             saveData();
+            showToast('Cat rested well! (+30⚡)', '😴');
         }
 
-        // Real Office Eco Missions Function
-        function completeEcoMission(missionName, rewardFish) {
-            playSound(600, 'sine', 0.2);
-            gameState.fish += rewardFish;
-            gameState.energy = Math.min(100, gameState.energy + 10);
-            saveData();
-            alert(`Great job saving energy! (${missionName})\nEarned +${rewardFish} Fish & +10 Cat Energy! 🌍⚡`);
-        }
-
-        // Floating Effect Function
         function createFloatingEffect(x, y, text) {
             const stage = document.getElementById('catStage').getBoundingClientRect();
             const el = document.createElement('div');
-            el.className = 'float-text';
+            el.className = 'float-text text-amber-500 text-sm';
             el.innerText = text;
             el.style.left = `${x - stage.left}px`;
             el.style.top = `${y - stage.top}px`;
             document.getElementById('effectLayer').appendChild(el);
-            setTimeout(() => el.remove(), 800);
+            setTimeout(() => el.remove(), 900);
         }
 
-        // Player ID Management Functions
-        function copyPlayerId() {
-            navigator.clipboard.writeText(playerId);
-            alert('Player ID copied to clipboard!');
-        }
+        // Modals
+        function toggleLeaderboard() { document.getElementById('leaderboardModal').classList.toggle('hidden'); }
+        function toggleMiniGame() { document.getElementById('miniGameModal').classList.toggle('hidden'); }
+        function toggleShop() { document.getElementById('shopModal').classList.toggle('hidden'); }
 
-        function switchPlayerId() {
-            const input = prompt('Enter Player ID to switch account:', playerId);
-            if (input && input.trim() !== '') {
-                playerId = input.trim().toUpperCase();
-                localStorage.setItem('energycat_player_id', playerId);
-                loadData();
+        // Shop System
+        function updateShopButton(item, price) {
+            const btn = document.getElementById(`btn-buy-${item}`);
+            if (gameState.inventory[item]) {
+                btn.innerText = gameState.equipped[item] ? 'Unequip' : 'Equip';
+                btn.className = "w-full bg-emerald-600 text-white text-xs font-bold py-1.5 rounded-xl";
+            } else {
+                btn.innerText = `Buy (${price} 🐟)`;
+                btn.className = "w-full bg-purple-600 text-white text-xs font-bold py-1.5 rounded-xl";
             }
         }
 
-        // Modals Toggle
-        function toggleMiniGame() {
-            document.getElementById('miniGameModal').classList.toggle('hidden');
-        }
-
-        function toggleShop() {
-            document.getElementById('shopModal').classList.toggle('hidden');
-        }
-
-        function toggleLeaderboard() {
-            document.getElementById('leaderboardModal').classList.toggle('hidden');
-        }
-
-        // Shop System Logic
         function buyItem(item, price) {
             if (gameState.inventory[item]) {
-                // Toggle Equip
                 gameState.equipped[item] = !gameState.equipped[item];
             } else {
-                // Buy Item
                 if (gameState.fish >= price) {
                     gameState.fish -= price;
                     gameState.inventory[item] = true;
                     gameState.equipped[item] = true;
                     playSound(600, 'square', 0.2);
+                    showToast('Item purchased and equipped!', '🎉');
                 } else {
-                    alert('Not enough fish points!');
+                    showToast('Not enough fish points!', '❌');
                     return;
                 }
             }
             saveData();
         }
 
-        // Mini-Game Logic
+        // Mini Game Logic
         let gameScore = 0;
-        let gameTimer = null;
-
         function startMiniGame() {
             gameScore = 0;
             document.getElementById('gameScore').innerText = gameScore;
             document.getElementById('gameStartText').classList.add('hidden');
             document.getElementById('startGameBtn').disabled = true;
-            document.getElementById('startGameBtn').classList.add('opacity-50');
             
             spawnFish();
-            gameTimer = setTimeout(() => {
+            setTimeout(() => {
                 document.getElementById('targetFish').classList.add('hidden');
-                document.getElementById('gameStartText').innerText = `Time's up! You caught ${gameScore} fish (+${gameScore * 2} 🐟)`;
+                document.getElementById('gameStartText').innerText = `Time's up! +${gameScore * 2} 🐟`;
                 document.getElementById('gameStartText').classList.remove('hidden');
                 document.getElementById('startGameBtn').disabled = false;
-                document.getElementById('startGameBtn').classList.remove('opacity-50');
                 
-                // Reward Player
                 gameState.fish += gameScore * 2;
                 saveData();
             }, 10000);
@@ -525,10 +624,8 @@
         function spawnFish() {
             const fish = document.getElementById('targetFish');
             const box = document.getElementById('gameBox').getBoundingClientRect();
-            
             const x = Math.random() * (box.width - 50);
             const y = Math.random() * (box.height - 50);
-            
             fish.style.left = `${x}px`;
             fish.style.top = `${y}px`;
             fish.classList.remove('hidden');
@@ -541,7 +638,6 @@
             spawnFish();
         }
 
-        // Initialize App
         loadData();
     </script>
 </body>
