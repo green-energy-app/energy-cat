@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat 3D - Kawaii Dress-Up Edition</title>
+    <title>Energy Cat 3D - Kawaii Dress-Up & Growth Studio</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@600;700;800&display=swap" rel="stylesheet">
@@ -17,7 +17,7 @@
             overflow-x: hidden;
         }
 
-        /* Claymorphism & Glossy 3D Cards */
+        /* Claymorphism Styling */
         .clay-card {
             background: rgba(255, 255, 255, 0.95);
             border-radius: 44px;
@@ -86,12 +86,6 @@
             z-index: 30;
         }
 
-        @keyframes sparkleFloat {
-            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.8; }
-            50% { transform: translateY(-10px) rotate(15deg); opacity: 1; }
-        }
-        .animate-sparkle { animation: sparkleFloat 3s ease-in-out infinite; }
-
         @keyframes zzzFloat {
             0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
             50% { opacity: 1; transform: translate(16px, -22px) scale(1.2); }
@@ -123,7 +117,7 @@
     </div>
 
     <!-- Main Game Container -->
-    <div class="clay-card w-full max-w-md h-[840px] flex flex-col justify-between relative z-10 overflow-hidden p-5 border-4 border-white">
+    <div class="clay-card w-full max-w-md h-[860px] flex flex-col justify-between relative z-10 overflow-hidden p-5 border-4 border-white">
         
         <!-- Header Bar -->
         <div class="bg-gradient-to-r from-rose-200 via-pink-200 to-amber-100 p-3.5 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
@@ -152,135 +146,151 @@
         <!-- MAIN CONTENT AREA -->
         <div class="flex-grow overflow-y-auto py-3">
             
-            <!-- PAGE 1: HOME (CAT CARE) -->
-            <div id="tab-home" class="tab-content active space-y-3.5">
+            <!-- PAGE 1: HOME (CAT CARE & GROWTH) -->
+            <div id="tab-home" class="tab-content active space-y-3">
                 
+                <!-- Cat Level & Growth Progress Bar -->
+                <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 border-3 border-purple-300 rounded-3xl p-3 shadow-sm">
+                    <div class="flex justify-between items-center mb-1">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-sm font-black bg-purple-600 text-white px-2.5 py-0.5 rounded-full shadow-sm" id="catLevelBadge">LVL 1</span>
+                            <span class="text-xs font-black text-purple-900 tracking-wider" id="catTitleText">KITTEN</span>
+                        </div>
+                        <span id="expText" class="text-xs font-black bg-white text-purple-700 px-2.5 py-0.5 rounded-full border border-purple-300">0/50 EXP</span>
+                    </div>
+                    <div class="w-full bg-purple-200 h-3.5 rounded-full overflow-hidden p-0.5 border border-purple-300">
+                        <div id="expBar" class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+                    </div>
+                </div>
+
                 <!-- Energy Progress Bar -->
-                <div class="bg-white border-3 border-rose-300 rounded-3xl p-3.5 shadow-sm">
-                    <div class="flex justify-between items-center mb-1.5">
+                <div class="bg-white border-3 border-rose-300 rounded-3xl p-3 shadow-sm">
+                    <div class="flex justify-between items-center mb-1">
                         <span class="text-xs font-black text-rose-700 flex items-center gap-1.5 tracking-wider">
                             <span class="text-base">⚡</span> CAT ENERGY
                         </span>
-                        <span id="energyText" class="text-xs font-black bg-rose-100 text-rose-700 px-3 py-1 rounded-full border border-rose-300">100/100</span>
+                        <span id="energyText" class="text-xs font-black bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded-full border border-rose-300">100/100</span>
                     </div>
-                    <div class="w-full bg-rose-100 h-5 rounded-full overflow-hidden p-1 border-2 border-rose-200 shadow-inner">
-                        <div id="energyBar" class="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500 shadow-md" style="width: 100%;"></div>
+                    <div class="w-full bg-rose-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-rose-200 shadow-inner">
+                        <div id="energyBar" class="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
                     </div>
                 </div>
 
                 <!-- Kawaii 3D Cat Stage Screen -->
-                <div id="catStage" class="relative clay-inner p-3 flex flex-col items-center justify-center border-3 border-pink-200 h-[340px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
+                <div id="catStage" class="relative clay-inner p-2 flex flex-col items-center justify-center border-3 border-pink-200 h-[310px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
                     
                     <!-- Decorative Background Elements -->
-                    <div class="absolute top-4 left-5 text-3xl animate-sparkle opacity-90">☁️</div>
-                    <div class="absolute top-6 right-6 text-2xl animate-bounce opacity-80">✨</div>
-                    <div class="absolute top-16 left-10 text-lg text-pink-400 animate-pulse">🌸</div>
-                    <div class="absolute bottom-12 left-6 text-3xl animate-bounce opacity-90">🥛</div>
-                    <div class="absolute bottom-10 right-8 text-2xl animate-pulse">🐟</div>
-                    <div class="absolute top-24 right-10 text-base opacity-70">⭐</div>
+                    <div class="absolute top-3 left-4 text-2xl opacity-80">☁️</div>
+                    <div class="absolute top-4 right-5 text-2xl opacity-80">✨</div>
+                    <div class="absolute bottom-10 left-5 text-2xl opacity-80">🥛</div>
+                    <div class="absolute bottom-8 right-6 text-2xl opacity-80">🐟</div>
 
                     <!-- Sleep Zzz FX -->
                     <div id="sleepEffect" class="hidden absolute top-6 right-12 z-20 pointer-events-none">
                         <span class="text-3xl font-black text-indigo-500 animate-zzz inline-block">Zzz...</span>
                     </div>
 
-                    <!-- SUPER KAWAII 3D CAT VECTOR SVG -->
-                    <div class="animate-breathe relative flex items-center justify-center z-10 w-[240px] h-[240px]">
-                        <svg width="240" height="240" viewBox="0 0 200 200" class="drop-shadow-2xl transition-transform duration-300 group-hover:scale-105">
-                            <defs>
-                                <radialGradient id="catBody3D" cx="35%" cy="30%" r="70%">
-                                    <stop offset="0%" stop-color="#FFFFFF"/>
-                                    <stop offset="55%" stop-color="#FFEAD5"/>
-                                    <stop offset="100%" stop-color="#FDCEAB"/>
-                                </radialGradient>
-                                <radialGradient id="earInner" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" stop-color="#FFB6C1"/>
-                                    <stop offset="100%" stop-color="#FF69B4"/>
-                                </radialGradient>
-                            </defs>
+                    <!-- CAT CONTAINER WITH DYNAMIC GROWTH SCALE -->
+                    <div id="catScaleWrapper" class="relative flex items-center justify-center transition-all duration-500 transform scale-100">
+                        <div class="animate-breathe relative flex items-center justify-center z-10 w-[230px] h-[230px]">
+                            
+                            <!-- ORIGINAL KAWAII 3D CAT SVG -->
+                            <svg width="230" height="230" viewBox="0 0 200 200" class="drop-shadow-2xl">
+                                <defs>
+                                    <radialGradient id="catBody3D" cx="35%" cy="30%" r="70%">
+                                        <stop offset="0%" stop-color="#FFFFFF"/>
+                                        <stop offset="55%" stop-color="#FFEAD5"/>
+                                        <stop offset="100%" stop-color="#FDCEAB"/>
+                                    </radialGradient>
+                                    <radialGradient id="earInner" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#FFB6C1"/>
+                                        <stop offset="100%" stop-color="#FF69B4"/>
+                                    </radialGradient>
+                                </defs>
 
-                            <!-- Tail with Stripe -->
-                            <g class="animate-tail">
-                                <path d="M 140 145 C 175 140, 185 105, 170 85 C 158 70, 145 88, 152 105 C 158 118, 142 135, 132 138 Z" 
-                                      fill="#FCB584" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" />
-                                <path d="M 160 92 Q 165 98 158 105" stroke="#5C2C16" stroke-width="4" stroke-linecap="round" fill="none"/>
-                            </g>
+                                <!-- Tail -->
+                                <g class="animate-tail">
+                                    <path d="M 140 145 C 175 140, 185 105, 170 85 C 158 70, 145 88, 152 105 C 158 118, 142 135, 132 138 Z" 
+                                          fill="#FCB584" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" />
+                                    <path d="M 160 92 Q 165 98 158 105" stroke="#5C2C16" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                </g>
 
-                            <!-- Feet Layer (Behind shoes or under paws) -->
-                            <ellipse cx="65" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
-                            <ellipse cx="135" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
+                                <!-- Feet Layer -->
+                                <ellipse cx="65" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
+                                <ellipse cx="135" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
 
-                            <!-- Body Shell -->
-                            <path d="M 50 120 C 42 155, 45 172, 65 172 C 85 172, 115 172, 135 172 C 155 172, 158 155, 150 120 Z" 
-                                  fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
-                            <ellipse cx="100" cy="148" rx="28" ry="20" fill="#FFFFFF" opacity="0.9"/>
+                                <!-- Body Shell -->
+                                <path d="M 50 120 C 42 155, 45 172, 65 172 C 85 172, 115 172, 135 172 C 155 172, 158 155, 150 120 Z" 
+                                      fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
+                                <ellipse cx="100" cy="148" rx="28" ry="20" fill="#FFFFFF" opacity="0.9"/>
 
-                            <!-- Raised Paws -->
-                            <ellipse cx="72" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
-                            <ellipse cx="128" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
+                                <!-- Raised Paws -->
+                                <ellipse cx="72" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
+                                <ellipse cx="128" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
 
-                            <!-- Large Cute Head -->
-                            <path d="M 35 80 C 22 55, 42 22, 68 32 C 85 22, 115 22, 132 32 C 158 22, 178 55, 165 80 C 175 110, 155 128, 100 128 C 45 128, 25 110, 35 80 Z" 
-                                  fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
+                                <!-- Head -->
+                                <path d="M 35 80 C 22 55, 42 22, 68 32 C 85 22, 115 22, 132 32 C 158 22, 178 55, 165 80 C 175 110, 155 128, 100 128 C 45 128, 25 110, 35 80 Z" 
+                                      fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
 
-                            <!-- Inner Ears -->
-                            <path d="M 48 42 C 43 32, 58 28, 64 36 Z" fill="url(#earInner)"/>
-                            <path d="M 152 42 C 157 32, 142 28, 136 36 Z" fill="url(#earInner)"/>
+                                <!-- Inner Ears -->
+                                <path d="M 48 42 C 43 32, 58 28, 64 36 Z" fill="url(#earInner)"/>
+                                <path d="M 152 42 C 157 32, 142 28, 136 36 Z" fill="url(#earInner)"/>
 
-                            <!-- Calico Ear Patches -->
-                            <path d="M 35 80 C 30 60, 45 35, 62 34 C 52 55, 55 70, 58 82 Z" fill="#FB923C"/>
+                                <!-- Calico Patch -->
+                                <path d="M 35 80 C 30 60, 45 35, 62 34 C 52 55, 55 70, 58 82 Z" fill="#FB923C"/>
 
-                            <!-- Whiskers -->
-                            <path d="M 22 82 L 42 85 M 18 92 L 40 92 M 22 102 L 43 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
-                            <path d="M 178 82 L 158 85 M 182 92 L 160 92 M 178 102 L 157 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
+                                <!-- Whiskers -->
+                                <path d="M 22 82 L 42 85 M 18 92 L 40 92 M 22 102 L 43 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M 178 82 L 158 85 M 182 92 L 160 92 M 178 102 L 157 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
 
-                            <!-- Awake Eyes (Big Sparkling Kawaii Eyes & Blushes) -->
-                            <g id="catEyesAwake">
-                                <circle cx="72" cy="82" r="11" fill="#3B170B"/>
-                                <circle cx="69" cy="78" r="4" fill="#FFFFFF"/>
-                                <circle cx="75" cy="85" r="2" fill="#FFFFFF"/>
-                                
-                                <circle cx="128" cy="82" r="11" fill="#3B170B"/>
-                                <circle cx="125" cy="78" r="4" fill="#FFFFFF"/>
-                                <circle cx="131" cy="85" r="2" fill="#FFFFFF"/>
+                                <!-- Awake Eyes & Face -->
+                                <g id="catEyesAwake">
+                                    <circle cx="72" cy="82" r="11" fill="#3B170B"/>
+                                    <circle cx="69" cy="78" r="4" fill="#FFFFFF"/>
+                                    <circle cx="75" cy="85" r="2" fill="#FFFFFF"/>
+                                    
+                                    <circle cx="128" cy="82" r="11" fill="#3B170B"/>
+                                    <circle cx="125" cy="78" r="4" fill="#FFFFFF"/>
+                                    <circle cx="131" cy="85" r="2" fill="#FFFFFF"/>
 
-                                <ellipse cx="58" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
-                                <ellipse cx="142" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
+                                    <ellipse cx="58" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
+                                    <ellipse cx="142" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
 
-                                <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
-                                <path d="M 92 92 Q 100 100 100 92 Q 100 100 108 92" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-                            </g>
+                                    <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
+                                    <path d="M 92 92 Q 100 100 100 92 Q 100 100 108 92" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                                </g>
 
-                            <!-- Sleeping Eyes -->
-                            <g id="catEyesSleep" class="hidden">
-                                <path d="M 62 84 Q 72 94 82 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
-                                <path d="M 118 84 Q 128 94 138 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
-                                <ellipse cx="58" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
-                                <ellipse cx="142" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
-                                <path d="M 95 92 Q 100 96 105 92" stroke="#5C2C16" stroke-width="3" fill="none" stroke-linecap="round"/>
-                            </g>
-                        </svg>
+                                <!-- Sleeping Eyes -->
+                                <g id="catEyesSleep" class="hidden">
+                                    <path d="M 62 84 Q 72 94 82 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <path d="M 118 84 Q 128 94 138 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <ellipse cx="58" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
+                                    <ellipse cx="142" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
+                                    <path d="M 95 92 Q 100 96 105 92" stroke="#5C2C16" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                </g>
+                            </svg>
 
-                        <!-- DRESS UP CLOTHES OVERLAY ON CAT BODY -->
-                        <div class="cat-outfit-container absolute inset-0 pointer-events-none flex items-center justify-center">
-                            <div class="slot-head absolute inset-0 flex items-center justify-center"></div>
-                            <div class="slot-outfit absolute inset-0 flex items-center justify-center"></div>
-                            <div class="slot-shoes absolute inset-0 flex items-center justify-center"></div>
+                            <!-- PIXEL-PERFECT FITTING CLOTHES OVERLAYS -->
+                            <div class="cat-outfit-container absolute inset-0 pointer-events-none flex items-center justify-center">
+                                <div class="slot-head absolute inset-0 flex items-center justify-center"></div>
+                                <div class="slot-outfit absolute inset-0 flex items-center justify-center"></div>
+                                <div class="slot-shoes absolute inset-0 flex items-center justify-center"></div>
+                            </div>
                         </div>
                     </div>
 
-                    <p id="catStatusLabel" class="text-xs font-black text-rose-600 mt-2 bg-white px-5 py-2 rounded-full border-2 border-rose-300 shadow-md z-10 tracking-wide">
-                        ✨ TAP TO PET KITTY (+1⚡)
+                    <p id="catStatusLabel" class="text-xs font-black text-rose-600 mt-1 bg-white px-4 py-1.5 rounded-full border-2 border-rose-300 shadow-md z-10 tracking-wide">
+                        ✨ TAP TO PET (+1⚡ / +2 EXP)
                     </p>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="grid grid-cols-2 gap-3.5 pt-1">
-                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 text-white font-black py-3.5 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
-                        <span class="text-xl">🍱</span> FEED (-5🐟 / +15⚡)
+                <div class="grid grid-cols-2 gap-3 pt-0.5">
+                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 text-white font-black py-3 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
+                        <span class="text-xl">🍱</span> FEED (-5🐟 / +15⚡ / +10 EXP)
                     </button>
-                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-500 text-white font-black py-3.5 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
-                        <span class="text-xl">😴</span> REST (+30⚡)
+                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-500 text-white font-black py-3 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
+                        <span class="text-xl">😴</span> REST (+30⚡ / +15 EXP)
                     </button>
                 </div>
             </div>
@@ -292,7 +302,7 @@
                         <span class="text-2xl">🌱</span>
                         <p class="text-sm font-black text-emerald-950 uppercase tracking-wide">Eco Missions (Photo Proof)</p>
                     </div>
-                    <p class="text-xs font-extrabold text-emerald-800 mb-3.5">Complete real-world eco tasks to earn fish & energy!</p>
+                    <p class="text-xs font-extrabold text-emerald-800 mb-3.5">Complete real-world eco tasks to earn fish & EXP!</p>
 
                     <div class="space-y-3 text-xs font-black">
                         <button onclick="openMissionUploadModal('Turn off lights / monitor', 15, 20)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
@@ -300,7 +310,7 @@
                             <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+15🐟 / +20⚡</span>
                         </button>
                         <button onclick="openMissionUploadModal('Turn off AC when leaving room', 20, 30)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2 text-xs">❄️ Turn Off AC</span>
+                            <span class="flex items-center gap-2 text-xs">❄️ Turn Off Air Conditioner</span>
                             <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+20🐟 / +30⚡</span>
                         </button>
                         <button onclick="openMissionUploadModal('Unplug idle electronics', 10, 15)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
@@ -315,40 +325,40 @@
                 </div>
             </div>
 
-            <!-- PAGE 3: DRESS-UP STUDIO (REPLACED GAME) -->
+            <!-- PAGE 3: DRESS-UP STUDIO (PIXEL-PERFECT FITTING CLOTHES & BOWS) -->
             <div id="tab-dressup" class="tab-content space-y-3.5">
-                <div class="bg-white rounded-3xl p-3.5 border-3 border-pink-300 shadow-sm flex flex-col h-[460px]">
+                <div class="bg-white rounded-3xl p-3.5 border-3 border-pink-300 shadow-sm flex flex-col h-[480px]">
                     <div class="flex justify-between items-center mb-2">
                         <div class="flex items-center gap-2">
-                            <span class="text-2xl">👗</span>
-                            <h3 class="font-black text-sm text-pink-900">Cat Dress-Up Studio</h3>
+                            <span class="text-2xl">🎀</span>
+                            <h3 class="font-black text-sm text-pink-900">Cat Dress-Up & Bow Studio</h3>
                         </div>
                         <button onclick="resetOutfit()" class="text-[11px] font-black bg-rose-100 text-rose-700 hover:bg-rose-200 px-3 py-1 rounded-full border border-rose-300">
-                            🔄 ถอดชุดทั้งหมด
+                            🔄 Strip All
                         </button>
                     </div>
 
                     <!-- Category Selector Tabs -->
                     <div class="grid grid-cols-3 gap-1.5 mb-2.5">
                         <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300 shadow-sm">
-                            🎩 บนหัว
+                            🎀 Bows & Hats
                         </button>
                         <button onclick="switchDressCategory('outfit')" id="cat-outfit-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200">
-                            👔 ชุด
+                            👗 Outfits
                         </button>
                         <button onclick="switchDressCategory('shoes')" id="cat-shoes-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200">
-                            👟 รองเท้า
+                            👟 Shoes
                         </button>
                     </div>
 
                     <!-- Items Grid Scroll Area -->
                     <div id="dressItemsGrid" class="flex-grow overflow-y-auto grid grid-cols-2 gap-2 p-1">
-                        <!-- Dynamic Dress Items -->
+                        <!-- Dynamic Item Cards Injected via JS -->
                     </div>
                 </div>
             </div>
 
-            <!-- PAGE 4: LEADERBOARD & REWARDS -->
+            <!-- PAGE 4: LEADERBOARD & REWARDS (SHOWING CAT LEVEL & GROWTH) -->
             <div id="tab-ranks" class="tab-content space-y-3.5">
                 
                 <!-- WINNER BANNER -->
@@ -375,17 +385,17 @@
                     <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center gap-2">
                             <span class="text-2xl">📊</span>
-                            <p class="text-xs font-black text-rose-900 uppercase tracking-wide">Player Leaderboard</p>
+                            <p class="text-xs font-black text-rose-900 uppercase tracking-wide">Player & Cat Growth Ranks</p>
                         </div>
                         <span id="totalPlayersCount" class="text-xs font-black bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded-full">0 Players</span>
                     </div>
                     <div class="overflow-y-auto max-h-[170px]">
                         <table class="w-full text-left text-xs">
                             <thead>
-                                <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[11px] uppercase">
-                                    <th class="p-2">Rank</th>
-                                    <th class="p-2">Agent</th>
-                                    <th class="p-2 text-right">Fish 🐟</th>
+                                <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[10px] uppercase">
+                                    <th class="p-1.5">Rank</th>
+                                    <th class="p-1.5">Agent & Cat Level</th>
+                                    <th class="p-1.5 text-right">Fish 🐟</th>
                                 </tr>
                             </thead>
                             <tbody id="leaderboardRows"></tbody>
@@ -608,7 +618,17 @@
                     showToast("Username already exists!", "❌");
                     return;
                 }
-                db[username] = { email, passwordHash, fish: 20, energy: 100, equipped: { head: null, outfit: null, shoes: null }, unlocked: ['h1', 'o1', 's1'], registeredAt: new Date().toISOString() };
+                db[username] = { 
+                    email, 
+                    passwordHash, 
+                    fish: 20, 
+                    energy: 100, 
+                    level: 1,
+                    exp: 0,
+                    equipped: { head: null, outfit: null, shoes: null }, 
+                    unlocked: ['h1', 'o1', 's1'], 
+                    registeredAt: new Date().toISOString() 
+                };
                 saveUsersDB(db);
                 currentUser = username;
                 localStorage.setItem('energycat_current_session', currentUser);
@@ -638,9 +658,16 @@
         let gameState = { 
             fish: 20, 
             energy: 100, 
+            level: 1,
+            exp: 0,
             equipped: { head: null, outfit: null, shoes: null },
             unlocked: ['h1', 'o1', 's1'] 
         };
+
+        const CAT_TITLES = [
+            "KITTEN", "LITTLE PAW", "PLAYFUL FELINE", "ROYAL CAT", "SUPER KITTY", 
+            "MEOW MASTER", "COSMIC CAT", "GODLY FELINE"
+        ];
 
         function loadUserData() {
             if (!currentUser) return;
@@ -648,12 +675,15 @@
             if (db[currentUser]) {
                 gameState.fish = db[currentUser].fish ?? 20;
                 gameState.energy = db[currentUser].energy ?? 100;
+                gameState.level = db[currentUser].level ?? 1;
+                gameState.exp = db[currentUser].exp ?? 0;
                 gameState.equipped = db[currentUser].equipped || { head: null, outfit: null, shoes: null };
                 gameState.unlocked = db[currentUser].unlocked || ['h1', 'o1', 's1'];
             }
             document.getElementById('displayUser').innerText = currentUser;
             updateUI();
             applyOutfitToCat();
+            updateCatGrowthVisuals();
         }
 
         function saveUserData() {
@@ -662,12 +692,48 @@
             if (db[currentUser]) {
                 db[currentUser].fish = gameState.fish;
                 db[currentUser].energy = gameState.energy;
+                db[currentUser].level = gameState.level;
+                db[currentUser].exp = gameState.exp;
                 db[currentUser].equipped = gameState.equipped;
                 db[currentUser].unlocked = gameState.unlocked;
                 saveUsersDB(db);
             }
             updateUI();
             applyOutfitToCat();
+            updateCatGrowthVisuals();
+        }
+
+        function getRequiredExp(lvl) {
+            return lvl * 50;
+        }
+
+        function addExp(amount) {
+            gameState.exp += amount;
+            let reqExp = getRequiredExp(gameState.level);
+
+            if (gameState.exp >= reqExp) {
+                gameState.exp -= reqExp;
+                gameState.level += 1;
+                playSound(900, 'triangle', 0.4);
+                showToast(`LEVEL UP! Cat reached LVL ${gameState.level}!`, '🌟');
+            }
+            saveUserData();
+        }
+
+        function updateCatGrowthVisuals() {
+            const wrapper = document.getElementById('catScaleWrapper');
+            // Scale increases slightly per level (capped at 1.25x max)
+            const scaleFactor = Math.min(1.25, 1 + (gameState.level - 1) * 0.03);
+            wrapper.style.transform = `scale(${scaleFactor})`;
+
+            const titleIndex = Math.min(CAT_TITLES.length - 1, Math.floor((gameState.level - 1) / 2));
+            document.getElementById('catTitleText').innerText = CAT_TITLES[titleIndex];
+            document.getElementById('catLevelBadge').innerText = `LVL ${gameState.level}`;
+            
+            const reqExp = getRequiredExp(gameState.level);
+            document.getElementById('expText').innerText = `${gameState.exp}/${reqExp} EXP`;
+            const percent = Math.min(100, (gameState.exp / reqExp) * 100);
+            document.getElementById('expBar').style.width = `${percent}%`;
         }
 
         function updateUI() {
@@ -687,14 +753,15 @@
             const db = getUsersDB();
             const playersList = Object.keys(db).map(username => ({
                 username,
-                fish: db[username].fish || 0
-            })).sort((a, b) => b.fish - a.fish);
+                fish: db[username].fish || 0,
+                level: db[username].level || 1
+            })).sort((a, b) => b.fish - a.fish || b.level - a.level);
 
             const container = document.getElementById('leaderboardRows');
             container.innerHTML = '';
 
             const topPlayer = playersList[0];
-            document.getElementById('topPlayerNameDisplay').innerText = topPlayer ? topPlayer.username : 'None';
+            document.getElementById('topPlayerNameDisplay').innerText = topPlayer ? `${topPlayer.username} (Lvl ${topPlayer.level})` : 'None';
 
             playersList.forEach((p, index) => {
                 const isYou = p.username === currentUser;
@@ -707,40 +774,43 @@
                 if (index === 2) rankBadge = '🥉';
 
                 tr.innerHTML = `
-                    <td class="p-2 font-black">${rankBadge}</td>
-                    <td class="p-2 flex items-center gap-1">${p.username} ${isYou ? '<span class="text-[9px] bg-rose-500 text-white px-1.5 py-0.5 rounded-full font-black">YOU</span>' : ''}</td>
-                    <td class="p-2 text-right font-black text-rose-600">${p.fish}</td>
+                    <td class="p-1.5 font-black">${rankBadge}</td>
+                    <td class="p-1.5 flex items-center justify-between gap-1">
+                        <span>${p.username} ${isYou ? '<span class="text-[8px] bg-rose-500 text-white px-1 py-0.5 rounded-full font-black">YOU</span>' : ''}</span>
+                        <span class="text-[10px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-md font-extrabold">LVL ${p.level}</span>
+                    </td>
+                    <td class="p-1.5 text-right font-black text-rose-600">${p.fish}</td>
                 `;
                 container.appendChild(tr);
             });
         }
 
         // ==========================================
-        // DRESS-UP SYSTEM DATA & RENDER
+        // DRESS-UP SYSTEM (PIXEL-PERFECT CLOTHES & BOWS)
         // ==========================================
         const DRESS_ITEMS = {
             head: [
-                { id: 'h1', name: 'มงกุฎกษัตริย์', price: 0, icon: '👑', render: '<span class="text-5xl -mt-44 ml-1">👑</span>' },
-                { id: 'h2', name: 'หมวกปาร์ตี้', price: 10, icon: '🎉', render: '<span class="text-5xl -mt-44 ml-1">🎉</span>' },
-                { id: 'h3', name: 'มงกุฎดอกไม้', price: 15, icon: '🌸', render: '<span class="text-5xl -mt-40 ml-1">🌸</span>' },
-                { id: 'h4', name: 'โบว์สีแดง', price: 12, icon: '🎀', render: '<span class="text-5xl -mt-40 ml-1">🎀</span>' },
-                { id: 'h5', name: 'หมวกเชฟ', price: 20, icon: '👨‍🍳', render: '<span class="text-5xl -mt-48 ml-1">👨‍🍳</span>' },
-                { id: 'h6', name: 'หมวกโจรสลัด', price: 25, icon: '🏴‍☠️', render: '<span class="text-5xl -mt-44 ml-1">🏴‍☠️</span>' },
-                { id: 'h7', name: 'หมวกรับปริญญา', price: 30, icon: '🎓', render: '<span class="text-5xl -mt-44 ml-1">🎓</span>' }
+                { id: 'h1', name: 'Red Ribbon Bow', price: 0, icon: '🎀', render: '<span class="text-5xl -mt-[170px] ml-[2px]">🎀</span>' },
+                { id: 'h2', name: 'Pink Pastel Bow', price: 10, icon: '🌸', render: '<span class="text-5xl -mt-[170px] ml-[2px] filter hue-rotate-30">🎀</span>' },
+                { id: 'h3', name: 'Polka Dot Bow', price: 15, icon: '✨', render: '<span class="text-5xl -mt-[170px] ml-[2px] filter contrast-200">🎀</span>' },
+                { id: 'h4', name: 'Blue Silk Bow', price: 12, icon: '💙', render: '<span class="text-5xl -mt-[170px] ml-[2px] filter hue-rotate-180">🎀</span>' },
+                { id: 'h5', name: 'Royal Gold Crown', price: 25, icon: '👑', render: '<span class="text-5xl -mt-[180px] ml-[2px]">👑</span>' },
+                { id: 'h6', name: 'Party Hat', price: 10, icon: '🎉', render: '<span class="text-5xl -mt-[180px] ml-[2px]">🎉</span>' },
+                { id: 'h7', name: 'Chef Hat', price: 20, icon: '👨‍🍳', render: '<span class="text-5xl -mt-[195px] ml-[2px]">👨‍🍳</span>' },
+                { id: 'h8', name: 'Graduate Cap', price: 30, icon: '🎓', render: '<span class="text-5xl -mt-[180px] ml-[2px]">🎓</span>' }
             ],
             outfit: [
-                { id: 'o1', name: 'ฮู้ดดี้สีเขียว', price: 0, icon: '🧥', render: '<span class="text-6xl mt-16">🧥</span>' },
-                { id: 'o2', name: 'เดรสหวานแหวว', price: 15, icon: '👗', render: '<span class="text-6xl mt-16">👗</span>' },
-                { id: 'o3', name: 'ทักซิโด้สุดหรู', price: 25, icon: '👔', render: '<span class="text-6xl mt-16">👔</span>' },
-                { id: 'o4', name: 'ผ้าคลุมซูเปอร์ฮีโร่', price: 30, icon: '🦸‍♂️', render: '<span class="text-6xl mt-16">🦸‍♂️</span>' },
-                { id: 'o5', name: 'ชุดกะลาสี', price: 20, icon: '🎽', render: '<span class="text-6xl mt-16">🎽</span>' },
-                { id: 'o6', name: 'ชุดพ่อมด', price: 35, icon: '🧙‍♂️', render: '<span class="text-6xl mt-16">🧙‍♂️</span>' }
+                { id: 'o1', name: 'Green Hoodie', price: 0, icon: '🧥', render: '<span class="text-6xl mt-[60px]">🧥</span>' },
+                { id: 'o2', name: 'Sweet Pink Dress', price: 15, icon: '👗', render: '<span class="text-6xl mt-[60px]">👗</span>' },
+                { id: 'o3', name: 'Luxury Tuxedo', price: 25, icon: '👔', render: '<span class="text-6xl mt-[60px]">👔</span>' },
+                { id: 'o4', name: 'Hero Cape', price: 30, icon: '🦸‍♂️', render: '<span class="text-6xl mt-[60px]">🦸‍♂️</span>' },
+                { id: 'o5', name: 'Sailor Suit', price: 20, icon: '🎽', render: '<span class="text-6xl mt-[60px]">🎽</span>' }
             ],
             shoes: [
-                { id: 's1', name: 'ผ้าใบสีแดง', price: 0, icon: '👟', render: '<div class="flex gap-16 mt-44 text-2xl"><span>👟</span><span>👟</span></div>' },
-                { id: 's2', name: 'รองเท้าบูท', price: 10, icon: '🥾', render: '<div class="flex gap-16 mt-44 text-2xl"><span>🥾</span><span>🥾</span></div>' },
-                { id: 's3', name: 'สเกตบอร์ด', price: 20, icon: '🛼', render: '<div class="flex gap-16 mt-44 text-2xl"><span>🛼</span><span>🛼</span></div>' },
-                { id: 's4', name: 'บูททองคำ', price: 40, icon: '✨', render: '<div class="flex gap-16 mt-44 text-2xl"><span>✨</span><span>✨</span></div>' }
+                { id: 's1', name: 'Red Sneakers', price: 0, icon: '👟', render: '<div class="flex gap-[65px] mt-[160px] text-2xl"><span>👟</span><span>👟</span></div>' },
+                { id: 's2', name: 'Cute Boots', price: 10, icon: '🥾', render: '<div class="flex gap-[65px] mt-[160px] text-2xl"><span>🥾</span><span>🥾</span></div>' },
+                { id: 's3', name: 'Roller Skates', price: 20, icon: '🛼', render: '<div class="flex gap-[65px] mt-[160px] text-2xl"><span>🛼</span><span>🛼</span></div>' },
+                { id: 's4', name: 'Gold Boots', price: 40, icon: '✨', render: '<div class="flex gap-[65px] mt-[160px] text-2xl"><span>✨</span><span>✨</span></div>' }
             ]
         };
 
@@ -776,9 +846,9 @@
                     <p class="text-[11px] font-black text-slate-800 text-center leading-tight mb-1.5">${item.name}</p>
                     ${
                         isEquipped 
-                            ? `<span class="bg-pink-500 text-white font-black text-[10px] px-2.5 py-0.5 rounded-full">สวมใส่อยู่</span>`
+                            ? `<span class="bg-pink-500 text-white font-black text-[10px] px-2.5 py-0.5 rounded-full">Equipped</span>`
                             : isUnlocked 
-                                ? `<span class="bg-emerald-100 text-emerald-700 font-black text-[10px] px-2.5 py-0.5 rounded-full border border-emerald-300">ใส่ชุดนี้</span>`
+                                ? `<span class="bg-emerald-100 text-emerald-700 font-black text-[10px] px-2.5 py-0.5 rounded-full border border-emerald-300">Equip</span>`
                                 : `<span class="bg-amber-400 text-slate-900 font-black text-[10px] px-2.5 py-0.5 rounded-full shadow-sm">🐟 ${item.price}</span>`
                     }
                 `;
@@ -795,20 +865,20 @@
                     gameState.unlocked.push(item.id);
                     gameState.equipped[category] = item.id;
                     playSound(600, 'sine', 0.2);
-                    showToast(`ปลดล็อก ${item.name} แล้ว!`, '🎉');
+                    showToast(`Unlocked ${item.name}!`, '🎉');
                     saveUserData();
                     renderDressItems();
                 } else {
-                    showToast('ปลาไม่พอ! ทำภารกิจเพื่อรับปลาเพิ่ม', '⚠️');
+                    showToast('Not enough fish! Complete missions to earn more', '⚠️');
                 }
             } else {
                 if (gameState.equipped[category] === item.id) {
                     gameState.equipped[category] = null; // Unequip
-                    showToast(`ถอด ${item.name} แล้ว`, '👕');
+                    showToast(`Removed ${item.name}`, '👕');
                 } else {
                     gameState.equipped[category] = item.id; // Equip
                     playSound(700, 'sine', 0.15);
-                    showToast(`สวมใส่ ${item.name}!`, '✨');
+                    showToast(`Equipped ${item.name}!`, '✨');
                 }
                 saveUserData();
                 renderDressItems();
@@ -819,7 +889,7 @@
             gameState.equipped = { head: null, outfit: null, shoes: null };
             saveUserData();
             renderDressItems();
-            showToast("ถอดชุดทั้งหมดแล้ว", "🧼");
+            showToast("Stripped all apparel!", "🧼");
         }
 
         function applyOutfitToCat() {
@@ -879,15 +949,16 @@
         function submitMissionWithPhoto() {
             const preview = document.getElementById('photoPreview');
             if (preview.classList.contains('hidden') || !preview.src) {
-                showToast('Please attach a photo proof first!', '⚠️');
+                showToast('Please attach photo proof first!', '⚠️');
                 return;
             }
             playSound(650, 'sine', 0.2);
             gameState.fish += activeMissionData.rewardFish;
             gameState.energy = Math.min(100, gameState.energy + activeMissionData.rewardEnergy);
+            addExp(15);
             saveUserData();
             closePhotoModal();
-            showToast(`Verified! +${activeMissionData.rewardFish} 🐟 & +${activeMissionData.rewardEnergy}⚡`, '🌿');
+            showToast(`Verified! +${activeMissionData.rewardFish} 🐟 & +15 EXP`, '🌿');
         }
 
         function setCatSleepState(sleep) {
@@ -902,13 +973,13 @@
                 sleepEyes.classList.remove('hidden');
                 zzz.classList.remove('hidden');
                 label.innerText = "😴 SHH... KITTY IS TAKING A NAP!";
-                label.className = "text-xs font-black text-purple-700 mt-2 bg-purple-100 px-5 py-2 rounded-full border-2 border-purple-300 shadow-md z-10";
+                label.className = "text-xs font-black text-purple-700 mt-1 bg-purple-100 px-4 py-1.5 rounded-full border-2 border-purple-300 shadow-md z-10";
             } else {
                 awakeEyes.classList.remove('hidden');
                 sleepEyes.classList.add('hidden');
                 zzz.classList.add('hidden');
-                label.innerText = "✨ TAP TO PET KITTY (+1⚡)";
-                label.className = "text-xs font-black text-rose-600 mt-2 bg-white px-5 py-2 rounded-full border-2 border-rose-300 shadow-md z-10";
+                label.innerText = "✨ TAP TO PET (+1⚡ / +2 EXP)";
+                label.className = "text-xs font-black text-rose-600 mt-1 bg-white px-4 py-1.5 rounded-full border-2 border-rose-300 shadow-md z-10";
             }
         }
 
@@ -932,11 +1003,13 @@
                 return;
             }
             if (gameState.energy >= 100) {
-                showToast("Energy is already maxed!", "⚡");
+                addExp(1);
+                showToast("Energy is full (+1 EXP)!", "⚡");
                 return;
             }
             playSound(800, 'sine', 0.15);
             gameState.energy = Math.min(100, gameState.energy + 1);
+            addExp(2);
             saveUserData();
         }
 
@@ -947,17 +1020,19 @@
             playSound(450, 'triangle', 0.15);
             gameState.fish -= 5;
             gameState.energy = Math.min(100, gameState.energy + 15);
+            addExp(10);
             saveUserData();
-            showToast('Fed kitty! (-5🐟 / +15⚡)', '🍱');
+            showToast('Fed kitty! (-5🐟 / +15⚡ / +10 EXP)', '🍱');
         }
 
         function restCat() {
             if (gameState.energy >= 100) { showToast("Energy is full!", "⚡"); return; }
             playSound(350, 'sine', 0.3);
             gameState.energy = Math.min(100, gameState.energy + 30);
+            addExp(15);
             saveUserData();
             setCatSleepState(true);
-            showToast('Kitty went to nap (+30⚡)', '😴');
+            showToast('Kitty went to nap (+30⚡ / +15 EXP)', '😴');
         }
 
         // ==========================================
