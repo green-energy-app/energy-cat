@@ -122,7 +122,7 @@
         </div>
     </div>
 
-    <!-- AUTH MODAL (LOGIN / REGISTER / FORGOT PASSWORD) -->
+    <!-- AUTH MODAL (LOGIN / REGISTER / FORGOT PASSWORD / SYNC DEVICE) -->
     <div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-2xl border-4 border-pink-300">
             <div class="text-center">
@@ -147,10 +147,24 @@
                     <label class="text-xs font-black text-slate-700">Password</label>
                     <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
                 </div>
-                <div class="text-right">
-                    <button type="button" onclick="switchAuthTab('forgot')" class="text-[11px] font-bold text-rose-500 hover:underline">Forgot Password?</button>
+                <div class="flex justify-between items-center text-[11px] font-bold">
+                    <button type="button" onclick="switchAuthTab('sync')" class="text-purple-600 hover:underline">📲 Sync Account (Other Device)</button>
+                    <button type="button" onclick="switchAuthTab('forgot')" class="text-rose-500 hover:underline">Forgot Password?</button>
                 </div>
                 <button type="submit" class="clay-btn w-full bg-rose-500 text-white font-black py-2.5 text-xs border-2 border-white mt-1">Login 🐾</button>
+            </form>
+
+            <!-- Cross-Device Sync Form -->
+            <form id="syncForm" onsubmit="handleImportData(event)" class="space-y-3 hidden">
+                <div class="bg-purple-50 p-2.5 rounded-xl border border-purple-200 text-[11px] font-bold text-purple-900">
+                    Paste your Account Sync Key below to import your account onto this device!
+                </div>
+                <div>
+                    <label class="text-xs font-black text-slate-700">Account Sync Key Data</label>
+                    <textarea id="syncDataInput" required rows="3" placeholder="Paste sync code here..." class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl p-2 text-[10px] font-mono mt-1 focus:outline-none focus:border-rose-400"></textarea>
+                </div>
+                <button type="submit" class="clay-btn w-full bg-purple-600 text-white font-black py-2.5 text-xs border-2 border-white">Import Account to Device 📲</button>
+                <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-1">Back to Login</button>
             </form>
 
             <!-- Register Form -->
@@ -224,6 +238,7 @@
                 <div>
                     <div class="flex items-center gap-1">
                         <span id="displayUser" class="text-xs font-black text-slate-800">Agent</span>
+                        <button onclick="exportAccountKey()" class="text-[9px] font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-md hover:bg-purple-700 ml-1">Export Key 🔑</button>
                         <button onclick="logout()" class="text-[10px] font-black text-rose-600 hover:underline ml-1">(Logout)</button>
                     </div>
                     <div class="text-[10px] font-black text-purple-700">
@@ -432,7 +447,7 @@
                     <div class="flex justify-between items-center mb-2">
                         <div class="flex items-center gap-1.5">
                             <span class="text-2xl">🎀</span>
-                            <h3 class="font-black text-xs text-pink-900">Wardrobe (10 Items Each)</h3>
+                            <h3 class="font-black text-xs text-pink-900">Wardrobe Catalog (10 Each)</h3>
                         </div>
                         <button onclick="resetOutfit()" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2.5 py-1 rounded-full border border-rose-300">
                             🔄 Take off all
@@ -456,25 +471,40 @@
                 </div>
             </div>
 
-            <!-- PAGE 4: CAT WEIGHT LEADERBOARD (REAL PLAYERS ONLY) -->
+            <!-- PAGE 4: CAT WEIGHT LEADERBOARD (MONTHLY CHAMPION & CONTACT FORM) -->
             <div id="tab-ranks" class="tab-content space-y-3">
-                <div class="bg-gradient-to-r from-rose-400 via-pink-500 to-amber-400 rounded-3xl p-3.5 border-2 border-white shadow-md text-white">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="text-3xl animate-bounce">🏆</span>
+                
+                <!-- Monthly Winner Banner & Reward Claim Form -->
+                <div class="bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400 rounded-3xl p-3.5 border-2 border-white shadow-md text-white">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-3xl animate-bounce">👑</span>
                         <div>
-                            <h4 class="text-xs font-black uppercase">Cat Weight Leaderboard</h4>
-                            <p class="text-[10px] font-extrabold text-rose-100">Rankings based on your cat's weight (Real players)</p>
+                            <h4 class="text-xs font-black uppercase tracking-wider">Monthly Champion Rewards</h4>
+                            <p class="text-[10px] font-extrabold text-amber-100">Top player wins monthly cat care prizes!</p>
                         </div>
+                    </div>
+
+                    <div id="monthlyWinnerInfo" class="bg-white/20 backdrop-blur-md p-2 rounded-2xl text-[11px] font-bold text-slate-900 border border-white/30 mb-2">
+                        🏆 Current #1 Champion: <span id="monthlyChampionName" class="text-rose-900 font-black">Loading...</span>
+                    </div>
+
+                    <!-- Contact Form for Monthly Champion -->
+                    <div id="winnerContactFormBox" class="bg-white/95 p-2.5 rounded-2xl text-slate-800 shadow-sm hidden">
+                        <p class="text-[11px] font-black text-amber-900 mb-1">🎉 You are in 1st Place! Enter contact info to receive prize:</p>
+                        <form onsubmit="handleSaveContactInfo(event)" class="space-y-1.5">
+                            <input type="text" id="championContactInput" required placeholder="Email / Phone / LINE ID" class="w-full bg-slate-50 border border-amber-300 rounded-xl px-2.5 py-1.5 text-xs font-bold outline-none focus:border-amber-500">
+                            <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-1.5 text-xs">Submit Contact Info 📩</button>
+                        </form>
                     </div>
                 </div>
 
                 <!-- Leaderboard Table -->
                 <div class="bg-white rounded-3xl p-3 border-2 border-rose-200 shadow-sm">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-black text-rose-900">📊 Active Players</span>
+                        <span class="text-xs font-black text-rose-900">📊 Active Players Ranking</span>
                         <span id="totalPlayersCount" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">0 Players</span>
                     </div>
-                    <div class="overflow-y-auto max-h-[260px]">
+                    <div class="overflow-y-auto max-h-[220px]">
                         <table class="w-full text-left text-xs">
                             <thead>
                                 <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[10px] uppercase">
@@ -538,7 +568,7 @@
         // Global LocalStorage Database Key
         const DB_KEY = 'ENERGY_CAT_ACCOUNTS_V2';
 
-        // 10 HEAD ACCESSORIES & 10 FRONT APRONS (Positioned Overlays)
+        // 10 HEAD ACCESSORIES & 10 FRONT APRONS CATALOG
         const dressItems = {
             head: [
                 { id: 'h1', name: 'Red Bow', price: 10, icon: '🎀', html: '<span style="font-size: 42px; position: absolute; top: 18px; left: 52px; transform: rotate(-15deg);">🎀</span>' },
@@ -572,7 +602,7 @@
         let currentDressCategory = 'head';
         let activeMission = null;
 
-        // Initialize App & Sync Storage
+        // Initialize App
         window.addEventListener('DOMContentLoaded', () => {
             loadAccounts();
             checkAutoLogin();
@@ -609,11 +639,12 @@
             }
         }
 
-        /* --- AUTHENTICATION SYSTEM --- */
+        /* --- AUTHENTICATION & CROSS-DEVICE SYNC --- */
         function switchAuthTab(tab) {
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('registerForm').classList.add('hidden');
             document.getElementById('forgotForm').classList.add('hidden');
+            document.getElementById('syncForm').classList.add('hidden');
 
             const tabContainer = document.getElementById('authTabsContainer');
             const loginBtn = document.getElementById('authTabLogin');
@@ -632,6 +663,9 @@
             } else if (tab === 'forgot') {
                 tabContainer.classList.add('hidden');
                 document.getElementById('forgotForm').classList.remove('hidden');
+            } else if (tab === 'sync') {
+                tabContainer.classList.add('hidden');
+                document.getElementById('syncForm').classList.remove('hidden');
             }
         }
 
@@ -660,6 +694,7 @@
                 level: 1,
                 exp: 0,
                 energy: 100,
+                contactInfo: '',
                 lastDecayTime: Date.now(),
                 unlockedItems: [],
                 equipped: { head: null, apron: null }
@@ -714,6 +749,34 @@
             showToast('🔑 Password reset successfully! Logging in...', '✨');
             switchAuthTab('login');
             document.getElementById('forgotForm').reset();
+        }
+
+        function exportAccountKey() {
+            if (!currentUser || !accounts[currentUser]) return;
+            const accData = JSON.stringify(accounts[currentUser]);
+            const encodedKey = btoa(unescape(encodeURIComponent(accData)));
+            navigator.clipboard.writeText(encodedKey);
+            showToast('📋 Account Sync Key copied to clipboard!', '🔑');
+        }
+
+        function handleImportData(e) {
+            e.preventDefault();
+            const key = document.getElementById('syncDataInput').value.trim();
+            try {
+                const decoded = decodeURIComponent(escape(atob(key)));
+                const accObj = JSON.parse(decoded);
+                if (!accObj.username || !accObj.password) throw new Error();
+
+                loadAccounts();
+                accounts[accObj.username] = accObj;
+                saveAccounts();
+
+                showToast('📲 Account imported successfully! Please login.', '✨');
+                switchAuthTab('login');
+                document.getElementById('syncForm').reset();
+            } catch (err) {
+                showToast('❌ Invalid Sync Key Data!', '⚠️');
+            }
         }
 
         function logout() {
@@ -852,7 +915,6 @@
         function feedCat() {
             const acc = accounts[currentUser];
 
-            // Check if energy is full (100%)
             if (acc.energy >= 100) {
                 showToast('❌ Cat is full! Energy is already at 100%.', '🥣');
                 return;
@@ -886,7 +948,7 @@
             acc.weight += 0.05;
             addExp(5);
 
-            // Trigger Sleep Animation
+            // Sleep Animation
             document.getElementById('catEyesAwake').classList.add('hidden');
             document.getElementById('catEyesSad').classList.add('hidden');
             document.getElementById('catEyesSleep').classList.remove('hidden');
@@ -1039,13 +1101,29 @@
             showToast('🔄 All outfits removed!', '✨');
         }
 
-        /* --- LEADERBOARD (REAL PLAYERS ONLY) --- */
+        /* --- LEADERBOARD & MONTHLY CHAMPION FORM --- */
         function renderLeaderboard() {
             const rows = document.getElementById('leaderboardRows');
             rows.innerHTML = '';
 
             const playerList = Object.values(accounts).sort((a, b) => b.weight - a.weight);
             document.getElementById('totalPlayersCount').innerText = `${playerList.length} Players`;
+
+            if (playerList.length > 0) {
+                const champ = playerList[0];
+                document.getElementById('monthlyChampionName').innerText = `${champ.username} (Cat: ${champ.catName} - ${champ.weight.toFixed(2)}kg)`;
+                
+                // Show contact submission form if the logged in user is currently #1
+                const formBox = document.getElementById('winnerContactFormBox');
+                if (champ.username === currentUser) {
+                    formBox.classList.remove('hidden');
+                    if (champ.contactInfo) {
+                        document.getElementById('championContactInput').value = champ.contactInfo;
+                    }
+                } else {
+                    formBox.classList.add('hidden');
+                }
+            }
 
             playerList.forEach((p, idx) => {
                 const tr = document.createElement('tr');
@@ -1060,6 +1138,15 @@
                 `;
                 rows.appendChild(tr);
             });
+        }
+
+        function handleSaveContactInfo(e) {
+            e.preventDefault();
+            const contact = document.getElementById('championContactInput').value.trim();
+            const acc = accounts[currentUser];
+            acc.contactInfo = contact;
+            saveAccounts();
+            showToast('📩 Monthly Champion contact details saved!', '🎉');
         }
 
         /* --- NAVIGATION TABS --- */
