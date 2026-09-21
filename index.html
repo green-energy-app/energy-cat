@@ -3,933 +3,939 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat - Kawaii Edition</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <title>Energy Cat 3D: Kawaii Dress-Up & Weight Studio</title>
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+    <!-- Chart.js Library -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- FontAwesome Icons -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
+    
     <style>
-        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        :root {
+            --primary: #ff8fa3;
+            --primary-dark: #ff4d6d;
+            --secondary: #8ac926;
+            --accent: #ffca3a;
+            --bg-soft: #fff0f5;
+            --card-bg: rgba(255, 255, 255, 0.9);
+            --text-main: #4a4e69;
+            --radius-lg: 24px;
+            --radius-sm: 12px;
+            --shadow: 0 10px 25px rgba(255, 143, 163, 0.2);
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Nunito', sans-serif;
+            user-select: none;
+        }
+
+        h1, h2, h3, .btn, .nav-btn, .logo-text {
+            font-family: 'Fredoka', sans-serif;
+        }
 
         body {
-            background: linear-gradient(135deg, #FFF5F5 0%, #FEF3C7 50%, #FCE7F3 100%);
-            background-image: radial-gradient(#F59E0B 0.75px, transparent 0.75px), radial-gradient(#F59E0B 0.75px, #FFF5F5 0.75px);
-            background-size: 30px 30px;
-            background-position: 0 0, 15px 15px;
+            background: linear-gradient(135deg, #ffdee9 0%, #b5fffc 100%);
             min-height: 100vh;
-            user-select: none;
+            color: var(--text-main);
             overflow-x: hidden;
+            display: flex;
+            flex-direction: column;
         }
 
-        .cute-card {
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(20px);
-            border: 4px solid #FDE68A;
-            box-shadow: 0 20px 40px -10px rgba(217, 119, 6, 0.2);
+        /* --- Auth Page --- */
+        #auth-overlay {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #ff8fa3, #ff4d6d);
+            z-index: 1000;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
         }
 
-        .glass-modal {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(12px);
+        .auth-card {
+            background: white;
+            padding: 35px 30px;
+            border-radius: var(--radius-lg);
+            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
+            width: 100%;
+            max-width: 420px;
+            text-align: center;
         }
 
-        @keyframes earTwitch {
-            0%, 90%, 100% { transform: rotate(0deg); }
-            93% { transform: rotate(-8deg); }
-            96% { transform: rotate(8deg); }
-        }
-        .animate-ear-left { transform-origin: 30px 20px; animation: earTwitch 4s ease-in-out infinite; }
-        .animate-ear-right { transform-origin: 70px 20px; animation: earTwitch 4s ease-in-out infinite 0.2s; }
-
-        @keyframes catBreathe {
-            0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-3px) scale(1.01, 0.99); }
-        }
-        .animate-breathe { animation: catBreathe 3s ease-in-out infinite; }
-
-        @keyframes sleepFloat {
-            0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
-            50% { opacity: 1; transform: translate(12px, -20px) scale(1.1); }
-            100% { opacity: 0; transform: translate(25px, -40px) scale(0.8); }
-        }
-        .animate-zzz { animation: sleepFloat 2.5s infinite ease-in-out; }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: fadeIn 0.25s ease-out; }
-
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(6px); }
-            to { opacity: 1; transform: translateY(0); }
+        .auth-tabs {
+            display: flex;
+            gap: 10px;
+            margin-bottom: 25px;
+            background: #f0f0f0;
+            padding: 5px;
+            border-radius: var(--radius-sm);
         }
 
-        .btn-cute {
-            transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 4px 0 0 rgba(180, 83, 9, 0.2);
+        .auth-tab {
+            flex: 1;
+            padding: 10px;
+            border: none;
+            background: transparent;
+            border-radius: 8px;
+            font-weight: bold;
+            cursor: pointer;
+            color: #777;
+            transition: all 0.3s ease;
         }
-        .btn-cute:active { transform: translateY(3px); box-shadow: 0 1px 0 0 rgba(180, 83, 9, 0.2); }
 
-        ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #FEF3C7; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: #F59E0B; border-radius: 10px; }
+        .auth-tab.active {
+            background: white;
+            color: var(--primary-dark);
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .auth-form {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .auth-form input, .auth-form select {
+            width: 100%;
+            padding: 12px 15px;
+            border: 2px solid #eee;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            outline: none;
+            transition: border-color 0.3s;
+        }
+
+        .auth-form input:focus, .auth-form select:focus {
+            border-color: var(--primary);
+        }
+
+        .forgot-link {
+            text-align: right;
+            font-size: 0.85rem;
+            color: var(--primary-dark);
+            cursor: pointer;
+            text-decoration: underline;
+            margin-top: -5px;
+            margin-bottom: 5px;
+            display: block;
+        }
+
+        /* --- Navigation Bar --- */
+        navbar {
+            background: var(--card-bg);
+            backdrop-filter: blur(10px);
+            padding: 15px 30px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+            font-size: 1.5rem;
+            color: var(--primary-dark);
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 15px;
+        }
+
+        .nav-btn {
+            background: transparent;
+            border: none;
+            padding: 10px 20px;
+            border-radius: var(--radius-sm);
+            cursor: pointer;
+            font-size: 1rem;
+            font-weight: 600;
+            color: var(--text-main);
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .nav-btn.active, .nav-btn:hover {
+            background: var(--primary);
+            color: white;
+            transform: translateY(-2px);
+        }
+
+        /* --- App Container --- */
+        .app-container {
+            display: flex;
+            flex: 1;
+            padding: 20px;
+            gap: 20px;
+            max-width: 1400px;
+            margin: 0 auto;
+            width: 100%;
+        }
+
+        .view-section {
+            display: none;
+            width: 100%;
+            gap: 20px;
+        }
+
+        .view-section.active {
+            display: flex;
+        }
+
+        /* --- Main 3D View & Canvas --- */
+        .cat-studio {
+            flex: 1;
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            position: relative;
+            min-height: 500px;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+        }
+
+        #canvas-container {
+            width: 100%;
+            height: 100%;
+            flex: 1;
+        }
+
+        .cat-status-overlay {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(255, 255, 255, 0.85);
+            padding: 15px 20px;
+            border-radius: var(--radius-sm);
+            backdrop-filter: blur(5px);
+            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        }
+
+        .fish-counter {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: var(--accent);
+            color: #5c4300;
+            padding: 10px 20px;
+            border-radius: 50px;
+            font-weight: bold;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            box-shadow: 0 4px 15px rgba(255, 202, 58, 0.4);
+        }
+
+        /* --- Sidebar & Panels --- */
+        .sidebar {
+            width: 380px;
+            background: var(--card-bg);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow);
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .card {
+            background: white;
+            padding: 20px;
+            border-radius: var(--radius-sm);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
+        }
+
+        .btn {
+            background: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: var(--radius-sm);
+            font-size: 1rem;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .btn:hover {
+            background: var(--primary-dark);
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
+        }
+
+        .btn-secondary {
+            background: var(--secondary);
+        }
+        .btn-secondary:hover {
+            background: #70a81d;
+        }
+
+        /* --- Closet Grid --- */
+        .closet-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            max-height: 400px;
+            overflow-y: auto;
+            padding: 5px;
+        }
+
+        .item-card {
+            background: #fff;
+            border: 2px solid #eee;
+            border-radius: var(--radius-sm);
+            padding: 15px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+        }
+
+        .item-card:hover {
+            border-color: var(--primary);
+            transform: scale(1.03);
+        }
+
+        .item-card.equipped {
+            border-color: var(--secondary);
+            background: #f4fce8;
+        }
+
+        .item-icon {
+            font-size: 2.5rem;
+            margin-bottom: 8px;
+        }
+
+        /* --- Log Form & Inputs --- */
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            font-weight: 600;
+            font-size: 0.9rem;
+        }
+
+        .form-group input {
+            padding: 12px;
+            border: 2px solid #eee;
+            border-radius: var(--radius-sm);
+            outline: none;
+            font-size: 1rem;
+        }
+
+        /* Responsive Layout */
+        @media (max-width: 900px) {
+            .app-container { flex-direction: column; }
+            .sidebar { width: 100%; }
+            .view-section { flex-direction: column; }
+        }
     </style>
 </head>
-<body class="flex justify-center items-center min-h-screen p-3 md:p-6 relative">
+<body>
 
-    <!-- Notification Toast -->
-    <div id="toastNotification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-5">
-        <div class="bg-slate-900/90 text-white px-6 py-3 rounded-full shadow-2xl border-2 border-amber-300 flex items-center gap-3 font-extrabold text-xs tracking-wide">
-            <span id="toastIcon" class="text-xl">✨</span>
-            <span id="toastMessage">Notification</span>
+    <!-- Auth System Overlay -->
+    <div id="auth-overlay">
+        <div class="auth-card">
+            <div style="font-size: 3rem; color: var(--primary-dark); margin-bottom: 10px;">
+                <i class="fa-solid fa-cat"></i>
+            </div>
+            <h2 style="margin-bottom: 15px; color: #333;">Energy Cat Studio</h2>
+            
+            <div class="auth-tabs" id="auth-tabs">
+                <button class="auth-tab active" onclick="switchAuthMode('login')">Login</button>
+                <button class="auth-tab" onclick="switchAuthMode('register')">Register</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
+                <input type="text" id="login-username" placeholder="Username" required>
+                <input type="password" id="login-password" placeholder="Password" required>
+                <span class="forgot-link" onclick="switchAuthMode('forgot')">Forgot Password?</span>
+                <button type="submit" class="btn">Login & Play</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="register-form" class="auth-form" style="display: none;" onsubmit="handleRegister(event)">
+                <input type="text" id="reg-username" placeholder="Create Username" required>
+                <input type="password" id="reg-password" placeholder="Create Password" required>
+                <select id="reg-question" required>
+                    <option value="" disabled selected>Select Security Question</option>
+                    <option value="pet">What was your first pet's name?</option>
+                    <option value="city">In what city were you born?</option>
+                    <option value="color">What is your favorite color?</option>
+                </select>
+                <input type="text" id="reg-answer" placeholder="Security Answer" required>
+                <button type="submit" class="btn btn-secondary">Create Account</button>
+            </form>
+
+            <!-- Forgot Password Form -->
+            <form id="forgot-form" class="auth-form" style="display: none;" onsubmit="handleResetPassword(event)">
+                <input type="text" id="forgot-username" placeholder="Your Username" required>
+                <select id="forgot-question" required>
+                    <option value="" disabled selected>Select Security Question</option>
+                    <option value="pet">What was your first pet's name?</option>
+                    <option value="city">In what city were you born?</option>
+                    <option value="color">What is your favorite color?</option>
+                </select>
+                <input type="text" id="forgot-answer" placeholder="Security Answer" required>
+                <input type="password" id="forgot-new-password" placeholder="New Password" required>
+                <button type="submit" class="btn">Reset Password</button>
+                <span class="forgot-link" style="text-align:center; margin-top:10px;" onclick="switchAuthMode('login')">Back to Login</span>
+            </form>
         </div>
     </div>
 
-    <!-- Main Container App -->
-    <div class="cute-card rounded-[42px] w-full max-w-md h-[760px] flex flex-col justify-between relative z-10 overflow-hidden p-5">
-        
-        <!-- Header Zone -->
-        <div class="bg-gradient-to-r from-amber-100 via-orange-100 to-pink-100 p-3 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
-            <div class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-2xl shadow-sm border border-amber-200">
-                    📦
+    <!-- Navigation Bar -->
+    <navbar>
+        <div class="logo">
+            <i class="fa-solid fa-cat"></i>
+            <span class="logo-text">Energy Cat 3D</span>
+        </div>
+        <div class="nav-links">
+            <button class="nav-btn active" onclick="switchTab(event, 'studio')"><i class="fa-solid fa-house"></i> Studio</button>
+            <button class="nav-btn" onclick="switchTab(event, 'closet')"><i class="fa-solid fa-shirt"></i> Closet</button>
+            <button class="nav-btn" onclick="switchTab(event, 'weight')"><i class="fa-solid fa-weight-scale"></i> Tracker</button>
+            <button class="nav-btn" onclick="logout()" style="color: #ff4d6d;"><i class="fa-solid fa-right-from-bracket"></i></button>
+        </div>
+    </navbar>
+
+    <!-- App Main Container -->
+    <div class="app-container">
+
+        <!-- TAB 1: STUDIO (3D Cat & Interact) -->
+        <div id="view-studio" class="view-section active">
+            <div class="cat-studio">
+                <div class="cat-status-overlay">
+                    <h3 id="cat-display-name">Energy Cat</h3>
+                    <p style="color: #666; font-size: 0.9rem;" id="cat-status-text">Status: Happy & Energetic!</p>
                 </div>
-                <div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[9px] tracking-widest font-black text-amber-600 uppercase">VERIFIED AGENT</span>
-                        <span id="totalUsersBadge" class="text-[9px] font-extrabold bg-white/80 px-2 py-0.5 rounded-full text-amber-800 border border-amber-200">👥 0</span>
-                    </div>
-                    <div class="text-xs font-black text-slate-800 flex items-center gap-1">
-                        <span id="displayUser">Guest Agent</span>
-                        <button onclick="logoutUser()" class="text-[10px] text-amber-600 hover:underline font-bold ml-1">🔒 Logout</button>
-                    </div>
+                <div class="fish-counter">
+                    <i class="fa-solid fa-fish"></i>
+                    <span id="fish-count">0</span>
                 </div>
+                <div id="canvas-container"></div>
             </div>
-            
-            <div class="flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-2xl border border-amber-200 shadow-sm">
-                <span class="text-xl">🐟</span>
-                <span id="fishCount" class="text-sm font-black text-amber-500">0</span>
+
+            <div class="sidebar">
+                <div class="card">
+                    <h3>Interactive Actions</h3>
+                    <p style="color: #777; font-size: 0.85rem; margin-bottom: 15px;">Interact with your cat to earn Fish Tokens!</p>
+                    <div style="display: flex; flex-direction: column; gap: 10px;">
+                        <button class="btn" onclick="interactCat('pet')"><i class="fa-solid fa-hand"></i> Pet Cat (+1 Fish)</button>
+                        <button class="btn btn-secondary" onclick="interactCat('feed')"><i class="fa-solid fa-bowl-food"></i> Feed Snack (+2 Fish)</button>
+                        <button class="btn" style="background: #7209b7;" onclick="interactCat('play')"><i class="fa-solid fa-baseball"></i> Play Toy (+3 Fish)</button>
+                    </div>
+                </div>
+
+                <div class="card">
+                    <h3>Quick Stats</h3>
+                    <p style="margin-top: 5px;"><strong>Weight:</strong> <span id="stat-weight">--</span> kg</p>
+                    <p style="margin-top: 5px;"><strong>Last Weight Log:</strong> <span id="stat-date">Never</span></p>
+                </div>
             </div>
         </div>
 
-        <!-- MAIN PAGES AREA -->
-        <div class="flex-grow overflow-y-auto py-3">
-            
-            <!-- PAGE 1: HOME (CAT CARE) -->
-            <div id="tab-home" class="tab-content active space-y-3.5">
-                <div class="bg-white border-2 border-emerald-200 rounded-2xl p-3 shadow-sm">
-                    <div class="flex justify-between items-center mb-1.5">
-                        <span class="text-xs text-emerald-700 font-extrabold flex items-center gap-1">
-                            <span>⚡</span> CAT ENERGY
-                        </span>
-                        <span id="energyText" class="text-xs font-black text-emerald-700">100/100</span>
-                    </div>
-                    <div class="w-full bg-emerald-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-emerald-200">
-                        <div id="energyBar" class="bg-gradient-to-r from-emerald-400 to-teal-300 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
-                    </div>
+        <!-- TAB 2: CLOSET (Dress Up Shop) -->
+        <div id="view-closet" class="view-section">
+            <div class="cat-studio" style="min-height: 400px;">
+                <div class="fish-counter">
+                    <i class="fa-solid fa-fish"></i>
+                    <span id="closet-fish-count">0</span>
                 </div>
-
-                <!-- Box Cat Stage Vector Graphic (High Quality Kawaii Art) -->
-                <div id="catStage" class="relative bg-gradient-to-b from-amber-50 via-orange-50 to-pink-50 rounded-3xl p-3 flex flex-col items-center justify-center border-2 border-amber-200 shadow-inner h-[290px] cursor-pointer group" onclick="petCat(event)">
-                    
-                    <!-- Sleep Floating Zzz Effect -->
-                    <div id="sleepEffect" class="hidden absolute top-6 right-12 z-20 pointer-events-none">
-                        <span class="text-2xl font-black text-indigo-400 animate-zzz inline-block">Zzz...</span>
-                    </div>
-
-                    <div class="animate-breathe relative flex items-center justify-center mt-2">
-                        <svg width="230" height="220" viewBox="0 0 100 100" class="drop-shadow-xl transition-transform duration-300 group-hover:scale-105">
-                            <defs>
-                                <radialGradient id="blushGlow" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" stop-color="#FB7185" stop-opacity="0.6"/>
-                                    <stop offset="100%" stop-color="#FB7185" stop-opacity="0"/>
-                                </radialGradient>
-                                <linearGradient id="boxGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#FCD34D"/>
-                                    <stop offset="100%" stop-color="#F59E0B"/>
-                                </linearGradient>
-                            </defs>
-                            
-                            <!-- Cat Tail Outside Box -->
-                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#E11D48" stroke-width="0" fill="none" />
-                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#5A3E2B" stroke-width="6" fill="none" stroke-linecap="round" />
-                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#F59E0B" stroke-width="3.5" fill="none" stroke-linecap="round" />
-                            
-                            <!-- Cardboard Box Back Flaps -->
-                            <polygon points="12,48 50,38 88,48 50,56" fill="#D97706" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
-                            <polygon points="12,48 30,32 50,38" fill="#B45309" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
-                            <polygon points="88,48 70,32 50,38" fill="#B45309" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
-
-                            <!-- Cat Body & Head Sitting inside Box -->
-                            <!-- Ears -->
-                            <g class="animate-ear-left">
-                                <polygon points="20,34 27,4 48,24" fill="#F59E0B" stroke="#5A3E2B" stroke-width="2" stroke-linejoin="round" />
-                                <polygon points="24,28 29,10 43,23" fill="#F472B6" opacity="0.8" />
-                                <polygon points="22,23 25,12 33,20" fill="#78350F" />
-                            </g>
-                            <g class="animate-ear-right">
-                                <polygon points="80,34 73,4 52,24" fill="#F59E0B" stroke="#5A3E2B" stroke-width="2" stroke-linejoin="round" />
-                                <polygon points="76,28 71,10 57,23" fill="#F472B6" opacity="0.8" />
-                                <polygon points="78,23 75,12 67,20" fill="#78350F" />
-                            </g>
-
-                            <!-- Head Circle -->
-                            <circle cx="50" cy="40" r="30" fill="#F59E0B" stroke="#5A3E2B" stroke-width="2" />
-                            <ellipse cx="50" cy="46" rx="20" ry="15" fill="#FEF3C7" />
-
-                            <!-- Orange Tabby Stripes on Head -->
-                            <path d="M 46 12 L 50 22 L 54 12" stroke="#78350F" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M 37 16 L 42 24" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
-                            <path d="M 63 16 L 58 24" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
-
-                            <!-- Soft Blush Cheeks -->
-                            <circle cx="28" cy="44" r="6" fill="url(#blushGlow)" />
-                            <circle cx="72" cy="44" r="6" fill="url(#blushGlow)" />
-
-                            <!-- AWAKE EYES (Kawaii Eyes) -->
-                            <g id="catEyesAwake">
-                                <circle cx="34" cy="38" r="6.5" fill="#5A3E2B" />
-                                <circle cx="66" cy="38" r="6.5" fill="#5A3E2B" />
-                                <circle cx="32" cy="35.5" r="2.8" fill="#FFFFFF" />
-                                <circle cx="64" cy="35.5" r="2.8" fill="#FFFFFF" />
-                                <circle cx="35.5" cy="40" r="1.2" fill="#FFFFFF" />
-                                <circle cx="67.5" cy="40" r="1.2" fill="#FFFFFF" />
-                            </g>
-
-                            <!-- SLEEPING EYES (Closed Arcs) -->
-                            <g id="catEyesSleep" class="hidden">
-                                <path d="M 29 39 Q 34 45 39 39" stroke="#5A3E2B" stroke-width="2.5" fill="none" stroke-linecap="round" />
-                                <path d="M 61 39 Q 66 45 71 39" stroke="#5A3E2B" stroke-width="2.5" fill="none" stroke-linecap="round" />
-                            </g>
-
-                            <!-- Whiskers -->
-                            <path d="M 16 38 L 26 40" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 15 44 L 25 44" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 84 38 L 74 40" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 85 44 L 75 44" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
-
-                            <!-- Nose & Open Mouth -->
-                            <polygon points="50,42 47,45 53,45" fill="#FB7185" stroke="#5A3E2B" stroke-width="0.8" />
-                            <path d="M 44 46 Q 50 54 56 46 Z" fill="#FB7185" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
-
-                            <!-- Gold Bell Collar -->
-                            <path d="M 36 56 Q 50 62 64 56" stroke="#EF4444" stroke-width="3.5" fill="none" stroke-linecap="round" />
-                            <circle cx="50" cy="60" r="4.5" fill="#FBBF24" stroke="#5A3E2B" stroke-width="1.2" />
-                            <circle cx="48.5" cy="58.5" r="1" fill="#FFFFFF" />
-
-                            <!-- Front Paws Resting on Box Edge -->
-                            <ellipse cx="36" cy="58" rx="6.5" ry="4.5" fill="#FEF3C7" stroke="#5A3E2B" stroke-width="1.5" />
-                            <ellipse cx="64" cy="58" rx="6.5" ry="4.5" fill="#FEF3C7" stroke="#5A3E2B" stroke-width="1.5" />
-
-                            <!-- Cardboard Box Front Body -->
-                            <polygon points="12,52 50,62 88,52 88,88 50,96 12,88" fill="url(#boxGrad)" stroke="#5A3E2B" stroke-width="2" stroke-linejoin="round" />
-                            <polygon points="12,52 50,62 50,96 12,88" fill="#D97706" opacity="0.25" />
-                            <!-- Box Tape Decor & Heart Sticker -->
-                            <polygon points="44,61 56,64 56,95 44,93" fill="#FEF3C7" opacity="0.8" stroke="#5A3E2B" stroke-width="1" />
-                            <path d="M 28 72 C 28 69, 24 67, 22 70 C 20 67, 16 69, 16 72 C 16 76, 22 79, 22 79 C 22 79, 28 76, 28 72 Z" fill="#F472B6" stroke="#5A3E2B" stroke-width="1" />
-                        </svg>
-                    </div>
-
-                    <p id="catStatusLabel" class="text-xs font-black text-amber-700 mt-1 bg-white/90 px-3.5 py-1 rounded-full border border-amber-200">
-                        ✨ Tap cat to pet (+1⚡ Energy)
-                    </p>
-                </div>
-
-                <!-- Feed & Rest Actions -->
-                <div class="grid grid-cols-2 gap-3">
-                    <button onclick="feedCat()" class="btn-cute bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white font-black py-3 px-2 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-sm">
-                        <span class="text-base">🍱</span> Feed (-5🐟 / +15⚡)
-                    </button>
-                    <button onclick="restCat()" class="btn-cute bg-gradient-to-r from-indigo-400 to-purple-400 hover:from-indigo-500 hover:to-purple-500 text-white font-black py-3 px-2 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-sm">
-                        <span class="text-base">😴</span> Rest / Sleep (+30⚡)
-                    </button>
+                <div style="display:flex; justify-content:center; align-items:center; height:100%; font-size: 1.2rem; color: #888;">
+                    <p><i class="fa-solid fa-shirt" style="font-size: 3rem; margin-bottom: 10px; color: var(--primary); display:block; text-align:center;"></i> Customize Outfit in the Wardrobe</p>
                 </div>
             </div>
 
-            <!-- PAGE 2: MISSIONS -->
-            <div id="tab-missions" class="tab-content space-y-3">
-                <div class="bg-gradient-to-br from-emerald-100/80 to-teal-100/80 border-2 border-emerald-200 rounded-3xl p-4">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="text-xl">🌱</span>
-                        <p class="text-xs font-black text-emerald-900 uppercase tracking-wider">Photo Proof Eco Missions</p>
-                    </div>
-                    <p class="text-[11px] font-bold text-slate-600 mb-3">Upload real photo proof to earn fish points!</p>
-
-                    <div class="space-y-2.5 text-xs">
-                        <button onclick="openMissionUploadModal('Turned off unused lights/monitors', 15, 20)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2">💡 Turn Off Lights / Monitor</span>
-                            <span class="text-emerald-600 font-black">+15🐟 / +20⚡</span>
-                        </button>
-                        <button onclick="openMissionUploadModal('Turn Off AC After Room Use', 20, 30)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2">❄️ Turn Off AC After Room Use</span>
-                            <span class="text-emerald-600 font-black">+20🐟 / +30⚡</span>
-                        </button>
-                        <button onclick="openMissionUploadModal('Unplugged idle electronics', 10, 15)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2">🔌 Unplug Electronics</span>
-                            <span class="text-emerald-600 font-black">+10🐟 / +15⚡</span>
-                        </button>
-                        <button onclick="openMissionUploadModal('Took stairs instead of lift', 10, 15)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2">🚶 Use Stairs Instead of Lift</span>
-                            <span class="text-emerald-600 font-black">+10🐟 / +15⚡</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PAGE 3: MINI-GAME -->
-            <div id="tab-game" class="tab-content space-y-3">
-                <div class="bg-white rounded-3xl p-4 border-2 border-sky-200 shadow-sm flex flex-col justify-between h-[380px]">
-                    <div>
-                        <div class="flex items-center gap-2 mb-1">
-                            <span class="text-xl">🎣</span>
-                            <h3 class="font-black text-sm text-sky-800">Catch Fish Speed Game</h3>
-                        </div>
-                        <p class="text-[11px] font-bold text-slate-500">Tap appearing fish fast in 10 seconds!</p>
-                    </div>
-
-                    <div id="gameBox" class="relative bg-gradient-to-b from-sky-100 to-blue-50 rounded-2xl border-2 border-sky-200 h-56 overflow-hidden flex items-center justify-center">
-                        <p id="gameStartText" class="text-xs font-black text-sky-600 bg-white px-4 py-2 rounded-full border border-sky-200">Tap Start Button Below!</p>
-                        <button id="targetFish" onclick="catchFish()" class="hidden absolute text-4xl transition-all duration-150 active:scale-75">🐟</button>
-                    </div>
-
-                    <div class="flex justify-between items-center">
-                        <p class="text-xs font-extrabold text-slate-600">Caught: <span id="gameScore" class="text-amber-500 font-black text-lg">0</span></p>
-                        <button id="startGameBtn" onclick="startMiniGame()" class="btn-cute bg-gradient-to-r from-sky-400 to-blue-500 text-white text-xs font-black px-5 py-2.5 rounded-xl shadow-md border-2 border-white">
-                            Start Game (10s)
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PAGE 4: RANKS & SHOP -->
-            <div id="tab-ranks" class="tab-content space-y-3.5">
+            <div class="sidebar">
+                <h3>Wardrobe Shop</h3>
+                <p style="color: #777; font-size: 0.85rem; margin-bottom: 15px;">Buy & equip accessories with Fish Tokens!</p>
                 
-                <!-- WINNER BANNER -->
-                <div class="bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500 rounded-3xl p-3.5 border-2 border-white shadow-md text-white">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="text-2xl animate-bounce">🏆</span>
-                        <div>
-                            <h4 class="text-xs font-black uppercase tracking-wider">Monthly Winner Announcement</h4>
-                            <p class="text-[10px] font-extrabold text-amber-100">Top verified player wins monthly reward!</p>
+                <div class="closet-grid" id="closet-items">
+                    <!-- Dynamic Closet Items will render here -->
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 3: WEIGHT TRACKER -->
+        <div id="view-weight" class="view-section">
+            <div class="cat-studio" style="padding: 20px;">
+                <h3>Weight Journey Graph</h3>
+                <div style="position: relative; flex: 1; width: 100%;">
+                    <canvas id="weightChart"></canvas>
+                </div>
+            </div>
+
+            <div class="sidebar">
+                <div class="card">
+                    <h3>Log New Weight</h3>
+                    <form onsubmit="logWeight(event)" style="margin-top: 15px;">
+                        <div class="form-group">
+                            <label>Current Weight (kg)</label>
+                            <input type="number" step="0.1" id="input-weight" placeholder="e.g. 65.5" required>
                         </div>
-                    </div>
-                    <div class="mt-2.5 pt-2 border-t border-white/30 flex justify-between items-center">
-                        <p class="text-[10px] font-extrabold bg-black/20 px-2.5 py-1 rounded-full">
-                            👑 Rank #1: <span id="topPlayerNameDisplay" class="underline">Loading...</span>
-                        </p>
-                        <button id="claimRewardBtn" onclick="openClaimModal()" class="btn-cute bg-white text-pink-600 hover:bg-pink-50 text-[10px] font-black px-3 py-1.5 rounded-xl shadow-sm border border-pink-200">
-                            🎁 Claim Reward
-                        </button>
-                    </div>
+                        <button type="submit" class="btn btn-secondary"><i class="fa-solid fa-plus"></i> Save Weight (+10 Fish!)</button>
+                    </form>
                 </div>
 
-                <!-- Leaderboard Section -->
-                <div class="bg-white rounded-3xl p-3 border-2 border-amber-200 shadow-sm">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-xl">📊</span>
-                            <p class="text-xs font-black text-amber-900">Verified Players Leaderboard</p>
-                        </div>
-                        <span id="totalPlayersCount" class="text-[10px] font-black text-slate-500">0 Players</span>
-                    </div>
-                    <div class="overflow-y-auto max-h-[160px]">
-                        <table class="w-full text-left text-xs">
-                            <thead>
-                                <tr class="border-b border-amber-100 text-amber-500 font-black text-[10px] uppercase">
-                                    <th class="p-1.5">Rank</th>
-                                    <th class="p-1.5">Player Username</th>
-                                    <th class="p-1.5 text-right">Fish 🐟</th>
-                                </tr>
-                            </thead>
-                            <tbody id="leaderboardRows"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <!-- Admin Action Footer -->
-                <div class="text-center pt-1">
-                    <button onclick="openAdminModal()" class="text-[10px] font-bold text-slate-400 hover:text-amber-600 underline">
-                        ⚙️ Admin Control Panel (Export Winners)
-                    </button>
+                <div class="card" style="flex:1; overflow-y:auto; max-height: 250px;">
+                    <h3>History Log</h3>
+                    <ul id="history-list" style="list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
+                        <!-- History Items -->
+                    </ul>
                 </div>
             </div>
-
-        </div>
-
-        <!-- NAVIGATION TABS -->
-        <div class="bg-white p-2 rounded-3xl border-2 border-amber-200 grid grid-cols-4 gap-1.5 shrink-0 shadow-md">
-            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2 rounded-2xl text-amber-600 bg-amber-100 font-black text-[11px]">
-                <span class="text-lg">🏠</span> Home
-            </button>
-            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
-                <span class="text-lg">🌱</span> Missions
-            </button>
-            <button onclick="switchTab('game')" id="nav-game" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
-                <span class="text-lg">🎣</span> Game
-            </button>
-            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
-                <span class="text-lg">🏆</span> Ranks
-            </button>
         </div>
 
     </div>
 
-    <!-- Hidden File Input for Mission Upload -->
-    <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
-
-    <!-- MODAL 1: PHOTO PROOF UPLOAD -->
-    <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-emerald-300">
-            <h3 class="font-black text-sm text-slate-800">📸 Verify Photo Proof</h3>
-            <p id="modalMissionName" class="text-xs font-bold text-emerald-700 bg-emerald-50 p-2.5 rounded-2xl border border-emerald-200">Mission</p>
-            
-            <div onclick="triggerFileSelect()" class="w-full h-44 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-300 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
-                <img id="photoPreview" class="w-full h-full object-cover hidden" />
-                <div id="uploadPlaceholder" class="text-center p-3">
-                    <span class="text-3xl">📷</span>
-                    <p class="text-xs font-bold text-emerald-700 mt-1">Tap to select photo</p>
-                </div>
-            </div>
-
-            <div class="flex gap-2">
-                <button onclick="closePhotoModal()" class="btn-cute w-1/2 bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-2xl">Cancel</button>
-                <button onclick="submitMissionWithPhoto()" class="btn-cute w-1/2 bg-emerald-500 text-white text-xs font-bold py-2.5 rounded-2xl border-2 border-white">Confirm</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL 2: AUTHENTICATION (LOGIN / REGISTER) -->
-    <div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-6 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-amber-300">
-            <div class="text-center">
-                <span class="text-4xl">🔐</span>
-                <h3 id="authTitle" class="font-black text-base text-slate-800 mt-1">Player Login</h3>
-                <p class="text-[11px] font-bold text-slate-500">Sign in to protect your score & rewards!</p>
-            </div>
-
-            <div class="space-y-2.5 text-xs">
-                <div>
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Username</label>
-                    <input type="text" id="authUsername" placeholder="e.g. AshCat99" class="w-full bg-slate-50 border-2 border-amber-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
-                </div>
-                <div id="emailContainer" class="hidden">
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Email Address</label>
-                    <input type="email" id="authEmail" placeholder="cat@example.com" class="w-full bg-slate-50 border-2 border-amber-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
-                </div>
-                <div>
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Password</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-slate-50 border-2 border-amber-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
-                </div>
-            </div>
-
-            <button onclick="handleAuthSubmit()" id="authSubmitBtn" class="btn-cute w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white mt-1">
-                Log In
-            </button>
-
-            <p class="text-center text-[11px] font-extrabold text-slate-500">
-                <span id="authToggleText">Don't have an account?</span>
-                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-amber-600 underline font-black ml-1">Register</button>
-            </p>
-        </div>
-    </div>
-
-    <!-- MODAL 3: CLAIM REWARD FOR WINNER -->
-    <div id="claimModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-amber-300">
-            <div class="text-center">
-                <span class="text-4xl">👑🎁</span>
-                <h3 class="font-black text-base text-amber-600 mt-1">Winner Claiming Form</h3>
-                <p class="text-[11px] font-bold text-slate-500 mt-0.5">Verified Rank #1 player submission</p>
-            </div>
-
-            <div class="space-y-2 text-xs">
-                <div>
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Full Real Name</label>
-                    <input type="text" id="claimFullName" placeholder="Firstname Lastname" class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
-                </div>
-                <div>
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Phone Number</label>
-                    <input type="text" id="claimPhone" placeholder="081-XXX-XXXX" class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
-                </div>
-                <div>
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Shipping Address</label>
-                    <textarea id="claimAddress" rows="2" placeholder="House No, Street, City..." class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none"></textarea>
-                </div>
-                <div>
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Confirm Account Password</label>
-                    <input type="password" id="claimConfirmPassword" placeholder="••••••••" class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
-                </div>
-            </div>
-
-            <div class="flex gap-2 mt-1">
-                <button onclick="closeClaimModal()" class="btn-cute w-1/2 bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-2xl">Cancel</button>
-                <button onclick="submitWinnerClaim()" class="btn-cute w-1/2 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-black py-2.5 rounded-2xl border-2 border-white">Submit Info</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL 4: ADMIN DASHBOARD (EXPORT CSV) -->
-    <div id="adminModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-sm flex flex-col gap-3 shadow-2xl border-4 border-amber-300">
-            <div class="flex justify-between items-center">
-                <h3 class="font-black text-sm text-amber-900">⚙️ Admin Control Panel</h3>
-                <button onclick="closeAdminModal()" class="text-xs font-bold text-slate-400">✕ Close</button>
-            </div>
-
-            <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 text-xs font-bold text-amber-900 flex justify-between items-center">
-                <span>Total Registered Accounts:</span>
-                <span id="adminTotalUsersCount" class="font-black text-lg text-amber-600">0</span>
-            </div>
-
-            <p class="text-[11px] font-black text-slate-700 uppercase">Monthly Verified Claimed Winners:</p>
-            <div id="adminWinnersList" class="bg-slate-50 border border-slate-200 rounded-2xl p-2.5 max-h-36 overflow-y-auto space-y-1.5 text-xs">
-                <!-- Winners Rendered Here -->
-            </div>
-
-            <button onclick="exportWinnersCSV()" class="btn-cute w-full bg-emerald-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white flex items-center justify-center gap-2">
-                <span>📥</span> Export Winner Claims (CSV / Excel)
-            </button>
-        </div>
-    </div>
-
-    <!-- JavaScript Engine -->
+    <!-- JavaScript Application Logic -->
     <script>
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSound(freq, type, duration) {
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch(e) {}
-        }
-
-        function showToast(message, icon = '✨') {
-            const toast = document.getElementById('toastNotification');
-            document.getElementById('toastMessage').innerText = message;
-            document.getElementById('toastIcon').innerText = icon;
-            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-5');
-            toast.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-5');
-            }, 2500);
-        }
-
-        async function hashPassword(str) {
-            const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
+        /* --- GLOBAL APP STATE --- */
         let currentUser = null;
-        let authMode = 'login';
-        let isSleeping = false;
+        let userData = {
+            username: '',
+            password: '',
+            question: '',
+            answer: '',
+            fish: 0,
+            weightLogs: [],
+            equipped: { hat: null, glasses: null }
+        };
 
-        function getUsersDB() { return JSON.parse(localStorage.getItem('energycat_users_db') || '{}'); }
-        function saveUsersDB(db) { localStorage.setItem('energycat_users_db', JSON.stringify(db)); }
+        // Items Catalog
+        const catalog = [
+            { id: 'hat_party', name: 'Party Hat', type: 'hat', price: 5, icon: '🎉', color: 0xff4d6d },
+            { id: 'hat_crown', name: 'Royal Crown', type: 'hat', price: 15, icon: '👑', color: 0xffca3a },
+            { id: 'glasses_sun', name: 'Cool Glasses', type: 'glasses', price: 10, icon: '🕶️', color: 0x111111 },
+            { id: 'hat_bow', name: 'Cute Bow', type: 'hat', price: 8, icon: '🎀', color: 0xff8fa3 }
+        ];
 
-        function toggleAuthMode() {
-            authMode = authMode === 'login' ? 'register' : 'login';
-            document.getElementById('authTitle').innerText = authMode === 'login' ? 'Player Login' : 'Create Account';
-            document.getElementById('emailContainer').classList.toggle('hidden', authMode === 'login');
-            document.getElementById('authSubmitBtn').innerText = authMode === 'login' ? 'Log In' : 'Register Account';
-            document.getElementById('authToggleText').innerText = authMode === 'login' ? "Don't have an account?" : "Already registered?";
-            document.getElementById('authToggleBtn').innerText = authMode === 'login' ? 'Register' : 'Log In';
+        /* --- AUTHENTICATION & FORGOT PASSWORD SYSTEM --- */
+        function switchAuthMode(mode) {
+            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
+            document.getElementById('login-form').style.display = 'none';
+            document.getElementById('register-form').style.display = 'none';
+            document.getElementById('forgot-form').style.display = 'none';
+
+            if(mode === 'login') {
+                document.querySelectorAll('.auth-tab')[0].classList.add('active');
+                document.getElementById('login-form').style.display = 'flex';
+            } else if(mode === 'register') {
+                document.querySelectorAll('.auth-tab')[1].classList.add('active');
+                document.getElementById('register-form').style.display = 'flex';
+            } else if(mode === 'forgot') {
+                document.getElementById('forgot-form').style.display = 'flex';
+            }
         }
 
-        async function handleAuthSubmit() {
-            const username = document.getElementById('authUsername').value.trim();
-            const password = document.getElementById('authPassword').value.trim();
-            const email = document.getElementById('authEmail').value.trim();
+        function handleRegister(e) {
+            e.preventDefault();
+            const u = document.getElementById('reg-username').value.trim();
+            const p = document.getElementById('reg-password').value;
+            const q = document.getElementById('reg-question').value;
+            const a = document.getElementById('reg-answer').value.trim().toLowerCase();
 
-            if (!username || !password || (authMode === 'register' && !email)) {
-                showToast("Please fill in all required fields!", "⚠️");
+            if (localStorage.getItem('cat_user_' + u)) {
+                alert('Username already exists! Please choose another or Login.');
                 return;
             }
 
-            const db = getUsersDB();
-            const passwordHash = await hashPassword(password);
+            userData = {
+                username: u,
+                password: p,
+                question: q,
+                answer: a,
+                fish: 10, // Starter Gift
+                weightLogs: [],
+                equipped: { hat: null, glasses: null }
+            };
 
-            if (authMode === 'register') {
-                if (db[username]) {
-                    showToast("Username already exists!", "❌");
-                    return;
-                }
-                db[username] = { email, passwordHash, fish: 10, energy: 100, registeredAt: new Date().toISOString() };
-                saveUsersDB(db);
-                currentUser = username;
-                localStorage.setItem('energycat_current_session', currentUser);
-                document.getElementById('authModal').classList.add('hidden');
-                showToast(`Welcome, ${currentUser}! Registered successfully.`, "🎉");
-                loadUserData();
-            } else {
-                if (!db[username] || db[username].passwordHash !== passwordHash) {
-                    showToast("Invalid Username or Password!", "❌");
-                    return;
-                }
-                currentUser = username;
-                localStorage.setItem('energycat_current_session', currentUser);
-                document.getElementById('authModal').classList.add('hidden');
-                showToast(`Welcome back, ${currentUser}!`, "🔓");
-                loadUserData();
-            }
+            saveUserData();
+            loginUser(u);
         }
 
-        function logoutUser() {
-            localStorage.removeItem('energycat_current_session');
-            currentUser = null;
-            document.getElementById('authModal').classList.remove('hidden');
-            showToast("Logged out successfully.", "🔒");
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('login-username').value.trim();
+            const p = document.getElementById('login-password').value;
+
+            const saved = localStorage.getItem('cat_user_' + u);
+            if (!saved) {
+                alert('User not found! Please register.');
+                return;
+            }
+
+            const data = JSON.parse(saved);
+            if (data.password !== p) {
+                alert('Incorrect password!');
+                return;
+            }
+
+            userData = data;
+            loginUser(u);
         }
 
-        let gameState = { fish: 10, energy: 100 };
+        function handleResetPassword(e) {
+            e.preventDefault();
+            const u = document.getElementById('forgot-username').value.trim();
+            const q = document.getElementById('forgot-question').value;
+            const a = document.getElementById('forgot-answer').value.trim().toLowerCase();
+            const newP = document.getElementById('forgot-new-password').value;
 
-        function loadUserData() {
-            if (!currentUser) return;
-            const db = getUsersDB();
-            if (db[currentUser]) {
-                gameState.fish = db[currentUser].fish || 10;
-                gameState.energy = db[currentUser].energy || 100;
+            const saved = localStorage.getItem('cat_user_' + u);
+            if (!saved) {
+                alert('Username not found!');
+                return;
             }
-            document.getElementById('displayUser').innerText = currentUser;
+
+            const data = JSON.parse(saved);
+            if (data.question !== q || data.answer.toLowerCase() !== a) {
+                alert('Security question or answer does not match!');
+                return;
+            }
+
+            // Update Password
+            data.password = newP;
+            localStorage.setItem('cat_user_' + u, JSON.stringify(data));
+            
+            alert('Password successfully reset! Logging you in...');
+            userData = data;
+            loginUser(u);
+        }
+
+        function loginUser(username) {
+            currentUser = username;
+            document.getElementById('auth-overlay').style.display = 'none';
             updateUI();
+            initChart();
+            init3D();
+        }
+
+        function logout() {
+            location.reload();
         }
 
         function saveUserData() {
-            if (!currentUser) return;
-            const db = getUsersDB();
-            if (db[currentUser]) {
-                db[currentUser].fish = gameState.fish;
-                db[currentUser].energy = gameState.energy;
-                saveUsersDB(db);
+            if (currentUser) {
+                localStorage.setItem('cat_user_' + currentUser, JSON.stringify(userData));
             }
-            updateUI();
+        }
+
+        /* --- UI & NAVIGATION --- */
+        function switchTab(e, tabId) {
+            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+
+            if(e && e.currentTarget) {
+                e.currentTarget.classList.add('active');
+            }
+            document.getElementById('view-' + tabId).classList.add('active');
+
+            if(tabId === 'weight') {
+                renderChart();
+            }
         }
 
         function updateUI() {
-            document.getElementById('fishCount').innerText = gameState.fish;
-            document.getElementById('energyText').innerText = `${gameState.energy}/100`;
-            document.getElementById('energyBar').style.width = `${gameState.energy}%`;
+            document.getElementById('fish-count').innerText = userData.fish;
+            document.getElementById('closet-fish-count').innerText = userData.fish;
+            document.getElementById('cat-display-name').innerText = userData.username + "'s Cat";
 
-            const db = getUsersDB();
-            const allUsers = Object.keys(db);
-            document.getElementById('totalUsersBadge').innerText = `👥 ${allUsers.length}`;
-            document.getElementById('totalPlayersCount').innerText = `${allUsers.length} Players`;
+            // Update Stats
+            if (userData.weightLogs && userData.weightLogs.length > 0) {
+                const latest = userData.weightLogs[userData.weightLogs.length - 1];
+                document.getElementById('stat-weight').innerText = latest.weight;
+                document.getElementById('stat-date').innerText = latest.date;
+            }
 
-            renderLeaderboard();
+            renderCloset();
+            renderHistory();
         }
 
-        function renderLeaderboard() {
-            const db = getUsersDB();
-            const playersList = Object.keys(db).map(username => ({
-                username,
-                fish: db[username].fish || 0
-            })).sort((a, b) => b.fish - a.fish);
+        /* --- INTERACTION & REWARDS --- */
+        function interactCat(action) {
+            let gain = 0;
+            let msg = '';
+            if(action === 'pet') { gain = 1; msg = 'Cat purrs happily!'; }
+            if(action === 'feed') { gain = 2; msg = 'Yummy! Cat enjoyed the treat.'; }
+            if(action === 'play') { gain = 3; msg = 'Cat did a playful flip!'; }
 
-            const container = document.getElementById('leaderboardRows');
+            userData.fish += gain;
+            document.getElementById('cat-status-text').innerText = 'Status: ' + msg;
+            saveUserData();
+            updateUI();
+            animateCat();
+        }
+
+        /* --- CLOSET & SHOP SYSTEM --- */
+        function renderCloset() {
+            const container = document.getElementById('closet-items');
             container.innerHTML = '';
 
-            const topPlayer = playersList[0];
-            document.getElementById('topPlayerNameDisplay').innerText = topPlayer ? topPlayer.username : 'None';
-
-            const isYouTop = topPlayer && topPlayer.username === currentUser;
-            const claimBtn = document.getElementById('claimRewardBtn');
-            if (isYouTop) {
-                claimBtn.disabled = false;
-                claimBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                claimBtn.classList.add('animate-pulse');
-            } else {
-                claimBtn.classList.remove('animate-pulse');
-            }
-
-            playersList.forEach((p, index) => {
-                const isYou = p.username === currentUser;
-                const tr = document.createElement('tr');
-                tr.className = `border-b border-amber-100 ${isYou ? 'bg-amber-50 font-bold text-amber-900' : 'text-slate-700'}`;
-
-                let rankBadge = `#${index + 1}`;
-                if (index === 0) rankBadge = '🥇';
-                if (index === 1) rankBadge = '🥈';
-                if (index === 2) rankBadge = '🥉';
-
-                tr.innerHTML = `
-                    <td class="p-1.5 font-bold">${rankBadge}</td>
-                    <td class="p-1.5 flex items-center gap-1">${p.username} ${isYou ? '<span class="text-[8px] bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-black">YOU</span>' : ''}</td>
-                    <td class="p-1.5 text-right font-black text-amber-500">${p.fish}</td>
+            catalog.forEach(item => {
+                const isEquipped = userData.equipped && userData.equipped[item.type] === item.id;
+                const card = document.createElement('div');
+                card.className = `item-card ${isEquipped ? 'equipped' : ''}`;
+                card.innerHTML = `
+                    <div class="item-icon">${item.icon}</div>
+                    <div style="font-weight:bold; font-size:0.9rem;">${item.name}</div>
+                    <div style="font-size:0.8rem; color:#888;">${item.price} Fish</div>
+                    <button class="btn" style="margin-top:8px; padding:6px; font-size:0.8rem;">
+                        ${isEquipped ? 'Unequip' : 'Equip'}
+                    </button>
                 `;
-                container.appendChild(tr);
+                card.onclick = () => toggleEquip(item);
+                container.appendChild(card);
             });
         }
 
-        // Mission Photo Upload Mechanics
-        let activeMissionData = null;
+        function toggleEquip(item) {
+            if (!userData.equipped) userData.equipped = { hat: null, glasses: null };
 
-        function openMissionUploadModal(name, rewardFish, rewardEnergy) {
-            activeMissionData = { name, rewardFish, rewardEnergy };
-            document.getElementById('modalMissionName').innerText = `Mission: ${name}`;
-            document.getElementById('photoPreview').classList.add('hidden');
-            document.getElementById('uploadPlaceholder').classList.remove('hidden');
-            document.getElementById('photoModal').classList.remove('hidden');
-        }
-
-        function triggerFileSelect() {
-            document.getElementById('photoFileInput').click();
-        }
-
-        function handlePhotoUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const img = document.getElementById('photoPreview');
-                    img.src = event.target.result;
-                    img.classList.remove('hidden');
-                    document.getElementById('uploadPlaceholder').classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function closePhotoModal() {
-            document.getElementById('photoModal').classList.add('hidden');
-            document.getElementById('photoFileInput').value = '';
-        }
-
-        function submitMissionWithPhoto() {
-            const preview = document.getElementById('photoPreview');
-            if (preview.classList.contains('hidden') || !preview.src) {
-                showToast('Please attach a photo proof first!', '⚠️');
-                return;
-            }
-            playSound(600, 'sine', 0.2);
-            gameState.fish += activeMissionData.rewardFish;
-            gameState.energy = Math.min(100, gameState.energy + activeMissionData.rewardEnergy);
-            saveUserData();
-            closePhotoModal();
-            showToast(`Proof Verified! +${activeMissionData.rewardFish} 🐟 & +${activeMissionData.rewardEnergy}⚡`, '🌿');
-        }
-
-        // REAL CAT SLEEPING MECHANIC
-        function setCatSleepState(sleep) {
-            isSleeping = sleep;
-            const awakeEyes = document.getElementById('catEyesAwake');
-            const sleepEyes = document.getElementById('catEyesSleep');
-            const zzz = document.getElementById('sleepEffect');
-            const label = document.getElementById('catStatusLabel');
-
-            if (sleep) {
-                awakeEyes.classList.add('hidden');
-                sleepEyes.classList.remove('hidden');
-                zzz.classList.remove('hidden');
-                label.innerText = "😴 Shh... Cat is sleeping soundly!";
-                label.className = "text-xs font-black text-purple-700 mt-1 bg-purple-100 px-3.5 py-1 rounded-full border border-purple-200";
+            if (userData.equipped[item.type] === item.id) {
+                userData.equipped[item.type] = null;
             } else {
-                awakeEyes.classList.remove('hidden');
-                sleepEyes.classList.add('hidden');
-                zzz.classList.add('hidden');
-                label.innerText = "✨ Tap cat to pet (+1⚡ Energy)";
-                label.className = "text-xs font-black text-amber-700 mt-1 bg-white/90 px-3.5 py-1 rounded-full border border-amber-200";
+                if (userData.fish >= item.price || userData.equipped[item.type] === item.id) {
+                    userData.equipped[item.type] = item.id;
+                } else {
+                    alert('Not enough Fish Tokens!');
+                    return;
+                }
             }
-        }
-
-        function petCat(e) {
-            if (isSleeping) {
-                setCatSleepState(false);
-                showToast("Woke up the cat!", "🐱");
-                return;
-            }
-            if (gameState.energy >= 100) {
-                showToast("Cat energy is already full! (100/100)", "⚡");
-                return;
-            }
-            playSound(750, 'sine', 0.15);
-            gameState.energy = Math.min(100, gameState.energy + 1);
             saveUserData();
+            updateUI();
+            update3DAccessories();
         }
 
-        function feedCat() {
-            if (isSleeping) setCatSleepState(false);
-            if (gameState.energy >= 100) {
-                showToast("Cat energy is already full! Cannot feed.", "⚡");
-                return;
-            }
-            if (gameState.fish < 5) { showToast('Not enough fish! Complete missions first.', '⚠️'); return; }
-            playSound(400, 'triangle', 0.12);
-            gameState.fish -= 5;
-            gameState.energy = Math.min(100, gameState.energy + 15);
-            saveUserData();
-            showToast('Fed the cat! (-5🐟 / +15⚡)', '🍱');
-        }
+        /* --- WEIGHT TRACKER & CHART.JS --- */
+        let weightChartInstance = null;
 
-        function restCat() {
-            if (gameState.energy >= 100) {
-                showToast("Cat energy is already full! Cannot rest.", "⚡");
-                return;
-            }
-            playSound(320, 'sine', 0.3);
-            gameState.energy = Math.min(100, gameState.energy + 30);
-            saveUserData();
-            setCatSleepState(true);
-            showToast('Cat went to sleep (+30⚡)', '😴');
-        }
+        function logWeight(e) {
+            e.preventDefault();
+            const val = parseFloat(document.getElementById('input-weight').value);
+            if (!val) return;
 
-        // AUTOMATIC ENERGY DECAY: -1 Energy every 5 minutes (300,000ms)
-        setInterval(() => {
-            if (currentUser && gameState.energy > 0) {
-                gameState.energy = Math.max(0, gameState.energy - 1);
-                saveUserData();
-            }
-        }, 300000);
-
-        function openClaimModal() {
-            const db = getUsersDB();
-            const playersList = Object.keys(db).map(u => ({ username: u, fish: db[u].fish || 0 })).sort((a, b) => b.fish - a.fish);
+            const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
+            if (!userData.weightLogs) userData.weightLogs = [];
             
-            if (playersList.length > 0 && playersList[0].username !== currentUser) {
-                showToast("Only Rank #1 verified player can claim!", "🔒");
-                return;
-            }
-            document.getElementById('claimModal').classList.remove('hidden');
-        }
-        function closeClaimModal() { document.getElementById('claimModal').classList.add('hidden'); }
+            userData.weightLogs.push({ date: dateStr, weight: val });
+            userData.fish += 10; // Reward
 
-        async function submitWinnerClaim() {
-            const fullName = document.getElementById('claimFullName').value.trim();
-            const phone = document.getElementById('claimPhone').value.trim();
-            const address = document.getElementById('claimAddress').value.trim();
-            const confirmPass = document.getElementById('claimConfirmPassword').value.trim();
-
-            if (!fullName || !phone || !address || !confirmPass) {
-                showToast("Please fill in all claim details!", "⚠️");
-                return;
-            }
-
-            const db = getUsersDB();
-            const passHash = await hashPassword(confirmPass);
-            if (db[currentUser].passwordHash !== passHash) {
-                showToast("Incorrect Account Password!", "❌");
-                return;
-            }
-
-            let winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
-            winners.push({ username: currentUser, fullName, phone, address, claimedAt: new Date().toISOString() });
-            localStorage.setItem('energycat_winners_claims', JSON.stringify(winners));
-
-            playSound(700, 'sine', 0.25);
-            closeClaimModal();
-            showToast("Winner claim verified & submitted successfully! 🎁", "🎉");
+            document.getElementById('input-weight').value = '';
+            saveUserData();
+            updateUI();
+            renderChart();
+            alert('Weight logged! You earned +10 Fish Tokens! 🐟');
         }
 
-        function openAdminModal() {
-            const db = getUsersDB();
-            document.getElementById('adminTotalUsersCount').innerText = Object.keys(db).length;
+        function renderHistory() {
+            const list = document.getElementById('history-list');
+            list.innerHTML = '';
+            if (!userData.weightLogs) return;
 
-            const winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
-            const listContainer = document.getElementById('adminWinnersList');
-            listContainer.innerHTML = '';
-
-            if (winners.length === 0) {
-                listContainer.innerHTML = `<p class="text-slate-400 italic font-bold text-center py-2">No winner claims submitted yet.</p>`;
-            } else {
-                winners.forEach(w => {
-                    const div = document.createElement('div');
-                    div.className = "bg-white p-2 rounded-xl border border-slate-200 shadow-sm";
-                    div.innerHTML = `
-                        <p class="font-black text-amber-900">🏆 ${w.username} (${w.fullName})</p>
-                        <p class="text-[10px] text-slate-600">📞 ${w.phone} | 🏠 ${w.address}</p>
-                    `;
-                    listContainer.appendChild(div);
-                });
-            }
-
-            document.getElementById('adminModal').classList.remove('hidden');
-        }
-        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
-
-        function exportWinnersCSV() {
-            const winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
-            if (winners.length === 0) {
-                showToast("No winner claims data to export!", "⚠️");
-                return;
-            }
-
-            let csvContent = "data:text/csv;charset=utf-8,Username,Full Name,Phone,Address,Claim Date\n";
-            winners.forEach(w => {
-                csvContent += `"${w.username}","${w.fullName}","${w.phone}","${w.address}","${w.claimedAt}"\n`;
+            [...userData.weightLogs].reverse().forEach(log => {
+                const li = document.createElement('li');
+                li.style.cssText = 'background:#f9f9f9; padding:10px; border-radius:8px; display:flex; justify-content:space-between;';
+                li.innerHTML = `<span>${log.date}</span> <strong>${log.weight} kg</strong>`;
+                list.appendChild(li);
             });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `energy_cat_winners_${Date.now()}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("Winners CSV exported successfully!", "📥");
         }
 
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('text-amber-600', 'bg-amber-100');
-                el.classList.add('text-slate-400');
+        function initChart() {
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            weightChartInstance = new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: [],
+                    datasets: [{
+                        label: 'Weight (kg)',
+                        data: [],
+                        borderColor: '#ff4d6d',
+                        backgroundColor: 'rgba(255, 143, 163, 0.2)',
+                        fill: true,
+                        tension: 0.3,
+                        borderWidth: 3
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    scales: { y: { beginAtZero: false } }
+                }
             });
-
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            const activeNav = document.getElementById(`nav-${tabId}`);
-            activeNav.classList.remove('text-slate-400');
-            activeNav.classList.add('text-amber-600', 'bg-amber-100');
-            playSound(500, 'sine', 0.1);
         }
 
-        let gameScore = 0;
-        function startMiniGame() {
-            if (isSleeping) setCatSleepState(false);
-            gameScore = 0;
-            document.getElementById('gameScore').innerText = gameScore;
-            document.getElementById('gameStartText').classList.add('hidden');
-            document.getElementById('startGameBtn').disabled = true;
+        function renderChart() {
+            if (!weightChartInstance || !userData.weightLogs) return;
+            weightChartInstance.data.labels = userData.weightLogs.map(l => l.date);
+            weightChartInstance.data.datasets[0].data = userData.weightLogs.map(l => l.weight);
+            weightChartInstance.update();
+        }
+
+        /* --- THREE.JS 3D CAT ENGINE --- */
+        let scene, camera, renderer, catGroup;
+        let hatMesh = null, glassesMesh = null;
+        let isAnimating = false;
+
+        function init3D() {
+            const container = document.getElementById('canvas-container');
+            if (container.children.length > 0) return;
+
+            scene = new THREE.Scene();
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 2, 5);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.setPixelRatio(window.devicePixelRatio);
+            container.appendChild(renderer.domElement);
+
+            // Lighting
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
+            dirLight.position.set(5, 10, 7);
+            scene.add(dirLight);
+
+            // Build Cat
+            catGroup = new THREE.Group();
+
+            const catMaterial = new THREE.MeshToonMaterial({ color: 0xffa559 });
+            const darkMaterial = new THREE.MeshToonMaterial({ color: 0x222222 });
+
+            // Body
+            const bodyGeo = new THREE.SphereGeometry(0.8, 32, 32);
+            bodyGeo.scale(1, 1.2, 0.9);
+            const body = new THREE.Mesh(bodyGeo, catMaterial);
+            body.position.y = 0.8;
+            catGroup.add(body);
+
+            // Head
+            const headGeo = new THREE.SphereGeometry(0.65, 32, 32);
+            headGeo.scale(1.1, 0.9, 1);
+            const head = new THREE.Mesh(headGeo, catMaterial);
+            head.position.set(0, 1.8, 0.1);
+            catGroup.add(head);
+
+            // Ears
+            const earGeo = new THREE.ConeGeometry(0.2, 0.4, 16);
+            const earL = new THREE.Mesh(earGeo, catMaterial);
+            earL.position.set(-0.35, 2.35, 0.1);
+            earL.rotation.z = 0.2;
+            const earR = earL.clone();
+            earR.position.x = 0.35;
+            earR.rotation.z = -0.2;
+            catGroup.add(earL);
+            catGroup.add(earR);
+
+            // Eyes
+            const eyeGeo = new THREE.SphereGeometry(0.07, 16, 16);
+            const eyeL = new THREE.Mesh(eyeGeo, darkMaterial);
+            eyeL.position.set(-0.2, 1.85, 0.6);
+            const eyeR = eyeL.clone();
+            eyeR.position.x = 0.2;
+            catGroup.add(eyeL);
+            catGroup.add(eyeR);
+
+            scene.add(catGroup);
+
+            update3DAccessories();
+
+            // Animation Loop
+            function animate() {
+                requestAnimationFrame(animate);
+                if(!isAnimating) {
+                    catGroup.rotation.y += 0.005;
+                }
+                renderer.render(scene, camera);
+            }
+            animate();
+
+            window.addEventListener('resize', () => {
+                if (!container) return;
+                camera.aspect = container.clientWidth / container.clientHeight;
+                camera.updateProjectionMatrix();
+                renderer.setSize(container.clientWidth, container.clientHeight);
+            });
+        }
+
+        function animateCat() {
+            isAnimating = true;
+            let startY = catGroup.position.y;
+            let time = 0;
             
-            spawnFish();
-            setTimeout(() => {
-                document.getElementById('targetFish').classList.add('hidden');
-                document.getElementById('gameStartText').innerText = `Time's up! Earned +${gameScore * 2} 🐟`;
-                document.getElementById('gameStartText').classList.remove('hidden');
-                document.getElementById('startGameBtn').disabled = false;
-                
-                gameState.fish += gameScore * 2;
-                saveUserData();
-            }, 10000);
+            let jumpInterval = setInterval(() => {
+                time += 0.2;
+                catGroup.position.y = startY + Math.sin(time) * 0.5;
+                catGroup.rotation.y += 0.2;
+
+                if (time >= Math.PI * 2) {
+                    clearInterval(jumpInterval);
+                    catGroup.position.y = startY;
+                    isAnimating = false;
+                }
+            }, 30);
         }
 
-        function spawnFish() {
-            const fish = document.getElementById('targetFish');
-            const box = document.getElementById('gameBox').getBoundingClientRect();
-            const x = Math.random() * (box.width - 50);
-            const y = Math.random() * (box.height - 50);
-            fish.style.left = `${x}px`;
-            fish.style.top = `${y}px`;
-            fish.classList.remove('hidden');
-        }
+        function update3DAccessories() {
+            if (!catGroup) return;
 
-        function catchFish() {
-            playSound(850, 'sine', 0.08);
-            gameScore++;
-            document.getElementById('gameScore').innerText = gameScore;
-            spawnFish();
-        }
+            if (hatMesh) { catGroup.remove(hatMesh); hatMesh = null; }
+            if (glassesMesh) { catGroup.remove(glassesMesh); glassesMesh = null; }
 
-        // Init App Session
-        const sessionUser = localStorage.getItem('energycat_current_session');
-        if (sessionUser && getUsersDB()[sessionUser]) {
-            currentUser = sessionUser;
-            document.getElementById('authModal').classList.add('hidden');
-            loadUserData();
-        } else {
-            document.getElementById('authModal').classList.remove('hidden');
+            const equipped = userData.equipped;
+            if (!equipped) return;
+
+            // Render Hat
+            if (equipped.hat) {
+                const item = catalog.find(c => c.id === equipped.hat);
+                if (item) {
+                    const hatGeo = new THREE.ConeGeometry(0.3, 0.5, 16);
+                    const hatMat = new THREE.MeshToonMaterial({ color: item.color });
+                    hatMesh = new THREE.Mesh(hatGeo, hatMat);
+                    hatMesh.position.set(0, 2.5, 0.1);
+                    catGroup.add(hatMesh);
+                }
+            }
+
+            // Render Glasses
+            if (equipped.glasses) {
+                const item = catalog.find(c => c.id === equipped.glasses);
+                if (item) {
+                    const glassGeo = new THREE.BoxGeometry(0.6, 0.15, 0.05);
+                    const glassMat = new THREE.MeshToonMaterial({ color: item.color });
+                    glassesMesh = new THREE.Mesh(glassGeo, glassMat);
+                    glassesMesh.position.set(0, 1.85, 0.65);
+                    catGroup.add(glassesMesh);
+                }
+            }
         }
     </script>
 </body>
