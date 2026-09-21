@@ -3,10 +3,10 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat 3D - Kawaii Pet & Weight Studio</title>
-    <!-- Three.js Library -->
+    <title>Energy Cat 3D - Classic Kawaii Edition</title>
+    <!-- Three.js -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Chart.js Library -->
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
@@ -17,7 +17,7 @@
         :root {
             --primary: #ff8fa3;
             --primary-dark: #ff4d6d;
-            --secondary: #8ac926;
+            --secondary: #4ea8de;
             --accent: #ffca3a;
             --bg-soft: #fff0f5;
             --card-bg: rgba(255, 255, 255, 0.95);
@@ -29,13 +29,12 @@
 
         * {
             box-sizing: border-box;
-            margin: 0;
-            padding: 0;
+            margin: 0; padding: 0;
             font-family: 'Nunito', sans-serif;
             user-select: none;
         }
 
-        h1, h2, h3, .btn, .nav-btn, .logo-text, .auth-tab {
+        h1, h2, h3, .btn, .nav-btn, .logo-text, .auth-tab, .rank-badge {
             font-family: 'Fredoka', sans-serif;
         }
 
@@ -43,12 +42,11 @@
             background: linear-gradient(135deg, #ffdee9 0%, #b5fffc 100%);
             min-height: 100vh;
             color: var(--text-main);
-            overflow-x: hidden;
             display: flex;
             flex-direction: column;
         }
 
-        /* --- Auth Overlay --- */
+        /* --- AUTH OVERLAY --- */
         #auth-overlay {
             position: fixed;
             top: 0; left: 0; width: 100%; height: 100%;
@@ -67,286 +65,125 @@
             border-radius: var(--radius-lg);
             box-shadow: 0 15px 35px rgba(0,0,0,0.15);
             width: 100%;
-            max-width: 400px;
+            max-width: 420px;
             text-align: center;
         }
 
         .auth-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 20px;
-            background: #f0f0f0;
-            padding: 5px;
-            border-radius: var(--radius-sm);
+            display: flex; gap: 10px; margin-bottom: 20px;
+            background: #f0f0f0; padding: 5px; border-radius: var(--radius-sm);
         }
 
         .auth-tab {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: transparent;
-            border-radius: 10px;
-            font-weight: 600;
-            cursor: pointer;
-            color: #777;
-            transition: all 0.3s ease;
+            flex: 1; padding: 10px; border: none; background: transparent;
+            border-radius: 10px; font-weight: 600; cursor: pointer; color: #777;
         }
 
         .auth-tab.active {
-            background: white;
-            color: var(--primary-dark);
+            background: white; color: var(--primary-dark);
             box-shadow: 0 2px 8px rgba(0,0,0,0.1);
         }
 
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
+        .auth-form { display: flex; flex-direction: column; gap: 12px; }
         .auth-form input, .auth-form select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #eee;
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .auth-form input:focus, .auth-form select:focus {
-            border-color: var(--primary);
+            width: 100%; padding: 12px 15px; border: 2px solid #eee;
+            border-radius: var(--radius-sm); font-size: 1rem; outline: none;
         }
 
         .forgot-link {
-            text-align: right;
-            font-size: 0.85rem;
-            color: var(--primary-dark);
-            cursor: pointer;
-            text-decoration: underline;
-            margin-top: -4px;
-            margin-bottom: 6px;
-            display: block;
+            text-align: right; font-size: 0.85rem; color: var(--primary-dark);
+            cursor: pointer; text-decoration: underline; margin-top: -4px;
         }
 
-        /* --- Navbar --- */
+        /* --- NAVBAR --- */
         navbar {
             background: var(--card-bg);
             backdrop-filter: blur(10px);
             padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
+            display: flex; justify-content: space-between; align-items: center;
+            box-shadow: var(--shadow); position: sticky; top: 0; z-index: 100;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.6rem;
-            color: var(--primary-dark);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 12px;
-        }
+        .logo { display: flex; align-items: center; gap: 12px; font-size: 1.6rem; color: var(--primary-dark); }
+        .nav-links { display: flex; gap: 10px; }
 
         .nav-btn {
-            background: transparent;
-            border: none;
-            padding: 10px 18px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-main);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
+            background: transparent; border: none; padding: 10px 16px;
+            border-radius: var(--radius-sm); cursor: pointer; font-size: 0.95rem;
+            font-weight: 600; color: var(--text-main); transition: all 0.3s;
+            display: flex; align-items: center; gap: 8px;
         }
 
-        .nav-btn.active, .nav-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-        }
+        .nav-btn.active, .nav-btn:hover { background: var(--primary); color: white; }
 
-        /* --- Main Layout --- */
+        /* --- LAYOUT --- */
         .app-container {
-            display: flex;
-            flex: 1;
-            padding: 20px;
-            gap: 20px;
-            max-width: 1350px;
-            margin: 0 auto;
-            width: 100%;
+            display: flex; flex: 1; padding: 20px; gap: 20px;
+            max-width: 1350px; margin: 0 auto; width: 100%;
         }
 
-        .view-section {
-            display: none;
-            width: 100%;
-            gap: 20px;
-        }
+        .view-section { display: none; width: 100%; gap: 20px; }
+        .view-section.active { display: flex; }
 
-        .view-section.active {
-            display: flex;
-        }
-
-        /* --- 3D Canvas Container --- */
         .cat-studio {
-            flex: 1;
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow);
-            position: relative;
-            min-height: 520px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
+            flex: 1; background: var(--card-bg); border-radius: var(--radius-lg);
+            box-shadow: var(--shadow); position: relative; min-height: 500px;
+            display: flex; flex-direction: column; overflow: hidden;
         }
 
-        #canvas-container {
-            width: 100%;
-            height: 100%;
-            flex: 1;
+        #canvas-container { width: 100%; height: 100%; flex: 1; }
+
+        .hud-overlay {
+            position: absolute; top: 20px; left: 20px; right: 20px;
+            display: flex; justify-content: space-between; pointer-events: none;
         }
 
-        .cat-status-overlay {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.9);
-            padding: 12px 20px;
-            border-radius: var(--radius-sm);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+        .hud-card {
+            background: rgba(255, 255, 255, 0.92); padding: 12px 20px;
+            border-radius: var(--radius-sm); backdrop-filter: blur(5px);
+            pointer-events: auto; box-shadow: 0 4px 15px rgba(0,0,0,0.05);
         }
 
-        .fish-counter {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--accent);
-            color: #5c4300;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(255, 202, 58, 0.4);
+        .energy-bar-bg {
+            width: 160px; height: 14px; background: #eee;
+            border-radius: 10px; overflow: hidden; margin-top: 6px;
         }
 
-        /* --- Sidebar & Cards --- */
+        .energy-bar-fill {
+            height: 100%; width: 100%; background: #4caf50; transition: width 0.5s ease;
+        }
+
         .sidebar {
-            width: 360px;
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow);
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
+            width: 360px; background: var(--card-bg); border-radius: var(--radius-lg);
+            box-shadow: var(--shadow); padding: 25px; display: flex; flex-direction: column; gap: 20px;
         }
 
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: var(--radius-sm);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-        }
+        .card { background: white; padding: 20px; border-radius: var(--radius-sm); box-shadow: 0 4px 10px rgba(0,0,0,0.03); }
 
         .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
+            background: var(--primary); color: white; border: none; padding: 12px 20px;
+            border-radius: var(--radius-sm); font-size: 1rem; font-weight: bold;
+            cursor: pointer; transition: all 0.3s; width: 100%;
+            display: flex; justify-content: center; align-items: center; gap: 8px;
         }
 
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
-        }
+        .btn:hover { background: var(--primary-dark); transform: translateY(-2px); }
+        .btn-secondary { background: var(--secondary); }
+        .btn-secondary:hover { background: #3a86c8; }
 
-        .btn-secondary {
-            background: var(--secondary);
-        }
-        .btn-secondary:hover {
-            background: #70a81d;
-        }
-
-        /* --- Closet Grid --- */
-        .closet-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-            max-height: 420px;
-            overflow-y: auto;
-            padding: 4px;
-        }
-
+        /* --- CLOSET & LEADERBOARD --- */
+        .closet-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 12px; }
         .item-card {
-            background: #fff;
-            border: 2px solid #eee;
-            border-radius: var(--radius-sm);
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
+            background: #fff; border: 2px solid #eee; border-radius: var(--radius-sm);
+            padding: 15px; text-align: center; cursor: pointer; transition: all 0.3s;
         }
+        .item-card.equipped { border-color: var(--primary-dark); background: #fff0f5; }
 
-        .item-card:hover {
-            border-color: var(--primary);
-            transform: scale(1.02);
-        }
-
-        .item-card.equipped {
-            border-color: var(--secondary);
-            background: #f4fce8;
-        }
-
-        .item-icon {
-            font-size: 2.5rem;
-            margin-bottom: 6px;
-        }
-
-        /* --- Forms & Inputs --- */
-        .form-group {
-            display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 15px;
-        }
-
-        .form-group label {
-            font-weight: 600;
-            font-size: 0.9rem;
-        }
-
-        .form-group input {
-            padding: 12px;
-            border: 2px solid #eee;
-            border-radius: var(--radius-sm);
-            outline: none;
-            font-size: 1rem;
+        .leaderboard-list { display: flex; flex-direction: column; gap: 12px; width: 100%; }
+        .leaderboard-item {
+            display: flex; align-items: center; justify-content: space-between;
+            background: white; padding: 15px 20px; border-radius: var(--radius-sm);
+            border-left: 6px solid var(--primary);
         }
 
         @media (max-width: 900px) {
@@ -358,59 +195,57 @@
 </head>
 <body>
 
-    <!-- Auth System Overlay -->
+    <!-- AUTH OVERLAY -->
     <div id="auth-overlay">
         <div class="auth-card">
             <div style="font-size: 3rem; color: var(--primary-dark); margin-bottom: 10px;">
                 <i class="fa-solid fa-cat"></i>
             </div>
-            <h2 style="margin-bottom: 15px; color: #333;">Energy Cat Studio</h2>
+            <h2 style="margin-bottom: 15px;">Energy Cat 3D</h2>
             
             <div class="auth-tabs">
-                <button class="auth-tab active" id="tab-login" onclick="switchAuthMode('login')">Login</button>
-                <button class="auth-tab" id="tab-register" onclick="switchAuthMode('register')">Register</button>
+                <button class="auth-tab active" id="tab-login" onclick="switchAuth('login')">Login</button>
+                <button class="auth-tab" id="tab-register" onclick="switchAuth('register')">Register</button>
             </div>
 
-            <!-- Login Form -->
+            <!-- LOGIN FORM -->
             <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
-                <input type="text" id="login-username" placeholder="Username" required>
-                <input type="password" id="login-password" placeholder="Password" required>
-                <span class="forgot-link" onclick="switchAuthMode('forgot')">Forgot Password?</span>
+                <input type="text" id="login-user" placeholder="Username" required>
+                <input type="password" id="login-pass" placeholder="Password" required>
+                <span class="forgot-link" onclick="switchAuth('forgot')">Forgot Password?</span>
                 <button type="submit" class="btn">Login & Play</button>
             </form>
 
-            <!-- Register Form -->
+            <!-- REGISTER FORM -->
             <form id="register-form" class="auth-form" style="display: none;" onsubmit="handleRegister(event)">
-                <input type="text" id="reg-username" placeholder="Create Username" required>
-                <input type="password" id="reg-password" placeholder="Create Password" required>
-                <select id="reg-question" required>
-                    <option value="" disabled selected>Select Security Question</option>
+                <input type="text" id="reg-user" placeholder="Choose Username" required>
+                <input type="password" id="reg-pass" placeholder="Choose Password" required>
+                <select id="reg-q" required>
+                    <option value="" disabled selected>Security Question</option>
                     <option value="pet">What was your first pet's name?</option>
                     <option value="city">In what city were you born?</option>
-                    <option value="color">What is your favorite color?</option>
                 </select>
-                <input type="text" id="reg-answer" placeholder="Security Answer" required>
+                <input type="text" id="reg-a" placeholder="Security Answer" required>
                 <button type="submit" class="btn btn-secondary">Create Account</button>
             </form>
 
-            <!-- Forgot Password Form -->
-            <form id="forgot-form" class="auth-form" style="display: none;" onsubmit="handleResetPassword(event)">
-                <input type="text" id="forgot-username" placeholder="Your Username" required>
-                <select id="forgot-question" required>
-                    <option value="" disabled selected>Select Security Question</option>
+            <!-- FORGOT PASSWORD FORM -->
+            <form id="forgot-form" class="auth-form" style="display: none;" onsubmit="handleForgot(event)">
+                <input type="text" id="forgot-user" placeholder="Your Username" required>
+                <select id="forgot-q" required>
+                    <option value="" disabled selected>Security Question</option>
                     <option value="pet">What was your first pet's name?</option>
                     <option value="city">In what city were you born?</option>
-                    <option value="color">What is your favorite color?</option>
                 </select>
-                <input type="text" id="forgot-answer" placeholder="Security Answer" required>
-                <input type="password" id="forgot-new-password" placeholder="New Password" required>
+                <input type="text" id="forgot-a" placeholder="Security Answer" required>
+                <input type="password" id="forgot-newpass" placeholder="New Password" required>
                 <button type="submit" class="btn">Reset Password</button>
-                <span class="forgot-link" style="text-align:center; margin-top:8px;" onclick="switchAuthMode('login')">Back to Login</span>
+                <span class="forgot-link" style="text-align:center;" onclick="switchAuth('login')">Back to Login</span>
             </form>
         </div>
     </div>
 
-    <!-- Navigation Bar -->
+    <!-- NAVBAR -->
     <navbar>
         <div class="logo">
             <i class="fa-solid fa-cat"></i>
@@ -419,331 +254,418 @@
         <div class="nav-links">
             <button class="nav-btn active" onclick="switchTab('studio')"><i class="fa-solid fa-house"></i> Studio</button>
             <button class="nav-btn" onclick="switchTab('closet')"><i class="fa-solid fa-shirt"></i> Closet</button>
+            <button class="nav-btn" onclick="switchTab('eco')"><i class="fa-solid fa-camera"></i> Eco Photo</button>
             <button class="nav-btn" onclick="switchTab('weight')"><i class="fa-solid fa-weight-scale"></i> Tracker</button>
-            <button class="nav-btn" onclick="logout()" style="color: #ff4d6d;"><i class="fa-solid fa-right-from-bracket"></i> Logout</button>
+            <button class="nav-btn" onclick="switchTab('leaderboard')"><i class="fa-solid fa-trophy"></i> Ranks</button>
+            <button class="nav-btn" onclick="logout()" style="color: #ff4d6d;"><i class="fa-solid fa-right-from-bracket"></i></button>
         </div>
     </navbar>
 
-    <!-- Main Container -->
+    <!-- MAIN APP CONTAINER -->
     <div class="app-container">
 
         <!-- TAB 1: STUDIO -->
         <div id="view-studio" class="view-section active">
             <div class="cat-studio">
-                <div class="cat-status-overlay">
-                    <h3 id="cat-display-name">Energy Cat</h3>
-                    <p style="color: #666; font-size: 0.9rem;" id="cat-status-text">Status: Happy & Energetic!</p>
-                </div>
-                <div class="fish-counter">
-                    <i class="fa-solid fa-fish"></i>
-                    <span id="fish-count">0</span>
+                <div class="hud-overlay">
+                    <div class="hud-card">
+                        <h3 id="cat-display-name">Energy Cat</h3>
+                        <div style="font-size: 0.85rem; color: #666; margin-top: 4px;">
+                            Energy: <span id="energy-text">100</span>/100 (-1 every 3 min)
+                        </div>
+                        <div class="energy-bar-bg">
+                            <div class="energy-bar-fill" id="energy-bar"></div>
+                        </div>
+                    </div>
+                    <div class="hud-card" style="background: var(--accent); color: #5c4300; font-weight: bold;">
+                        <i class="fa-solid fa-fish"></i> <span id="fish-count">0</span> Fish Tokens
+                    </div>
                 </div>
                 <div id="canvas-container"></div>
             </div>
 
             <div class="sidebar">
                 <div class="card">
-                    <h3>Interact with Cat</h3>
-                    <p style="color: #777; font-size: 0.85rem; margin-bottom: 15px;">Earn Fish Tokens through daily interactions!</p>
+                    <h3>Care & Actions</h3>
+                    <p style="font-size: 0.85rem; color: #777; margin-bottom: 15px;">Keep Energy above 20% or your cat becomes sad!</p>
                     <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <button class="btn" onclick="interactCat('pet')"><i class="fa-solid fa-hand"></i> Pet Cat (+1 Fish)</button>
-                        <button class="btn btn-secondary" onclick="interactCat('feed')"><i class="fa-solid fa-bowl-food"></i> Feed Snack (+2 Fish)</button>
-                        <button class="btn" style="background: #7209b7;" onclick="interactCat('play')"><i class="fa-solid fa-baseball"></i> Play Toy (+3 Fish)</button>
+                        <button class="btn" onclick="careCat('feed')"><i class="fa-solid fa-bowl-food"></i> Feed Cat (+30 Energy)</button>
+                        <button class="btn btn-secondary" onclick="careCat('sleep')"><i class="fa-solid fa-bed"></i> Sleep/Rest (+50 Energy)</button>
+                        <button class="btn" style="background: #7209b7;" onclick="careCat('play')"><i class="fa-solid fa-baseball"></i> Play Toy (-10 Energy, +2 Fish)</button>
                     </div>
                 </div>
 
                 <div class="card">
-                    <h3>Current Summary</h3>
-                    <p style="margin-top: 5px;"><strong>Weight:</strong> <span id="stat-weight">--</span> kg</p>
-                    <p style="margin-top: 5px;"><strong>Last Log:</strong> <span id="stat-date">Never</span></p>
+                    <h3>Status Summary</h3>
+                    <p style="margin-top:5px;"><strong>Mood:</strong> <span id="mood-text">Happy</span></p>
+                    <p style="margin-top:5px;"><strong>Weight Progress:</strong> <span id="summary-weight">--</span> kg</p>
                 </div>
             </div>
         </div>
 
         <!-- TAB 2: CLOSET -->
         <div id="view-closet" class="view-section">
-            <div class="cat-studio" style="min-height: 400px; justify-content: center; align-items: center; text-align: center;">
-                <div class="fish-counter">
-                    <i class="fa-solid fa-fish"></i>
-                    <span id="closet-fish-count">0</span>
-                </div>
+            <div class="cat-studio" style="justify-content: center; align-items: center; text-align: center;">
                 <i class="fa-solid fa-shirt" style="font-size: 4rem; color: var(--primary); margin-bottom: 15px;"></i>
-                <h3>Wardrobe Fitting Room</h3>
-                <p style="color: #666;">Equip accessories to style your 3D Cat in real-time!</p>
+                <h3>3D Outfit Fitting</h3>
+                <p style="color: #666;">Equip accessories earned with Fish Tokens!</p>
             </div>
-
             <div class="sidebar">
                 <h3>Wardrobe Shop</h3>
-                <p style="color: #777; font-size: 0.85rem; margin-bottom: 15px;">Use Fish Tokens to unlock and wear accessories.</p>
-                
-                <div class="closet-grid" id="closet-items"></div>
+                <div class="closet-grid" id="closet-grid" style="margin-top: 15px;"></div>
             </div>
         </div>
 
-        <!-- TAB 3: WEIGHT TRACKER -->
+        <!-- TAB 3: ECO PHOTO -->
+        <div id="view-eco" class="view-section">
+            <div class="cat-studio" style="padding: 30px;">
+                <h2><i class="fa-solid fa-leaf" style="color: #4caf50;"></i> Eco Energy Saving Tasks</h2>
+                <p style="color: #666; margin-top: 5px;">Take photos of energy-saving actions (e.g., turning off lights, saving water) to earn Fish Tokens!</p>
+                <div style="margin-top: 30px; border: 2px dashed #ccc; padding: 40px; text-align: center; border-radius: var(--radius-sm);">
+                    <i class="fa-solid fa-cloud-arrow-up" style="font-size: 3rem; color: var(--secondary);"></i>
+                    <p style="margin-top: 15px; font-weight: bold;">Upload Energy Saving Photo</p>
+                    <input type="file" id="eco-upload" accept="image/*" style="display: none;" onchange="uploadEcoPhoto()">
+                    <button class="btn btn-secondary" style="width: auto; margin: 15px auto 0;" onclick="document.getElementById('eco-upload').click()">Choose Image</button>
+                </div>
+            </div>
+            <div class="sidebar">
+                <div class="card">
+                    <h3>Eco Rewards</h3>
+                    <p style="font-size: 0.9rem; margin-top: 10px;">Each verified Eco Photo grants <strong>+15 Fish Tokens</strong>!</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- TAB 4: WEIGHT TRACKER -->
         <div id="view-weight" class="view-section">
             <div class="cat-studio" style="padding: 25px;">
-                <h3>Weight Progress Chart</h3>
+                <h3>Weight Loss Progress</h3>
                 <div style="position: relative; flex: 1; width: 100%; margin-top: 15px;">
                     <canvas id="weightChart"></canvas>
                 </div>
             </div>
-
             <div class="sidebar">
                 <div class="card">
-                    <h3>Log New Weight</h3>
-                    <form onsubmit="logWeight(event)" style="margin-top: 12px;">
-                        <div class="form-group">
-                            <label>Current Weight (kg)</label>
-                            <input type="number" step="0.1" id="input-weight" placeholder="e.g. 60.5" required>
-                        </div>
-                        <button type="submit" class="btn btn-secondary"><i class="fa-solid fa-plus"></i> Save Weight (+10 Fish!)</button>
+                    <h3>Log Weight</h3>
+                    <form onsubmit="logWeight(event)" style="margin-top: 10px;">
+                        <input type="number" step="0.1" id="input-weight" placeholder="Weight in kg" required style="width:100%; padding:10px; margin-bottom:10px; border:2px solid #eee; border-radius:8px;">
+                        <button type="submit" class="btn btn-secondary">Save (+10 Fish)</button>
                     </form>
                 </div>
+            </div>
+        </div>
 
-                <div class="card" style="flex:1; overflow-y:auto; max-height: 250px;">
-                    <h3>Log History</h3>
-                    <ul id="history-list" style="list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 8px;"></ul>
-                </div>
+        <!-- TAB 5: LEADERBOARD -->
+        <div id="view-leaderboard" class="view-section">
+            <div class="cat-studio" style="padding: 25px;">
+                <h2><i class="fa-solid fa-trophy" style="color: var(--accent);"></i> Fitness Leaderboard</h2>
+                <div class="leaderboard-list" id="leaderboard-list" style="margin-top: 20px;"></div>
             </div>
         </div>
 
     </div>
 
-    <!-- Application Script -->
     <script>
         let currentUser = null;
         let userData = {
-            username: '',
-            password: '',
-            question: '',
-            answer: '',
-            fish: 0,
-            weightLogs: [],
-            equipped: { hat: null, glasses: null }
+            username: '', password: '', question: '', answer: '',
+            energy: 100, fish: 10, weightLogs: [], equipped: { hat: null }
         };
 
         const catalog = [
-            { id: 'hat_party', name: 'Party Hat', type: 'hat', price: 5, icon: '🎉', color: 0xff4d6d },
-            { id: 'hat_crown', name: 'Crown', type: 'hat', price: 15, icon: '👑', color: 0xffca3a },
-            { id: 'glasses_sun', name: 'Sunglasses', type: 'glasses', price: 10, icon: '🕶️', color: 0x111111 },
-            { id: 'hat_bow', name: 'Cute Bow', type: 'hat', price: 8, icon: '🎀', color: 0xff8fa3 }
+            { id: 'hat_party', name: 'Party Hat', price: 5, icon: '🎉', color: 0xff4d6d },
+            { id: 'hat_crown', name: 'Crown', price: 15, icon: '👑', color: 0xffca3a },
+            { id: 'hat_bow', name: 'Cute Bow', price: 8, icon: '🎀', color: 0xff8fa3 }
         ];
 
         /* --- AUTH SYSTEM --- */
-        function switchAuthMode(mode) {
-            document.getElementById('tab-login').classList.remove('active');
-            document.getElementById('tab-register').classList.remove('active');
+        function switchAuth(mode) {
             document.getElementById('login-form').style.display = 'none';
             document.getElementById('register-form').style.display = 'none';
             document.getElementById('forgot-form').style.display = 'none';
+            document.getElementById('tab-login').classList.remove('active');
+            document.getElementById('tab-register').classList.remove('active');
 
             if(mode === 'login') {
-                document.getElementById('tab-login').classList.add('active');
                 document.getElementById('login-form').style.display = 'flex';
+                document.getElementById('tab-login').classList.add('active');
             } else if(mode === 'register') {
-                document.getElementById('tab-register').classList.add('active');
                 document.getElementById('register-form').style.display = 'flex';
-            } else if(mode === 'forgot') {
+                document.getElementById('tab-register').classList.add('active');
+            } else {
                 document.getElementById('forgot-form').style.display = 'flex';
             }
         }
 
         function handleRegister(e) {
             e.preventDefault();
-            const u = document.getElementById('reg-username').value.trim();
-            const p = document.getElementById('reg-password').value;
-            const q = document.getElementById('reg-question').value;
-            const a = document.getElementById('reg-answer').value.trim().toLowerCase();
+            const u = document.getElementById('reg-user').value.trim();
+            const p = document.getElementById('reg-pass').value;
+            const q = document.getElementById('reg-q').value;
+            const a = document.getElementById('reg-a').value.trim().toLowerCase();
 
             if (localStorage.getItem('cat_user_' + u)) {
-                alert('Username already exists! Please choose another or Login.');
-                return;
+                alert('Username already exists!'); return;
             }
 
-            userData = {
-                username: u,
-                password: p,
-                question: q,
-                answer: a,
-                fish: 10,
-                weightLogs: [],
-                equipped: { hat: null, glasses: null }
-            };
-
+            userData = { username: u, password: p, question: q, answer: a, energy: 100, fish: 10, weightLogs: [], equipped: { hat: null } };
             saveUserData();
-            loginUser(u);
+            login(u);
         }
 
         function handleLogin(e) {
             e.preventDefault();
-            const u = document.getElementById('login-username').value.trim();
-            const p = document.getElementById('login-password').value;
-
+            const u = document.getElementById('login-user').value.trim();
+            const p = document.getElementById('login-pass').value;
             const saved = localStorage.getItem('cat_user_' + u);
-            if (!saved) {
-                alert('User not found! Please register.');
-                return;
+
+            if (!saved || JSON.parse(saved).password !== p) {
+                alert('Invalid Username or Password!'); return;
             }
 
-            const data = JSON.parse(saved);
-            if (data.password !== p) {
-                alert('Incorrect password!');
-                return;
-            }
-
-            userData = data;
-            loginUser(u);
+            userData = JSON.parse(saved);
+            login(u);
         }
 
-        function handleResetPassword(e) {
+        function handleForgot(e) {
             e.preventDefault();
-            const u = document.getElementById('forgot-username').value.trim();
-            const q = document.getElementById('forgot-question').value;
-            const a = document.getElementById('forgot-answer').value.trim().toLowerCase();
-            const newP = document.getElementById('forgot-new-password').value;
+            const u = document.getElementById('forgot-user').value.trim();
+            const q = document.getElementById('forgot-q').value;
+            const a = document.getElementById('forgot-a').value.trim().toLowerCase();
+            const newP = document.getElementById('forgot-newpass').value;
 
             const saved = localStorage.getItem('cat_user_' + u);
-            if (!saved) {
-                alert('Username not found!');
-                return;
-            }
+            if (!saved) { alert('Username not found!'); return; }
 
             const data = JSON.parse(saved);
             if (data.question !== q || data.answer.toLowerCase() !== a) {
-                alert('Security question or answer does not match!');
-                return;
+                alert('Incorrect security answer!'); return;
             }
 
             data.password = newP;
             localStorage.setItem('cat_user_' + u, JSON.stringify(data));
-            
-            alert('Password successfully reset! Logging you in...');
+            alert('Password reset successfully! Logging in...');
             userData = data;
-            loginUser(u);
+            login(u);
         }
 
-        function loginUser(username) {
-            currentUser = username;
+        function login(u) {
+            currentUser = u;
             document.getElementById('auth-overlay').style.display = 'none';
             updateUI();
             initChart();
             init3D();
+            startEnergyDepletion();
         }
 
-        function logout() {
-            location.reload();
+        function logout() { location.reload(); }
+        function saveUserData() { if(currentUser) localStorage.setItem('cat_user_' + currentUser, JSON.stringify(userData)); }
+
+        /* --- ENERGY TIMER (-1 Every 3 Minutes) --- */
+        function startEnergyDepletion() {
+            setInterval(() => {
+                if (userData.energy > 0) {
+                    userData.energy = Math.max(0, userData.energy - 1);
+                    saveUserData();
+                    updateUI();
+                }
+            }, 180000); // 180,000 ms = 3 minutes
         }
 
-        function saveUserData() {
-            if (currentUser) {
-                localStorage.setItem('cat_user_' + currentUser, JSON.stringify(userData));
+        /* --- CARE ACTIONS & UI --- */
+        function careCat(action) {
+            if(action === 'feed') userData.energy = Math.min(100, userData.energy + 30);
+            if(action === 'sleep') userData.energy = Math.min(100, userData.energy + 50);
+            if(action === 'play') {
+                if(userData.energy < 10) { alert('Too tired to play!'); return; }
+                userData.energy -= 10;
+                userData.fish += 2;
             }
-        }
-
-        /* --- UI & NAVIGATION --- */
-        function switchTab(tabId) {
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
-
-            event.currentTarget.classList.add('active');
-            document.getElementById('view-' + tabId).classList.add('active');
-
-            if(tabId === 'weight') {
-                renderChart();
-            }
+            saveUserData();
+            updateUI();
         }
 
         function updateUI() {
             document.getElementById('fish-count').innerText = userData.fish;
-            document.getElementById('closet-fish-count').innerText = userData.fish;
+            document.getElementById('energy-text').innerText = userData.energy;
             document.getElementById('cat-display-name').innerText = userData.username + "'s Cat";
 
-            if (userData.weightLogs.length > 0) {
-                const latest = userData.weightLogs[userData.weightLogs.length - 1];
-                document.getElementById('stat-weight').innerText = latest.weight;
-                document.getElementById('stat-date').innerText = latest.date;
-            }
+            const bar = document.getElementById('energy-bar');
+            bar.style.width = userData.energy + '%';
+            
+            // Sad Face Logic (< 20% energy)
+            const mood = userData.energy < 20 ? 'Sad 😿' : 'Happy 😺';
+            document.getElementById('mood-text').innerText = mood;
+            bar.style.background = userData.energy < 20 ? '#ff4d6d' : '#4caf50';
 
+            updateCatExpression();
             renderCloset();
-            renderHistory();
         }
 
-        /* --- INTERACTIONS --- */
-        function interactCat(action) {
-            let gain = 0;
-            let msg = '';
-            if(action === 'pet') { gain = 1; msg = 'Cat purrs happily!'; }
-            if(action === 'feed') { gain = 2; msg = 'Yummy treat!'; }
-            if(action === 'play') { gain = 3; msg = 'Cat did a fun flip!'; }
+        /* --- CLOSET --- */
+        function renderCloset() {
+            const grid = document.getElementById('closet-grid');
+            grid.innerHTML = '';
+            catalog.forEach(item => {
+                const isEquipped = userData.equipped.hat === item.id;
+                const card = document.createElement('div');
+                card.className = `item-card ${isEquipped ? 'equipped' : ''}`;
+                card.innerHTML = `
+                    <div style="font-size:2rem;">${item.icon}</div>
+                    <div style="font-weight:bold; font-size:0.9rem;">${item.name}</div>
+                    <div style="font-size:0.8rem; color:#888;">${item.price} Fish</div>
+                `;
+                card.onclick = () => {
+                    if (isEquipped) userData.equipped.hat = null;
+                    else if (userData.fish >= item.price) userData.equipped.hat = item.id;
+                    else return alert('Not enough Fish Tokens!');
+                    saveUserData(); updateUI(); update3DAccessory();
+                };
+                grid.appendChild(card);
+            });
+        }
 
-            userData.fish += gain;
-            document.getElementById('catหากต้องการย้อนกลับไปใช้หน้าเว็บเวอร์ชันก่อนหน้า พร้อมปรับแก้ให้**เปลี่ยนเป็นภาษาอังกฤษทั้งหมด** และ**เพิ่มระบบลืมรหัสผ่าน (Forgot Password)** สามารถปรับโค้ดเดิมของคุณให้เป็นโครงสร้างนี้ได้เลยครับ:
+        /* --- ECO PHOTO --- */
+        function uploadEcoPhoto() {
+            userData.fish += 15;
+            saveUserData(); updateUI();
+            alert('Photo Verified! You earned +15 Fish Tokens! 🍃');
+        }
 
-### ตัวอย่างโครงสร้างหน้า Login ภาษาอังกฤษ + ระบบ Forgot Password
+        /* --- WEIGHT TRACKER & LEADERBOARD --- */
+        function logWeight(e) {
+            e.preventDefault();
+            const w = parseFloat(document.getElementById('input-weight').value);
+            if (!w) return;
+            userData.weightLogs.push({ date: new Date().toLocaleDateString('en-US', {month:'short', day:'numeric'}), weight: w });
+            userData.fish += 10;
+            saveUserData(); updateUI(); renderChart();
+            alert('Weight logged! Earned +10 Fish Tokens!');
+        }
 
-```html
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Login & Password Recovery</title>
-    <style>
-        body {
-            font-family: Arial, sans-serif;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            height: 100vh;
-            background-color: #f4f4f9;
-            margin: 0;
+        let chartInstance;
+        function initChart() {
+            const ctx = document.getElementById('weightChart').getContext('2d');
+            chartInstance = new Chart(ctx, {
+                type: 'line',
+                data: { labels: [], datasets: [{ label: 'Weight (kg)', data: [], borderColor: '#ff4d6d', fill: true, backgroundColor: 'rgba(255,143,163,0.2)' }] },
+                options: { responsive: true, maintainAspectRatio: false }
+            });
         }
-        .container {
-            background: white;
-            padding: 30px;
-            border-radius: 8px;
-            box-shadow: 0 4px 8px rgba(0,0,0,0.1);
-            width: 300px;
+
+        function renderChart() {
+            if(!chartInstance) return;
+            chartInstance.data.labels = userData.weightLogs.map(l => l.date);
+            chartInstance.data.datasets[0].data = userData.weightLogs.map(l => l.weight);
+            chartInstance.update();
         }
-        .form-group {
-            margin-bottom: 15px;
+
+        function renderLeaderboard() {
+            const list = document.getElementById('leaderboard-list');
+            list.innerHTML = '';
+            let users = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const k = localStorage.key(i);
+                if (k.startsWith('cat_user_')) {
+                    const u = JSON.parse(localStorage.getItem(k));
+                    const loss = u.weightLogs.length > 1 ? (u.weightLogs[0].weight - u.weightLogs[u.weightLogs.length-1].weight).toFixed(1) : 0;
+                    users.push({ name: u.username, loss: parseFloat(loss) || 0 });
+                }
+            }
+            users.sort((a,b) => b.loss - a.loss);
+            users.forEach((u, idx) => {
+                list.innerHTML += `<div class="leaderboard-item"><strong>#${idx+1} ${u.name}</strong><span>-${u.loss} kg</span></div>`;
+            });
         }
-        label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: bold;
+
+        function switchTab(t) {
+            document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+            document.querySelectorAll('.view-section').forEach(s => s.classList.remove('active'));
+            event.currentTarget.classList.add('active');
+            document.getElementById('view-' + t).classList.add('active');
+            if (t === 'weight') renderChart();
+            if (t === 'leaderboard') renderLeaderboard();
         }
-        input[type="text"], input[type="email"], input[type="password"] {
-            width: 100%;
-            padding: 8px;
-            box-sizing: border-box;
-            border: 1px solid #ccc;
-            border-radius: 4px;
+
+        /* --- 3D ENGINE (THREE.JS) --- */
+        let scene, camera, renderer, catGroup, eyeLeft, eyeRight, hatMesh;
+        function init3D() {
+            const container = document.getElementById('canvas-container');
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xfff0f5);
+
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 1.5, 4.5);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            container.appendChild(renderer.domElement);
+
+            scene.add(new THREE.AmbientLight(0xffffff, 0.7));
+            const light = new THREE.DirectionalLight(0xffffff, 0.6);
+            light.position.set(5, 10, 7);
+            scene.add(light);
+
+            catGroup = new THREE.Group();
+            const catMat = new THREE.MeshPhongMaterial({ color: 0xffa07a });
+
+            // Body & Head
+            const body = new THREE.Mesh(new THREE.SphereGeometry(0.8, 32, 32), catMat);
+            body.position.y = 0.8; catGroup.add(body);
+
+            const head = new THREE.Mesh(new THREE.SphereGeometry(0.65, 32, 32), catMat);
+            head.position.set(0, 1.5, 0.2); catGroup.add(head);
+
+            // Ears
+            const earGeo = new THREE.ConeGeometry(0.25, 0.4, 32);
+            const earMat = new THREE.MeshPhongMaterial({ color: 0xff7f50 });
+            const e1 = new THREE.Mesh(earGeo, earMat); e1.position.set(-0.35, 2.1, 0.2); catGroup.add(e1);
+            const e2 = new THREE.Mesh(earGeo, earMat); e2.position.set(0.35, 2.1, 0.2); catGroup.add(e2);
+
+            // Eyes
+            const eyeGeo = new THREE.SphereGeometry(0.08, 16, 16);
+            const eyeMat = new THREE.MeshBasicMaterial({ color: 0x222222 });
+            eyeLeft = new THREE.Mesh(eyeGeo, eyeMat); eyeLeft.position.set(-0.2, 1.6, 0.8); catGroup.add(eyeLeft);
+            eyeRight = new THREE.Mesh(eyeGeo, eyeMat); eyeRight.position.set(0.2, 1.6, 0.8); catGroup.add(eyeRight);
+
+            scene.add(catGroup);
+            update3DAccessory();
+
+            function animate() {
+                requestAnimationFrame(animate);
+                if(catGroup) catGroup.rotation.y += 0.005;
+                renderer.render(scene, camera);
+            }
+            animate();
         }
-        button {
-            width: 100%;
-            padding: 10px;
-            background-color: #007bff;
-            color: white;
-            border: none;
-            border-radius: 4px;
-            cursor: pointer;
+
+        function updateCatExpression() {
+            if (!eyeLeft) return;
+            // Scale eyes to simulate sad Expression when energy < 20%
+            if (userData.energy < 20) {
+                eyeLeft.scale.set(1, 0.2, 1);
+                eyeRight.scale.set(1, 0.2, 1);
+            } else {
+                eyeLeft.scale.set(1, 1, 1);
+                eyeRight.scale.set(1, 1, 1);
+            }
         }
-        button:hover {
-            background-color: #0056b3;
+
+        function update3DAccessory() {
+            if (!catGroup) return;
+            if (hatMesh) { catGroup.remove(hatMesh); hatMesh = null; }
+
+            if (userData.equipped.hat) {
+                const item = catalog.find(i => i.id === userData.equipped.hat);
+                if (item) {
+                    const geo = new THREE.ConeGeometry(0.25, 0.5, 16);
+                    const mat = new THREE.MeshPhongMaterial({ color: item.color });
+                    hatMesh = new THREE.Mesh(geo, mat);
+                    hatMesh.position.set(0, 2.3, 0.2);
+                    catGroup.add(hatMesh);
+                }
+            }
         }
-        .links {
-            margin-top: 15px;
-            text-align: center;
-        }
-        .links a {
-            color: #007bff;
-            text-decoration: none;
-            font-size: 0.9em;
-        }
-        .links a:hover {
-            text-decoration: underline;
-        }
-        .hidden {
-            display: none
+    </script>
+</body>
+</html>
