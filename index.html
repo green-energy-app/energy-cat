@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -8,7 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mitr:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Mitr', 'Fredoka', sans-serif; }
+        * { font-family: 'Fredoka', 'Mitr', sans-serif; }
 
         body {
             background: radial-gradient(circle at 50% 30%, #FFE5EC 0%, #FFC2D1 50%, #B5FFFC 100%);
@@ -118,53 +118,96 @@
     <div id="toastNotification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-6">
         <div class="bg-slate-900/95 text-white px-6 py-3 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-2.5 font-bold text-xs md:text-sm tracking-wide">
             <span id="toastIcon" class="text-xl">✨</span>
-            <span id="toastMessage">แจ้งเตือน</span>
+            <span id="toastMessage">Notification</span>
         </div>
     </div>
 
-    <!-- AUTH MODAL (LOGIN / REGISTER) -->
+    <!-- AUTH MODAL (LOGIN / REGISTER / FORGOT PASSWORD) -->
     <div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-2xl border-4 border-pink-300">
             <div class="text-center">
                 <span class="text-5xl inline-block animate-bounce">🐱</span>
                 <h2 class="text-xl font-black text-rose-600 mt-2">Energy Cat Studio</h2>
-                <p class="text-xs font-bold text-slate-500">ลงชื่อเข้าใช้เพื่อสะสมน้ำหนักและแต่งตัวน้องแมว</p>
+                <p class="text-xs font-bold text-slate-500">Sign in to track weight and dress up your cat</p>
             </div>
 
             <!-- Tabs -->
-            <div class="flex bg-rose-100 p-1 rounded-2xl">
-                <button onclick="switchAuthTab('login')" id="authTabLogin" class="w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition">เข้าสู่ระบบ</button>
-                <button onclick="switchAuthTab('register')" id="authTabRegister" class="w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition">สมัครสมาชิก</button>
+            <div class="flex bg-rose-100 p-1 rounded-2xl" id="authTabsContainer">
+                <button onclick="switchAuthTab('login')" id="authTabLogin" class="w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition">Login</button>
+                <button onclick="switchAuthTab('register')" id="authTabRegister" class="w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition">Register</button>
             </div>
 
             <!-- Login Form -->
             <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-3">
                 <div>
-                    <label class="text-xs font-black text-slate-700">ชื่อผู้ใช้งาน (Username)</label>
-                    <input type="text" id="loginUsername" required placeholder="ป้อนชื่อผู้ใช้" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-xs font-black text-slate-700">Username</label>
+                    <input type="text" id="loginUsername" required placeholder="Enter username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">รหัสผ่าน (Password)</label>
+                    <label class="text-xs font-black text-slate-700">Password</label>
                     <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
                 </div>
-                <button type="submit" class="clay-btn w-full bg-rose-500 text-white font-black py-2.5 text-xs border-2 border-white mt-2">เข้าสู่ระบบ 🐾</button>
+                <div class="text-right">
+                    <button type="button" onclick="switchAuthTab('forgot')" class="text-[11px] font-bold text-rose-500 hover:underline">Forgot Password?</button>
+                </div>
+                <button type="submit" class="clay-btn w-full bg-rose-500 text-white font-black py-2.5 text-xs border-2 border-white mt-1">Login 🐾</button>
             </form>
 
             <!-- Register Form -->
             <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-3 hidden">
                 <div>
-                    <label class="text-xs font-black text-slate-700">ชื่อผู้ใช้งาน (Username)</label>
-                    <input type="text" id="regUsername" required placeholder="ตั้งชื่อผู้ใช้" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-xs font-black text-slate-700">Username</label>
+                    <input type="text" id="regUsername" required placeholder="Create username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">ชื่อน้องแมว (Cat Name)</label>
-                    <input type="text" id="regCatName" required placeholder="ตั้งชื่อแมวของคุณ" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-xs font-black text-slate-700">Cat Name</label>
+                    <input type="text" id="regCatName" required placeholder="Name your cat" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">รหัสผ่าน (Password)</label>
+                    <label class="text-xs font-black text-slate-700">Password</label>
                     <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
                 </div>
-                <button type="submit" class="clay-btn w-full bg-emerald-500 text-white font-black py-2.5 text-xs border-2 border-white mt-2">สร้างบัญชีใหม่ ✨</button>
+                <div>
+                    <label class="text-xs font-black text-slate-700">Security Question</label>
+                    <select id="regSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                        <option value="" disabled selected>Select a question</option>
+                        <option value="pet">What was your first pet's name?</option>
+                        <option value="city">What city were you born in?</option>
+                        <option value="color">What is your favorite color?</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-black text-slate-700">Security Answer</label>
+                    <input type="text" id="regSecurityAnswer" required placeholder="Your answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                </div>
+                <button type="submit" class="clay-btn w-full bg-emerald-500 text-white font-black py-2.5 text-xs border-2 border-white mt-1">Create Account ✨</button>
+            </form>
+
+            <!-- Forgot Password Form -->
+            <form id="forgotForm" onsubmit="handleForgotPassword(event)" class="space-y-3 hidden">
+                <div>
+                    <label class="text-xs font-black text-slate-700">Username</label>
+                    <input type="text" id="forgotUsername" required placeholder="Enter your username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                </div>
+                <div>
+                    <label class="text-xs font-black text-slate-700">Security Question</label>
+                    <select id="forgotSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                        <option value="" disabled selected>Select your registered question</option>
+                        <option value="pet">What was your first pet's name?</option>
+                        <option value="city">What city were you born in?</option>
+                        <option value="color">What is your favorite color?</option>
+                    </select>
+                </div>
+                <div>
+                    <label class="text-xs font-black text-slate-700">Security Answer</label>
+                    <input type="text" id="forgotSecurityAnswer" required placeholder="Enter answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                </div>
+                <div>
+                    <label class="text-xs font-black text-slate-700">New Password</label>
+                    <input type="password" id="forgotNewPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                </div>
+                <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-2.5 text-xs border-2 border-white mt-1">Reset Password 🔑</button>
+                <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-1">Back to Login</button>
             </form>
         </div>
     </div>
@@ -181,10 +224,10 @@
                 <div>
                     <div class="flex items-center gap-1">
                         <span id="displayUser" class="text-xs font-black text-slate-800">Agent</span>
-                        <button onclick="logout()" class="text-[10px] font-black text-rose-600 hover:underline ml-1">(ออกจากระบบ)</button>
+                        <button onclick="logout()" class="text-[10px] font-black text-rose-600 hover:underline ml-1">(Logout)</button>
                     </div>
                     <div class="text-[10px] font-black text-purple-700">
-                        แมว: <span id="displayCatName" class="text-rose-600">น้องส้ม</span>
+                        Cat: <span id="displayCatName" class="text-rose-600">Mikan</span>
                     </div>
                 </div>
             </div>
@@ -219,7 +262,7 @@
                 <div class="bg-white border-2 border-rose-300 rounded-3xl p-2.5 shadow-sm">
                     <div class="flex justify-between items-center mb-1">
                         <span class="text-xs font-black text-rose-700 flex items-center gap-1">
-                            <span>⚡</span> พลังงาน (ลด 1 ทุก 3 น.)
+                            <span>⚡</span> Energy (-1 per 3 min)
                         </span>
                         <span id="energyText" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full border border-rose-300">100/100</span>
                     </div>
@@ -230,7 +273,7 @@
 
                 <!-- Low Energy Warning Banner -->
                 <div id="sadWarningBanner" class="hidden bg-amber-100 border-2 border-amber-400 text-amber-900 px-3 py-1.5 rounded-2xl text-[11px] font-black flex items-center gap-2">
-                    <span class="text-lg">😿</span> พลังงานต่ำกว่า 20%! น้องแมวหิวและหงอยแล้ว รีบให้อาหารหรือพักผ่อนเร็วจ้า
+                    <span class="text-lg">😿</span> Energy below 20%! Your cat is hungry and sad. Feed or let it rest soon!
                 </div>
 
                 <!-- Kawaii Cat Stage Screen -->
@@ -338,17 +381,17 @@
                     </div>
 
                     <p id="catStatusLabel" class="text-[11px] font-black text-rose-600 mt-1 bg-white px-3.5 py-1 rounded-full border border-rose-300 shadow-sm z-10">
-                        ✨ ลูบตัวน้อง (+1⚡ / +2 EXP)
+                        ✨ Pet Cat (+1⚡ / +2 EXP)
                     </p>
                 </div>
 
                 <!-- Action Buttons -->
                 <div class="grid grid-cols-2 gap-2.5 pt-1">
                     <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 to-orange-400 text-white font-black py-2.5 px-2 border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-md">
-                        <span class="text-lg">🍱</span> ให้อาหาร (-5🐟 / +0.15kg)
+                        <span class="text-lg">🍱</span> Feed (-5🐟 / +0.15kg)
                     </button>
                     <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-black py-2.5 px-2 border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-md">
-                        <span class="text-lg">😴</span> พักผ่อน (+30⚡ / +0.05kg)
+                        <span class="text-lg">😴</span> Rest (+30⚡ / +0.05kg)
                     </button>
                 </div>
             </div>
@@ -358,25 +401,25 @@
                 <div class="bg-gradient-to-br from-emerald-100 to-teal-100 border-2 border-emerald-300 rounded-3xl p-3.5 shadow-sm">
                     <div class="flex items-center gap-2 mb-1">
                         <span class="text-2xl">🌱</span>
-                        <p class="text-xs font-black text-emerald-950 uppercase">ภารกิจประหยัดพลังงาน (แนบรูปถ่าย)</p>
+                        <p class="text-xs font-black text-emerald-950 uppercase">Eco Energy Missions (Attach Photo)</p>
                     </div>
-                    <p class="text-[11px] font-extrabold text-emerald-800 mb-3">ทำภารกิจในชีวิตจริงแล้วแนบรูปถ่ายเพื่อรับปลาและพลังงาน!</p>
+                    <p class="text-[11px] font-extrabold text-emerald-800 mb-3">Complete real-life eco tasks and upload photos to earn fish & energy!</p>
 
                     <div class="space-y-2 text-xs font-black">
-                        <button onclick="openMissionUploadModal('ปิดไฟเมื่อไม่ใช้งาน', 15, 20)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span>💡 ปิดไฟ/จอคอมที่ไม่ใช้</span>
+                        <button onclick="openMissionUploadModal('Turn off unused lights & screens', 15, 20)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span>💡 Turn off unused lights/screens</span>
                             <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+15🐟 / +20⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('ปิดเครื่องปรับอากาศก่อนออกจากห้อง', 20, 30)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span>❄️ ปิดแอร์เมื่อออกนอกห้อง</span>
+                        <button onclick="openMissionUploadModal('Turn off AC before leaving room', 20, 30)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span>❄️ Turn off AC before leaving</span>
                             <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+20🐟 / +30⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('ถอดปลั๊กเครื่องใช้ไฟฟ้า', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span>🔌 ถอดปลั๊กไฟที่ไม่ใช้</span>
+                        <button onclick="openMissionUploadModal('Unplug idle electronics', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span>🔌 Unplug unused devices</span>
                             <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+10🐟 / +15⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('ใช้บันไดแทนลิฟต์', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span>🚶 เดินขึ้นบันไดแทนลิฟต์</span>
+                        <button onclick="openMissionUploadModal('Use stairs instead of elevator', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span>🚶 Take stairs instead of elevator</span>
                             <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+10🐟 / +15⚡</span>
                         </button>
                     </div>
@@ -389,20 +432,20 @@
                     <div class="flex justify-between items-center mb-2">
                         <div class="flex items-center gap-1.5">
                             <span class="text-2xl">🎀</span>
-                            <h3 class="font-black text-xs text-pink-900">ห้องแต่งตัวแมว (อย่างละ 10 แบบ)</h3>
+                            <h3 class="font-black text-xs text-pink-900">Wardrobe (10 Items Each)</h3>
                         </div>
                         <button onclick="resetOutfit()" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2.5 py-1 rounded-full border border-rose-300">
-                            🔄 ถอดชุดทั้งหมด
+                            🔄 Take off all
                         </button>
                     </div>
 
                     <!-- Category Selector Tabs -->
                     <div class="grid grid-cols-2 gap-2 mb-2">
                         <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300">
-                            👑 เครื่องหัว (10)
+                            👑 Headwear (10)
                         </button>
                         <button onclick="switchDressCategory('apron')" id="cat-apron-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200">
-                            🎽 ผ้ากันเปื้อนปิดหน้า (10)
+                            🎽 Front Aprons (10)
                         </button>
                     </div>
 
@@ -419,8 +462,8 @@
                     <div class="flex items-center gap-2 mb-1">
                         <span class="text-3xl animate-bounce">🏆</span>
                         <div>
-                            <h4 class="text-xs font-black uppercase">ตารางแข่งน้ำหนักแมว (Cat Weight)</h4>
-                            <p class="text-[10px] font-extrabold text-rose-100">อันดับวัดจากน้ำหนักแมวที่เลี้ยงดู (เฉพาะผู้เล่นจริง)</p>
+                            <h4 class="text-xs font-black uppercase">Cat Weight Leaderboard</h4>
+                            <p class="text-[10px] font-extrabold text-rose-100">Rankings based on your cat's weight (Real players)</p>
                         </div>
                     </div>
                 </div>
@@ -428,16 +471,16 @@
                 <!-- Leaderboard Table -->
                 <div class="bg-white rounded-3xl p-3 border-2 border-rose-200 shadow-sm">
                     <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-black text-rose-900">📊 รายชื่อผู้เล่นจริงทั้งหมด</span>
-                        <span id="totalPlayersCount" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">0 ผู้เล่น</span>
+                        <span class="text-xs font-black text-rose-900">📊 Active Players</span>
+                        <span id="totalPlayersCount" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">0 Players</span>
                     </div>
                     <div class="overflow-y-auto max-h-[260px]">
                         <table class="w-full text-left text-xs">
                             <thead>
                                 <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[10px] uppercase">
-                                    <th class="p-1.5">อันดับ</th>
-                                    <th class="p-1.5">ผู้เล่น & แมว</th>
-                                    <th class="p-1.5 text-right">น้ำหนัก ⚖️</th>
+                                    <th class="p-1.5">Rank</th>
+                                    <th class="p-1.5">Player & Cat</th>
+                                    <th class="p-1.5 text-right">Weight ⚖️</th>
                                 </tr>
                             </thead>
                             <tbody id="leaderboardRows"></tbody>
@@ -451,16 +494,16 @@
         <!-- NAVIGATION BAR -->
         <div class="bg-white p-2 rounded-3xl border-2 border-rose-200 grid grid-cols-4 gap-1.5 shrink-0 shadow-md">
             <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2 rounded-2xl text-rose-600 bg-rose-100 font-black text-[11px]">
-                <span class="text-lg">🏠</span> หน้าแรก
+                <span class="text-lg">🏠</span> Home
             </button>
             <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
-                <span class="text-lg">🌱</span> ภารกิจ
+                <span class="text-lg">🌱</span> Missions
             </button>
             <button onclick="switchTab('dressup')" id="nav-dressup" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
-                <span class="text-lg">👗</span> แต่งตัว
+                <span class="text-lg">👗</span> Dress Up
             </button>
             <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
-                <span class="text-lg">🏆</span> อันดับ
+                <span class="text-lg">🏆</span> Rank
             </button>
         </div>
 
@@ -472,20 +515,20 @@
     <!-- PHOTO PROOF MODAL -->
     <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-emerald-300">
-            <h3 class="font-black text-sm text-slate-800">📸 แนบรูปถ่ายยืนยันภารกิจ</h3>
-            <p id="modalMissionName" class="text-xs font-black text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">ภารกิจ</p>
+            <h3 class="font-black text-sm text-slate-800">📸 Upload Eco Proof Photo</h3>
+            <p id="modalMissionName" class="text-xs font-black text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">Mission</p>
             
             <div onclick="triggerFileSelect()" class="w-full h-40 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
                 <img id="photoPreview" class="w-full h-full object-cover hidden" />
                 <div id="uploadPlaceholder" class="text-center p-2">
                     <span class="text-3xl">📷</span>
-                    <p class="text-xs font-black text-emerald-700 mt-1">กดเพื่อเลือกรูปภาพ</p>
+                    <p class="text-xs font-black text-emerald-700 mt-1">Click to choose image</p>
                 </div>
             </div>
 
             <div class="flex gap-2">
-                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2.5 rounded-xl">ยกเลิก</button>
-                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-2.5 rounded-xl border-2 border-white">ส่งรูปถ่าย</button>
+                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2.5 rounded-xl">Cancel</button>
+                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-2.5 rounded-xl border-2 border-white">Submit Photo</button>
             </div>
         </div>
     </div>
@@ -495,127 +538,210 @@
         // Database key for local storage
         const DB_KEY = 'ENERGY_CAT_ACCOUNTS_V2';
 
-        // 10 HEAD ACCESSORIES & 10 FRONT APRONS (Perfect SVG overlays)
+        // 10 HEAD ACCESSORIES & 10 FRONT APRONS (SVG Overlay Definitions)
         const dressItems = {
             head: [
-                { id: 'h1', name: 'โบว์สีแดง', price: 10, icon: '🎀', html: '<span style="font-size: 42px; position: absolute; top: 18px; left: 52px; transform: rotate(-15deg);">🎀</span>' },
-                { id: 'h2', name: 'มงกุฎทอง', price: 20, icon: '👑', html: '<span style="font-size: 38px; position: absolute; top: 12px; left: 81px;">👑</span>' },
-                { id: 'h3', name: 'หมวกปาร์ตี้', price: 15, icon: '🎉', html: '<span style="font-size: 40px; position: absolute; top: 10px; left: 80px;">🎉</span>' },
-                { id: 'h4', name: 'หมวกรับปริญญา', price: 25, icon: '🎓', html: '<span style="font-size: 42px; position: absolute; top: 12px; left: 79px;">🎓</span>' },
-                { id: 'h5', name: 'ดอกไม้สีหวาน', price: 12, icon: '🌺', html: '<span style="font-size: 38px; position: absolute; top: 22px; left: 110px;">🌺</span>' },
-                { id: 'h6', name: 'หูกระต่ายขาว', price: 30, icon: '🐰', html: '<span style="font-size: 44px; position: absolute; top: 5px; left: 78px;">🐰</span>' },
-                { id: 'h7', name: 'หมวกเชฟ', price: 20, icon: '👨‍🍳', html: '<span style="font-size: 42px; position: absolute; top: 8px; left: 79px;">👨‍🍳</span>' },
-                { id: 'h8', name: 'แว่นตากันแดด', price: 18, icon: '🕶️', html: '<span style="font-size: 36px; position: absolute; top: 48px; left: 78px;">🕶️</span>' },
-                { id: 'h9', name: 'วิกผมเทวดา', price: 35, icon: '😇', html: '<span style="font-size: 40px; position: absolute; top: 6px; left: 80px;">😇</span>' },
-                { id: 'h10', name: 'หมวกซานต้า', price: 25, icon: '🎅', html: '<span style="font-size: 42px; position: absolute; top: 8px; left: 82px;">🎅</span>' }
+                { id: 'h1', name: 'Red Bow', price: 10, icon: '🎀', html: '<span style="font-size: 42px; position: absolute; top: 18px; left: 52px; transform: rotate(-15deg);">🎀</span>' },
+                { id: 'h2', name: 'Golden Crown', price: 20, icon: '👑', html: '<span style="font-size: 38px; position: absolute; top: 12px; left: 81px;">👑</span>' },
+                { id: 'h3', name: 'Party Hat', price: 15, icon: '🎉', html: '<span style="font-size: 40px; position: absolute; top: 10px; left: 80px;">🎉</span>' },
+                { id: 'h4', name: 'Graduation Cap', price: 25, icon: '🎓', html: '<span style="font-size: 40px; position: absolute; top: 10px; left: 78px;">🎓</span>' },
+                { id: 'h5', name: 'Flower Crown', price: 15, icon: '🌸', html: '<span style="font-size: 38px; position: absolute; top: 20px; left: 76px;">🌸</span>' },
+                { id: 'h6', name: 'Bear Ears', price: 12, icon: '🐻', html: '<span style="font-size: 38px; position: absolute; top: 14px; left: 78px;">🐻</span>' },
+                { id: 'h7', name: 'Witch Hat', price: 18, icon: '🧙‍♀️', html: '<span style="font-size: 42px; position: absolute; top: 8px; left: 75px;">🧙‍♀️</span>' },
+                { id: 'h8', name: 'Chef Hat', price: 15, icon: '👨‍🍳', html: '<span style="font-size: 42px; position: absolute; top: 6px; left: 78px;">👨‍🍳</span>' },
+                { id: 'h9', name: 'Cowboy Hat', price: 18, icon: '🤠', html: '<span style="font-size: 40px; position: absolute; top: 12px; left: 76px;">🤠</span>' },
+                { id: 'h10', name: 'Santa Hat', price: 15, icon: '🎅', html: '<span style="font-size: 42px; position: absolute; top: 8px; left: 78px;">🎅</span>' }
             ],
             apron: [
-                { id: 'a1', name: 'ผ้ากันเปื้อน สตอเบอร์รี่', price: 15, icon: '🍓', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FFB6C1; border: 3px solid #E11D48; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🍓</div>' },
-                { id: 'a2', name: 'ผ้ากันเปื้อน โบว์ชมพู', price: 15, icon: '🎀', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FFE4E6; border: 3px solid #FB7185; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🎀</div>' },
-                { id: 'a3', name: 'ผ้ากันเปื้อน เป็ดน้อย', price: 20, icon: '🐥', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FEF08A; border: 3px solid #CA8A04; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🐥</div>' },
-                { id: 'a4', name: 'ผ้ากันเปื้อน หัวใจ', price: 20, icon: '💖', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FCE7F3; border: 3px solid #DB2777; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">💖</div>' },
-                { id: 'a5', name: 'ผ้ากันเปื้อน ยิ้มแจ่มใส', price: 18, icon: '😊', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #BAF7D0; border: 3px solid #16A34A; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">😊</div>' },
-                { id: 'a6', name: 'ผ้ากันเปื้อน ดาวทอง', price: 25, icon: '⭐', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FEF3C7; border: 3px solid #D97706; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">⭐</div>' },
-                { id: 'a7', name: 'ผ้ากันเปื้อน กุหลาบ', price: 22, icon: '🌹', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FFE4E6; border: 3px solid #E11D48; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🌹</div>' },
-                { id: 'a8', name: 'ผ้ากันเปื้อน รอยเท้าแมว', price: 25, icon: '🐾', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #E0E7FF; border: 3px solid #4F46E5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🐾</div>' },
-                { id: 'a9', name: 'ผ้ากันเปื้อน แคนดี้', price: 30, icon: '🍬', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #F5D0FE; border: 3px solid #C084FC; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🍬</div>' },
-                { id: 'a10', name: 'ผ้ากันเปื้อน ปลาน้อย', price: 30, icon: '🐟', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #CFFAFE; border: 3px solid #0891B2; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🐟</div>' }
+                { id: 'a1', name: 'Strawberry Apron', price: 15, icon: '🍓', html: '<span style="font-size: 52px; position: absolute; top: 135px; left: 74px; z-index: 25;">🍓</span>' },
+                { id: 'a2', name: 'Bee Bib', price: 15, icon: '🐝', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🐝</span>' },
+                { id: 'a3', name: 'Star Bib', price: 12, icon: '⭐', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">⭐</span>' },
+                { id: 'a4', name: 'Heart Apron', price: 15, icon: '💖', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">💖</span>' },
+                { id: 'a5', name: 'Fish Bib', price: 18, icon: '🐟', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🐟</span>' },
+                { id: 'a6', name: 'Flower Apron', price: 15, icon: '🌻', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🌻</span>' },
+                { id: 'a7', name: 'Clover Apron', price: 12, icon: '🍀', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🍀</span>' },
+                { id: 'a8', name: 'Ribbon Bib', price: 15, icon: '🎀', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🎀</span>' },
+                { id: 'a9', name: 'Paw Print Bib', price: 20, icon: '🐾', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🐾</span>' },
+                { id: 'a10', name: 'Rainbow Apron', price: 22, icon: '🌈', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🌈</span>' }
             ]
         };
 
-        // App Current State
+        // App State
         let currentUser = null;
         let accounts = {};
         let currentDressCategory = 'head';
         let activeMission = null;
-        let missionPhotoData = null;
 
-        // Init App & Load Accounts
-        function initStorage() {
-            const data = localStorage.getItem(DB_KEY);
-            if (data) {
-                accounts = JSON.parse(data);
-            } else {
-                accounts = {};
-                saveStorage();
-            }
+        // Initialize App
+        window.addEventListener('DOMContentLoaded', () => {
+            loadAccounts();
+            checkAutoLogin();
+            setupEnergyDecayLoop();
+        });
+
+        // Save & Load LocalStorage Accounts
+        function loadAccounts() {
+            const raw = localStorage.getItem(DB_KEY);
+            accounts = raw ? JSON.parse(raw) : {};
         }
 
-        function saveStorage() {
+        function saveAccounts() {
             localStorage.setItem(DB_KEY, JSON.stringify(accounts));
         }
 
-        // AUTH SYSTEM
-        function switchAuthTab(type) {
-            if (type === 'login') {
-                document.getElementById('loginForm').classList.remove('hidden');
-                document.getElementById('registerForm').classList.add('hidden');
-                document.getElementById('authTabLogin').className = 'w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition';
-                document.getElementById('authTabRegister').className = 'w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition';
+        function checkAutoLogin() {
+            const sessionUser = sessionStorage.getItem('ENERGY_CAT_ACTIVE_USER');
+            if (sessionUser && accounts[sessionUser]) {
+                currentUser = sessionUser;
+                document.getElementById('authModal').classList.add('hidden');
+                initUserSession();
             } else {
-                document.getElementById('loginForm').classList.add('hidden');
-                document.getElementById('registerForm').classList.remove('hidden');
-                document.getElementById('authTabRegister').className = 'w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition';
-                document.getElementById('authTabLogin').className = 'w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition';
+                document.getElementById('authModal').classList.remove('hidden');
             }
         }
 
-        function handleLogin(e) {
-            e.preventDefault();
-            const u = document.getElementById('loginUsername').value.trim();
-            const p = document.getElementById('loginPassword').value.trim();
+        /* --- AUTH SYSTEM --- */
+        function switchAuthTab(tab) {
+            document.getElementById('loginForm').classList.add('hidden');
+            document.getElementById('registerForm').classList.add('hidden');
+            document.getElementById('forgotForm').classList.add('hidden');
 
-            if (!accounts[u] || accounts[u].password !== p) {
-                showToast('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!', '❌');
-                return;
+            const tabContainer = document.getElementById('authTabsContainer');
+            const loginBtn = document.getElementById('authTabLogin');
+            const regBtn = document.getElementById('authTabRegister');
+
+            if (tab === 'login') {
+                tabContainer.classList.remove('hidden');
+                loginBtn.className = "w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
+                regBtn.className = "w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition";
+                document.getElementById('loginForm').classList.remove('hidden');
+            } else if (tab === 'register') {
+                tabContainer.classList.remove('hidden');
+                regBtn.className = "w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
+                loginBtn.className = "w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition";
+                document.getElementById('registerForm').classList.remove('hidden');
+            } else if (tab === 'forgot') {
+                tabContainer.classList.add('hidden');
+                document.getElementById('forgotForm').classList.remove('hidden');
             }
-
-            currentUser = u;
-            document.getElementById('authModal').classList.add('hidden');
-            showToast(`ยินดีต้อนรับกลับ คุณ ${u}!`, '🐱');
-            updateUI();
         }
 
         function handleRegister(e) {
             e.preventDefault();
-            const u = document.getElementById('regUsername').value.trim();
-            const c = document.getElementById('regCatName').value.trim();
-            const p = document.getElementById('regPassword').value.trim();
+            const username = document.getElementById('regUsername').value.trim();
+            const catName = document.getElementById('regCatName').value.trim();
+            const password = document.getElementById('regPassword').value;
+            const question = document.getElementById('regSecurityQuestion').value;
+            const answer = document.getElementById('regSecurityAnswer').value.trim().toLowerCase();
 
-            if (accounts[u]) {
-                showToast('ชื่อผู้ใช้นี้ถูกใช้งานแล้ว!', '⚠️');
+            if (accounts[username]) {
+                showToast('❌ Username already exists!', '⚠️');
                 return;
             }
 
-            accounts[u] = {
-                username: u,
-                catName: c,
-                password: p,
+            accounts[username] = {
+                username,
+                catName,
+                password,
+                question,
+                answer,
                 fish: 100,
-                energy: 100,
-                maxEnergy: 100,
-                exp: 0,
-                maxExp: 50,
+                weight: 2.00,
                 level: 1,
-                weight: 2.00, // Initial Cat Weight in Kg
+                exp: 0,
+                energy: 100,
+                lastDecayTime: Date.now(),
                 unlockedItems: [],
-                outfit: { head: null, apron: null }
+                equipped: { head: null, apron: null }
             };
 
-            saveStorage();
-            currentUser = u;
+            saveAccounts();
+            showToast('✨ Account created successfully! Please login.', '🎉');
+            switchAuthTab('login');
+            document.getElementById('registerForm').reset();
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const username = document.getElementById('loginUsername').value.trim();
+            const password = document.getElementById('loginPassword').value;
+
+            if (!accounts[username] || accounts[username].password !== password) {
+                showToast('❌ Invalid username or password', '⚠️');
+                return;
+            }
+
+            currentUser = username;
+            sessionStorage.setItem('ENERGY_CAT_ACTIVE_USER', username);
             document.getElementById('authModal').classList.add('hidden');
-            showToast('สร้างบัญชีสำเร็จแล้ว!', '🎉');
-            updateUI();
+            document.getElementById('loginForm').reset();
+            initUserSession();
+            showToast(`Welcome back, ${username}!`, '😸');
+        }
+
+        function handleForgotPassword(e) {
+            e.preventDefault();
+            const username = document.getElementById('forgotUsername').value.trim();
+            const question = document.getElementById('forgotSecurityQuestion').value;
+            const answer = document.getElementById('forgotSecurityAnswer').value.trim().toLowerCase();
+            const newPassword = document.getElementById('forgotNewPassword').value;
+
+            if (!accounts[username]) {
+                showToast('❌ Username not found', '⚠️');
+                return;
+            }
+
+            const acc = accounts[username];
+            if (acc.question !== question || acc.answer !== answer) {
+                showToast('❌ Incorrect security question or answer', '⚠️');
+                return;
+            }
+
+            acc.password = newPassword;
+            saveAccounts();
+            showToast('🔑 Password reset successfully! Logging in...', '✨');
+            switchAuthTab('login');
+            document.getElementById('forgotForm').reset();
         }
 
         function logout() {
+            sessionStorage.removeItem('ENERGY_CAT_ACTIVE_USER');
             currentUser = null;
             document.getElementById('authModal').classList.remove('hidden');
-            showToast('ออกจากระบบเรียบร้อยแล้ว');
+            switchAuthTab('login');
+            showToast('Logged out successfully', '👋');
         }
 
-        // UPDATE UI & CAT STATE
+        function initUserSession() {
+            calculateDecay();
+            updateUI();
+            renderDressUpGrid();
+            renderLeaderboard();
+        }
+
+        /* --- ENERGY DECAY MECHANICS (-1 Energy every 3 minutes) --- */
+        function calculateDecay() {
+            if (!currentUser || !accounts[currentUser]) return;
+            const acc = accounts[currentUser];
+            const now = Date.now();
+            const diffMinutes = Math.floor((now - acc.lastDecayTime) / (1000 * 60));
+            const decayPoints = Math.floor(diffMinutes / 3);
+
+            if (decayPoints > 0) {
+                acc.energy = Math.max(0, acc.energy - decayPoints);
+                acc.lastDecayTime = now;
+                saveAccounts();
+            }
+        }
+
+        function setupEnergyDecayLoop() {
+            setInterval(() => {
+                calculateDecay();
+                updateUI();
+            }, 30000); // Check every 30 seconds
+        }
+
+        /* --- UI RENDER & CAT EXPRESSIONS --- */
         function updateUI() {
             if (!currentUser || !accounts[currentUser]) return;
             const acc = accounts[currentUser];
@@ -624,245 +750,141 @@
             document.getElementById('displayCatName').innerText = acc.catName;
             document.getElementById('fishCount').innerText = acc.fish;
 
+            // Level & EXP
             document.getElementById('catLevelBadge').innerText = `LVL ${acc.level}`;
             document.getElementById('catWeightBadge').innerText = `⚖️ ${acc.weight.toFixed(2)} kg`;
-            document.getElementById('expText').innerText = `${acc.exp}/${acc.maxExp} EXP`;
-            document.getElementById('expBar').style.width = `${(acc.exp / acc.maxExp) * 100}%`;
+            document.getElementById('expText').innerText = `${acc.exp}/50 EXP`;
+            document.getElementById('expBar').style.width = `${Math.min(100, (acc.exp / 50) * 100)}%`;
 
-            document.getElementById('energyText').innerText = `${acc.energy}/${acc.maxEnergy}`;
-            document.getElementById('energyBar').style.width = `${(acc.energy / acc.maxEnergy) * 100}%`;
+            // Energy Bar
+            document.getElementById('energyText').innerText = `${acc.energy}/100`;
+            document.getElementById('energyBar').style.width = `${acc.energy}%`;
 
-            // Cat Growth Scale based on Weight
-            const scaleFactor = 1 + (acc.weight - 2.00) * 0.05;
-            document.getElementById('catScaleWrapper').style.transform = `scale(${Math.min(scaleFactor, 1.35)})`;
-
-            // Energy Status & Sad Expression Check (<20%)
+            // Cat Expressions & Warning Banner (<20% Sad Face)
+            const awakeEyes = document.getElementById('catEyesAwake');
+            const sadEyes = document.getElementById('catEyesSad');
+            const sleepEyes = document.getElementById('catEyesSleep');
             const sadBanner = document.getElementById('sadWarningBanner');
-            const eyesAwake = document.getElementById('catEyesAwake');
-            const eyesSad = document.getElementById('catEyesSad');
+
+            awakeEyes.classList.add('hidden');
+            sadEyes.classList.add('hidden');
+            sleepEyes.classList.add('hidden');
 
             if (acc.energy < 20) {
+                sadEyes.classList.remove('hidden');
                 sadBanner.classList.remove('hidden');
-                eyesAwake.classList.add('hidden');
-                eyesSad.classList.remove('hidden');
+                document.getElementById('catStatusLabel').innerText = '😿 Hungry & Sad... (Low Energy!)';
             } else {
+                awakeEyes.classList.remove('hidden');
                 sadBanner.classList.add('hidden');
-                eyesAwake.classList.remove('hidden');
-                eyesSad.classList.add('hidden');
+                document.getElementById('catStatusLabel').innerText = '✨ Pet Cat (+1⚡ / +2 EXP)';
             }
 
-            renderEquippedOutfit();
-            renderLeaderboard();
+            // Clothes Overlays
+            renderEquippedOverlay();
         }
 
-        function addEXP(amount) {
-            const acc = accounts[currentUser];
-            acc.exp += amount;
-            if (acc.exp >= acc.maxExp) {
-                acc.exp -= acc.maxExp;
-                acc.level += 1;
-                acc.maxExp = Math.floor(acc.maxExp * 1.4);
-                showToast(`LEVEL UP! น้องแมวเลเวล ${acc.level} แล้ว! 🎉`, '⭐');
-            }
-            saveStorage();
-            updateUI();
-        }
-
-        // PET, FEED & REST ACTIONS
-        function petCat(e) {
-            const acc = accounts[currentUser];
-            if (acc.energy >= acc.maxEnergy) {
-                showToast('พลังงานเต็มแล้ว ไม่จำเป็นต้องลูบตัวเพิ่ม!', '⚡');
-                return;
-            }
-            acc.energy = Math.min(acc.maxEnergy, acc.energy + 1);
-            addEXP(2);
-
-            // Pop Heart FX
-            const heart = document.createElement('div');
-            heart.className = 'heart-pop';
-            heart.innerText = '💖';
-            heart.style.left = `${e.clientX}px`;
-            heart.style.top = `${e.clientY}px`;
-            document.body.appendChild(heart);
-            setTimeout(() => heart.remove(), 900);
-        }
-
-        function feedCat() {
-            const acc = accounts[currentUser];
-
-            if (acc.energy >= acc.maxEnergy) {
-                showToast('พลังงานเต็มแล้ว ไม่จำเป็นต้องกินอาหาร!', '🍱');
-                return;
-            }
-            if (acc.fish < 5) {
-                showToast('ปลาไม่พอ! ทำภารกิจถ่ายรูปเพื่อสะสมปลา', '🐟');
-                return;
-            }
-
-            acc.fish -= 5;
-            acc.energy = Math.min(acc.maxEnergy, acc.energy + 15);
-            acc.weight += 0.15; // Increase weight
-            addEXP(10);
-            showToast('อิ่มอร่อย! พลังงาน +15, น้ำหนัก +0.15kg', '🍱');
-            saveStorage();
-            updateUI();
-        }
-
-        function restCat() {
-            const acc = accounts[currentUser];
-
-            if (acc.energy >= acc.maxEnergy) {
-                showToast('พลังงานเต็มแล้ว ไม่จำเป็นต้องนอนหลับ!', '😴');
-                return;
-            }
-
-            document.getElementById('catEyesAwake').classList.add('hidden');
-            document.getElementById('catEyesSad').classList.add('hidden');
-            document.getElementById('catEyesSleep').classList.remove('hidden');
-            document.getElementById('sleepEffect').classList.remove('hidden');
-            document.getElementById('catStatusLabel').innerText = '💤 กำลังพักผ่อน...';
-
-            setTimeout(() => {
-                acc.energy = Math.min(acc.maxEnergy, acc.energy + 30);
-                acc.weight += 0.05;
-                addEXP(15);
-
-                document.getElementById('catEyesSleep').classList.add('hidden');
-                document.getElementById('sleepEffect').classList.add('hidden');
-                document.getElementById('catStatusLabel').innerText = '✨ ลูบตัวน้อง (+1⚡ / +2 EXP)';
-
-                showToast('น้องแมวตื่นนอนแล้ว! พลังงาน +30', '☀️');
-                saveStorage();
-                updateUI();
-            }, 2500);
-        }
-
-        // ENERGY DECAY SYSTEM: Reduce 1 energy every 3 minutes
-        setInterval(() => {
-            let changed = false;
-            Object.keys(accounts).forEach(u => {
-                if (accounts[u].energy > 0) {
-                    accounts[u].energy -= 1;
-                    changed = true;
-                }
-            });
-            if (changed) {
-                saveStorage();
-                updateUI();
-            }
-        }, 180000); // 3 minutes = 180,000 ms
-
-        // DRESS-UP STUDIO & SHOP
-        function switchDressCategory(cat) {
-            currentDressCategory = cat;
-            document.querySelectorAll('.dress-tab-btn').forEach(btn => {
-                btn.className = 'dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200';
-            });
-            document.getElementById(`cat-${cat}-btn`).className = 'dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300';
-            renderDressGrid();
-        }
-
-        function renderDressGrid() {
-            const grid = document.getElementById('dressItemsGrid');
-            grid.innerHTML = '';
-            const acc = accounts[currentUser];
-
-            dressItems[currentDressCategory].forEach(item => {
-                const isUnlocked = acc.unlockedItems.includes(item.id);
-                const isEquipped = acc.outfit[currentDressCategory] === item.id;
-
-                const card = document.createElement('div');
-                card.className = `clay-btn p-2.5 bg-white border-2 ${isEquipped ? 'border-rose-500 bg-rose-50' : 'border-pink-200'} rounded-2xl flex flex-col items-center justify-between cursor-pointer`;
-                card.onclick = () => handleItemClick(currentDressCategory, item);
-
-                let btnLabel = '';
-                if (isEquipped) btnLabel = '<span class="text-rose-600 font-black">สวมใส่อยู่</span>';
-                else if (isUnlocked) btnLabel = '<span class="text-emerald-600 font-black">กดใส่ชุด</span>';
-                else btnLabel = `<span class="text-amber-600 font-black">ซื้อ 🐟 ${item.price}</span>`;
-
-                card.innerHTML = `
-                    <span class="text-3xl my-1">${item.icon}</span>
-                    <span class="text-[11px] font-black text-slate-800">${item.name}</span>
-                    <div class="mt-1 text-[10px]">${btnLabel}</div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function handleItemClick(category, item) {
-            const acc = accounts[currentUser];
-            const isUnlocked = acc.unlockedItems.includes(item.id);
-            const isEquipped = acc.outfit[category] === item.id;
-
-            if (isEquipped) {
-                // Unequip
-                acc.outfit[category] = null;
-                showToast(`ถอด ${item.name} แล้ว`);
-            } else if (isUnlocked) {
-                // Equip
-                acc.outfit[category] = item.id;
-                showToast(`สวมใส่ ${item.name} ✨`);
-            } else {
-                // Buy item
-                if (acc.fish < item.price) {
-                    showToast(`ปลาไม่พอ! ต้องการ 🐟 ${item.price}`, '⚠️');
-                    return;
-                }
-                acc.fish -= item.price;
-                acc.unlockedItems.push(item.id);
-                acc.outfit[category] = item.id;
-                showToast(`ปลดล็อกและสวมใส่ ${item.name} แล้ว! 🎉`, '🛍️');
-            }
-
-            saveStorage();
-            updateUI();
-            renderDressGrid();
-        }
-
-        function renderEquippedOutfit() {
+        function renderEquippedOverlay() {
             const acc = accounts[currentUser];
             const headSlot = document.getElementById('slot-head');
             const apronSlot = document.getElementById('slot-apron');
 
-            // Render Head
-            if (acc.outfit.head) {
-                const item = dressItems.head.find(i => i.id === acc.outfit.head);
-                headSlot.innerHTML = item ? item.html : '';
-            } else {
-                headSlot.innerHTML = '';
-            }
+            headSlot.innerHTML = '';
+            apronSlot.innerHTML = '';
 
-            // Render Apron
-            if (acc.outfit.apron) {
-                const item = dressItems.apron.find(i => i.id === acc.outfit.apron);
-                apronSlot.innerHTML = item ? item.html : '';
-            } else {
-                apronSlot.innerHTML = '';
+            if (acc.equipped.head) {
+                const item = dressItems.head.find(i => i.id === acc.equipped.head);
+                if (item) headSlot.innerHTML = item.html;
+            }
+            if (acc.equipped.apron) {
+                const item = dressItems.apron.find(i => i.id === acc.equipped.apron);
+                if (item) apronSlot.innerHTML = item.html;
             }
         }
 
-        function resetOutfit() {
+        /* --- GAME ACTIONS --- */
+        function addExp(pts) {
             const acc = accounts[currentUser];
-            acc.outfit = { head: null, apron: null };
-            saveStorage();
-            updateUI();
-            if (currentDressCategory) renderDressGrid();
-            showToast('ถอดชุดทั้งหมดแล้ว!', '🧹');
+            acc.exp += pts;
+            if (acc.exp >= 50) {
+                acc.level += 1;
+                acc.exp -= 50;
+                showToast(`🎉 Level Up! Your cat reached Level ${acc.level}!`, '🌟');
+            }
+            saveAccounts();
         }
 
-        // MISSION PHOTO PROOF UPLOAD
-        function openMissionUploadModal(name, fishReward, energyReward) {
-            activeMission = { name, fishReward, energyReward };
-            document.getElementById('modalMissionName').innerText = `ภารกิจ: ${name}`;
+        function petCat(e) {
+            if (!currentUser) return;
+            const acc = accounts[currentUser];
+            acc.energy = Math.min(100, acc.energy + 1);
+            addExp(2);
+
+            // Pop Heart Effect
+            const rect = document.getElementById('catStage').getBoundingClientRect();
+            const heart = document.createElement('div');
+            heart.className = 'heart-pop';
+            heart.innerText = '💖';
+            heart.style.left = `${e.clientX - rect.left}px`;
+            heart.style.top = `${e.clientY - rect.top}px`;
+            document.getElementById('catStage').appendChild(heart);
+            setTimeout(() => heart.remove(), 900);
+
+            saveAccounts();
+            updateUI();
+        }
+
+        function feedCat() {
+            const acc = accounts[currentUser];
+            if (acc.fish < 5) {
+                showToast('❌ Not enough Fish tokens!', '🐟');
+                return;
+            }
+            acc.fish -= 5;
+            acc.weight += 0.15;
+            acc.energy = Math.min(100, acc.energy + 15);
+            addExp(10);
+            saveAccounts();
+            updateUI();
+            renderLeaderboard();
+            showToast('🍱 Yum! Fed your cat (+0.15kg / +15⚡)', '😋');
+        }
+
+        function restCat() {
+            const acc = accounts[currentUser];
+            acc.energy = Math.min(100, acc.energy + 30);
+            acc.weight += 0.05;
+            addExp(5);
+
+            // Sleep Eyes Trigger
+            document.getElementById('catEyesAwake').classList.add('hidden');
+            document.getElementById('catEyesSad').classList.add('hidden');
+            document.getElementById('catEyesSleep').classList.remove('hidden');
+            document.getElementById('sleepEffect').classList.remove('hidden');
+
+            setTimeout(() => {
+                document.getElementById('sleepEffect').classList.add('hidden');
+                updateUI();
+            }, 2000);
+
+            saveAccounts();
+            updateUI();
+            renderLeaderboard();
+            showToast('😴 Rested well! (+30⚡ / +0.05kg)', '✨');
+        }
+
+        /* --- ECO MISSIONS WITH PHOTO PROOF --- */
+        function openMissionUploadModal(name, rewardFish, rewardEnergy) {
+            activeMission = { name, rewardFish, rewardEnergy };
+            document.getElementById('modalMissionName').innerText = `Mission: ${name}`;
+            document.getElementById('photoPreview').classList.add('hidden');
+            document.getElementById('uploadPlaceholder').classList.remove('hidden');
             document.getElementById('photoModal').classList.remove('hidden');
         }
 
         function closePhotoModal() {
             document.getElementById('photoModal').classList.add('hidden');
-            document.getElementById('photoPreview').classList.add('hidden');
-            document.getElementById('uploadPlaceholder').classList.remove('hidden');
-            missionPhotoData = null;
+            activeMission = null;
         }
 
         function triggerFileSelect() {
@@ -874,9 +896,9 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
-                    missionPhotoData = evt.target.result;
-                    document.getElementById('photoPreview').src = evt.target.result;
-                    document.getElementById('photoPreview').classList.remove('hidden');
+                    const img = document.getElementById('photoPreview');
+                    img.src = evt.target.result;
+                    img.classList.remove('hidden');
                     document.getElementById('uploadPlaceholder').classList.add('hidden');
                 };
                 reader.readAsDataURL(file);
@@ -884,82 +906,161 @@
         }
 
         function submitMissionWithPhoto() {
-            if (!missionPhotoData) {
-                showToast('กรุณาแนบรูปถ่ายก่อนส่งภารกิจ!', '⚠️');
+            const img = document.getElementById('photoPreview');
+            if (img.classList.contains('hidden')) {
+                showToast('⚠️ Please choose a photo proof first!', '📷');
                 return;
             }
+
             const acc = accounts[currentUser];
-            acc.fish += activeMission.fishReward;
-            acc.energy = Math.min(acc.maxEnergy, acc.energy + activeMission.energyReward);
-            addEXP(20);
+            acc.fish += activeMission.rewardFish;
+            acc.energy = Math.min(100, acc.energy + activeMission.rewardEnergy);
+            addExp(20);
 
-            showToast(`สำเร็จภารกิจ! รับ +${activeMission.fishReward} 🐟`, '🌱');
-            closePhotoModal();
-            saveStorage();
+            saveAccounts();
             updateUI();
+            closePhotoModal();
+            showToast(`🌱 Mission completed! Received +${activeMission.rewardFish} 🐟 & +${activeMission.rewardEnergy}⚡`, '🎉');
         }
 
-        // LEADERBOARD (REAL PLAYERS ONLY - RANKED BY CAT WEIGHT)
-        function renderLeaderboard() {
-            const tbody = document.getElementById('leaderboardRows');
-            tbody.innerHTML = '';
+        /* --- DRESS-UP STUDIO --- */
+        function switchDressCategory(cat) {
+            currentDressCategory = cat;
+            document.getElementById('cat-head-btn').className = cat === 'head' 
+                ? "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300"
+                : "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200";
+            document.getElementById('cat-apron-btn').className = cat === 'apron' 
+                ? "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300"
+                : "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200";
+            renderDressUpGrid();
+        }
 
-            // Convert accounts object into array of real players
-            const realPlayers = Object.values(accounts);
+        function renderDressUpGrid() {
+            if (!currentUser) return;
+            const acc = accounts[currentUser];
+            const grid = document.getElementById('dressItemsGrid');
+            grid.innerHTML = '';
 
-            // Sort by Cat Weight descending
-            realPlayers.sort((a, b) => b.weight - a.weight);
+            const items = dressItems[currentDressCategory];
+            items.forEach(item => {
+                const isUnlocked = acc.unlockedItems.includes(item.id);
+                const isEquipped = acc.equipped[currentDressCategory] === item.id;
 
-            document.getElementById('totalPlayersCount').innerText = `${realPlayers.length} ผู้เล่น`;
-
-            realPlayers.forEach((player, index) => {
-                const rank = index + 1;
-                const tr = document.createElement('tr');
-                tr.className = "border-b border-rose-50 font-extrabold";
-                tr.innerHTML = `
-                    <td class="p-2">${rank === 1 ? '👑 #1' : `#${rank}`}</td>
-                    <td class="p-2">
-                        <div class="text-xs font-black text-slate-800">${player.username}</div>
-                        <div class="text-[10px] text-purple-600">แมว: ${player.catName} (LVL ${player.level})</div>
-                    </td>
-                    <td class="p-2 text-right text-rose-600 font-black">${player.weight.toFixed(2)} kg</td>
+                const card = document.createElement('div');
+                card.className = `p-2.5 rounded-2xl border-2 flex flex-col items-center justify-between transition ${isEquipped ? 'bg-pink-100 border-pink-500' : 'bg-slate-50 border-rose-100'}`;
+                
+                card.innerHTML = `
+                    <div class="text-3xl my-1">${item.icon}</div>
+                    <div class="text-[11px] font-black text-slate-800 text-center">${item.name}</div>
+                    <div class="mt-2 w-full">
+                        ${isEquipped ? `
+                            <button onclick="unequipItem('${currentDressCategory}')" class="clay-btn w-full bg-rose-500 text-white font-black text-[10px] py-1 rounded-xl">Unequip</button>
+                        ` : isUnlocked ? `
+                            <button onclick="equipItem('${currentDressCategory}', '${item.id}')" class="clay-btn w-full bg-emerald-500 text-white font-black text-[10px] py-1 rounded-xl">Equip</button>
+                        ` : `
+                            <button onclick="buyItem('${currentDressCategory}', '${item.id}',${item.price})" class="clay-btn w-full bg-amber-400 text-slate-900 font-black text-[10px] py-1 rounded-xl">Buy (${item.price}🐟)</button>
+                        `}
+                    </div>
                 `;
-                tbody.appendChild(tr);
+                grid.appendChild(card);
             });
         }
 
-        // NAVIGATION TABS
-        function switchTab(tabId) {
+        function buyItem(category, itemId, price) {
+            const acc = accounts[currentUser];
+            if (acc.fish < price) {
+                showToast('❌ Not enough Fish tokens!', '🐟');
+                return;
+            }
+            acc.fish -= price;
+            acc.unlockedItems.push(itemId);
+            acc.equipped[category] = itemId;
+            saveAccounts();
+            updateUI();
+            renderDressUpGrid();
+            showToast('🛍️ Outfit purchased and equipped!', '✨');
+        }
+
+        function equipItem(category, itemId) {
+            const acc = accounts[currentUser];
+            acc.equipped[category] = itemId;
+            saveAccounts();
+            updateUI();
+            renderDressUpGrid();
+            showToast('✨ Outfit equipped!', '👗');
+        }
+
+        function unequipItem(category) {
+            const acc = accounts[currentUser];
+            acc.equipped[category] = null;
+            saveAccounts();
+            updateUI();
+            renderDressUpGrid();
+            showToast('🔄 Outfit unequipped', '👕');
+        }
+
+        function resetOutfit() {
+            const acc = accounts[currentUser];
+            acc.equipped.head = null;
+            acc.equipped.apron = null;
+            saveAccounts();
+            updateUI();
+            renderDressUpGrid();
+            showToast('🔄 All outfits removed!', '✨');
+        }
+
+        /* --- LEADERBOARD (REAL PLAYERS ONLY) --- */
+        function renderLeaderboard() {
+            const rows = document.getElementById('leaderboardRows');
+            rows.innerHTML = '';
+
+            const playerList = Object.values(accounts).sort((a, b) => b.weight - a.weight);
+            document.getElementById('totalPlayersCount').innerText = `${playerList.length} Players`;
+
+            playerList.forEach((p, idx) => {
+                const tr = document.createElement('tr');
+                tr.className = `border-b border-rose-50 ${p.username === currentUser ? 'bg-pink-50 font-black' : ''}`;
+                tr.innerHTML = `
+                    <td class="p-2 font-black text-rose-600">#${idx + 1}</td>
+                    <td class="p-2">
+                        <div class="font-black text-slate-800">${p.username} ${p.username === currentUser ? '⭐' : ''}</div>
+                        <div class="text-[10px] text-purple-600 font-bold">Cat: ${p.catName}</div>
+                    </td>
+                    <td class="p-2 text-right font-black text-purple-900">${p.weight.toFixed(2)} kg</td>
+                `;
+                rows.appendChild(tr);
+            });
+        }
+
+        /* --- NAVIGATION TABS --- */
+        function switchTab(tab) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.className = 'nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]';
+            document.querySelectorAll('.nav-btn').forEach(btn => {
+                btn.className = "nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]";
             });
 
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            const navBtn = document.getElementById(`nav-${tabId}`);
-            navBtn.className = 'nav-btn active flex flex-col items-center py-2 rounded-2xl text-rose-600 bg-rose-100 font-black text-[11px]';
+            document.getElementById(`tab-${tab}`).classList.add('active');
+            const activeBtn = document.getElementById(`nav-${tab}`);
+            activeBtn.className = "nav-btn active flex flex-col items-center py-2 rounded-2xl text-rose-600 bg-rose-100 font-black text-[11px]";
 
-            if (tabId === 'dressup') renderDressGrid();
+            if (tab === 'dressup') renderDressUpGrid();
+            if (tab === 'ranks') renderLeaderboard();
         }
 
-        // TOAST NOTIFICATION
+        /* --- TOAST NOTIFICATIONS --- */
         function showToast(msg, icon = '✨') {
             const toast = document.getElementById('toastNotification');
             document.getElementById('toastMessage').innerText = msg;
             document.getElementById('toastIcon').innerText = icon;
+
             toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-6');
             toast.classList.add('opacity-100', 'translate-y-0');
-            
+
             setTimeout(() => {
                 toast.classList.remove('opacity-100', 'translate-y-0');
                 toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-6');
             }, 2500);
         }
-
-        // STARTUP
-        window.onload = () => {
-            initStorage();
-        };
     </script>
 </body>
 </html>
