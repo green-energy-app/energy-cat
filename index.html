@@ -1,352 +1,1080 @@
 <!DOCTYPE html>
-<html lang="th">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Kawaii Cat Dress-Up Studio - ห้องแต่งตัวน้องแมว</title>
-    <!-- Tailwind CSS CDN -->
+    <title>Energy Cat 3D - Kawaii Dress-Up Edition</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
+        * { font-family: 'Fredoka', 'Quicksand', sans-serif; }
+
         body {
-            font-family: 'Kanit', sans-serif;
-            background-color: #fdf2f8;
+            background: radial-gradient(circle at 50% 30%, #FFE5EC 0%, #FFC2D1 50%, #B5FFFC 100%);
+            min-height: 100vh;
+            user-select: none;
+            overflow-x: hidden;
         }
-        .item-card {
-            transition: all 0.2s ease-in-out;
+
+        /* Claymorphism & Glossy 3D Cards */
+        .clay-card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 44px;
+            box-shadow: 
+                0 25px 50px -12px rgba(255, 182, 193, 0.5),
+                inset 0 4px 12px rgba(255, 255, 255, 1),
+                inset 0 -6px 12px rgba(255, 154, 162, 0.2);
+            border: 5px solid #FFFFFF;
         }
-        .item-card:hover {
-            transform: translateY(-4px);
+
+        .clay-inner {
+            background: linear-gradient(180deg, #FFFDF9 0%, #FFF5F7 100%);
+            border-radius: 36px;
+            box-shadow: 
+                inset 0 6px 16px rgba(251, 113, 133, 0.15),
+                inset 0 -6px 12px rgba(255, 255, 255, 0.9);
+            border: 3.5px solid #FFE4E6;
         }
-        /* Style scrollbar */
-        ::-webkit-scrollbar {
-            width: 8px;
+
+        .clay-btn {
+            border-radius: 24px;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 8px 0 0 rgba(225, 29, 72, 0.25),
+                0 12px 20px -4px rgba(244, 63, 94, 0.3),
+                inset 0 3px 6px rgba(255, 255, 255, 0.9);
         }
-        ::-webkit-scrollbar-track {
-            background: #f1f1f1;
-            border-radius: 10px;
+        .clay-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
         }
-        ::-webkit-scrollbar-thumb {
-            background: #f472b6;
-            border-radius: 10px;
+        .clay-btn:active {
+            transform: translateY(5px);
+            box-shadow: 
+                0 3px 0 0 rgba(225, 29, 72, 0.25),
+                inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
+
+        .glass-modal {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(14px);
+        }
+
+        /* Dynamic Animations */
+        @keyframes breathe {
+            0%, 100% { transform: translateY(0) scale(1, 1); }
+            50% { transform: translateY(-8px) scale(1.03, 0.97); }
+        }
+        .animate-breathe { animation: breathe 3s ease-in-out infinite; }
+
+        @keyframes tailWag {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(18deg); }
+        }
+        .animate-tail { transform-origin: 155px 165px; animation: tailWag 2s ease-in-out infinite; }
+
+        @keyframes floatHeart {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) translateY(0); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4) translateY(-80px); }
+        }
+        .heart-pop {
+            position: absolute;
+            pointer-events: none;
+            animation: floatHeart 0.9s ease-out forwards;
+            font-size: 28px;
+            z-index: 30;
+        }
+
+        @keyframes sparkleFloat {
+            0%, 100% { transform: translateY(0px) rotate(0deg); opacity: 0.8; }
+            50% { transform: translateY(-10px) rotate(15deg); opacity: 1; }
+        }
+        .animate-sparkle { animation: sparkleFloat 3s ease-in-out infinite; }
+
+        @keyframes zzzFloat {
+            0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
+            50% { opacity: 1; transform: translate(16px, -22px) scale(1.2); }
+            100% { opacity: 0; transform: translate(32px, -45px) scale(0.8); }
+        }
+        .animate-zzz { animation: zzzFloat 2.4s infinite ease-in-out; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.96) translateY(8px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FFF1F2; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #FB7185; border-radius: 10px; }
     </style>
 </head>
-<body class="min-h-screen text-slate-800 flex flex-col justify-between">
+<body class="flex justify-center items-center min-h-screen p-3 md:p-6">
 
-    <!-- Header Navigation -->
-    <header class="bg-pink-500 text-white shadow-md p-4 sticky top-0 z-50">
-        <div class="max-w-5xl mx-auto flex justify-between items-center">
-            <h1 class="text-2xl font-bold flex items-center gap-2">
-                <i class="fa-solid font-bold fa-cat"></i> Kawaii Cat Dress-Up
-            </h1>
-            <div class="bg-pink-700/50 px-4 py-1.5 rounded-full flex items-center gap-2 border border-pink-300">
-                <span class="text-xl">🐟</span>
-                <span id="fish-count" class="font-bold text-lg text-yellow-300">1,000</span>
-                <button onclick="addFish()" class="ml-2 bg-yellow-400 hover:bg-yellow-300 text-pink-900 text-xs px-2 py-1 rounded-md font-bold transition">
-                    + เพิ่มปลา
-                </button>
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-6">
+        <div class="bg-slate-900/95 text-white px-7 py-3.5 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-3 font-extrabold text-sm tracking-wide">
+            <span id="toastIcon" class="text-2xl">✨</span>
+            <span id="toastMessage">Notification</span>
+        </div>
+    </div>
+
+    <!-- Main Game Container -->
+    <div class="clay-card w-full max-w-md h-[840px] flex flex-col justify-between relative z-10 overflow-hidden p-5 border-4 border-white">
+        
+        <!-- Header Bar -->
+        <div class="bg-gradient-to-r from-rose-200 via-pink-200 to-amber-100 p-3.5 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-3xl shadow-md border-2 border-pink-200 animate-bounce">
+                    🐱
+                </div>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] tracking-widest font-black text-rose-600 uppercase bg-white/80 px-2 py-0.5 rounded-full border border-rose-200">AGENT</span>
+                        <span id="totalUsersBadge" class="text-[10px] font-black bg-rose-500 text-white px-2.5 py-0.5 rounded-full shadow-sm">👥 0</span>
+                    </div>
+                    <div class="text-sm font-black text-slate-800 flex items-center gap-1.5 mt-0.5">
+                        <span id="displayUser">Guest Agent</span>
+                        <button onclick="logoutUser()" class="text-xs text-rose-600 hover:text-rose-800 font-extrabold underline ml-1">Logout</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border-2 border-rose-300 shadow-sm">
+                <span class="text-2xl animate-pulse">🐟</span>
+                <span id="fishCount" class="text-base font-black text-rose-600 tracking-tight">0</span>
             </div>
         </div>
-    </header>
 
-    <!-- Main Content Area -->
-    <main class="max-w-5xl mx-auto w-full p-4 grid grid-cols-1 md:grid-cols-12 gap-6 my-auto">
-        
-        <!-- Left Side: Cat Display Canvas -->
-        <section class="md:col-span-5 bg-white rounded-3xl p-6 shadow-xl border-4 border-pink-200 flex flex-col items-center justify-between relative overflow-hidden min-h-[420px]">
-            <!-- Background Glow -->
-            <div class="absolute inset-0 bg-gradient-to-b from-pink-50 to-purple-50 -z-10"></div>
+        <!-- MAIN CONTENT AREA -->
+        <div class="flex-grow overflow-y-auto py-3">
             
-            <div class="w-full flex justify-between items-center text-sm font-semibold text-pink-600">
-                <span id="cat-status"><i class="fa-solid fa-sparkles"></i> แต่งตัวน้องแมวสุดน่ารัก</span>
-                <button onclick="randomOutfit()" class="bg-pink-100 hover:bg-pink-200 text-pink-600 px-3 py-1 rounded-full text-xs font-bold transition">
-                    🎲 สุ่มชุด
-                </button>
+            <!-- PAGE 1: HOME (CAT CARE) -->
+            <div id="tab-home" class="tab-content active space-y-3.5">
+                
+                <!-- Energy Progress Bar -->
+                <div class="bg-white border-3 border-rose-300 rounded-3xl p-3.5 shadow-sm">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-xs font-black text-rose-700 flex items-center gap-1.5 tracking-wider">
+                            <span class="text-base">⚡</span> CAT ENERGY
+                        </span>
+                        <span id="energyText" class="text-xs font-black bg-rose-100 text-rose-700 px-3 py-1 rounded-full border border-rose-300">100/100</span>
+                    </div>
+                    <div class="w-full bg-rose-100 h-5 rounded-full overflow-hidden p-1 border-2 border-rose-200 shadow-inner">
+                        <div id="energyBar" class="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500 shadow-md" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <!-- Kawaii 3D Cat Stage Screen -->
+                <div id="catStage" class="relative clay-inner p-3 flex flex-col items-center justify-center border-3 border-pink-200 h-[340px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
+                    
+                    <!-- Decorative Background Elements -->
+                    <div class="absolute top-4 left-5 text-3xl animate-sparkle opacity-90">☁️</div>
+                    <div class="absolute top-6 right-6 text-2xl animate-bounce opacity-80">✨</div>
+                    <div class="absolute top-16 left-10 text-lg text-pink-400 animate-pulse">🌸</div>
+                    <div class="absolute bottom-12 left-6 text-3xl animate-bounce opacity-90">🥛</div>
+                    <div class="absolute bottom-10 right-8 text-2xl animate-pulse">🐟</div>
+                    <div class="absolute top-24 right-10 text-base opacity-70">⭐</div>
+
+                    <!-- Sleep Zzz FX -->
+                    <div id="sleepEffect" class="hidden absolute top-6 right-12 z-20 pointer-events-none">
+                        <span class="text-3xl font-black text-indigo-500 animate-zzz inline-block">Zzz...</span>
+                    </div>
+
+                    <!-- SUPER KAWAII 3D CAT VECTOR SVG -->
+                    <div class="animate-breathe relative flex items-center justify-center z-10 w-[240px] h-[240px]">
+                        <svg width="240" height="240" viewBox="0 0 200 200" class="drop-shadow-2xl transition-transform duration-300 group-hover:scale-105">
+                            <defs>
+                                <radialGradient id="catBody3D" cx="35%" cy="30%" r="70%">
+                                    <stop offset="0%" stop-color="#FFFFFF"/>
+                                    <stop offset="55%" stop-color="#FFEAD5"/>
+                                    <stop offset="100%" stop-color="#FDCEAB"/>
+                                </radialGradient>
+                                <radialGradient id="earInner" cx="50%" cy="50%" r="50%">
+                                    <stop offset="0%" stop-color="#FFB6C1"/>
+                                    <stop offset="100%" stop-color="#FF69B4"/>
+                                </radialGradient>
+                            </defs>
+
+                            <!-- Tail with Stripe -->
+                            <g class="animate-tail">
+                                <path d="M 140 145 C 175 140, 185 105, 170 85 C 158 70, 145 88, 152 105 C 158 118, 142 135, 132 138 Z" 
+                                      fill="#FCB584" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" />
+                                <path d="M 160 92 Q 165 98 158 105" stroke="#5C2C16" stroke-width="4" stroke-linecap="round" fill="none"/>
+                            </g>
+
+                            <!-- Feet Layer (Behind shoes or under paws) -->
+                            <ellipse cx="65" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
+                            <ellipse cx="135" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
+
+                            <!-- Body Shell -->
+                            <path d="M 50 120 C 42 155, 45 172, 65 172 C 85 172, 115 172, 135 172 C 155 172, 158 155, 150 120 Z" 
+                                  fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
+                            <ellipse cx="100" cy="148" rx="28" ry="20" fill="#FFFFFF" opacity="0.9"/>
+
+                            <!-- Raised Paws -->
+                            <ellipse cx="72" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
+                            <ellipse cx="128" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
+
+                            <!-- Large Cute Head -->
+                            <path d="M 35 80 C 22 55, 42 22, 68 32 C 85 22, 115 22, 132 32 C 158 22, 178 55, 165 80 C 175 110, 155 128, 100 128 C 45 128, 25 110, 35 80 Z" 
+                                  fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
+
+                            <!-- Inner Ears -->
+                            <path d="M 48 42 C 43 32, 58 28, 64 36 Z" fill="url(#earInner)"/>
+                            <path d="M 152 42 C 157 32, 142 28, 136 36 Z" fill="url(#earInner)"/>
+
+                            <!-- Calico Ear Patches -->
+                            <path d="M 35 80 C 30 60, 45 35, 62 34 C 52 55, 55 70, 58 82 Z" fill="#FB923C"/>
+
+                            <!-- Whiskers -->
+                            <path d="M 22 82 L 42 85 M 18 92 L 40 92 M 22 102 L 43 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
+                            <path d="M 178 82 L 158 85 M 182 92 L 160 92 M 178 102 L 157 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
+
+                            <!-- Awake Eyes (Big Sparkling Kawaii Eyes & Blushes) -->
+                            <g id="catEyesAwake">
+                                <circle cx="72" cy="82" r="11" fill="#3B170B"/>
+                                <circle cx="69" cy="78" r="4" fill="#FFFFFF"/>
+                                <circle cx="75" cy="85" r="2" fill="#FFFFFF"/>
+                                
+                                <circle cx="128" cy="82" r="11" fill="#3B170B"/>
+                                <circle cx="125" cy="78" r="4" fill="#FFFFFF"/>
+                                <circle cx="131" cy="85" r="2" fill="#FFFFFF"/>
+
+                                <ellipse cx="58" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
+                                <ellipse cx="142" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
+
+                                <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
+                                <path d="M 92 92 Q 100 100 100 92 Q 100 100 108 92" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                            </g>
+
+                            <!-- Sleeping Eyes -->
+                            <g id="catEyesSleep" class="hidden">
+                                <path d="M 62 84 Q 72 94 82 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                <path d="M 118 84 Q 128 94 138 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                <ellipse cx="58" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
+                                <ellipse cx="142" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
+                                <path d="M 95 92 Q 100 96 105 92" stroke="#5C2C16" stroke-width="3" fill="none" stroke-linecap="round"/>
+                            </g>
+                        </svg>
+
+                        <!-- DRESS UP CLOTHES OVERLAY ON CAT BODY -->
+                        <div class="cat-outfit-container absolute inset-0 pointer-events-none flex items-center justify-center">
+                            <div class="slot-head absolute inset-0 flex items-center justify-center"></div>
+                            <div class="slot-outfit absolute inset-0 flex items-center justify-center"></div>
+                            <div class="slot-shoes absolute inset-0 flex items-center justify-center"></div>
+                        </div>
+                    </div>
+
+                    <p id="catStatusLabel" class="text-xs font-black text-rose-600 mt-2 bg-white px-5 py-2 rounded-full border-2 border-rose-300 shadow-md z-10 tracking-wide">
+                        ✨ TAP TO PET KITTY (+1⚡)
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3.5 pt-1">
+                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 text-white font-black py-3.5 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
+                        <span class="text-xl">🍱</span> FEED (-5🐟 / +15⚡)
+                    </button>
+                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-500 text-white font-black py-3.5 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
+                        <span class="text-xl">😴</span> REST (+30⚡)
+                    </button>
+                </div>
             </div>
 
-            <!-- Dynamic SVG Cat Avatar -->
-            <div class="relative w-64 h-64 my-auto flex items-center justify-center">
-                <!-- Aura / Effect Layer -->
-                <div id="layer-aura" class="absolute inset-0 flex items-center justify-center text-6xl pointer-events-none opacity-0 transition-all"></div>
+            <!-- PAGE 2: MISSIONS -->
+            <div id="tab-missions" class="tab-content space-y-3.5">
+                <div class="bg-gradient-to-br from-emerald-100 via-teal-100 to-emerald-200 border-3 border-emerald-300 rounded-3xl p-4 shadow-sm">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-2xl">🌱</span>
+                        <p class="text-sm font-black text-emerald-950 uppercase tracking-wide">Eco Missions (Photo Proof)</p>
+                    </div>
+                    <p class="text-xs font-extrabold text-emerald-800 mb-3.5">Complete real-world eco tasks to earn fish & energy!</p>
 
-                <!-- Base Cat SVG -->
-                <svg viewBox="0 0 200 200" class="w-full h-full drop-shadow-md">
-                    <!-- Tail -->
-                    <path d="M 140 140 C 170 130 170 90 150 90" stroke="#f9a8d4" stroke-width="12" fill="none" stroke-linecap="round"/>
-                    <!-- Body -->
-                    <ellipse cx="100" cy="135" rx="45" ry="40" fill="#fbcfe8" />
-                    <ellipse cx="100" cy="135" rx="35" ry="30" fill="#fdf2f8" />
-                    <!-- Ears -->
-                    <polygon points="65,55 50,20 80,40" fill="#fbcfe8" stroke="#f472b6" stroke-width="3" />
-                    <polygon points="135,55 150,20 120,40" fill="#fbcfe8" stroke="#f472b6" stroke-width="3" />
-                    <polygon points="67,50 56,28 77,40" fill="#f472b6" />
-                    <polygon points="133,50 144,28 123,40" fill="#f472b6" />
-                    <!-- Head -->
-                    <circle cx="100" cy="75" r="45" fill="#fbcfe8" />
-                    <!-- Eyes -->
-                    <circle cx="85" cy="70" r="5" fill="#334155" />
-                    <circle cx="115" cy="70" r="5" fill="#334155" />
-                    <circle cx="87" cy="68" r="2" fill="white" />
-                    <circle cx="117" cy="68" r="2" fill="white" />
-                    <!-- Blush -->
-                    <ellipse cx="75" cy="80" rx="6" ry="3" fill="#f472b6" opacity="0.6" />
-                    <ellipse cx="125" cy="80" rx="6" ry="3" fill="#f472b6" opacity="0.6" />
-                    <!-- Nose & Mouth -->
-                    <polygon points="100,77 97,74 103,74" fill="#f472b6" />
-                    <path d="M 95 82 Q 100 86 105 82" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round" />
-                    <!-- Paws -->
-                    <ellipse cx="80" cy="165" rx="10" ry="8" fill="#fbcfe8" stroke="#f472b6" stroke-width="2" />
-                    <ellipse cx="120" cy="165" rx="10" ry="8" fill="#fbcfe8" stroke="#f472b6" stroke-width="2" />
-                </svg>
-
-                <!-- Clothes Layer -->
-                <div id="layer-clothes" class="absolute inset-0 pointer-events-none flex items-center justify-center"></div>
-                <!-- Head Layer -->
-                <div id="layer-head" class="absolute inset-0 pointer-events-none flex items-center justify-center"></div>
-                <!-- Shoes Layer -->
-                <div id="layer-shoes" class="absolute inset-0 pointer-events-none flex items-center justify-center"></div>
-                <!-- Accessory Layer -->
-                <div id="layer-extra" class="absolute inset-0 pointer-events-none flex items-center justify-center"></div>
+                    <div class="space-y-3 text-xs font-black">
+                        <button onclick="openMissionUploadModal('Turn off lights / monitor', 15, 20)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2 text-xs">💡 Turn Off Unused Lights</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+15🐟 / +20⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Turn off AC when leaving room', 20, 30)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2 text-xs">❄️ Turn Off AC</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+20🐟 / +30⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Unplug idle electronics', 10, 15)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2 text-xs">🔌 Unplug Idle Electronics</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+10🐟 / +15⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Take stairs instead of elevator', 10, 15)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2 text-xs">🚶 Take Stairs vs Elevator</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+10🐟 / +15⚡</span>
+                        </button>
+                    </div>
+                </div>
             </div>
 
-            <!-- Action Controls -->
-            <div class="w-full flex gap-2">
-                <button onclick="resetOutfit()" class="flex-1 bg-gray-100 hover:bg-gray-200 text-gray-700 py-2 rounded-xl text-sm font-semibold transition">
-                    <i class="fa-solid fa-rotate-left"></i> ถอดชุดทั้งหมด
-                </button>
+            <!-- PAGE 3: DRESS-UP STUDIO (REPLACED GAME) -->
+            <div id="tab-dressup" class="tab-content space-y-3.5">
+                <div class="bg-white rounded-3xl p-3.5 border-3 border-pink-300 shadow-sm flex flex-col h-[460px]">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">👗</span>
+                            <h3 class="font-black text-sm text-pink-900">Cat Dress-Up Studio</h3>
+                        </div>
+                        <button onclick="resetOutfit()" class="text-[11px] font-black bg-rose-100 text-rose-700 hover:bg-rose-200 px-3 py-1 rounded-full border border-rose-300">
+                            🔄 ถอดชุดทั้งหมด
+                        </button>
+                    </div>
+
+                    <!-- Category Selector Tabs -->
+                    <div class="grid grid-cols-3 gap-1.5 mb-2.5">
+                        <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300 shadow-sm">
+                            🎩 บนหัว
+                        </button>
+                        <button onclick="switchDressCategory('outfit')" id="cat-outfit-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200">
+                            👔 ชุด
+                        </button>
+                        <button onclick="switchDressCategory('shoes')" id="cat-shoes-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200">
+                            👟 รองเท้า
+                        </button>
+                    </div>
+
+                    <!-- Items Grid Scroll Area -->
+                    <div id="dressItemsGrid" class="flex-grow overflow-y-auto grid grid-cols-2 gap-2 p-1">
+                        <!-- Dynamic Dress Items -->
+                    </div>
+                </div>
             </div>
-        </section>
 
-        <!-- Right Side: Dressing Closet / Shop -->
-        <section class="md:col-span-7 bg-white rounded-3xl p-6 shadow-xl border-4 border-pink-200 flex flex-col">
-            <!-- Category Tabs Navigation -->
-            <div class="flex border-b-2 border-pink-100 mb-4 gap-1 overflow-x-auto pb-2">
-                <button onclick="switchCategory('head')" id="tab-head" class="tab-btn active-tab px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap transition bg-pink-500 text-white">
-                    🎓 ของบนหัว
-                </button>
-                <button onclick="switchCategory('clothes')" id="tab-clothes" class="tab-btn px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap transition bg-pink-50 text-pink-600 hover:bg-pink-100">
-                    👔 ชุด
-                </button>
-                <button onclick="switchCategory('shoes')" id="tab-shoes" class="tab-btn px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap transition bg-pink-50 text-pink-600 hover:bg-pink-100">
-                    👟 รองเท้า
-                </button>
-                <button onclick="switchCategory('extras')" id="tab-extras" class="tab-btn px-4 py-2 rounded-xl font-bold text-sm whitespace-nowrap transition bg-pink-50 text-pink-600 hover:bg-pink-100">
-                    ✨ ของเสริม
-                </button>
+            <!-- PAGE 4: LEADERBOARD & REWARDS -->
+            <div id="tab-ranks" class="tab-content space-y-3.5">
+                
+                <!-- WINNER BANNER -->
+                <div class="bg-gradient-to-r from-rose-400 via-pink-500 to-amber-400 rounded-3xl p-4 border-3 border-white shadow-lg text-white">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-3xl animate-bounce">🏆</span>
+                        <div>
+                            <h4 class="text-xs font-black uppercase tracking-wider">Monthly Leaderboard Winner</h4>
+                            <p class="text-[11px] font-extrabold text-rose-100">Rank #1 player wins exclusive rewards!</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2.5 border-t border-white/30 flex justify-between items-center">
+                        <p class="text-xs font-black bg-black/25 px-3 py-1 rounded-full border border-white/20">
+                            👑 Rank #1: <span id="topPlayerNameDisplay" class="underline">Loading...</span>
+                        </p>
+                        <button id="claimRewardBtn" onclick="openClaimModal()" class="clay-btn bg-white text-rose-600 hover:bg-rose-50 text-xs font-black px-3.5 py-2 rounded-2xl shadow-md border-2 border-rose-200">
+                            🎁 CLAIM
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Table -->
+                <div class="bg-white rounded-3xl p-3.5 border-3 border-rose-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">📊</span>
+                            <p class="text-xs font-black text-rose-900 uppercase tracking-wide">Player Leaderboard</p>
+                        </div>
+                        <span id="totalPlayersCount" class="text-xs font-black bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded-full">0 Players</span>
+                    </div>
+                    <div class="overflow-y-auto max-h-[170px]">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[11px] uppercase">
+                                    <th class="p-2">Rank</th>
+                                    <th class="p-2">Agent</th>
+                                    <th class="p-2 text-right">Fish 🐟</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardRows"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Admin Action Footer -->
+                <div class="text-center pt-1">
+                    <button onclick="openAdminModal()" class="text-xs font-extrabold text-slate-500 hover:text-rose-600 underline">
+                        ⚙️ Admin Panel (Export Winner Data CSV)
+                    </button>
+                </div>
             </div>
 
-            <!-- Items Grid -->
-            <div id="items-grid" class="grid grid-cols-2 sm:grid-cols-3 gap-3 overflow-y-auto max-h-[360px] p-1">
-                <!-- Items dynamically injected here -->
+        </div>
+
+        <!-- NAVIGATION BAR -->
+        <div class="bg-white p-2.5 rounded-3xl border-3 border-rose-200 grid grid-cols-4 gap-2 shrink-0 shadow-lg">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2.5 rounded-2xl text-rose-600 bg-rose-100 font-black text-xs">
+                <span class="text-xl">🏠</span> HOME
+            </button>
+            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
+                <span class="text-xl">🌱</span> MISSIONS
+            </button>
+            <button onclick="switchTab('dressup')" id="nav-dressup" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
+                <span class="text-xl">👗</span> DRESS-UP
+            </button>
+            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
+                <span class="text-xl">🏆</span> RANKS
+            </button>
+        </div>
+
+    </div>
+
+    <!-- Hidden File Input for Mission Photo Proof -->
+    <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
+
+    <!-- MODAL 1: PHOTO PROOF UPLOAD -->
+    <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3.5 shadow-2xl border-4 border-emerald-300">
+            <h3 class="font-black text-base text-slate-800">📸 Attach Photo Proof</h3>
+            <p id="modalMissionName" class="text-xs font-black text-emerald-800 bg-emerald-50 p-3 rounded-2xl border border-emerald-200">Mission</p>
+            
+            <div onclick="triggerFileSelect()" class="w-full h-44 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
+                <img id="photoPreview" class="w-full h-full object-cover hidden" />
+                <div id="uploadPlaceholder" class="text-center p-3">
+                    <span class="text-4xl">📷</span>
+                    <p class="text-xs font-black text-emerald-700 mt-1">Tap to select photo</p>
+                </div>
             </div>
-        </section>
 
-    </main>
+            <div class="flex gap-2">
+                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-3 rounded-2xl">Cancel</button>
+                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white">Submit Proof</button>
+            </div>
+        </div>
+    </div>
 
-    <!-- Footer -->
-    <footer class="bg-pink-100 text-center py-3 text-xs text-pink-500 border-t border-pink-200">
-        Kawaii Cat Dress-Up Studio &copy; 2026 - แต่งตัวน้องแมวเพลินๆ
-    </footer>
+    <!-- MODAL 2: AUTHENTICATION -->
+    <div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-xs flex flex-col gap-3.5 shadow-2xl border-4 border-rose-300">
+            <div class="text-center">
+                <span class="text-5xl">🔐</span>
+                <h3 id="authTitle" class="font-black text-lg text-slate-800 mt-1">Agent Login</h3>
+                <p class="text-xs font-bold text-slate-500">Sign in to save your progress!</p>
+            </div>
 
-    <!-- JavaScript Game Logic -->
+            <div class="space-y-3 text-xs">
+                <div>
+                    <label class="font-black text-slate-700 text-[10px] uppercase tracking-wider">Username</label>
+                    <input type="text" id="authUsername" placeholder="e.g. KittyHero99" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2.5 font-black text-slate-800 focus:outline-none mt-0.5" />
+                </div>
+                <div id="emailContainer" class="hidden">
+                    <label class="font-black text-slate-700 text-[10px] uppercase tracking-wider">Email Address</label>
+                    <input type="email" id="authEmail" placeholder="cat@example.com" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2.5 font-black text-slate-800 focus:outline-none mt-0.5" />
+                </div>
+                <div>
+                    <label class="font-black text-slate-700 text-[10px] uppercase tracking-wider">Password</label>
+                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2.5 font-black text-slate-800 focus:outline-none mt-0.5" />
+                </div>
+            </div>
+
+            <button onclick="handleAuthSubmit()" id="authSubmitBtn" class="clay-btn w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs font-black py-3.5 rounded-2xl border-2 border-white mt-1">
+                LOG IN
+            </button>
+
+            <p class="text-center text-xs font-extrabold text-slate-500">
+                <span id="authToggleText">Need an account?</span>
+                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-rose-600 underline font-black ml-1">Register</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL 3: CLAIM REWARD -->
+    <div id="claimModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-rose-300">
+            <div class="text-center">
+                <span class="text-4xl">👑🎁</span>
+                <h3 class="font-black text-base text-rose-600 mt-1">Winner Claim Form</h3>
+                <p class="text-xs font-bold text-slate-500">Exclusive for Verified Rank #1 Player</p>
+            </div>
+
+            <div class="space-y-2 text-xs font-black">
+                <div>
+                    <label class="text-slate-700 text-[10px] uppercase">Full Name</label>
+                    <input type="text" id="claimFullName" placeholder="John Doe" class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none" />
+                </div>
+                <div>
+                    <label class="text-slate-700 text-[10px] uppercase">Phone Number</label>
+                    <input type="text" id="claimPhone" placeholder="+1 234-567-890" class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none" />
+                </div>
+                <div>
+                    <label class="text-slate-700 text-[10px] uppercase">Shipping Address</label>
+                    <textarea id="claimAddress" rows="2" placeholder="Address..." class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="text-slate-700 text-[10px] uppercase">Confirm Password</label>
+                    <input type="password" id="claimConfirmPassword" placeholder="••••••••" class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none" />
+                </div>
+            </div>
+
+            <div class="flex gap-2 mt-1">
+                <button onclick="closeClaimModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2.5 rounded-2xl">Cancel</button>
+                <button onclick="submitWinnerClaim()" class="clay-btn w-1/2 bg-gradient-to-r from-rose-400 to-pink-500 text-white text-xs font-black py-2.5 rounded-2xl border-2 border-white">Submit</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: ADMIN PANEL -->
+    <div id="adminModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-sm flex flex-col gap-3.5 shadow-2xl border-4 border-rose-300">
+            <div class="flex justify-between items-center">
+                <h3 class="font-black text-base text-rose-900">⚙️ Admin Dashboard</h3>
+                <button onclick="closeAdminModal()" class="text-xs font-black text-slate-400">✕ CLOSE</button>
+            </div>
+
+            <div class="bg-rose-50 p-3 rounded-2xl border border-rose-200 text-xs font-black text-rose-900 flex justify-between items-center">
+                <span>Total Registered Accounts:</span>
+                <span id="adminTotalUsersCount" class="font-black text-lg text-rose-600">0</span>
+            </div>
+
+            <p class="text-xs font-black text-slate-700 uppercase">Winner Claim Requests:</p>
+            <div id="adminWinnersList" class="bg-slate-50 border border-slate-200 rounded-2xl p-3 max-h-36 overflow-y-auto space-y-2 text-xs">
+                <!-- Winners Data -->
+            </div>
+
+            <button onclick="exportWinnersCSV()" class="clay-btn w-full bg-emerald-500 text-white text-xs font-black py-3.5 rounded-2xl border-2 border-white flex items-center justify-center gap-2">
+                <span>📥</span> Export Winners Data (CSV)
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Logic -->
     <script>
-        // State Management
-        let fish = 1000;
-        let currentCategory = 'head';
-        
-        let equipped = {
-            head: null,
-            clothes: null,
-            shoes: null,
-            extras: null
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(freq, type, duration) {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function showToast(message, icon = '✨') {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = message;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-6');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-6');
+            }, 2500);
+        }
+
+        async function hashPassword(str) {
+            const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
+        let currentUser = null;
+        let authMode = 'login';
+        let isSleeping = false;
+
+        function getUsersDB() { return JSON.parse(localStorage.getItem('energycat_users_db') || '{}'); }
+        function saveUsersDB(db) { localStorage.setItem('energycat_users_db', JSON.stringify(db)); }
+
+        function toggleAuthMode() {
+            authMode = authMode === 'login' ? 'register' : 'login';
+            document.getElementById('authTitle').innerText = authMode === 'login' ? 'Agent Login' : 'New Registration';
+            document.getElementById('emailContainer').classList.toggle('hidden', authMode === 'login');
+            document.getElementById('authSubmitBtn').innerText = authMode === 'login' ? 'LOG IN' : 'REGISTER ACCOUNT';
+            document.getElementById('authToggleText').innerText = authMode === 'login' ? "Need an account?" : "Already registered?";
+            document.getElementById('authToggleBtn').innerText = authMode === 'login' ? 'Register' : 'Log In';
+        }
+
+        async function handleAuthSubmit() {
+            const username = document.getElementById('authUsername').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+            const email = document.getElementById('authEmail').value.trim();
+
+            if (!username || !password || (authMode === 'register' && !email)) {
+                showToast("Please fill out all fields!", "⚠️");
+                return;
+            }
+
+            const db = getUsersDB();
+            const passwordHash = await hashPassword(password);
+
+            if (authMode === 'register') {
+                if (db[username]) {
+                    showToast("Username already exists!", "❌");
+                    return;
+                }
+                db[username] = { email, passwordHash, fish: 20, energy: 100, equipped: { head: null, outfit: null, shoes: null }, unlocked: ['h1', 'o1', 's1'], registeredAt: new Date().toISOString() };
+                saveUsersDB(db);
+                currentUser = username;
+                localStorage.setItem('energycat_current_session', currentUser);
+                document.getElementById('authModal').classList.add('hidden');
+                showToast(`Welcome Agent ${currentUser}!`, "🎉");
+                loadUserData();
+            } else {
+                if (!db[username] || db[username].passwordHash !== passwordHash) {
+                    showToast("Invalid credentials!", "❌");
+                    return;
+                }
+                currentUser = username;
+                localStorage.setItem('energycat_current_session', currentUser);
+                document.getElementById('authModal').classList.add('hidden');
+                showToast(`Welcome back Agent ${currentUser}!`, "🔓");
+                loadUserData();
+            }
+        }
+
+        function logoutUser() {
+            localStorage.removeItem('energycat_current_session');
+            currentUser = null;
+            document.getElementById('authModal').classList.remove('hidden');
+            showToast("Logged out", "🔒");
+        }
+
+        let gameState = { 
+            fish: 20, 
+            energy: 100, 
+            equipped: { head: null, outfit: null, shoes: null },
+            unlocked: ['h1', 'o1', 's1'] 
         };
 
-        // Inventory Database
-        const items = {
+        function loadUserData() {
+            if (!currentUser) return;
+            const db = getUsersDB();
+            if (db[currentUser]) {
+                gameState.fish = db[currentUser].fish ?? 20;
+                gameState.energy = db[currentUser].energy ?? 100;
+                gameState.equipped = db[currentUser].equipped || { head: null, outfit: null, shoes: null };
+                gameState.unlocked = db[currentUser].unlocked || ['h1', 'o1', 's1'];
+            }
+            document.getElementById('displayUser').innerText = currentUser;
+            updateUI();
+            applyOutfitToCat();
+        }
+
+        function saveUserData() {
+            if (!currentUser) return;
+            const db = getUsersDB();
+            if (db[currentUser]) {
+                db[currentUser].fish = gameState.fish;
+                db[currentUser].energy = gameState.energy;
+                db[currentUser].equipped = gameState.equipped;
+                db[currentUser].unlocked = gameState.unlocked;
+                saveUsersDB(db);
+            }
+            updateUI();
+            applyOutfitToCat();
+        }
+
+        function updateUI() {
+            document.getElementById('fishCount').innerText = gameState.fish;
+            document.getElementById('energyText').innerText = `${gameState.energy}/100`;
+            document.getElementById('energyBar').style.width = `${gameState.energy}%`;
+
+            const db = getUsersDB();
+            const allUsers = Object.keys(db);
+            document.getElementById('totalUsersBadge').innerText = `👥 ${allUsers.length}`;
+            document.getElementById('totalPlayersCount').innerText = `${allUsers.length} Players`;
+
+            renderLeaderboard();
+        }
+
+        function renderLeaderboard() {
+            const db = getUsersDB();
+            const playersList = Object.keys(db).map(username => ({
+                username,
+                fish: db[username].fish || 0
+            })).sort((a, b) => b.fish - a.fish);
+
+            const container = document.getElementById('leaderboardRows');
+            container.innerHTML = '';
+
+            const topPlayer = playersList[0];
+            document.getElementById('topPlayerNameDisplay').innerText = topPlayer ? topPlayer.username : 'None';
+
+            playersList.forEach((p, index) => {
+                const isYou = p.username === currentUser;
+                const tr = document.createElement('tr');
+                tr.className = `border-b border-rose-100 ${isYou ? 'bg-rose-50 font-black text-rose-900' : 'text-slate-700 font-bold'}`;
+
+                let rankBadge = `#${index + 1}`;
+                if (index === 0) rankBadge = '🥇';
+                if (index === 1) rankBadge = '🥈';
+                if (index === 2) rankBadge = '🥉';
+
+                tr.innerHTML = `
+                    <td class="p-2 font-black">${rankBadge}</td>
+                    <td class="p-2 flex items-center gap-1">${p.username} ${isYou ? '<span class="text-[9px] bg-rose-500 text-white px-1.5 py-0.5 rounded-full font-black">YOU</span>' : ''}</td>
+                    <td class="p-2 text-right font-black text-rose-600">${p.fish}</td>
+                `;
+                container.appendChild(tr);
+            });
+        }
+
+        // ==========================================
+        // DRESS-UP SYSTEM DATA & RENDER
+        // ==========================================
+        const DRESS_ITEMS = {
             head: [
-                { id: 'h1', name: 'หมวกรับปริญญา', price: 0, icon: '🎓', layerHtml: '<div class="absolute -top-4 text-6xl">🎓</div>' },
-                { id: 'h2', name: 'มงกุฎกษัตริย์', price: 100, icon: '👑', layerHtml: '<div class="absolute -top-5 text-6xl">👑</div>' },
-                { id: 'h3', name: 'หมวกปาร์ตี้', price: 50, icon: '🥳', layerHtml: '<div class="absolute -top-4 text-5xl">🎉</div>' },
-                { id: 'h4', name: 'มงกุฎดอกไม้', price: 150, icon: '🌸', layerHtml: '<div class="absolute -top-3 text-5xl">🌸</div>' },
-                { id: 'h5', name: 'หมวกโจรสลัด', price: 200, icon: '🏴‍☠️', layerHtml: '<div class="absolute -top-5 text-6xl">🏴‍☠️</div>' },
-                { id: 'h6', name: 'โบสีแดง', price: 80, icon: '🎀', layerHtml: '<div class="absolute -top-2 text-5xl">🎀</div>' },
-                { id: 'h7', name: 'หมวกเชฟ', price: 120, icon: '👨‍🍳', layerHtml: '<div class="absolute -top-6 text-6xl">👨‍🍳</div>' },
-                { id: 'h8', name: 'หมวกไหมพรม', price: 150, icon: '🧶', layerHtml: '<div class="absolute -top-4 text-5xl">🧢</div>' }
+                { id: 'h1', name: 'มงกุฎกษัตริย์', price: 0, icon: '👑', render: '<span class="text-5xl -mt-44 ml-1">👑</span>' },
+                { id: 'h2', name: 'หมวกปาร์ตี้', price: 10, icon: '🎉', render: '<span class="text-5xl -mt-44 ml-1">🎉</span>' },
+                { id: 'h3', name: 'มงกุฎดอกไม้', price: 15, icon: '🌸', render: '<span class="text-5xl -mt-40 ml-1">🌸</span>' },
+                { id: 'h4', name: 'โบว์สีแดง', price: 12, icon: '🎀', render: '<span class="text-5xl -mt-40 ml-1">🎀</span>' },
+                { id: 'h5', name: 'หมวกเชฟ', price: 20, icon: '👨‍🍳', render: '<span class="text-5xl -mt-48 ml-1">👨‍🍳</span>' },
+                { id: 'h6', name: 'หมวกโจรสลัด', price: 25, icon: '🏴‍☠️', render: '<span class="text-5xl -mt-44 ml-1">🏴‍☠️</span>' },
+                { id: 'h7', name: 'หมวกรับปริญญา', price: 30, icon: '🎓', render: '<span class="text-5xl -mt-44 ml-1">🎓</span>' }
             ],
-            clothes: [
-                { id: 'c1', name: 'ชุดเอี๊ยม', price: 0, icon: '👖', layerHtml: '<div class="absolute top-[115px] text-5xl">👖</div>' },
-                { id: 'c2', name: 'เดรสสีหวาน', price: 150, icon: '👗', layerHtml: '<div class="absolute top-[115px] text-5xl">👗</div>' },
-                { id: 'c3', name: 'ชุดทักซิโด้', price: 300, icon: '🥋', layerHtml: '<div class="absolute top-[115px] text-5xl">👔</div>' },
-                { id: 'c4', name: 'เสื้อฮู้ดดี้', price: 200, icon: '🧥', layerHtml: '<div class="absolute top-[115px] text-5xl">🧥</div>' },
-                { id: 'c5', name: 'ชุดกะลาสี', price: 250, icon: '👔', layerHtml: '<div class="absolute top-[115px] text-5xl">🎽</div>' },
-                { id: 'c6', name: 'ชุดแม่มด', price: 350, icon: '🧙‍♀️', layerHtml: '<div class="absolute top-[115px] text-5xl">🥻</div>' },
-                { id: 'c7', name: 'เสื้อฮาวาย', price: 180, icon: '🌺', layerHtml: '<div class="absolute top-[115px] text-5xl">👕</div>' },
-                { id: 'c8', name: 'ผ้าคลุมฮีโร่', price: 400, icon: '🦸‍♂️', layerHtml: '<div class="absolute top-[110px] text-6xl">🦸‍♂️</div>' }
+            outfit: [
+                { id: 'o1', name: 'ฮู้ดดี้สีเขียว', price: 0, icon: '🧥', render: '<span class="text-6xl mt-16">🧥</span>' },
+                { id: 'o2', name: 'เดรสหวานแหวว', price: 15, icon: '👗', render: '<span class="text-6xl mt-16">👗</span>' },
+                { id: 'o3', name: 'ทักซิโด้สุดหรู', price: 25, icon: '👔', render: '<span class="text-6xl mt-16">👔</span>' },
+                { id: 'o4', name: 'ผ้าคลุมซูเปอร์ฮีโร่', price: 30, icon: '🦸‍♂️', render: '<span class="text-6xl mt-16">🦸‍♂️</span>' },
+                { id: 'o5', name: 'ชุดกะลาสี', price: 20, icon: '🎽', render: '<span class="text-6xl mt-16">🎽</span>' },
+                { id: 'o6', name: 'ชุดพ่อมด', price: 35, icon: '🧙‍♂️', render: '<span class="text-6xl mt-16">🧙‍♂️</span>' }
             ],
             shoes: [
-                { id: 's1', name: 'รองเท้าผ้าใบ', price: 0, icon: '👟', layerHtml: '<div class="absolute top-[165px] flex gap-8 text-2xl"><span>👟</span><span>👟</span></div>' },
-                { id: 's2', name: 'รองเท้าบูท', price: 120, icon: '🥾', layerHtml: '<div class="absolute top-[165px] flex gap-8 text-2xl"><span>🥾</span><span>🥾</span></div>' },
-                { id: 's3', name: 'สเกตบอร์ด/สเกต', price: 250, icon: '🛼', layerHtml: '<div class="absolute top-[165px] flex gap-8 text-2xl"><span>🛼</span><span>🛼</span></div>' },
-                { id: 's4', name: 'บูททองคำ', price: 500, icon: '🩰', layerHtml: '<div class="absolute top-[165px] flex gap-8 text-2xl"><span>✨</span><span>✨</span></div>' },
-                { id: 's5', name: 'สลิปเปอร์', price: 80, icon: '🩴', layerHtml: '<div class="absolute top-[165px] flex gap-8 text-2xl"><span>🩴</span><span>🩴</span></div>' },
-                { id: 's6', name: 'ถุงเท้าอุ้งเท้า', price: 100, icon: '🧦', layerHtml: '<div class="absolute top-[165px] flex gap-8 text-2xl"><span>🧦</span><span>🧦</span></div>' }
-            ],
-            extras: [
-                { id: 'e1', name: 'แว่นกันแดด', price: 0, icon: '🕶️', layerHtml: '<div class="absolute top-[62px] text-3xl">🕶️</div>' },
-                { id: 'e2', name: 'แว่นตาตลก', price: 90, icon: '👓', layerHtml: '<div class="absolute top-[62px] text-3xl">👓</div>' },
-                { id: 'e3', name: 'คทาเวทมนตร์', price: 300, icon: '🪄', layerHtml: '<div class="absolute top-[110px] right-6 text-4xl">🪄</div>' },
-                { id: 'e4', name: 'กระเป๋าสะพาย', price: 150, icon: '🎒', layerHtml: '<div class="absolute top-[120px] left-8 text-3xl">🎒</div>' },
-                { id: 'e5', name: 'ออร่าประกายดาว', price: 450, icon: '⭐', layerHtml: '<div class="absolute text-7xl animate-pulse">✨</div>' }
+                { id: 's1', name: 'ผ้าใบสีแดง', price: 0, icon: '👟', render: '<div class="flex gap-16 mt-44 text-2xl"><span>👟</span><span>👟</span></div>' },
+                { id: 's2', name: 'รองเท้าบูท', price: 10, icon: '🥾', render: '<div class="flex gap-16 mt-44 text-2xl"><span>🥾</span><span>🥾</span></div>' },
+                { id: 's3', name: 'สเกตบอร์ด', price: 20, icon: '🛼', render: '<div class="flex gap-16 mt-44 text-2xl"><span>🛼</span><span>🛼</span></div>' },
+                { id: 's4', name: 'บูททองคำ', price: 40, icon: '✨', render: '<div class="flex gap-16 mt-44 text-2xl"><span>✨</span><span>✨</span></div>' }
             ]
         };
 
-        // Purchased Trackers
-        let purchasedItems = new Set(['h1', 'c1', 's1', 'e1']); // Default unlocked items
+        let currentDressCategory = 'head';
 
-        // Initialize App
-        window.onload = () => {
-            renderGrid();
-            updateUI();
-        };
-
-        // Switch Category Tabs
-        function switchCategory(cat) {
-            currentCategory = cat;
-            document.querySelectorAll('.tab-btn').forEach(btn => {
-                btn.classList.remove('bg-pink-500', 'text-white', 'active-tab');
-                btn.classList.add('bg-pink-50', 'text-pink-600');
+        function switchDressCategory(cat) {
+            currentDressCategory = cat;
+            document.querySelectorAll('.dress-tab-btn').forEach(btn => {
+                btn.className = "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200";
             });
-            const activeBtn = document.getElementById(`tab-${cat}`);
-            activeBtn.classList.remove('bg-pink-50', 'text-pink-600');
-            activeBtn.classList.add('bg-pink-500', 'text-white', 'active-tab');
-
-            renderGrid();
+            const activeBtn = document.getElementById(`cat-${cat}-btn`);
+            activeBtn.className = "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300 shadow-sm";
+            renderDressItems();
         }
 
-        // Render Item Cards
-        function renderGrid() {
-            const grid = document.getElementById('items-grid');
+        function renderDressItems() {
+            const grid = document.getElementById('dressItemsGrid');
             grid.innerHTML = '';
 
-            items[currentCategory].forEach(item => {
-                const isOwned = purchasedItems.has(item.id);
-                const isEquipped = equipped[currentCategory]?.id === item.id;
+            DRESS_ITEMS[currentDressCategory].forEach(item => {
+                const isUnlocked = gameState.unlocked.includes(item.id);
+                const isEquipped = gameState.equipped[currentDressCategory] === item.id;
 
                 const card = document.createElement('div');
-                card.className = `item-card p-3 rounded-2xl border-2 flex flex-col items-center justify-between text-center cursor-pointer ${
-                    isEquipped 
-                        ? 'border-pink-500 bg-pink-100/60 shadow-md' 
-                        : 'border-pink-100 bg-pink-50/30 hover:border-pink-300'
+                card.className = `p-2.5 rounded-2xl border-2 flex flex-col items-center justify-between transition-all cursor-pointer ${
+                    isEquipped ? 'bg-pink-100 border-pink-500 shadow-md scale-95' : 'bg-slate-50 border-pink-100 hover:border-pink-300'
                 }`;
 
-                card.onclick = () => handleItemClick(item);
+                card.onclick = () => handleItemSelect(item, currentDressCategory);
 
                 card.innerHTML = `
-                    <div class="text-4xl mb-1">${item.icon}</div>
-                    <div class="font-bold text-xs text-slate-700 mb-2">${item.name}</div>
+                    <span class="text-3xl my-1">${item.icon}</span>
+                    <p class="text-[11px] font-black text-slate-800 text-center leading-tight mb-1.5">${item.name}</p>
                     ${
                         isEquipped 
-                        ? `<span class="bg-pink-500 text-white text-[10px] px-2 py-0.5 rounded-full font-bold">กำลังใส่</span>`
-                        : isOwned
-                        ? `<span class="bg-emerald-100 text-emerald-600 text-[10px] px-2 py-0.5 rounded-full font-bold">สวมใส่</span>`
-                        : `<span class="bg-yellow-100 text-yellow-700 text-[10px] px-2 py-0.5 rounded-full font-bold flex items-center gap-1">🐟 ${item.price}</span>`
+                            ? `<span class="bg-pink-500 text-white font-black text-[10px] px-2.5 py-0.5 rounded-full">สวมใส่อยู่</span>`
+                            : isUnlocked 
+                                ? `<span class="bg-emerald-100 text-emerald-700 font-black text-[10px] px-2.5 py-0.5 rounded-full border border-emerald-300">ใส่ชุดนี้</span>`
+                                : `<span class="bg-amber-400 text-slate-900 font-black text-[10px] px-2.5 py-0.5 rounded-full shadow-sm">🐟 ${item.price}</span>`
                     }
                 `;
-
                 grid.appendChild(card);
             });
         }
 
-        // Handle Item Click (Buy or Equip/Unequip)
-        function handleItemClick(item) {
-            const isOwned = purchasedItems.has(item.id);
+        function handleItemSelect(item, category) {
+            const isUnlocked = gameState.unlocked.includes(item.id);
 
-            if (!isOwned) {
-                // Buy logic
-                if (fish >= item.price) {
-                    fish -= item.price;
-                    purchasedItems.add(item.id);
-                    equipped[currentCategory] = item;
+            if (!isUnlocked) {
+                if (gameState.fish >= item.price) {
+                    gameState.fish -= item.price;
+                    gameState.unlocked.push(item.id);
+                    gameState.equipped[category] = item.id;
+                    playSound(600, 'sine', 0.2);
+                    showToast(`ปลดล็อก ${item.name} แล้ว!`, '🎉');
+                    saveUserData();
+                    renderDressItems();
                 } else {
-                    alert('ปลาไม่พอ! กดปุ่ม "+ เพิ่มปลา" ได้เลยนะ');
-                    return;
+                    showToast('ปลาไม่พอ! ทำภารกิจเพื่อรับปลาเพิ่ม', '⚠️');
                 }
             } else {
-                // Toggle equip logic
-                if (equipped[currentCategory]?.id === item.id) {
-                    equipped[currentCategory] = null; // Unequip
+                if (gameState.equipped[category] === item.id) {
+                    gameState.equipped[category] = null; // Unequip
+                    showToast(`ถอด ${item.name} แล้ว`, '👕');
                 } else {
-                    equipped[currentCategory] = item; // Equip
+                    gameState.equipped[category] = item.id; // Equip
+                    playSound(700, 'sine', 0.15);
+                    showToast(`สวมใส่ ${item.name}!`, '✨');
                 }
-            }
-
-            updateUI();
-            renderGrid();
-            renderCatOutfit();
-        }
-
-        // Render Cat Layers
-        function renderCatOutfit() {
-            document.getElementById('layer-head').innerHTML = equipped.head ? equipped.head.layerHtml : '';
-            document.getElementById('layer-clothes').innerHTML = equipped.clothes ? equipped.clothes.layerHtml : '';
-            document.getElementById('layer-shoes').innerHTML = equipped.shoes ? equipped.shoes.layerHtml : '';
-            
-            const extraLayer = document.getElementById('layer-extra');
-            const auraLayer = document.getElementById('layer-aura');
-
-            if (equipped.extras) {
-                if (equipped.extras.id === 'e5') { // Aura Special
-                    auraLayer.innerHTML = equipped.extras.layerHtml;
-                    auraLayer.style.opacity = '1';
-                    extraLayer.innerHTML = '';
-                } else {
-                    extraLayer.innerHTML = equipped.extras.layerHtml;
-                    auraLayer.innerHTML = '';
-                    auraLayer.style.opacity = '0';
-                }
-            } else {
-                extraLayer.innerHTML = '';
-                auraLayer.innerHTML = '';
-                auraLayer.style.opacity = '0';
+                saveUserData();
+                renderDressItems();
             }
         }
 
-        // Random Outfit Button
-        function randomOutfit() {
-            Object.keys(items).forEach(cat => {
-                const available = items[cat].filter(i => purchasedItems.has(i.id));
-                if (available.length > 0 && Math.random() > 0.2) {
-                    const randomItem = available[Math.floor(Math.random() * available.length)];
-                    equipped[cat] = randomItem;
-                } else {
-                    equipped[cat] = null;
-                }
-            });
-            renderCatOutfit();
-            renderGrid();
-        }
-
-        // Reset Outfit
         function resetOutfit() {
-            equipped = { head: null, clothes: null, shoes: null, extras: null };
-            renderCatOutfit();
-            renderGrid();
+            gameState.equipped = { head: null, outfit: null, shoes: null };
+            saveUserData();
+            renderDressItems();
+            showToast("ถอดชุดทั้งหมดแล้ว", "🧼");
         }
 
-        // Add Fish Counter
-        function addFish() {
-            fish += 200;
-            updateUI();
-            renderGrid();
+        function applyOutfitToCat() {
+            const headSlot = document.querySelector('.slot-head');
+            const outfitSlot = document.querySelector('.slot-outfit');
+            const shoesSlot = document.querySelector('.slot-shoes');
+
+            headSlot.innerHTML = '';
+            outfitSlot.innerHTML = '';
+            shoesSlot.innerHTML = '';
+
+            if (gameState.equipped.head) {
+                const item = DRESS_ITEMS.head.find(i => i.id === gameState.equipped.head);
+                if (item) headSlot.innerHTML = item.render;
+            }
+            if (gameState.equipped.outfit) {
+                const item = DRESS_ITEMS.outfit.find(i => i.id === gameState.equipped.outfit);
+                if (item) outfitSlot.innerHTML = item.render;
+            }
+            if (gameState.equipped.shoes) {
+                const item = DRESS_ITEMS.shoes.find(i => i.id === gameState.equipped.shoes);
+                if (item) shoesSlot.innerHTML = item.render;
+            }
         }
 
-        // Update Global UI
-        function updateUI() {
-            document.getElementById('fish-count').innerText = fish.toLocaleString();
+        let activeMissionData = null;
+
+        function openMissionUploadModal(name, rewardFish, rewardEnergy) {
+            activeMissionData = { name, rewardFish, rewardEnergy };
+            document.getElementById('modalMissionName').innerText = `Mission: ${name}`;
+            document.getElementById('photoPreview').classList.add('hidden');
+            document.getElementById('uploadPlaceholder').classList.remove('hidden');
+            document.getElementById('photoModal').classList.remove('hidden');
+        }
+
+        function triggerFileSelect() { document.getElementById('photoFileInput').click(); }
+
+        function handlePhotoUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.getElementById('photoPreview');
+                    img.src = event.target.result;
+                    img.classList.remove('hidden');
+                    document.getElementById('uploadPlaceholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
+            }
+        }
+
+        function closePhotoModal() {
+            document.getElementById('photoModal').classList.add('hidden');
+            document.getElementById('photoFileInput').value = '';
+        }
+
+        function submitMissionWithPhoto() {
+            const preview = document.getElementById('photoPreview');
+            if (preview.classList.contains('hidden') || !preview.src) {
+                showToast('Please attach a photo proof first!', '⚠️');
+                return;
+            }
+            playSound(650, 'sine', 0.2);
+            gameState.fish += activeMissionData.rewardFish;
+            gameState.energy = Math.min(100, gameState.energy + activeMissionData.rewardEnergy);
+            saveUserData();
+            closePhotoModal();
+            showToast(`Verified! +${activeMissionData.rewardFish} 🐟 & +${activeMissionData.rewardEnergy}⚡`, '🌿');
+        }
+
+        function setCatSleepState(sleep) {
+            isSleeping = sleep;
+            const awakeEyes = document.getElementById('catEyesAwake');
+            const sleepEyes = document.getElementById('catEyesSleep');
+            const zzz = document.getElementById('sleepEffect');
+            const label = document.getElementById('catStatusLabel');
+
+            if (sleep) {
+                awakeEyes.classList.add('hidden');
+                sleepEyes.classList.remove('hidden');
+                zzz.classList.remove('hidden');
+                label.innerText = "😴 SHH... KITTY IS TAKING A NAP!";
+                label.className = "text-xs font-black text-purple-700 mt-2 bg-purple-100 px-5 py-2 rounded-full border-2 border-purple-300 shadow-md z-10";
+            } else {
+                awakeEyes.classList.remove('hidden');
+                sleepEyes.classList.add('hidden');
+                zzz.classList.add('hidden');
+                label.innerText = "✨ TAP TO PET KITTY (+1⚡)";
+                label.className = "text-xs font-black text-rose-600 mt-2 bg-white px-5 py-2 rounded-full border-2 border-rose-300 shadow-md z-10";
+            }
+        }
+
+        function spawnHeartFX(x, y) {
+            const stage = document.getElementById('catStage');
+            const rect = stage.getBoundingClientRect();
+            const heart = document.createElement('div');
+            heart.className = 'heart-pop';
+            heart.innerText = ['💖', '✨', '🌸', '💕'][Math.floor(Math.random() * 4)];
+            heart.style.left = `${x - rect.left}px`;
+            heart.style.top = `${y - rect.top}px`;
+            stage.appendChild(heart);
+            setTimeout(() => heart.remove(), 900);
+        }
+
+        function petCat(e) {
+            spawnHeartFX(e.clientX, e.clientY);
+            if (isSleeping) {
+                setCatSleepState(false);
+                showToast("Woke up the kitty!", "🐱");
+                return;
+            }
+            if (gameState.energy >= 100) {
+                showToast("Energy is already maxed!", "⚡");
+                return;
+            }
+            playSound(800, 'sine', 0.15);
+            gameState.energy = Math.min(100, gameState.energy + 1);
+            saveUserData();
+        }
+
+        function feedCat() {
+            if (isSleeping) setCatSleepState(false);
+            if (gameState.energy >= 100) { showToast("Kitty is full!", "⚡"); return; }
+            if (gameState.fish < 5) { showToast('Not enough fish!', '⚠️'); return; }
+            playSound(450, 'triangle', 0.15);
+            gameState.fish -= 5;
+            gameState.energy = Math.min(100, gameState.energy + 15);
+            saveUserData();
+            showToast('Fed kitty! (-5🐟 / +15⚡)', '🍱');
+        }
+
+        function restCat() {
+            if (gameState.energy >= 100) { showToast("Energy is full!", "⚡"); return; }
+            playSound(350, 'sine', 0.3);
+            gameState.energy = Math.min(100, gameState.energy + 30);
+            saveUserData();
+            setCatSleepState(true);
+            showToast('Kitty went to nap (+30⚡)', '😴');
+        }
+
+        // ==========================================
+        // AUTOMATIC ENERGY DECAY: -1 Energy every 3 minutes (180,000ms)
+        // ==========================================
+        setInterval(() => {
+            if (currentUser && gameState.energy > 0) {
+                gameState.energy = Math.max(0, gameState.energy - 1);
+                saveUserData();
+            }
+        }, 180000);
+
+        function openClaimModal() { document.getElementById('claimModal').classList.remove('hidden'); }
+        function closeClaimModal() { document.getElementById('claimModal').classList.add('hidden'); }
+
+        async function submitWinnerClaim() {
+            const fullName = document.getElementById('claimFullName').value.trim();
+            const phone = document.getElementById('claimPhone').value.trim();
+            const address = document.getElementById('claimAddress').value.trim();
+            const confirmPass = document.getElementById('claimConfirmPassword').value.trim();
+
+            if (!fullName || !phone || !address || !confirmPass) {
+                showToast("Please fill all fields!", "⚠️");
+                return;
+            }
+
+            const db = getUsersDB();
+            const passHash = await hashPassword(confirmPass);
+            if (db[currentUser].passwordHash !== passHash) {
+                showToast("Incorrect password!", "❌");
+                return;
+            }
+
+            let winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
+            winners.push({ username: currentUser, fullName, phone, address, claimedAt: new Date().toISOString() });
+            localStorage.setItem('energycat_winners_claims', JSON.stringify(winners));
+
+            playSound(750, 'sine', 0.25);
+            closeClaimModal();
+            showToast("Claim request submitted! 🎁", "🎉");
+        }
+
+        function openAdminModal() {
+            const db = getUsersDB();
+            document.getElementById('adminTotalUsersCount').innerText = Object.keys(db).length;
+
+            const winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
+            const listContainer = document.getElementById('adminWinnersList');
+            listContainer.innerHTML = '';
+
+            if (winners.length === 0) {
+                listContainer.innerHTML = `<p class="text-slate-400 italic font-bold text-center py-2">No claim requests yet.</p>`;
+            } else {
+                winners.forEach(w => {
+                    const div = document.createElement('div');
+                    div.className = "bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm";
+                    div.innerHTML = `
+                        <p class="font-black text-rose-900">🏆 ${w.username} (${w.fullName})</p>
+                        <p class="text-[11px] text-slate-600 font-bold">📞 ${w.phone} | 🏠 ${w.address}</p>
+                    `;
+                    listContainer.appendChild(div);
+                });
+            }
+
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+
+        function exportWinnersCSV() {
+            const winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
+            if (winners.length === 0) {
+                showToast("No winner data to export!", "⚠️");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,Username,Full Name,Phone,Address,Claim Date\n";
+            winners.forEach(w => {
+                csvContent += `"${w.username}","${w.fullName}","${w.phone}","${w.address}","${w.claimedAt}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `energy_cat_winners_${Date.now()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("CSV Exported!", "📥");
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('text-rose-600', 'bg-rose-100');
+                el.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            activeNav.classList.remove('text-slate-400');
+            activeNav.classList.add('text-rose-600', 'bg-rose-100');
+
+            if (tabId === 'dressup') {
+                renderDressItems();
+            }
+
+            playSound(550, 'sine', 0.1);
+        }
+
+        // Init App Session
+        const sessionUser = localStorage.getItem('energycat_current_session');
+        if (sessionUser && getUsersDB()[sessionUser]) {
+            currentUser = sessionUser;
+            document.getElementById('authModal').classList.add('hidden');
+            loadUserData();
+        } else {
+            document.getElementById('authModal').classList.remove('hidden');
         }
     </script>
 </body>
