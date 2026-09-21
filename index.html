@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Energy Cat: Kawaii Wardrobe & Eco Tracker</title>
+    <title>Eco Energy Cat: Smartphone Edition</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- FontAwesome Icons -->
@@ -13,355 +13,368 @@
 
     <style>
         :root {
-            --primary: #ff8fa3;
-            --primary-dark: #ff4d6d;
-            --secondary: #8ac926;
-            --accent: #ffca3a;
-            --card-bg: rgba(255, 255, 255, 0.95);
+            --pink-main: #f72585;
+            --purple-main: #7209b7;
+            --purple-light: #b5179e;
+            --pastel-bg-start: #ffc6ff;
+            --pastel-bg-end: #e0aaff;
         }
 
         body {
             font-family: 'Nunito', sans-serif;
-            background: linear-gradient(135deg, #ffdee9 0%, #b5fffc 100%);
+            background: linear-gradient(135deg, var(--pastel-bg-start) 0%, var(--pastel-bg-end) 100%);
             min-height: 100vh;
-            color: #4a4e69;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 10px;
+            margin: 0;
         }
 
         h1, h2, h3, .font-heading {
             font-family: 'Fredoka', sans-serif;
         }
 
-        .kawaii-card {
-            background: var(--card-bg);
-            border-radius: 24px;
-            box-shadow: 0 10px 25px rgba(255, 143, 163, 0.2);
-            backdrop-filter: blur(10px);
+        /* --- SMARTPHONE CONTAINER FRAME --- */
+        .phone-frame {
+            width: 100%;
+            max-width: 410px;
+            height: 820px;
+            background: #ffffff;
+            border-radius: 42px;
+            box-shadow: 0 20px 50px rgba(114, 9, 183, 0.3), 0 0 0 12px #2b2b2b;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+            overflow: hidden;
         }
 
-        /* --- 2D CAT CANVAS AVATAR --- */
-        .cat-avatar-stage {
-            position: relative;
-            width: 220px;
-            height: 220px;
-            margin: 0 auto;
-            background: #ffffff;
+        /* Phone Notch */
+        .phone-notch {
+            width: 140px;
+            height: 22px;
+            background: #2b2b2b;
+            position: absolute;
+            top: 0;
+            left: 50%;
+            transform: translateX(-50%);
+            border-bottom-left-radius: 14px;
+            border-bottom-right-radius: 14px;
+            z-index: 50;
+        }
+
+        /* Pink-Purple Theme Buttons */
+        .btn-purple {
+            background: linear-gradient(135deg, var(--pink-main), var(--purple-main));
+            color: white;
+            transition: all 0.2s ease;
+        }
+        .btn-purple:hover {
+            opacity: 0.95;
+            transform: translateY(-1px);
+        }
+
+        /* 2D Cat Stage Avatar */
+        .cat-stage {
+            width: 180px;
+            height: 180px;
             border-radius: 50%;
-            border: 6px solid var(--primary);
+            background: radial-gradient(circle, #ffffff 60%, #f3c4fb 100%);
+            border: 4px solid var(--purple-light);
+            position: relative;
             display: flex;
             align-items: center;
             justify-content: center;
-            box-shadow: 0 10px 25px rgba(0,0,0,0.08);
-            overflow: visible;
+            margin: 0 auto;
+            box-shadow: 0 8px 20px rgba(114, 9, 183, 0.15);
         }
 
-        /* 2D Cat Elements Base */
-        .cat-body-layer {
-            font-size: 6.5rem;
+        .cat-avatar {
+            font-size: 5.8rem;
+            transition: all 0.3s ease;
             position: relative;
             z-index: 1;
-            transition: all 0.3s ease;
         }
 
-        /* Hat Position (Top of Head) */
-        .layer-hat {
+        .cat-hat-layer {
             position: absolute;
-            top: -15px;
-            font-size: 3.2rem;
+            top: -12px;
+            font-size: 2.8rem;
             z-index: 10;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
         }
 
-        /* Apron / Bib Position (Front Cover of Body) */
-        .layer-apron {
+        .cat-apron-layer {
             position: absolute;
-            bottom: 30px;
-            font-size: 3.5rem;
+            bottom: 20px;
+            font-size: 3.2rem;
             z-index: 5;
-            filter: drop-shadow(0 2px 4px rgba(0,0,0,0.15));
         }
 
-        .energy-progress {
-            transition: width 0.5s ease-in-out, background-color 0.5s ease;
+        .progress-bar-inner {
+            transition: width 0.4s ease, background-color 0.4s ease;
         }
     </style>
 </head>
-<body class="flex flex-col min-h-screen">
+<body>
 
-    <!-- AUTH OVERLAY -->
-    <div id="auth-overlay" class="fixed inset-0 bg-pink-500 bg-opacity-90 z-50 flex items-center justify-center p-4">
-        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center">
-            <div class="text-6xl text-pink-500 mb-3"><i class="fa-solid fa-cat"></i></div>
-            <h2 class="text-3xl font-heading text-gray-800 mb-2">Eco Energy Cat</h2>
-            <p class="text-sm text-gray-500 mb-6">Care for your eco-pet & collect 20 cute outfits!</p>
+    <!-- SMARTPHONE CONTAINER -->
+    <div class="phone-frame">
+        <div class="phone-notch"></div>
 
-            <!-- Tabs -->
-            <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
-                <button id="tab-login" onclick="switchAuth('login')" class="flex-1 py-2 font-bold rounded-lg bg-white text-pink-600 shadow-sm">Login</button>
-                <button id="tab-register" onclick="switchAuth('register')" class="flex-1 py-2 font-bold rounded-lg text-gray-500">Register</button>
-            </div>
+        <!-- AUTH OVERLAY (PINK & PURPLE THEME) -->
+        <div id="auth-overlay" class="absolute inset-0 bg-gradient-to-br from-pink-600 via-purple-700 to-indigo-800 z-40 flex items-center justify-center p-6 text-white text-center">
+            <div class="w-full mt-4">
+                <div class="text-6xl mb-2"><i class="fa-solid fa-cat text-pink-300"></i></div>
+                <h2 class="text-3xl font-heading mb-1">Energy Cat</h2>
+                <p class="text-xs text-pink-200 mb-6">Mobile Eco-Pet & Weight Studio</p>
 
-            <!-- Login Form -->
-            <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
-                <input type="text" id="login-user" placeholder="Username" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
-                <input type="password" id="login-pass" placeholder="Password" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
-                <div class="text-right">
-                    <button type="button" onclick="switchAuth('forgot')" class="text-xs text-pink-500 underline font-semibold">Forgot Password?</button>
+                <!-- Auth Tabs -->
+                <div class="flex bg-white/20 p-1 rounded-xl mb-4 backdrop-blur-md">
+                    <button id="tab-login" onclick="switchAuth('login')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-white text-purple-900 shadow">Login</button>
+                    <button id="tab-register" onclick="switchAuth('register')" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-pink-100">Register</button>
                 </div>
-                <button type="submit" class="w-full bg-pink-500 text-white font-bold py-3 rounded-xl hover:bg-pink-600 transition">Login & Play 🐾</button>
-            </form>
 
-            <!-- Register Form -->
-            <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
-                <input type="text" id="reg-user" placeholder="Create Username" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
-                <input type="password" id="reg-pass" placeholder="Create Password" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
-                <select id="reg-question" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
-                    <option value="" disabled selected>Select Security Question</option>
-                    <option value="pet">What was your first pet's name?</option>
-                    <option value="city">In what city were you born?</option>
-                    <option value="school">What was the name of your first school?</option>
-                </select>
-                <input type="text" id="reg-answer" placeholder="Security Answer" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
-                <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 rounded-xl hover:bg-green-600 transition">Create Account 🌿</button>
-            </form>
+                <!-- Login Form -->
+                <form id="form-login" onsubmit="handleLogin(event)" class="space-y-3">
+                    <input type="text" id="login-user" placeholder="Username" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
+                    <input type="password" id="login-pass" placeholder="Password" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
+                    <div class="text-right">
+                        <button type="button" onclick="switchAuth('forgot')" class="text-xs text-pink-200 underline">Forgot Password?</button>
+                    </div>
+                    <button type="submit" class="w-full py-3 rounded-xl font-bold bg-pink-500 hover:bg-pink-600 text-white shadow-lg">Login & Play 🐾</button>
+                </form>
 
-            <!-- Forgot Password Form -->
-            <form id="form-forgot" onsubmit="handleForgot(event)" class="space-y-4 hidden">
-                <input type="text" id="forgot-user" placeholder="Your Username" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
-                <select id="forgot-question" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
-                    <option value="" disabled selected>Select Security Question</option>
-                    <option value="pet">What was your first pet's name?</option>
-                    <option value="city">In what city were you born?</option>
-                    <option value="school">What was the name of your first school?</option>
-                </select>
-                <input type="text" id="forgot-answer" placeholder="Security Answer" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
-                <input type="password" id="forgot-newpass" placeholder="New Password" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
-                <button type="submit" class="w-full bg-yellow-500 text-white font-bold py-3 rounded-xl hover:bg-yellow-600 transition">Reset Password 🔑</button>
-                <button type="button" onclick="switchAuth('login')" class="text-xs text-gray-400 underline block mx-auto">Back to Login</button>
-            </form>
+                <!-- Register Form -->
+                <form id="form-register" onsubmit="handleRegister(event)" class="space-y-3 hidden">
+                    <input type="text" id="reg-user" placeholder="Create Username" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
+                    <input type="password" id="reg-pass" placeholder="Create Password" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
+                    <select id="reg-question" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
+                        <option value="" disabled selected>Select Security Question</option>
+                        <option value="pet">First pet's name?</option>
+                        <option value="city">Birth city?</option>
+                        <option value="color">Favorite color?</option>
+                    </select>
+                    <input type="text" id="reg-answer" placeholder="Security Answer" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
+                    <button type="submit" class="w-full py-3 rounded-xl font-bold bg-purple-500 hover:bg-purple-600 text-white shadow-lg">Create Account 🌿</button>
+                </form>
+
+                <!-- Forgot Password Form -->
+                <form id="form-forgot" onsubmit="handleForgot(event)" class="space-y-3 hidden">
+                    <input type="text" id="forgot-user" placeholder="Your Username" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
+                    <select id="forgot-question" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
+                        <option value="" disabled selected>Select Security Question</option>
+                        <option value="pet">First pet's name?</option>
+                        <option value="city">Birth city?</option>
+                        <option value="color">Favorite color?</option>
+                    </select>
+                    <input type="text" id="forgot-answer" placeholder="Security Answer" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
+                    <input type="password" id="forgot-newpass" placeholder="New Password" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
+                    <button type="submit" class="w-full py-3 rounded-xl font-bold bg-yellow-500 text-white shadow-lg">Reset Password 🔑</button>
+                    <button type="button" onclick="switchAuth('login')" class="text-xs text-pink-200 underline block mx-auto pt-1">Back to Login</button>
+                </form>
+            </div>
         </div>
-    </div>
 
-    <!-- NAVBAR -->
-    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-40 px-6 py-4 shadow-sm flex justify-between items-center">
-        <div class="flex items-center gap-3 text-pink-500 font-heading text-2xl">
-            <i class="fa-solid fa-leaf text-green-500"></i>
-            <span>EcoCat Studio</span>
-        </div>
-        <div class="flex gap-2">
-            <button onclick="navTo('home')" class="nav-btn bg-pink-500 text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-cat"></i> Home</button>
-            <button onclick="navTo('wardrobe')" class="nav-btn text-gray-600 hover:bg-pink-100 px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-shirt"></i> Wardrobe (20)</button>
-            <button onclick="navTo('missions')" class="nav-btn text-gray-600 hover:bg-pink-100 px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-camera"></i> Eco Proof</button>
-            <button onclick="navTo('leaderboard')" class="nav-btn text-gray-600 hover:bg-pink-100 px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-trophy"></i> Rank</button>
-            <button onclick="logout()" class="text-red-400 hover:text-red-600 px-3 py-2"><i class="fa-solid fa-right-from-bracket"></i></button>
-        </div>
-    </nav>
+        <!-- APP HEADER (STATUS & LOGOUT) -->
+        <header class="pt-7 px-5 pb-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white flex justify-between items-center shadow-md">
+            <div>
+                <h1 class="font-heading text-lg leading-tight">Eco Energy Cat</h1>
+                <p class="text-[10px] text-pink-200">Level <span id="display-level">1</span> Pet Companion</p>
+            </div>
+            <div class="flex items-center gap-2">
+                <div class="bg-yellow-400 text-purple-950 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-sm">
+                    <i class="fa-solid fa-fish"></i> <span id="display-fish">0</span>
+                </div>
+                <button onclick="logout()" class="text-white/80 hover:text-white text-sm ml-1"><i class="fa-solid fa-right-from-bracket"></i></button>
+            </div>
+        </header>
 
-    <!-- MAIN APP CONTAINER -->
-    <main class="flex-1 max-w-5xl w-full mx-auto p-6">
+        <!-- VIEW PANELS CONTAINER -->
+        <div class="flex-1 overflow-y-auto p-4 space-y-4">
 
-        <!-- VIEW 1: PET HOME -->
-        <section id="view-home" class="view-panel space-y-6">
-            <div class="grid md:grid-cols-3 gap-6">
-                <!-- Cat Display -->
-                <div class="md:col-span-2 kawaii-card p-6 text-center flex flex-col justify-between items-center relative min-h-[400px]">
-                    <div class="w-full flex justify-between items-center">
-                        <div class="bg-yellow-400 text-yellow-900 font-bold px-4 py-2 rounded-full flex items-center gap-2 text-sm shadow-sm">
-                            <i class="fa-solid fa-fish"></i> <span id="display-fish">0</span> Fish Currency
-                        </div>
-                        <div class="text-xs text-gray-400 font-semibold">Decay: -1 Energy / 3 Mins</div>
+            <!-- PAGE 1: PET CARE & LEVEL -->
+            <section id="view-page1" class="view-panel space-y-4">
+                <!-- Level & Progress -->
+                <div class="bg-purple-50 p-3 rounded-2xl border border-purple-100 flex items-center justify-between">
+                    <div class="text-xs font-bold text-purple-900">Pet Level Status</div>
+                    <div class="text-xs font-bold text-pink-600">Lv. <span id="stat-level">1</span> (<span id="stat-exp">0</span>/100 EXP)</div>
+                </div>
+
+                <!-- Cat Stage -->
+                <div class="bg-white p-4 rounded-3xl shadow-sm text-center border border-pink-100 relative">
+                    <div class="cat-stage">
+                        <div id="cat-hat" class="cat-hat-layer"></div>
+                        <div id="cat-apron" class="cat-apron-layer"></div>
+                        <div id="cat-avatar" class="cat-avatar">😸</div>
                     </div>
 
-                    <!-- 2D Cat Avatar Stage -->
-                    <div class="cat-avatar-stage my-4">
-                        <div id="cat-hat" class="layer-hat"></div>
-                        <div id="cat-apron" class="layer-apron"></div>
-                        <div id="cat-body" class="cat-body-layer">🐱</div>
-                    </div>
-
-                    <!-- Energy Bar & Sad Reaction -->
-                    <div class="w-full space-y-2">
-                        <div class="flex justify-between text-sm font-bold">
-                            <span>Energy Status</span>
+                    <!-- Energy Bar -->
+                    <div class="mt-4 space-y-1">
+                        <div class="flex justify-between text-xs font-bold text-gray-600">
+                            <span>Energy</span>
                             <span id="energy-text">100 / 100%</span>
                         </div>
-                        <div class="w-full bg-gray-200 h-5 rounded-full overflow-hidden p-1">
-                            <div id="energy-bar" class="energy-progress bg-green-500 h-full rounded-full w-full"></div>
+                        <div class="w-full bg-gray-200 h-4 rounded-full overflow-hidden p-0.5">
+                            <div id="energy-bar" class="progress-bar-inner bg-green-500 h-full rounded-full w-full"></div>
                         </div>
-                        <p id="cat-mood" class="text-xs font-semibold text-gray-500">Mood: Happy & Energetic! ✨</p>
+                        <p id="cat-status-msg" class="text-[11px] font-semibold text-purple-600 pt-1">Mood: Happy & Full of Energy! ✨</p>
                     </div>
                 </div>
 
-                <!-- Care Controls & Weight -->
-                <div class="space-y-6">
-                    <div class="kawaii-card p-6 space-y-3">
-                        <h3 class="font-heading text-lg text-gray-700">Pet Care</h3>
-                        <button onclick="careAction('feed')" class="w-full bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 shadow-sm">
-                            <i class="fa-solid fa-bowl-food"></i> Feed Snack (+20 Energy)
-                        </button>
-                        <button onclick="careAction('play')" class="w-full bg-purple-400 hover:bg-purple-500 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 shadow-sm">
-                            <i class="fa-solid fa-baseball"></i> Play Toy (+10 Energy, +2 Fish)
-                        </button>
-                        <button onclick="careAction('sleep')" class="w-full bg-indigo-400 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 shadow-sm">
-                            <i class="fa-solid fa-bed"></i> Sleep Rest (+40 Energy)
-                        </button>
-                    </div>
-
-                    <div class="kawaii-card p-6 space-y-2">
-                        <h3 class="font-heading text-lg text-gray-700">Weight Log</h3>
-                        <div class="flex justify-between items-center text-sm">
-                            <span>Current Weight:</span>
-                            <span id="stat-weight" class="font-bold text-pink-500">-- kg</span>
-                        </div>
-                        <form onsubmit="logWeight(event)" class="flex gap-2 pt-2">
-                            <input type="number" step="0.1" id="input-weight" placeholder="kg" class="w-full p-2 border rounded-xl outline-none text-sm" required>
-                            <button type="submit" class="bg-green-500 text-white font-bold px-4 py-2 rounded-xl text-xs hover:bg-green-600">Log (+5 Fish)</button>
-                        </form>
-                    </div>
+                <!-- Care Action Buttons -->
+                <div class="grid grid-cols-3 gap-2">
+                    <button onclick="careAction('feed')" class="btn-purple p-3 rounded-2xl text-center shadow-sm">
+                        <i class="fa-solid fa-bowl-food text-lg block mb-1"></i>
+                        <span class="text-[11px] font-bold block">Feed (+20)</span>
+                    </button>
+                    <button onclick="careAction('play')" class="btn-purple p-3 rounded-2xl text-center shadow-sm">
+                        <i class="fa-solid fa-baseball text-lg block mb-1"></i>
+                        <span class="text-[11px] font-bold block">Play (+10)</span>
+                    </button>
+                    <button onclick="careAction('sleep')" class="btn-purple p-3 rounded-2xl text-center shadow-sm">
+                        <i class="fa-solid fa-bed text-lg block mb-1"></i>
+                        <span class="text-[11px] font-bold block">Sleep (+40)</span>
+                    </button>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- VIEW 2: 20-ITEM WARDROBE SHOP -->
-        <section id="view-wardrobe" class="view-panel space-y-6 hidden">
-            <div class="kawaii-card p-6">
-                <div class="flex justify-between items-center mb-6">
-                    <div>
-                        <h2 class="font-heading text-2xl text-pink-500">2D Custom Wardrobe</h2>
-                        <p class="text-xs text-gray-500">Equip 1 Hat and 1 Front Apron to style your cat!</p>
-                    </div>
-                    <!-- Filter Tabs -->
-                    <div class="flex bg-pink-100 p-1 rounded-xl">
-                        <button onclick="filterWardrobe('all')" id="filter-all" class="px-3 py-1 text-xs font-bold rounded-lg bg-white text-pink-500">All (20)</button>
-                        <button onclick="filterWardrobe('hat')" id="filter-hat" class="px-3 py-1 text-xs font-bold rounded-lg text-gray-500">Hats (10)</button>
-                        <button onclick="filterWardrobe('apron')" id="filter-apron" class="px-3 py-1 text-xs font-bold rounded-lg text-gray-500">Aprons (10)</button>
-                    </div>
-                </div>
+            <!-- PAGE 2: ECO PHOTO PROOF -->
+            <section id="view-page2" class="view-panel space-y-4 hidden">
+                <div class="bg-white p-4 rounded-3xl shadow-sm border border-pink-100">
+                    <h2 class="font-heading text-lg text-purple-900 mb-1">Eco-Photo Proof</h2>
+                    <p class="text-xs text-gray-500 mb-4">Complete eco activities, upload photos, and earn Fish Tokens!</p>
 
-                <div class="grid grid-cols-2 md:grid-cols-5 gap-4" id="wardrobe-grid">
-                    <!-- Dynamic 20 Outfit Cards -->
-                </div>
-            </div>
-        </section>
-
-        <!-- VIEW 3: ECO MISSIONS -->
-        <section id="view-missions" class="view-panel space-y-6 hidden">
-            <div class="kawaii-card p-6">
-                <h2 class="font-heading text-2xl text-green-600 mb-2">Eco-Photo Proof Missions</h2>
-                <p class="text-sm text-gray-500 mb-6">Take green actions, upload photo proof, and earn Fish Currency for outfits!</p>
-
-                <div class="grid md:grid-cols-2 gap-4">
-                    <div class="border-2 border-green-100 bg-green-50/50 p-4 rounded-2xl space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-bold text-green-800">1. Unplug Unused Appliances</h3>
-                                <p class="text-xs text-gray-500">Reward: +15 Fish Currency 🐟</p>
+                    <div class="space-y-3">
+                        <div class="border p-3 rounded-2xl bg-pink-50/50 space-y-2">
+                            <div class="flex justify-between items-center text-xs font-bold text-purple-900">
+                                <span>1. Unplug Appliance</span>
+                                <span class="text-yellow-600">+15 Fish 🐟</span>
                             </div>
-                            <span class="text-2xl">🔌</span>
+                            <input type="file" accept="image/*" id="file-p1" class="text-[10px] text-gray-500 w-full">
+                            <button onclick="submitEcoProof('p1', 15)" class="w-full bg-pink-500 text-white text-xs font-bold py-2 rounded-xl">Upload & Claim Reward</button>
                         </div>
-                        <input type="file" accept="image/*" id="file-m1" class="text-xs text-gray-500 w-full">
-                        <button onclick="submitMission('M1', 15)" class="w-full bg-green-500 text-white font-bold py-2 rounded-xl text-xs hover:bg-green-600">Upload & Claim Reward</button>
-                    </div>
 
-                    <div class="border-2 border-green-100 bg-green-50/50 p-4 rounded-2xl space-y-3">
-                        <div class="flex justify-between items-start">
-                            <div>
-                                <h3 class="font-bold text-green-800">2. Plant Care & Watering</h3>
-                                <p class="text-xs text-gray-500">Reward: +20 Fish Currency 🐟</p>
+                        <div class="border p-3 rounded-2xl bg-purple-50/50 space-y-2">
+                            <div class="flex justify-between items-center text-xs font-bold text-purple-900">
+                                <span>2. Water Garden Plants</span>
+                                <span class="text-yellow-600">+20 Fish 🐟</span>
                             </div>
-                            <span class="text-2xl">🌱</span>
+                            <input type="file" accept="image/*" id="file-p2" class="text-[10px] text-gray-500 w-full">
+                            <button onclick="submitEcoProof('p2', 20)" class="w-full bg-purple-600 text-white text-xs font-bold py-2 rounded-xl">Upload & Claim Reward</button>
                         </div>
-                        <input type="file" accept="image/*" id="file-m2" class="text-xs text-gray-500 w-full">
-                        <button onclick="submitMission('M2', 20)" class="w-full bg-green-500 text-white font-bold py-2 rounded-xl text-xs hover:bg-green-600">Upload & Claim Reward</button>
                     </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-        <!-- VIEW 4: LEADERBOARD -->
-        <section id="view-leaderboard" class="view-panel space-y-6 hidden">
-            <div class="kawaii-card p-6">
-                <h2 class="font-heading text-2xl text-purple-600 mb-4">Player Weight Leaderboard</h2>
-                <div class="overflow-x-auto">
-                    <table class="w-full text-left border-collapse">
-                        <thead>
-                            <tr class="border-b text-gray-400 text-xs uppercase">
-                                <th class="p-3">Rank</th>
-                                <th class="p-3">Player</th>
-                                <th class="p-3">Logged Weight</th>
-                                <th class="p-3">Fish Currency</th>
-                            </tr>
-                        </thead>
-                        <tbody id="leaderboard-body" class="divide-y text-sm font-semibold">
-                            <!-- Injected dynamically -->
-                        </tbody>
-                    </table>
+            <!-- PAGE 3: DRESS-UP SHOP -->
+            <section id="view-page3" class="view-panel space-y-4 hidden">
+                <div class="bg-white p-4 rounded-3xl shadow-sm border border-pink-100">
+                    <h2 class="font-heading text-lg text-purple-900 mb-1">Dress-Up Closet</h2>
+                    <p class="text-xs text-gray-500 mb-3">Buy hats & aprons using Fish Currency!</p>
+
+                    <div class="grid grid-cols-2 gap-3" id="wardrobe-grid">
+                        <!-- Dynamic Outfits Injected -->
+                    </div>
                 </div>
-            </div>
-        </section>
+            </section>
 
-    </main>
+            <!-- PAGE 4: WEIGHT LEADERBOARD -->
+            <section id="view-page4" class="view-panel space-y-4 hidden">
+                <div class="bg-white p-4 rounded-3xl shadow-sm border border-pink-100 space-y-3">
+                    <h2 class="font-heading text-lg text-purple-900">Weight & Rank</h2>
 
-    <!-- JS APP LOGIC -->
+                    <!-- Log Weight Form -->
+                    <form onsubmit="logPlayerWeight(event)" class="bg-purple-50 p-3 rounded-2xl flex gap-2">
+                        <input type="number" step="0.1" id="input-weight" placeholder="Weight (kg)" class="w-full p-2 bg-white text-xs rounded-xl border outline-none" required>
+                        <button type="submit" class="bg-purple-600 text-white text-xs font-bold px-3 py-2 rounded-xl whitespace-nowrap">Save (+5 Fish)</button>
+                    </form>
+
+                    <!-- Leaderboard Table -->
+                    <div class="overflow-x-auto">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b text-gray-400">
+                                    <th class="pb-2">Rank</th>
+                                    <th class="pb-2">Player</th>
+                                    <th class="pb-2">Weight</th>
+                                    <th class="pb-2">Fish</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboard-list" class="divide-y font-semibold">
+                                <!-- Dynamic Rank Rows -->
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </section>
+
+        </div>
+
+        <!-- BOTTOM NAV BAR (4 TABS) -->
+        <nav class="bg-white border-t border-pink-100 py-2 px-3 flex justify-around items-center">
+            <button onclick="switchPage(1)" id="nav-p1" class="text-pink-600 flex flex-col items-center">
+                <i class="fa-solid fa-cat text-lg"></i>
+                <span class="text-[10px] font-bold">Pet Care</span>
+            </button>
+            <button onclick="switchPage(2)" id="nav-p2" class="text-gray-400 flex flex-col items-center">
+                <i class="fa-solid fa-camera text-lg"></i>
+                <span class="text-[10px] font-bold">Eco Proof</span>
+            </button>
+            <button onclick="switchPage(3)" id="nav-p3" class="text-gray-400 flex flex-col items-center">
+                <i class="fa-solid fa-shirt text-lg"></i>
+                <span class="text-[10px] font-bold">Closet</span>
+            </button>
+            <button onclick="switchPage(4)" id="nav-p4" class="text-gray-400 flex flex-col items-center">
+                <i class="fa-solid fa-trophy text-lg"></i>
+                <span class="text-[10px] font-bold">Leaderboard</span>
+            </button>
+        </nav>
+
+    </div>
+
+    <!-- JS LOGIC -->
     <script>
-        /* APP STATE */
-        let activeUser = null;
+        /* GLOBAL USER STATE */
+        let currentUser = null;
         let userData = {
             username: '',
             password: '',
             question: '',
             answer: '',
+            level: 1,
+            exp: 0,
             energy: 100,
-            fish: 30,
+            fish: 25,
             weight: 0,
             equippedHat: null,
             equippedApron: null,
             lastDecayTime: Date.now()
         };
 
-        /* 20 WARDROBE ITEMS (10 HATS + 10 FRONT APRONS) */
         const wardrobeCatalog = [
-            // 10 HATS
-            { id: 'h1', name: 'Party Cone', type: 'hat', icon: '🎉', price: 5 },
-            { id: 'h2', name: 'Royal Crown', type: 'hat', icon: '👑', price: 15 },
-            { id: 'h3', name: 'Chef Hat', type: 'hat', icon: '👨‍🍳', price: 10 },
-            { id: 'h4', name: 'Witch Hat', type: 'hat', icon: '🧙‍♀️', price: 12 },
-            { id: 'h5', name: 'Cowboy Hat', type: 'hat', icon: '🤠', price: 12 },
-            { id: 'h6', name: 'Graduate Cap', type: 'hat', icon: '🎓', price: 15 },
-            { id: 'h7', name: 'Cute Bow', type: 'hat', icon: '🎀', price: 8 },
-            { id: 'h8', name: 'Flower Crown', type: 'hat', icon: '🌸', price: 10 },
-            { id: 'h9', name: 'Santa Cap', type: 'hat', icon: '🎅', price: 10 },
-            { id: 'h10', name: 'Bear Ears', type: 'hat', icon: '🐻', price: 10 },
-
-            // 10 FRONT APRONS / BIBS
-            { id: 'a1', name: 'Strawberry Bib', type: 'apron', icon: '🍓', price: 8 },
-            { id: 'a2', name: 'Honey Bee Bib', type: 'apron', icon: '🐝', price: 10 },
-            { id: 'a3', name: 'Star Apron', type: 'apron', icon: '⭐', price: 8 },
-            { id: 'a4', name: 'Chef Apron', type: 'apron', icon: '🎽', price: 12 },
-            { id: 'a5', name: 'Heart Apron', type: 'apron', icon: '💖', price: 10 },
-            { id: 'a6', name: 'Flower Apron', type: 'apron', icon: '🌻', price: 10 },
-            { id: 'a7', name: 'Fish Bib', type: 'apron', icon: '🐟', price: 12 },
-            { id: 'a8', name: 'Clover Bib', type: 'apron', icon: '🍀', price: 10 },
-            { id: 'a9', name: 'Cat Paw Apron', type: 'apron', icon: '🐾', price: 15 },
-            { id: 'a10', name: 'Rainbow Bib', type: 'apron', icon: '🌈', price: 15 }
+            { id: 'h1', name: 'Party Hat', type: 'hat', icon: '🎉', price: 5 },
+            { id: 'h2', name: 'Crown', type: 'hat', icon: '👑', price: 15 },
+            { id: 'h3', name: 'Bow', type: 'hat', icon: '🎀', price: 8 },
+            { id: 'a1', name: 'Strawberry Apron', type: 'apron', icon: '🍓', price: 10 },
+            { id: 'a2', name: 'Bee Bib', type: 'apron', icon: '🐝', price: 10 },
+            { id: 'a3', name: 'Star Apron', type: 'apron', icon: '⭐', price: 12 }
         ];
 
-        let activeFilter = 'all';
-
-        /* AUTHENTICATION SYSTEM */
+        /* AUTH LOGIC */
         function switchAuth(mode) {
             document.getElementById('form-login').classList.add('hidden');
             document.getElementById('form-register').classList.add('hidden');
             document.getElementById('form-forgot').classList.add('hidden');
-            
-            document.getElementById('tab-login').className = "flex-1 py-2 font-bold rounded-lg text-gray-500";
-            document.getElementById('tab-register').className = "flex-1 py-2 font-bold rounded-lg text-gray-500";
+
+            document.getElementById('tab-login').className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-pink-100";
+            document.getElementById('tab-register').className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-pink-100";
 
             if (mode === 'login') {
                 document.getElementById('form-login').classList.remove('hidden');
-                document.getElementById('tab-login').className = "flex-1 py-2 font-bold rounded-lg bg-white text-pink-600 shadow-sm";
+                document.getElementById('tab-login').className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white text-purple-900 shadow";
             } else if (mode === 'register') {
                 document.getElementById('form-register').classList.remove('hidden');
-                document.getElementById('tab-register').className = "flex-1 py-2 font-bold rounded-lg bg-white text-green-600 shadow-sm";
+                document.getElementById('tab-register').className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white text-purple-900 shadow";
             } else if (mode === 'forgot') {
                 document.getElementById('form-forgot').classList.remove('hidden');
             }
@@ -374,7 +387,7 @@
             const q = document.getElementById('reg-question').value;
             const a = document.getElementById('reg-answer').value.trim().toLowerCase();
 
-            if (localStorage.getItem('ec_user_' + u)) {
+            if (localStorage.getItem('sm_user_' + u)) {
                 alert('Username already exists!');
                 return;
             }
@@ -384,15 +397,17 @@
                 password: p,
                 question: q,
                 answer: a,
+                level: 1,
+                exp: 0,
                 energy: 100,
-                fish: 30, // Gift starter fish
-                weight: 60.0,
+                fish: 25,
+                weight: 55.0,
                 equippedHat: null,
                 equippedApron: null,
                 lastDecayTime: Date.now()
             };
 
-            saveData();
+            saveUserData();
             loginSuccess(u);
         }
 
@@ -401,7 +416,7 @@
             const u = document.getElementById('login-user').value.trim();
             const p = document.getElementById('login-pass').value;
 
-            const stored = localStorage.getItem('ec_user_' + u);
+            const stored = localStorage.getItem('sm_user_' + u);
             if (!stored) {
                 alert('User not found!');
                 return;
@@ -424,9 +439,9 @@
             const a = document.getElementById('forgot-answer').value.trim().toLowerCase();
             const newP = document.getElementById('forgot-newpass').value;
 
-            const stored = localStorage.getItem('ec_user_' + u);
+            const stored = localStorage.getItem('sm_user_' + u);
             if (!stored) {
-                alert('User not found!');
+                alert('Username not found!');
                 return;
             }
 
@@ -437,32 +452,32 @@
             }
 
             parsed.password = newP;
-            localStorage.setItem('ec_user_' + u, JSON.stringify(parsed));
-            alert('Password successfully reset! Logging in...');
+            localStorage.setItem('sm_user_' + u, JSON.stringify(parsed));
+            alert('Password reset successful! Logging in...');
             userData = parsed;
             loginSuccess(u);
         }
 
         function loginSuccess(u) {
-            activeUser = u;
+            currentUser = u;
             document.getElementById('auth-overlay').classList.add('hidden');
-            calculateEnergyDecay();
+            calculateDecay();
             updateUI();
-            setInterval(calculateEnergyDecay, 30000);
+            setInterval(calculateDecay, 30000);
         }
 
         function logout() {
             location.reload();
         }
 
-        function saveData() {
-            if (activeUser) {
-                localStorage.setItem('ec_user_' + activeUser, JSON.stringify(userData));
+        function saveUserData() {
+            if (currentUser) {
+                localStorage.setItem('sm_user_' + currentUser, JSON.stringify(userData));
             }
         }
 
-        /* ENERGY TIMED DECAY (1 point / 3 mins) */
-        function calculateEnergyDecay() {
+        /* TIMED DECAY (-1 energy per 3 mins) */
+        function calculateDecay() {
             const now = Date.now();
             const elapsedMins = (now - userData.lastDecayTime) / (1000 * 60);
             const loss = Math.floor(elapsedMins / 3);
@@ -470,117 +485,121 @@
             if (loss > 0) {
                 userData.energy = Math.max(0, userData.energy - loss);
                 userData.lastDecayTime = now;
-                saveData();
+                saveUserData();
                 updateUI();
             }
         }
 
-        /* UI UPDATE & EXPRESSIONS */
+        /* UPDATE UI & EXPRESSIONS */
         function updateUI() {
             document.getElementById('display-fish').innerText = userData.fish;
+            document.getElementById('display-level').innerText = userData.level;
+            document.getElementById('stat-level').innerText = userData.level;
+            document.getElementById('stat-exp').innerText = userData.exp;
             document.getElementById('energy-text').innerText = `${userData.energy} / 100%`;
-            document.getElementById('stat-weight').innerText = userData.weight ? `${userData.weight} kg` : '-- kg';
 
             const bar = document.getElementById('energy-bar');
             bar.style.width = userData.energy + '%';
 
-            const catBody = document.getElementById('cat-body');
-            const catMood = document.getElementById('cat-mood');
+            const catAvatar = document.getElementById('cat-avatar');
+            const statusMsg = document.getElementById('cat-status-msg');
 
-            // Low energy <20% triggers sad expression 😿
+            /* SAD CAT FACE WHEN ENERGY < 20% */
             if (userData.energy < 20) {
-                bar.className = 'energy-progress bg-red-500 h-full rounded-full';
-                catBody.innerText = '😿';
-                catMood.innerText = 'Mood: Sad & Exhausted... (<20% Energy) 💔';
+                bar.className = 'progress-bar-inner bg-red-500 h-full rounded-full';
+                catAvatar.innerText = '😿';
+                statusMsg.innerText = 'Mood: Sad & Sleepy (<20% Energy) 💔';
             } else if (userData.energy < 60) {
-                bar.className = 'energy-progress bg-yellow-500 h-full rounded-full';
-                catBody.innerText = '🐱';
-                catMood.innerText = 'Mood: Normal / Needs a snack 🍃';
+                bar.className = 'progress-bar-inner bg-yellow-500 h-full rounded-full';
+                catAvatar.innerText = '🐱';
+                statusMsg.innerText = 'Mood: Hungry for a snack 🍃';
             } else {
-                bar.className = 'energy-progress bg-green-500 h-full rounded-full';
-                catBody.innerText = '😸';
-                catMood.innerText = 'Mood: Happy & Energetic! ✨';
+                bar.className = 'progress-bar-inner bg-green-500 h-full rounded-full';
+                catAvatar.innerText = '😸';
+                statusMsg.innerText = 'Mood: Happy & Full of Energy! ✨';
             }
 
-            // Render Layers on Cat
-            const hatItem = wardrobeCatalog.find(i => i.id === userData.equippedHat);
-            const apronItem = wardrobeCatalog.find(i => i.id === userData.equippedApron);
-
-            document.getElementById('cat-hat').innerText = hatItem ? hatItem.icon : '';
-            document.getElementById('cat-apron').innerText = apronItem ? apronItem.icon : '';
+            // Equipped Layers
+            const hItem = wardrobeCatalog.find(i => i.id === userData.equippedHat);
+            const aItem = wardrobeCatalog.find(i => i.id === userData.equippedApron);
+            document.getElementById('cat-hat').innerText = hItem ? hItem.icon : '';
+            document.getElementById('cat-apron').innerText = aItem ? aItem.icon : '';
 
             renderWardrobe();
             renderLeaderboard();
+        }
+
+        function addExp(pts) {
+            userData.exp += pts;
+            if (userData.exp >= 100) {
+                userData.level += 1;
+                userData.exp = userData.exp - 100;
+                alert(`🎉 Level Up! Cat reached Level ${userData.level}!`);
+            }
         }
 
         /* CARE ACTIONS */
         function careAction(type) {
             if (type === 'feed') {
                 userData.energy = Math.min(100, userData.energy + 20);
+                addExp(10);
             } else if (type === 'play') {
                 userData.energy = Math.min(100, userData.energy + 10);
                 userData.fish += 2;
+                addExp(15);
             } else if (type === 'sleep') {
                 userData.energy = Math.min(100, userData.energy + 40);
+                addExp(20);
             }
-            saveData();
+            saveUserData();
             updateUI();
         }
 
-        /* WEIGHT LOG */
-        function logWeight(e) {
-            e.preventDefault();
-            const w = parseFloat(document.getElementById('input-weight').value);
-            if (w) {
-                userData.weight = w;
-                userData.fish += 5;
-                document.getElementById('input-weight').value = '';
-                saveData();
-                updateUI();
-                alert('Weight logged! Claimed +5 Fish Currency 🐟');
-            }
-        }
-
-        /* ECO MISSION */
-        function submitMission(mCode, reward) {
-            const input = document.getElementById(mCode === 'M1' ? 'file-m1' : 'file-m2');
+        /* ECO PROOF */
+        function submitEcoProof(id, reward) {
+            const input = document.getElementById('file-' + id);
             if (input.files.length === 0) {
                 alert('Please upload photo proof first!');
                 return;
             }
             userData.fish += reward;
+            addExp(25);
             input.value = '';
-            saveData();
+            saveUserData();
             updateUI();
-            alert(`Proof uploaded! Claimed +${reward} Fish Currency! 🌿`);
+            alert(`Proof uploaded! Claimed +${reward} Fish Tokens! 🐟`);
         }
 
-        /* WARDROBE SYSTEM (20 ITEMS) */
-        function filterWardrobe(type) {
-            activeFilter = type;
-            document.getElementById('filter-all').className = "px-3 py-1 text-xs font-bold rounded-lg " + (type==='all' ? 'bg-white text-pink-500' : 'text-gray-500');
-            document.getElementById('filter-hat').className = "px-3 py-1 text-xs font-bold rounded-lg " + (type==='hat' ? 'bg-white text-pink-500' : 'text-gray-500');
-            document.getElementById('filter-apron').className = "px-3 py-1 text-xs font-bold rounded-lg " + (type==='apron' ? 'bg-white text-pink-500' : 'text-gray-500');
-            renderWardrobe();
+        /* WEIGHT LOGGING */
+        function logPlayerWeight(e) {
+            e.preventDefault();
+            const w = parseFloat(document.getElementById('input-weight').value);
+            if (w) {
+                userData.weight = w;
+                userData.fish += 5;
+                addExp(15);
+                document.getElementById('input-weight').value = '';
+                saveUserData();
+                updateUI();
+                alert('Weight saved! Earned +5 Fish Tokens! 🐟');
+            }
         }
 
+        /* WARDROBE SYSTEM */
         function renderWardrobe() {
             const grid = document.getElementById('wardrobe-grid');
             grid.innerHTML = '';
 
-            const list = wardrobeCatalog.filter(i => activeFilter === 'all' || i.type === activeFilter);
-
-            list.forEach(item => {
+            wardrobeCatalog.forEach(item => {
                 const isEquipped = (userData.equippedHat === item.id) || (userData.equippedApron === item.id);
 
                 const card = document.createElement('div');
-                card.className = `p-4 border-2 rounded-2xl text-center cursor-pointer transition ${isEquipped ? 'border-pink-500 bg-pink-50' : 'border-gray-100 bg-white'}`;
+                card.className = `p-3 border rounded-2xl text-center cursor-pointer transition ${isEquipped ? 'border-pink-500 bg-pink-50' : 'border-gray-100 bg-white'}`;
                 card.innerHTML = `
-                    <div class="text-4xl mb-2">${item.icon}</div>
+                    <div class="text-3xl mb-1">${item.icon}</div>
                     <div class="font-bold text-xs truncate">${item.name}</div>
-                    <div class="text-[10px] text-gray-400 capitalize mb-1">${item.type}</div>
-                    <div class="text-xs text-yellow-600 font-bold mb-2">${item.price} Fish</div>
-                    <button class="w-full text-xs font-bold py-1 px-2 rounded-lg ${isEquipped ? 'bg-red-400 text-white' : 'bg-pink-400 text-white'}">
+                    <div class="text-[10px] text-yellow-600 font-bold mb-2">${item.price} Fish</div>
+                    <button class="w-full text-[10px] font-bold py-1 rounded-lg ${isEquipped ? 'bg-red-400 text-white' : 'bg-pink-500 text-white'}">
                         ${isEquipped ? 'Unequip' : 'Equip'}
                     </button>
                 `;
@@ -594,28 +613,28 @@
                 if (userData.equippedHat === item.id) userData.equippedHat = null;
                 else {
                     if (userData.fish >= item.price) userData.equippedHat = item.id;
-                    else return alert('Not enough Fish Currency!');
+                    else return alert('Not enough Fish Tokens!');
                 }
             } else if (item.type === 'apron') {
                 if (userData.equippedApron === item.id) userData.equippedApron = null;
                 else {
                     if (userData.fish >= item.price) userData.equippedApron = item.id;
-                    else return alert('Not enough Fish Currency!');
+                    else return alert('Not enough Fish Tokens!');
                 }
             }
-            saveData();
+            saveUserData();
             updateUI();
         }
 
         /* LEADERBOARD */
         function renderLeaderboard() {
-            const tbody = document.getElementById('leaderboard-body');
+            const tbody = document.getElementById('leaderboard-list');
             tbody.innerHTML = '';
 
             let players = [];
             for (let i = 0; i < localStorage.length; i++) {
                 const key = localStorage.key(i);
-                if (key.startsWith('ec_user_')) {
+                if (key.startsWith('sm_user_')) {
                     players.push(JSON.parse(localStorage.getItem(key)));
                 }
             }
@@ -625,19 +644,28 @@
             players.forEach((p, idx) => {
                 const tr = document.createElement('tr');
                 tr.innerHTML = `
-                    <td class="p-3 font-bold text-gray-400">#${idx + 1}</td>
-                    <td class="p-3">${p.username} ${p.username === activeUser ? '(You)' : ''}</td>
-                    <td class="p-3">${p.weight ? p.weight + ' kg' : '--'}</td>
-                    <td class="p-3 text-yellow-600">${p.fish} 🐟</td>
+                    <td class="py-2 text-gray-400">#${idx + 1}</td>
+                    <td class="py-2">${p.username} ${p.username === currentUser ? '⭐' : ''}</td>
+                    <td class="py-2">${p.weight ? p.weight + ' kg' : '--'}</td>
+                    <td class="py-2 text-yellow-600">${p.fish} 🐟</td>
                 `;
                 tbody.appendChild(tr);
             });
         }
 
-        /* NAVIGATION */
-        function navTo(viewId) {
+        /* NAVIGATION TABS */
+        function switchPage(pageNum) {
             document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
-            document.getElementById('view-' + viewId).classList.remove('hidden');
+            document.getElementById('view-page' + pageNum).classList.remove('hidden');
+
+            for (let i = 1; i <= 4; i++) {
+                const navBtn = document.getElementById('nav-p' + i);
+                if (i === pageNum) {
+                    navBtn.className = "text-pink-600 flex flex-col items-center";
+                } else {
+                    navBtn.className = "text-gray-400 flex flex-col items-center";
+                }
+            }
         }
     </script>
 </body>
