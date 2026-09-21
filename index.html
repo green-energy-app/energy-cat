@@ -1,1181 +1,1152 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat - Kawaii Dress-Up & Weight Studio</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mitr:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <style>
-        * { font-family: 'Fredoka', 'Mitr', sans-serif; }
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Energy Cat - Kawaii Dress-Up &amp; Weight Studio</title>
+<script src="https://cdn.tailwindcss.com"></script>
+<link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mitr:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --page-a:#FFE5EC; --page-b:#FFC2D1; --page-c:#B5FFFC;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+:root:not([data-theme="light"]){}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){ --page-a:#3B2B3A; --page-b:#2A2033; --page-c:#1E2A38; }
+}
+:root[data-theme="dark"]{ --page-a:#3B2B3A; --page-b:#2A2033; --page-c:#1E2A38; }
 
-        body {
-            background: radial-gradient(circle at 50% 30%, #FFE5EC 0%, #FFC2D1 50%, #B5FFFC 100%);
-            min-height: 100vh;
-            user-select: none;
-            overflow: hidden;
-        }
+html,body{height:100%;}
+html{scroll-padding-top:env(safe-area-inset-top,0px);}
+*{font-family:'Fredoka','Mitr',sans-serif;}
+body{
+  background:radial-gradient(circle at 50% 30%, var(--page-a) 0%, var(--page-b) 50%, var(--page-c) 100%);
+  background-color:var(--page-b);
+  user-select:none; overflow:hidden; margin:0;
+}
+.clay-card{background:rgba(255,255,255,.95);border-radius:36px;box-shadow:0 20px 40px -12px rgba(255,182,193,.5),inset 0 4px 10px rgba(255,255,255,1),inset 0 -5px 10px rgba(255,154,162,.2);border:4px solid #fff;}
+.clay-inner{background:linear-gradient(180deg,#FFFDF9 0%,#FFF5F7 100%);border-radius:28px;box-shadow:inset 0 5px 12px rgba(251,113,133,.12),inset 0 -5px 10px rgba(255,255,255,.9);border:2.5px solid #FFE4E6;}
+.clay-btn{border-radius:18px;transition:all .15s cubic-bezier(.4,0,.2,1);box-shadow:0 5px 0 0 rgba(225,29,72,.25),0 8px 12px -3px rgba(244,63,94,.3),inset 0 2px 5px rgba(255,255,255,.9);}
+.clay-btn:hover{transform:translateY(-2px);filter:brightness(1.05);}
+.clay-btn:active{transform:translateY(3px);box-shadow:0 2px 0 0 rgba(225,29,72,.25),inset 0 2px 4px rgba(0,0,0,.1);}
+.glass-modal{background:rgba(15,23,42,.7);backdrop-filter:blur(10px);}
 
-        /* Claymorphism Styling */
-        .clay-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 36px;
-            box-shadow: 
-                0 20px 40px -12px rgba(255, 182, 193, 0.5),
-                inset 0 4px 10px rgba(255, 255, 255, 1),
-                inset 0 -5px 10px rgba(255, 154, 162, 0.2);
-            border: 4px solid #FFFFFF;
-        }
-
-        .clay-inner {
-            background: linear-gradient(180deg, #FFFDF9 0%, #FFF5F7 100%);
-            border-radius: 28px;
-            box-shadow: 
-                inset 0 5px 12px rgba(251, 113, 133, 0.12),
-                inset 0 -5px 10px rgba(255, 255, 255, 0.9);
-            border: 2.5px solid #FFE4E6;
-        }
-
-        .clay-btn {
-            border-radius: 18px;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 5px 0 0 rgba(225, 29, 72, 0.25),
-                0 8px 12px -3px rgba(244, 63, 94, 0.3),
-                inset 0 2px 5px rgba(255, 255, 255, 0.9);
-        }
-        .clay-btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.05);
-        }
-        .clay-btn:active {
-            transform: translateY(3px);
-            box-shadow: 
-                0 2px 0 0 rgba(225, 29, 72, 0.25),
-                inset 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .glass-modal {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(10px);
-        }
-
-        /* Animations */
-        @keyframes breathe {
-            0%, 100% { transform: translateY(0) scale(1, 1); }
-            50% { transform: translateY(-5px) scale(1.02, 0.98); }
-        }
-        .animate-breathe { animation: breathe 3.5s ease-in-out infinite; }
-
-        @keyframes tailWag {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(16deg); }
-        }
-        .animate-tail { transform-origin: 155px 165px; animation: tailWag 2s ease-in-out infinite; }
-
-        @keyframes catBlink {
-            0%, 90%, 100% { transform: scaleY(1); }
-            95% { transform: scaleY(0.1); }
-        }
-        .eye-blink { transform-origin: center 82px; animation: catBlink 4s infinite; }
-
-        @keyframes floatHeart {
-            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) translateY(0); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4) translateY(-60px); }
-        }
-        .heart-pop {
-            position: absolute;
-            pointer-events: none;
-            animation: floatHeart 0.9s ease-out forwards;
-            font-size: 26px;
-            z-index: 30;
-        }
-
-        @keyframes zzzFloat {
-            0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
-            50% { opacity: 1; transform: translate(12px, -16px) scale(1.1); }
-            100% { opacity: 0; transform: translate(24px, -32px) scale(0.8); }
-        }
-        .animate-zzz { animation: zzzFloat 2.4s infinite ease-in-out; }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: popIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.97) translateY(4px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        ::-webkit-scrollbar { width: 5px; }
-        ::-webkit-scrollbar-track { background: #FFF1F2; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: #FB7185; border-radius: 10px; }
-    </style>
+@keyframes breathe{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-5px) scale(1.02,.98)}}
+.animate-breathe{animation:breathe 3.5s ease-in-out infinite}
+@keyframes breatheSlow{0%,100%{transform:translateY(0) scale(1,1)}50%{transform:translateY(-3px) scale(1.03,.97)}}
+.animate-breathe-slow{animation:breatheSlow 5.5s ease-in-out infinite}
+@keyframes tailWag{0%,100%{transform:rotate(0)}50%{transform:rotate(16deg)}}
+.animate-tail{transform-origin:155px 165px;animation:tailWag 2s ease-in-out infinite}
+@keyframes catBlink{0%,90%,100%{transform:scaleY(1)}95%{transform:scaleY(.1)}}
+.eye-blink{transform-origin:center 82px;animation:catBlink 4s infinite}
+@keyframes floatHeart{0%{opacity:1;transform:translate(-50%,-50%) scale(.6) translateY(0)}100%{opacity:0;transform:translate(-50%,-50%) scale(1.4) translateY(-60px)}}
+.heart-pop{position:absolute;pointer-events:none;animation:floatHeart .9s ease-out forwards;font-size:26px;z-index:30}
+@keyframes zzzFloat{0%{opacity:0;transform:translate(0,0) scale(.6)}50%{opacity:1;transform:translate(12px,-16px) scale(1.1)}100%{opacity:0;transform:translate(24px,-32px) scale(.8)}}
+.animate-zzz{animation:zzzFloat 2.4s infinite ease-in-out}
+.zzz2{animation-delay:.8s}
+.tab-content{display:none}
+.tab-content.active{display:block;animation:popIn .25s cubic-bezier(.34,1.56,.64,1)}
+@keyframes popIn{from{opacity:0;transform:scale(.97) translateY(4px)}to{opacity:1;transform:scale(1) translateY(0)}}
+::-webkit-scrollbar{width:5px}
+::-webkit-scrollbar-track{background:#FFF1F2;border-radius:10px}
+::-webkit-scrollbar-thumb{background:#FB7185;border-radius:10px}
+#copyHelper{position:fixed;left:-9999px;top:0;opacity:0}
+</style>
 </head>
-<body class="flex justify-center items-center min-h-screen p-2 md:p-4">
+<body class="flex justify-center items-center p-2 md:p-4">
 
-    <!-- Toast Notification -->
-    <div id="toastNotification" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-6">
-        <div class="bg-slate-900/95 text-white px-5 py-2.5 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-2 font-bold text-xs tracking-wide">
-            <span id="toastIcon" class="text-lg">✨</span>
-            <span id="toastMessage">Notification</span>
-        </div>
+<!-- Toast -->
+<div id="toastNotification" class="fixed left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-6" style="top:calc(1rem + env(safe-area-inset-top,0px));">
+  <div class="bg-slate-900/95 text-white px-5 py-2.5 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-2 font-bold text-xs tracking-wide">
+    <span id="toastIcon" class="text-lg">✨</span><span id="toastMessage">Notification</span>
+  </div>
+</div>
+
+<!-- AUTH MODAL -->
+<div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-pink-300 max-h-[92dvh] overflow-y-auto">
+    <div class="text-center">
+      <span class="text-4xl inline-block animate-bounce">🐱</span>
+      <h2 class="text-lg font-black text-rose-600 mt-1">Energy Cat Studio</h2>
+      <p class="text-[11px] font-bold text-slate-500">Sign in to grow, rest &amp; dress up your cat</p>
     </div>
 
-    <!-- AUTH MODAL (LOGIN / REGISTER / FORGOT PASSWORD / SYNC DEVICE) -->
-    <div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-pink-300">
-            <div class="text-center">
-                <span class="text-4xl inline-block animate-bounce">🐱</span>
-                <h2 class="text-lg font-black text-rose-600 mt-1">Energy Cat Studio</h2>
-                <p class="text-[11px] font-bold text-slate-500">Sign in to track weight & dress up your cat</p>
-            </div>
-
-            <!-- Tabs -->
-            <div class="flex bg-rose-100 p-1 rounded-2xl" id="authTabsContainer">
-                <button onclick="switchAuthTab('login')" id="authTabLogin" class="w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition">Login</button>
-                <button onclick="switchAuthTab('register')" id="authTabRegister" class="w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition">Register</button>
-            </div>
-
-            <!-- Login Form -->
-            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-2.5">
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">Username</label>
-                    <input type="text" id="loginUsername" required placeholder="Enter username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-1.5 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
-                </div>
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">Password</label>
-                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-1.5 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
-                </div>
-                <div class="flex justify-between items-center text-[10px] font-bold">
-                    <button type="button" onclick="switchAuthTab('sync')" class="text-purple-600 hover:underline">📲 Sync Account</button>
-                    <button type="button" onclick="switchAuthTab('forgot')" class="text-rose-500 hover:underline">Forgot Password?</button>
-                </div>
-                <button type="submit" class="clay-btn w-full bg-rose-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Login 🐾</button>
-            </form>
-
-            <!-- Cross-Device Sync Form -->
-            <form id="syncForm" onsubmit="handleImportData(event)" class="space-y-2.5 hidden">
-                <div class="bg-purple-50 p-2 rounded-xl border border-purple-200 text-[10px] font-bold text-purple-900">
-                    Paste your Sync Key to import your account onto this device:
-                </div>
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">Account Sync Key</label>
-                    <textarea id="syncDataInput" required rows="3" placeholder="Paste key code..." class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl p-2 text-[10px] font-mono mt-0.5 focus:outline-none focus:border-rose-400"></textarea>
-                </div>
-                <button type="submit" class="clay-btn w-full bg-purple-600 text-white font-black py-2 text-xs border-2 border-white">Import Account 📲</button>
-                <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-0.5">Back to Login</button>
-            </form>
-
-            <!-- Register Form -->
-            <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-2 hidden">
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">Username</label>
-                    <input type="text" id="regUsername" required placeholder="Create username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
-                </div>
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">Cat Name</label>
-                    <input type="text" id="regCatName" required placeholder="Name your cat" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
-                </div>
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">Password</label>
-                    <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
-                </div>
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">Security Question</label>
-                    <select id="regSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
-                        <option value="" disabled selected>Select a question</option>
-                        <option value="pet">What was your first pet's name?</option>
-                        <option value="city">What city were you born in?</option>
-                        <option value="color">What is your favorite color?</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">Security Answer</label>
-                    <input type="text" id="regSecurityAnswer" required placeholder="Your answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
-                </div>
-                <button type="submit" class="clay-btn w-full bg-emerald-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Create Account ✨</button>
-            </form>
-
-            <!-- Forgot Password Form -->
-            <form id="forgotForm" onsubmit="handleForgotPassword(event)" class="space-y-2 hidden">
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">Username</label>
-                    <input type="text" id="forgotUsername" required placeholder="Enter username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
-                </div>
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">Security Question</label>
-                    <select id="forgotSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
-                        <option value="" disabled selected>Select registered question</option>
-                        <option value="pet">What was your first pet's name?</option>
-                        <option value="city">What city were you born in?</option>
-                        <option value="color">What is your favorite color?</option>
-                    </select>
-                </div>
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">Security Answer</label>
-                    <input type="text" id="forgotSecurityAnswer" required placeholder="Enter answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
-                </div>
-                <div>
-                    <label class="text-[11px] font-black text-slate-700">New Password</label>
-                    <input type="password" id="forgotNewPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
-                </div>
-                <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Reset Password 🔑</button>
-                <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-0.5">Back to Login</button>
-            </form>
-        </div>
+    <div class="flex bg-rose-100 p-1 rounded-2xl" id="authTabsContainer">
+      <button onclick="switchAuthTab('login')" id="authTabLogin" class="w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition">Login</button>
+      <button onclick="switchAuthTab('register')" id="authTabRegister" class="w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition">Register</button>
     </div>
 
-    <!-- MAIN GAME CONTAINER (MOBILE COMPACT FIT) -->
-    <div class="clay-card w-full max-w-sm h-[720px] max-h-[100dvh] flex flex-col justify-between relative z-10 overflow-hidden p-3 border-4 border-white">
-        
-        <!-- Header Bar -->
-        <div class="bg-gradient-to-r from-rose-200 via-pink-200 to-amber-100 p-2.5 rounded-2xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
-            <div class="flex items-center gap-2">
-                <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-xl shadow-md border-2 border-pink-200">
-                    🐱
-                </div>
-                <div>
-                    <div class="flex items-center gap-1">
-                        <span id="displayUser" class="text-xs font-black text-slate-800">Agent</span>
-                        <button onclick="exportAccountKey()" class="text-[9px] font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-md hover:bg-purple-700">Key 🔑</button>
-                        <button onclick="logout()" class="text-[10px] font-black text-rose-600 hover:underline">(Logout)</button>
-                    </div>
-                    <div class="text-[10px] font-black text-purple-700">
-                        Cat: <span id="displayCatName" class="text-rose-600">Mikan</span>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-1 bg-white px-3 py-1 rounded-xl border-2 border-rose-300 shadow-sm">
-                <span class="text-lg">🐟</span>
-                <span id="fishCount" class="text-xs font-black text-rose-600">100</span>
-            </div>
+    <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-2.5">
+      <div>
+        <label class="text-[11px] font-black text-slate-700">Username</label>
+        <input type="text" id="loginUsername" required placeholder="Enter username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-1.5 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+      </div>
+      <div>
+        <label class="text-[11px] font-black text-slate-700">Password</label>
+        <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-1.5 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+      </div>
+      <div class="flex justify-between items-center text-[10px] font-bold">
+        <button type="button" onclick="switchAuthTab('sync')" class="text-purple-600 hover:underline">📲 Sync Account</button>
+        <button type="button" onclick="switchAuthTab('forgot')" class="text-rose-500 hover:underline">Forgot Password?</button>
+      </div>
+      <button type="submit" class="clay-btn w-full bg-rose-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Login 🐾</button>
+    </form>
+
+    <form id="syncForm" onsubmit="handleImportData(event)" class="space-y-2.5 hidden">
+      <div class="bg-purple-50 p-2 rounded-xl border border-purple-200 text-[10px] font-bold text-purple-900">
+        Paste your Sync Key to import your account onto this device:
+      </div>
+      <div>
+        <label class="text-[11px] font-black text-slate-700">Account Sync Key</label>
+        <textarea id="syncDataInput" required rows="3" placeholder="Paste key code..." class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl p-2 text-[10px] font-mono mt-0.5 focus:outline-none focus:border-rose-400"></textarea>
+      </div>
+      <button type="submit" class="clay-btn w-full bg-purple-600 text-white font-black py-2 text-xs border-2 border-white">Import Account 📲</button>
+      <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-0.5">Back to Login</button>
+    </form>
+
+    <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-2 hidden">
+      <div>
+        <label class="text-[11px] font-black text-slate-700">Username</label>
+        <input type="text" id="regUsername" required placeholder="Create username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+      </div>
+      <div>
+        <label class="text-[11px] font-black text-slate-700">Cat Name</label>
+        <input type="text" id="regCatName" required placeholder="Name your cat" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+      </div>
+      <div>
+        <label class="text-[11px] font-black text-slate-700">Password</label>
+        <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+      </div>
+      <div>
+        <label class="text-[11px] font-black text-slate-700">Security Question</label>
+        <select id="regSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+          <option value="" disabled selected>Select a question</option>
+          <option value="pet">What was your first pet's name?</option>
+          <option value="city">What city were you born in?</option>
+          <option value="color">What is your favorite color?</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-[11px] font-black text-slate-700">Security Answer</label>
+        <input type="text" id="regSecurityAnswer" required placeholder="Your answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+      </div>
+      <button type="submit" class="clay-btn w-full bg-emerald-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Create Account ✨</button>
+    </form>
+
+    <form id="forgotForm" onsubmit="handleForgotPassword(event)" class="space-y-2 hidden">
+      <div>
+        <label class="text-[11px] font-black text-slate-700">Username</label>
+        <input type="text" id="forgotUsername" required placeholder="Enter username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+      </div>
+      <div>
+        <label class="text-[11px] font-black text-slate-700">Security Question</label>
+        <select id="forgotSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+          <option value="" disabled selected>Select registered question</option>
+          <option value="pet">What was your first pet's name?</option>
+          <option value="city">What city were you born in?</option>
+          <option value="color">What is your favorite color?</option>
+        </select>
+      </div>
+      <div>
+        <label class="text-[11px] font-black text-slate-700">Security Answer</label>
+        <input type="text" id="forgotSecurityAnswer" required placeholder="Enter answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+      </div>
+      <div>
+        <label class="text-[11px] font-black text-slate-700">New Password</label>
+        <input type="password" id="forgotNewPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+      </div>
+      <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Reset Password 🔑</button>
+      <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-0.5">Back to Login</button>
+    </form>
+  </div>
+</div>
+
+<!-- MAIN -->
+<div class="clay-card w-full max-w-sm h-[760px] max-h-[100dvh] flex flex-col justify-between relative z-10 overflow-hidden p-3 border-4 border-white">
+
+  <!-- Header -->
+  <div class="bg-gradient-to-r from-rose-200 via-pink-200 to-amber-100 p-2.5 rounded-2xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
+    <div class="flex items-center gap-2">
+      <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-xl shadow-md border-2 border-pink-200">🐱</div>
+      <div>
+        <div class="flex items-center gap-1">
+          <span id="displayUser" class="text-xs font-black text-slate-800">Agent</span>
+          <button onclick="exportAccountKey()" class="text-[9px] font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-md hover:bg-purple-700">Key 🔑</button>
+          <button onclick="logout()" class="text-[10px] font-black text-rose-600 hover:underline">(Logout)</button>
+        </div>
+        <div class="text-[10px] font-black text-purple-700">Cat: <span id="displayCatName" class="text-rose-600">Mikan</span></div>
+      </div>
+    </div>
+    <div class="flex items-center gap-1">
+      <button id="notifyBtn" onclick="enableNotifications()" title="Enable low-stat alerts" class="w-7 h-7 rounded-lg bg-white border-2 border-rose-300 text-sm shadow-sm">🔕</button>
+      <div class="flex items-center gap-1 bg-white px-2.5 py-1 rounded-xl border-2 border-rose-300 shadow-sm">
+        <span class="text-lg">🐟</span><span id="fishCount" class="text-xs font-black text-rose-600">100</span>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENT -->
+  <div class="flex-grow overflow-y-auto py-2">
+
+    <!-- HOME -->
+    <div id="tab-home" class="tab-content active space-y-2">
+
+      <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 border-2 border-purple-300 rounded-2xl p-2 shadow-sm">
+        <div class="flex justify-between items-center mb-0.5">
+          <div class="flex items-center gap-1.5">
+            <span class="text-[10px] font-black bg-purple-600 text-white px-2 py-0.5 rounded-full shadow-sm" id="catLevelBadge">LVL 1</span>
+            <span class="text-xs font-black text-purple-900" id="catWeightBadge">⚖️ 2.00 kg</span>
+          </div>
+          <span id="expText" class="text-[10px] font-black bg-white text-purple-700 px-2 py-0.5 rounded-full border border-purple-300">0/50 EXP</span>
+        </div>
+        <div class="w-full bg-purple-200 h-2.5 rounded-full overflow-hidden p-0.5 border border-purple-300">
+          <div id="expBar" class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width:0%"></div>
+        </div>
+      </div>
+
+      <!-- ENERGY -->
+      <div class="bg-white border-2 border-rose-300 rounded-2xl p-2 shadow-sm">
+        <div class="flex justify-between items-center mb-0.5">
+          <span class="text-xs font-black text-rose-700 flex items-center gap-1"><span>⚡</span> Energy</span>
+          <span id="energyText" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full border border-rose-300">100/100</span>
+        </div>
+        <div class="w-full bg-rose-100 h-2.5 rounded-full overflow-hidden p-0.5 border border-rose-200">
+          <div id="energyBar" class="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width:100%"></div>
+        </div>
+      </div>
+
+      <!-- SLEEP (separate meter) -->
+      <div class="bg-white border-2 border-indigo-300 rounded-2xl p-2 shadow-sm">
+        <div class="flex justify-between items-center mb-0.5">
+          <span class="text-xs font-black text-indigo-700 flex items-center gap-1"><span>💤</span> Sleep</span>
+          <span id="sleepText" class="text-[10px] font-black bg-indigo-100 text-indigo-700 px-2 py-0.5 rounded-full border border-indigo-300">100/100</span>
+        </div>
+        <div class="w-full bg-indigo-100 h-2.5 rounded-full overflow-hidden p-0.5 border border-indigo-200">
+          <div id="sleepBar" class="bg-gradient-to-r from-indigo-400 via-violet-500 to-purple-500 h-full rounded-full transition-all duration-500" style="width:100%"></div>
+        </div>
+      </div>
+
+      <div id="sadWarningBanner" class="hidden bg-amber-100 border-2 border-amber-400 text-amber-900 px-2.5 py-1 rounded-xl text-[10px] font-black flex items-center gap-1.5">
+        <span class="text-base">😿</span><span id="sadWarningText">Low status!</span>
+      </div>
+
+      <!-- STAGE -->
+      <div id="catStage" class="relative clay-inner p-1 flex flex-col items-center justify-center border-2 border-pink-200 h-[240px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
+        <div class="absolute top-2 left-3 text-lg opacity-70">☁️</div>
+        <div class="absolute top-3 right-4 text-lg opacity-70">✨</div>
+
+        <div id="sleepEffect" class="hidden absolute top-4 right-8 z-20 pointer-events-none">
+          <span class="text-xl font-black text-indigo-500 animate-zzz inline-block">Zzz</span>
+          <span class="text-base font-black text-indigo-400 animate-zzz zzz2 inline-block">z</span>
         </div>
 
-        <!-- MAIN CONTENT AREA -->
-        <div class="flex-grow overflow-y-auto py-2">
-            
-            <!-- PAGE 1: HOME (CAT CARE & WEIGHT GROWTH) -->
-            <div id="tab-home" class="tab-content active space-y-2">
-                
-                <!-- Weight & Level Banner -->
-                <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 border-2 border-purple-300 rounded-2xl p-2 shadow-sm">
-                    <div class="flex justify-between items-center mb-0.5">
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-[10px] font-black bg-purple-600 text-white px-2 py-0.5 rounded-full shadow-sm" id="catLevelBadge">LVL 1</span>
-                            <span class="text-xs font-black text-purple-900" id="catWeightBadge">⚖️ 2.00 kg</span>
-                        </div>
-                        <span id="expText" class="text-[10px] font-black bg-white text-purple-700 px-2 py-0.5 rounded-full border border-purple-300">0/50 EXP</span>
-                    </div>
-                    <div class="w-full bg-purple-200 h-2.5 rounded-full overflow-hidden p-0.5 border border-purple-300">
-                        <div id="expBar" class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
-                    </div>
-                </div>
+        <div id="catScaleWrapper" class="relative flex items-center justify-center transition-all duration-500 transform scale-95">
+          <div id="catBreath" class="animate-breathe relative flex items-center justify-center z-10 w-[200px] h-[200px]">
+            <svg width="200" height="200" viewBox="0 0 200 200" class="drop-shadow-lg relative z-10">
+              <defs>
+                <radialGradient id="catBody3D" cx="35%" cy="30%" r="70%">
+                  <stop offset="0%" stop-color="#FFFFFF"/><stop offset="55%" stop-color="#FFEAD5"/><stop offset="100%" stop-color="#FDCEAB"/>
+                </radialGradient>
+                <radialGradient id="earInner" cx="50%" cy="50%" r="50%">
+                  <stop offset="0%" stop-color="#FFB6C1"/><stop offset="100%" stop-color="#FF69B4"/>
+                </radialGradient>
+              </defs>
+              <g class="animate-tail">
+                <path d="M 140 145 C 175 140, 185 105, 170 85 C 158 70, 145 88, 152 105 C 158 118, 142 135, 132 138 Z" fill="#FCB584" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round"/>
+              </g>
+              <ellipse cx="65" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
+              <ellipse cx="135" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
+              <path d="M 50 120 C 42 155, 45 172, 65 172 C 85 172, 115 172, 135 172 C 155 172, 158 155, 150 120 Z" fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round"/>
+              <ellipse cx="100" cy="148" rx="28" ry="20" fill="#FFFFFF" opacity=".9"/>
+              <ellipse cx="72" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
+              <ellipse cx="128" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
+              <path d="M 35 80 C 22 55, 42 22, 68 32 C 85 22, 115 22, 132 32 C 158 22, 178 55, 165 80 C 175 110, 155 128, 100 128 C 45 128, 25 110, 35 80 Z" fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round"/>
+              <path d="M 48 42 C 43 32, 58 28, 64 36 Z" fill="url(#earInner)"/>
+              <path d="M 152 42 C 157 32, 142 28, 136 36 Z" fill="url(#earInner)"/>
+              <path d="M 35 80 C 30 60, 45 35, 62 34 C 52 55, 55 70, 58 82 Z" fill="#FB923C"/>
+              <path d="M 22 82 L 42 85 M 18 92 L 40 92" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
+              <path d="M 178 82 L 158 85 M 182 92 L 160 92" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
 
-                <!-- Energy Bar -->
-                <div class="bg-white border-2 border-rose-300 rounded-2xl p-2 shadow-sm">
-                    <div class="flex justify-between items-center mb-0.5">
-                        <span class="text-xs font-black text-rose-700 flex items-center gap-1">
-                            <span>⚡</span> Energy
-                        </span>
-                        <span id="energyText" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full border border-rose-300">100/100</span>
-                    </div>
-                    <div class="w-full bg-rose-100 h-2.5 rounded-full overflow-hidden p-0.5 border border-rose-200">
-                        <div id="energyBar" class="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
-                    </div>
-                </div>
+              <g id="catEyesAwake">
+                <g class="eye-blink">
+                  <circle cx="72" cy="82" r="11" fill="#3B170B"/><circle cx="69" cy="78" r="4" fill="#FFFFFF"/>
+                  <circle cx="128" cy="82" r="11" fill="#3B170B"/><circle cx="125" cy="78" r="4" fill="#FFFFFF"/>
+                </g>
+                <ellipse cx="58" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity=".75"/>
+                <ellipse cx="142" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity=".75"/>
+                <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
+                <path d="M 92 92 Q 100 100 100 92 Q 100 100 108 92" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+              </g>
 
-                <!-- Low Energy Warning Banner -->
-                <div id="sadWarningBanner" class="hidden bg-amber-100 border-2 border-amber-400 text-amber-900 px-2.5 py-1 rounded-xl text-[10px] font-black flex items-center gap-1.5">
-                    <span class="text-base">😿</span> Energy below 20%! Your cat is hungry and sad!
-                </div>
+              <g id="catEyesSad" class="hidden">
+                <path d="M 62 88 Q 72 78 82 88" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M 118 88 Q 128 78 138 88" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M 60 74 L 75 78" stroke="#5C2C16" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 140 74 L 125 78" stroke="#5C2C16" stroke-width="3" stroke-linecap="round"/>
+                <path d="M 94 96 Q 100 90 106 96" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                <path d="M 142 86 C 146 92, 142 98, 140 98 C 138 98, 138 92, 142 86 Z" fill="#60A5FA"/>
+              </g>
 
-                <!-- Kawaii Cat Stage Screen -->
-                <div id="catStage" class="relative clay-inner p-1 flex flex-col items-center justify-center border-2 border-pink-200 h-[240px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
-                    
-                    <div class="absolute top-2 left-3 text-lg opacity-70">☁️</div>
-                    <div class="absolute top-3 right-4 text-lg opacity-70">✨</div>
+              <g id="catEyesSleep" class="hidden">
+                <path d="M 62 84 Q 72 94 82 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <path d="M 118 84 Q 128 94 138 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
+                <path d="M 95 92 Q 100 96 105 92" stroke="#5C2C16" stroke-width="3" fill="none" stroke-linecap="round"/>
+              </g>
+            </svg>
 
-                    <!-- Sleep FX -->
-                    <div id="sleepEffect" class="hidden absolute top-4 right-10 z-20 pointer-events-none">
-                        <span class="text-xl font-black text-indigo-500 animate-zzz inline-block">Zzz...</span>
-                    </div>
-
-                    <!-- CAT SVG WRAPPER -->
-                    <div id="catScaleWrapper" class="relative flex items-center justify-center transition-all duration-500 transform scale-95">
-                        <div class="animate-breathe relative flex items-center justify-center z-10 w-[200px] h-[200px]">
-                            
-                            <!-- ORIGINAL KAWAII CAT SVG -->
-                            <svg width="200" height="200" viewBox="0 0 200 200" class="drop-shadow-lg relative z-10">
-                                <defs>
-                                    <radialGradient id="catBody3D" cx="35%" cy="30%" r="70%">
-                                        <stop offset="0%" stop-color="#FFFFFF"/>
-                                        <stop offset="55%" stop-color="#FFEAD5"/>
-                                        <stop offset="100%" stop-color="#FDCEAB"/>
-                                    </radialGradient>
-                                    <radialGradient id="earInner" cx="50%" cy="50%" r="50%">
-                                        <stop offset="0%" stop-color="#FFB6C1"/>
-                                        <stop offset="100%" stop-color="#FF69B4"/>
-                                    </radialGradient>
-                                </defs>
-
-                                <!-- Tail -->
-                                <g class="animate-tail">
-                                    <path d="M 140 145 C 175 140, 185 105, 170 85 C 158 70, 145 88, 152 105 C 158 118, 142 135, 132 138 Z" 
-                                          fill="#FCB584" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" />
-                                </g>
-
-                                <!-- Feet -->
-                                <ellipse cx="65" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
-                                <ellipse cx="135" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
-
-                                <!-- Body -->
-                                <path d="M 50 120 C 42 155, 45 172, 65 172 C 85 172, 115 172, 135 172 C 155 172, 158 155, 150 120 Z" 
-                                      fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
-                                <ellipse cx="100" cy="148" rx="28" ry="20" fill="#FFFFFF" opacity="0.9"/>
-
-                                <!-- Raised Paws -->
-                                <ellipse cx="72" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
-                                <ellipse cx="128" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
-
-                                <!-- Head -->
-                                <path d="M 35 80 C 22 55, 42 22, 68 32 C 85 22, 115 22, 132 32 C 158 22, 178 55, 165 80 C 175 110, 155 128, 100 128 C 45 128, 25 110, 35 80 Z" 
-                                      fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
-
-                                <!-- Inner Ears -->
-                                <path d="M 48 42 C 43 32, 58 28, 64 36 Z" fill="url(#earInner)"/>
-                                <path d="M 152 42 C 157 32, 142 28, 136 36 Z" fill="url(#earInner)"/>
-
-                                <!-- Calico Patch -->
-                                <path d="M 35 80 C 30 60, 45 35, 62 34 C 52 55, 55 70, 58 82 Z" fill="#FB923C"/>
-
-                                <!-- Whiskers -->
-                                <path d="M 22 82 L 42 85 M 18 92 L 40 92" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
-                                <path d="M 178 82 L 158 85 M 182 92 L 160 92" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
-
-                                <!-- AWAKE / HAPPY EYES -->
-                                <g id="catEyesAwake">
-                                    <g class="eye-blink">
-                                        <circle cx="72" cy="82" r="11" fill="#3B170B"/>
-                                        <circle cx="69" cy="78" r="4" fill="#FFFFFF"/>
-                                        <circle cx="128" cy="82" r="11" fill="#3B170B"/>
-                                        <circle cx="125" cy="78" r="4" fill="#FFFFFF"/>
-                                    </g>
-                                    <ellipse cx="58" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
-                                    <ellipse cx="142" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
-                                    <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
-                                    <path d="M 92 92 Q 100 100 100 92 Q 100 100 108 92" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-                                </g>
-
-                                <!-- SAD / LOW ENERGY EYES (<20%) -->
-                                <g id="catEyesSad" class="hidden">
-                                    <path d="M 62 88 Q 72 78 82 88" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
-                                    <path d="M 118 88 Q 128 78 138 88" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
-                                    <path d="M 60 74 L 75 78" stroke="#5C2C16" stroke-width="3" stroke-linecap="round"/>
-                                    <path d="M 140 74 L 125 78" stroke="#5C2C16" stroke-width="3" stroke-linecap="round"/>
-                                    <path d="M 94 96 Q 100 90 106 96" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-                                    <path d="M 142 86 C 146 92, 142 98, 140 98 C 138 98, 138 92, 142 86 Z" fill="#60A5FA"/>
-                                </g>
-
-                                <!-- SLEEPING EYES -->
-                                <g id="catEyesSleep" class="hidden">
-                                    <path d="M 62 84 Q 72 94 82 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
-                                    <path d="M 118 84 Q 128 94 138 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
-                                    <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
-                                    <path d="M 95 92 Q 100 96 105 92" stroke="#5C2C16" stroke-width="3" fill="none" stroke-linecap="round"/>
-                                </g>
-                            </svg>
-
-                            <!-- OVERLAY CLOTHES (HEAD ACCESSORIES & BODY APRON) -->
-                            <div class="absolute inset-0 pointer-events-none z-20">
-                                <div id="slot-head" class="absolute inset-0"></div>
-                                <div id="slot-apron" class="absolute inset-0"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <p id="catStatusLabel" class="text-[10px] font-black text-rose-600 bg-white px-3 py-0.5 rounded-full border border-rose-300 shadow-sm z-10">
-                        ✨ Tap Cat to Show Love 💕
-                    </p>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="grid grid-cols-2 gap-2 pt-0.5">
-                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 to-orange-400 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md">
-                        <span class="text-base">🍱</span> Feed (-5🐟 / +0.15kg)
-                    </button>
-                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md">
-                        <span class="text-base">😴</span> Rest (+30⚡ / +0.05kg)
-                    </button>
-                </div>
+            <div class="absolute inset-0 pointer-events-none z-20">
+              <div id="slot-head" class="absolute inset-0"></div>
+              <div id="slot-apron" class="absolute inset-0"></div>
             </div>
-
-            <!-- PAGE 2: ECO MISSIONS -->
-            <div id="tab-missions" class="tab-content space-y-2.5">
-                <div class="bg-gradient-to-br from-emerald-100 to-teal-100 border-2 border-emerald-300 rounded-2xl p-3 shadow-sm">
-                    <div class="flex items-center gap-1.5 mb-1">
-                        <span class="text-xl">🌱</span>
-                        <p class="text-xs font-black text-emerald-950 uppercase">Eco Energy Missions (Attach Photo)</p>
-                    </div>
-                    <p class="text-[10px] font-extrabold text-emerald-800 mb-2.5">Complete eco tasks and upload photos to earn fish & energy!</p>
-
-                    <div class="space-y-1.5 text-xs font-black">
-                        <button onclick="openMissionUploadModal('Turn off unused lights & screens', 15, 20)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
-                            <span>💡 Turn off lights/screens</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+15🐟 / +20⚡</span>
-                        </button>
-                        <button onclick="openMissionUploadModal('Turn off AC before leaving room', 20, 30)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
-                            <span>❄️ Turn off AC when leaving</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+20🐟 / +30⚡</span>
-                        </button>
-                        <button onclick="openMissionUploadModal('Unplug idle electronics', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
-                            <span>🔌 Unplug idle devices</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+10🐟 / +15⚡</span>
-                        </button>
-                        <button onclick="openMissionUploadModal('Use stairs instead of elevator', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
-                            <span>🚶 Take stairs over elevator</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+10🐟 / +15⚡</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PAGE 3: DRESS-UP STUDIO (HEAD ACCESSORIES & FRONT APRONS) -->
-            <div id="tab-dressup" class="tab-content space-y-2">
-                <div class="bg-white rounded-2xl p-2.5 border-2 border-pink-300 shadow-sm flex flex-col h-[400px]">
-                    <div class="flex justify-between items-center mb-1.5">
-                        <div class="flex items-center gap-1">
-                            <span class="text-xl">🎀</span>
-                            <h3 class="font-black text-xs text-pink-900">Wardrobe Catalog</h3>
-                        </div>
-                        <button onclick="resetOutfit()" class="text-[9px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full border border-rose-300">
-                            🔄 Take off all
-                        </button>
-                    </div>
-
-                    <!-- Category Selector Tabs -->
-                    <div class="grid grid-cols-2 gap-1.5 mb-1.5">
-                        <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300">
-                            👑 Headwear (10)
-                        </button>
-                        <button onclick="switchDressCategory('apron')" id="cat-apron-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200">
-                            🎽 Front Aprons (10)
-                        </button>
-                    </div>
-
-                    <!-- Items Grid Scroll Area -->
-                    <div id="dressItemsGrid" class="flex-grow overflow-y-auto grid grid-cols-2 gap-1.5 p-0.5">
-                        <!-- Dynamic Item Cards -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- PAGE 4: CAT WEIGHT LEADERBOARD (REAL PLAYERS & MONTHLY CHAMPION) -->
-            <div id="tab-ranks" class="tab-content space-y-2">
-                
-                <!-- Monthly Winner Banner & Reward Claim Form -->
-                <div class="bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400 rounded-2xl p-2.5 border-2 border-white shadow-md text-white">
-                    <div class="flex items-center gap-1.5 mb-1">
-                        <span class="text-2xl animate-bounce">👑</span>
-                        <div>
-                            <h4 class="text-xs font-black uppercase tracking-wider">Monthly Champion Rewards</h4>
-                            <p class="text-[9px] font-extrabold text-amber-100">Top player wins monthly cat care prizes!</p>
-                        </div>
-                    </div>
-
-                    <div id="monthlyWinnerInfo" class="bg-white/20 backdrop-blur-md p-1.5 rounded-xl text-[10px] font-bold text-slate-900 border border-white/30 mb-1">
-                        🏆 Current #1 Champion: <span id="monthlyChampionName" class="text-rose-900 font-black">No real players yet</span>
-                    </div>
-
-                    <!-- Contact Form for Monthly Champion -->
-                    <div id="winnerContactFormBox" class="bg-white/95 p-2 rounded-xl text-slate-800 shadow-sm hidden">
-                        <p class="text-[10px] font-black text-amber-900 mb-1">🎉 You are in 1st Place! Enter contact info for prize:</p>
-                        <form onsubmit="handleSaveContactInfo(event)" class="space-y-1">
-                            <input type="text" id="championContactInput" required placeholder="Email / Phone / LINE ID" class="w-full bg-slate-50 border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold outline-none focus:border-amber-500">
-                            <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-1 text-[11px]">Submit Contact Info 📩</button>
-                        </form>
-                    </div>
-                </div>
-
-                <!-- Leaderboard Table -->
-                <div class="bg-white rounded-2xl p-2.5 border-2 border-rose-200 shadow-sm">
-                    <div class="flex items-center justify-between mb-1.5">
-                        <span class="text-xs font-black text-rose-900">📊 Registered Players Ranking</span>
-                        <span id="totalPlayersCount" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">0 Players</span>
-                    </div>
-                    <div class="overflow-y-auto max-h-[190px]">
-                        <table class="w-full text-left text-xs">
-                            <thead>
-                                <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[10px] uppercase">
-                                    <th class="p-1">Rank</th>
-                                    <th class="p-1">Player & Cat</th>
-                                    <th class="p-1 text-right">Weight ⚖️</th>
-                                </tr>
-                            </thead>
-                            <tbody id="leaderboardRows"></tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
+          </div>
         </div>
 
-        <!-- NAVIGATION BAR -->
-        <div class="bg-white p-1.5 rounded-2xl border-2 border-rose-200 grid grid-cols-4 gap-1 shrink-0 shadow-md">
-            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-1.5 rounded-xl text-rose-600 bg-rose-100 font-black text-[10px]">
-                <span class="text-base">🏠</span> Home
-            </button>
-            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]">
-                <span class="text-base">🌱</span> Missions
-            </button>
-            <button onclick="switchTab('dressup')" id="nav-dressup" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]">
-                <span class="text-base">👗</span> Dress Up
-            </button>
-            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]">
-                <span class="text-base">🏆</span> Rank
-            </button>
-        </div>
+        <p id="catStatusLabel" class="text-[10px] font-black text-rose-600 bg-white px-3 py-0.5 rounded-full border border-rose-300 shadow-sm z-10">✨ Tap Cat to Show Love 💕</p>
+      </div>
 
+      <div class="grid grid-cols-2 gap-2 pt-0.5">
+        <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 to-orange-400 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md">
+          <span class="text-base">🍱</span> Feed (-5🐟 / +0.15kg)
+        </button>
+        <button id="restBtn" onclick="toggleRest()" class="clay-btn bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md">
+          <span class="text-base">😴</span> <span id="restBtnLabel">Rest (💤 fills slowly)</span>
+        </button>
+      </div>
     </div>
 
-    <!-- Hidden File Input for Mission Upload -->
-    <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
-
-    <!-- PHOTO PROOF MODAL -->
-    <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-4 w-full max-w-xs flex flex-col gap-2.5 shadow-2xl border-4 border-emerald-300">
-            <h3 class="font-black text-xs text-slate-800">📸 Upload Eco Proof Photo</h3>
-            <p id="modalMissionName" class="text-[11px] font-black text-emerald-800 bg-emerald-50 p-2 rounded-xl border border-emerald-200">Mission</p>
-            
-            <div onclick="triggerFileSelect()" class="w-full h-36 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
-                <img id="photoPreview" class="w-full h-full object-cover hidden" />
-                <div id="uploadPlaceholder" class="text-center p-2">
-                    <span class="text-2xl">📷</span>
-                    <p class="text-[11px] font-black text-emerald-700 mt-1">Click to choose image</p>
-                </div>
-            </div>
-
-            <div class="flex gap-2">
-                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2 rounded-xl">Cancel</button>
-                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-2 rounded-xl border-2 border-white">Submit Photo</button>
-            </div>
+    <!-- MISSIONS -->
+    <div id="tab-missions" class="tab-content space-y-2.5">
+      <div class="bg-gradient-to-br from-emerald-100 to-teal-100 border-2 border-emerald-300 rounded-2xl p-3 shadow-sm">
+        <div class="flex items-center gap-1.5 mb-1">
+          <span class="text-xl">🌱</span>
+          <p class="text-xs font-black text-emerald-950 uppercase">Eco Energy Missions (Attach Photo)</p>
         </div>
+        <p class="text-[10px] font-extrabold text-emerald-800 mb-2.5">Complete eco tasks and upload photos to earn fish, energy &amp; sleep!</p>
+        <div class="space-y-1.5 text-xs font-black">
+          <button onclick="openMissionUploadModal('Turn off unused lights &amp; screens',15,20,10)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+            <span>💡 Turn off lights/screens</span><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+15🐟 +20⚡ +10💤</span>
+          </button>
+          <button onclick="openMissionUploadModal('Turn off AC before leaving room',20,30,15)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+            <span>❄️ Turn off AC when leaving</span><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+20🐟 +30⚡ +15💤</span>
+          </button>
+          <button onclick="openMissionUploadModal('Unplug idle electronics',10,15,10)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+            <span>🔌 Unplug idle devices</span><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+10🐟 +15⚡ +10💤</span>
+          </button>
+          <button onclick="openMissionUploadModal('Use stairs instead of elevator',10,15,5)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+            <span>🚶 Take stairs over elevator</span><span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+10🐟 +15⚡ +5💤</span>
+          </button>
+        </div>
+      </div>
     </div>
 
-    <!-- GAME ENGINE JAVASCRIPT -->
-    <script>
-        // Global LocalStorage Database Key
-        const DB_KEY = 'ENERGY_CAT_ACCOUNTS_V2';
+    <!-- DRESS UP -->
+    <div id="tab-dressup" class="tab-content space-y-2">
+      <div class="bg-white rounded-2xl p-2.5 border-2 border-pink-300 shadow-sm flex flex-col h-[400px]">
+        <div class="flex justify-between items-center mb-1.5">
+          <div class="flex items-center gap-1"><span class="text-xl">🎀</span><h3 class="font-black text-xs text-pink-900">Wardrobe Catalog</h3></div>
+          <button onclick="resetOutfit()" class="text-[9px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full border border-rose-300">🔄 Take off all</button>
+        </div>
+        <div class="grid grid-cols-2 gap-1.5 mb-1.5">
+          <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300">👑 Headwear (10)</button>
+          <button onclick="switchDressCategory('apron')" id="cat-apron-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200">🎽 Front Aprons (10)</button>
+        </div>
+        <div id="dressItemsGrid" class="flex-grow overflow-y-auto grid grid-cols-2 gap-1.5 p-0.5"></div>
+      </div>
+    </div>
 
-        // 10 HEAD ACCESSORIES & 10 FRONT BODY APRONS CATALOG
-        const dressItems = {
-            head: [
-                { id: 'h1', name: 'Red Bow', price: 10, icon: '🎀', html: '<span style="font-size: 36px; position: absolute; top: 12px; left: 45px; transform: rotate(-15deg);">🎀</span>' },
-                { id: 'h2', name: 'Golden Crown', price: 20, icon: '👑', html: '<span style="font-size: 32px; position: absolute; top: 6px; left: 70px;">👑</span>' },
-                { id: 'h3', name: 'Party Hat', price: 15, icon: '🎉', html: '<span style="font-size: 34px; position: absolute; top: 4px; left: 68px;">🎉</span>' },
-                { id: 'h4', name: 'Graduation Cap', price: 25, icon: '🎓', html: '<span style="font-size: 34px; position: absolute; top: 4px; left: 66px;">🎓</span>' },
-                { id: 'h5', name: 'Flower Crown', price: 15, icon: '🌸', html: '<span style="font-size: 32px; position: absolute; top: 12px; left: 66px;">🌸</span>' },
-                { id: 'h6', name: 'Bear Ears', price: 12, icon: '🐻', html: '<span style="font-size: 32px; position: absolute; top: 8px; left: 68px;">🐻</span>' },
-                { id: 'h7', name: 'Witch Hat', price: 18, icon: '🧙‍♀️', html: '<span style="font-size: 36px; position: absolute; top: 2px; left: 65px;">🧙‍♀️</span>' },
-                { id: 'h8', name: 'Chef Hat', price: 15, icon: '👨‍🍳', html: '<span style="font-size: 36px; position: absolute; top: 0px; left: 68px;">👨‍🍳</span>' },
-                { id: 'h9', name: 'Cowboy Hat', price: 18, icon: '🤠', html: '<span style="font-size: 34px; position: absolute; top: 6px; left: 66px;">🤠</span>' },
-                { id: 'h10', name: 'Santa Hat', price: 15, icon: '🎅', html: '<span style="font-size: 36px; position: absolute; top: 2px; left: 68px;">🎅</span>' }
-            ],
-            apron: [
-                { id: 'a1', name: 'Strawberry Apron', price: 15, icon: '🍓', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FF4D6D; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🍓</div>' },
-                { id: 'a2', name: 'Bee Bib', price: 15, icon: '🐝', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FFCA3A; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🐝</div>' },
-                { id: 'a3', name: 'Star Bib', price: 12, icon: '⭐', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FFD166; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">⭐</div>' },
-                { id: 'a4', name: 'Heart Apron', price: 15, icon: '💖', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FF8FA3; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">💖</div>' },
-                { id: 'a5', name: 'Fish Bib', price: 18, icon: '🐟', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #4EA8DE; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🐟</div>' },
-                { id: 'a6', name: 'Flower Apron', price: 15, icon: '🌻', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #8AC926; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🌻</div>' },
-                { id: 'a7', name: 'Clover Apron', price: 12, icon: '🍀', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #52B788; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🍀</div>' },
-                { id: 'a8', name: 'Ribbon Bib', price: 15, icon: '🎀', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #F72585; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🎀</div>' },
-                { id: 'a9', name: 'Paw Print Bib', price: 20, icon: '🐾', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #B5179E; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🐾</div>' },
-                { id: 'a10', name: 'Rainbow Apron', price: 22, icon: '🌈', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: linear-gradient(90deg, #ffadad,#ffd6a5,#fdffb6,#caffbf,#9bf6ff,#a0c4ff,#bdb2ff); border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🌈</div>' }
-            ]
-        };
+    <!-- RANKS -->
+    <div id="tab-ranks" class="tab-content space-y-2">
+      <div class="bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400 rounded-2xl p-2.5 border-2 border-white shadow-md text-white">
+        <div class="flex items-center gap-1.5 mb-1">
+          <span class="text-2xl animate-bounce">👑</span>
+          <div>
+            <h4 class="text-xs font-black uppercase tracking-wider">Monthly Champion Rewards</h4>
+            <p class="text-[9px] font-extrabold text-amber-100">Top player wins monthly cat care prizes!</p>
+          </div>
+        </div>
+        <div id="monthlyWinnerInfo" class="bg-white/20 backdrop-blur-md p-1.5 rounded-xl text-[10px] font-bold text-slate-900 border border-white/30 mb-1">
+          🏆 Current #1 Champion: <span id="monthlyChampionName" class="text-rose-900 font-black">No players yet</span>
+        </div>
+        <div id="winnerContactFormBox" class="bg-white/95 p-2 rounded-xl text-slate-800 shadow-sm hidden">
+          <p class="text-[10px] font-black text-amber-900 mb-1">🎉 You are in 1st Place! Enter contact info for prize:</p>
+          <form onsubmit="handleSaveContactInfo(event)" class="space-y-1">
+            <input type="text" id="championContactInput" required placeholder="Email / Phone / LINE ID" class="w-full bg-slate-50 border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold outline-none focus:border-amber-500">
+            <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-1 text-[11px]">Submit Contact Info 📩</button>
+          </form>
+        </div>
+      </div>
 
-        // App State Variables
-        let currentUser = null;
-        let accounts = {};
-        let currentDressCategory = 'head';
-        let activeMission = null;
+      <div class="bg-white rounded-2xl p-2.5 border-2 border-rose-200 shadow-sm">
+        <div class="flex items-center justify-between mb-1">
+          <span class="text-xs font-black text-rose-900">📊 Registered Players Ranking</span>
+          <span id="totalPlayersCount" class="text-[10px] font-black bg-rose-500 text-white px-2.5 py-1 rounded-full shadow-sm border-2 border-white">👥 0 Users</span>
+        </div>
+        <div class="flex items-center justify-between mb-1.5">
+          <span id="cloudStatus" class="text-[9px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200">⏳ Connecting…</span>
+          <button onclick="copyPlayerList()" class="text-[9px] font-black bg-purple-600 text-white px-2 py-1 rounded-lg border border-white shadow-sm">📋 Copy List</button>
+        </div>
+        <div class="overflow-y-auto max-h-[190px]">
+          <table class="w-full text-left text-xs">
+            <thead>
+              <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[10px] uppercase">
+                <th class="p-1">Rank</th><th class="p-1">Player &amp; Cat</th><th class="p-1 text-right">Weight ⚖️</th>
+              </tr>
+            </thead>
+            <tbody id="leaderboardRows"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
 
-        // Initialize App
-        window.addEventListener('DOMContentLoaded', () => {
-            loadAccounts();
-            checkAutoLogin();
-            setupEnergyDecayLoop();
+  </div>
+
+  <!-- NAV -->
+  <div class="bg-white p-1.5 rounded-2xl border-2 border-rose-200 grid grid-cols-4 gap-1 shrink-0 shadow-md">
+    <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-1.5 rounded-xl text-rose-600 bg-rose-100 font-black text-[10px]"><span class="text-base">🏠</span> Home</button>
+    <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]"><span class="text-base">🌱</span> Missions</button>
+    <button onclick="switchTab('dressup')" id="nav-dressup" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]"><span class="text-base">👗</span> Dress Up</button>
+    <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]"><span class="text-base">🏆</span> Rank</button>
+  </div>
+</div>
+
+<input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)"/>
+<textarea id="copyHelper" readonly></textarea>
+
+<!-- PHOTO MODAL -->
+<div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+  <div class="bg-white rounded-3xl p-4 w-full max-w-xs flex flex-col gap-2.5 shadow-2xl border-4 border-emerald-300">
+    <h3 class="font-black text-xs text-slate-800">📸 Upload Eco Proof Photo</h3>
+    <p id="modalMissionName" class="text-[11px] font-black text-emerald-800 bg-emerald-50 p-2 rounded-xl border border-emerald-200">Mission</p>
+    <div onclick="triggerFileSelect()" class="w-full h-36 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
+      <img id="photoPreview" class="w-full h-full object-cover hidden"/>
+      <div id="uploadPlaceholder" class="text-center p-2"><span class="text-2xl">📷</span><p class="text-[11px] font-black text-emerald-700 mt-1">Click to choose image</p></div>
+    </div>
+    <div class="flex gap-2">
+      <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2 rounded-xl">Cancel</button>
+      <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-2 rounded-xl border-2 border-white">Submit Photo</button>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ============================================================
+   ENERGY CAT STUDIO — engine
+   Local: accounts + credentials (localStorage, never uploaded)
+   Cloud: public leaderboard profile (shared db, cross-device)
+   ============================================================ */
+
+const DB_KEY   = 'ENERGY_CAT_ACCOUNTS_V3';
+const SESS_KEY = 'ENERGY_CAT_ACTIVE_USER';
+
+const ENERGY_MS = 3 * 60 * 1000;  // -1 energy each 3 real minutes
+const SLEEP_MS  = 4 * 60 * 1000;  // -1 sleep   each 4 real minutes
+const LOW = 20;
+
+/* ---- Wardrobe ---- */
+const dressItems = {
+  head: [
+    { id:'h1',  name:'Red Bow',        price:10, icon:'🎀', html:'<span style="font-size:36px;position:absolute;top:12px;left:45px;transform:rotate(-15deg)">🎀</span>' },
+    { id:'h2',  name:'Golden Crown',   price:20, icon:'👑', html:'<span style="font-size:32px;position:absolute;top:6px;left:70px">👑</span>' },
+    { id:'h3',  name:'Party Hat',      price:15, icon:'🎉', html:'<span style="font-size:34px;position:absolute;top:4px;left:68px">🎉</span>' },
+    { id:'h4',  name:'Graduation Cap', price:25, icon:'🎓', html:'<span style="font-size:34px;position:absolute;top:4px;left:66px">🎓</span>' },
+    { id:'h5',  name:'Flower Crown',   price:15, icon:'🌸', html:'<span style="font-size:32px;position:absolute;top:12px;left:66px">🌸</span>' },
+    { id:'h6',  name:'Bear Ears',      price:12, icon:'🐻', html:'<span style="font-size:32px;position:absolute;top:8px;left:68px">🐻</span>' },
+    { id:'h7',  name:'Witch Hat',      price:18, icon:'🧙‍♀️', html:'<span style="font-size:36px;position:absolute;top:2px;left:65px">🧙‍♀️</span>' },
+    { id:'h8',  name:'Chef Hat',       price:15, icon:'👨‍🍳', html:'<span style="font-size:36px;position:absolute;top:0px;left:68px">👨‍🍳</span>' },
+    { id:'h9',  name:'Cowboy Hat',     price:18, icon:'🤠', html:'<span style="font-size:34px;position:absolute;top:6px;left:66px">🤠</span>' },
+    { id:'h10', name:'Santa Hat',      price:15, icon:'🎅', html:'<span style="font-size:36px;position:absolute;top:2px;left:68px">🎅</span>' }
+  ],
+  apron: [
+    { id:'a1',  name:'Strawberry Apron', price:15, icon:'🍓', c:'#FF4D6D' },
+    { id:'a2',  name:'Bee Bib',          price:15, icon:'🐝', c:'#FFCA3A' },
+    { id:'a3',  name:'Star Bib',         price:12, icon:'⭐', c:'#FFD166' },
+    { id:'a4',  name:'Heart Apron',      price:15, icon:'💖', c:'#FF8FA3' },
+    { id:'a5',  name:'Fish Bib',         price:18, icon:'🐟', c:'#4EA8DE' },
+    { id:'a6',  name:'Flower Apron',     price:15, icon:'🌻', c:'#8AC926' },
+    { id:'a7',  name:'Clover Apron',     price:12, icon:'🍀', c:'#52B788' },
+    { id:'a8',  name:'Ribbon Bib',       price:15, icon:'🎀', c:'#F72585' },
+    { id:'a9',  name:'Paw Print Bib',    price:20, icon:'🐾', c:'#B5179E' },
+    { id:'a10', name:'Rainbow Apron',    price:22, icon:'🌈', c:'linear-gradient(90deg,#ffadad,#ffd6a5,#fdffb6,#caffbf,#9bf6ff,#a0c4ff,#bdb2ff)' }
+  ]
+};
+dressItems.apron.forEach(it => {
+  it.html = '<div style="position:absolute;top:110px;left:50px;width:100px;height:50px;background:'+it.c+
+            ';border:3px solid #5C2C16;border-radius:12px 12px 24px 24px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 6px rgba(0,0,0,.15);z-index:25">'+it.icon+'</div>';
+});
+
+/* ---- State ---- */
+let accounts = {};
+let currentUser = null;
+let currentDressCategory = 'head';
+let activeMission = null;
+
+let cloud = null;                 // db namespace or null
+let cloudReady = false;
+let cloudPlayers = [];            // [{username,catName,weight,level,updatedAt}]
+let cloudUnsub = null;
+let cloudPending = false;
+
+let isResting = false;
+let restTimer = null;
+let restGained = 0;
+
+/* ---- Boot ---- */
+window.addEventListener('DOMContentLoaded', () => {
+  loadAccounts();
+  checkAutoLogin();
+  setInterval(tickLoop, 15000);
+  refreshNotifyButton();
+  renderLeaderboard();
+  initCloud();               // resolves later; page works without it
+});
+
+window.addEventListener('storage', () => {
+  loadAccounts();
+  if (currentUser && accounts[currentUser]) { updateUI(); renderDressUpGrid(); }
+  renderLeaderboard();
+});
+
+document.addEventListener('visibilitychange', () => {
+  if (!document.hidden) { applyDecay(); updateUI(); }
+});
+
+function cur(){ return currentUser ? accounts[currentUser] : null; }
+
+/* ---- Storage ---- */
+function loadAccounts(){
+  try { accounts = JSON.parse(localStorage.getItem(DB_KEY) || '{}'); }
+  catch(e){ accounts = {}; }
+  Object.values(accounts).forEach(migrate);
+}
+function saveAccounts(){
+  try { localStorage.setItem(DB_KEY, JSON.stringify(accounts)); } catch(e){}
+}
+function migrate(a){
+  const now = Date.now();
+  if (typeof a.sleep  !== 'number') a.sleep = 100;
+  if (typeof a.energy !== 'number') a.energy = 100;
+  if (!a.lastEnergyTick) a.lastEnergyTick = a.lastDecayTime || now;
+  if (!a.lastSleepTick)  a.lastSleepTick  = a.lastDecayTime || now;
+  if (!a.flags) a.flags = { energyLow:false, sleepLow:false };
+  if (!a.unlockedItems) a.unlockedItems = [];
+  if (!a.equipped) a.equipped = { head:null, apron:null };
+  if (typeof a.contactInfo !== 'string') a.contactInfo = '';
+  delete a.lastDecayTime;
+}
+
+/* ============ AUTH ============ */
+function switchAuthTab(tab){
+  ['loginForm','registerForm','forgotForm','syncForm'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  const box = document.getElementById('authTabsContainer');
+  const lb = document.getElementById('authTabLogin'), rb = document.getElementById('authTabRegister');
+  const on  = "w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
+  const off = "w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition";
+  if (tab === 'login')      { box.classList.remove('hidden'); lb.className = on; rb.className = off; document.getElementById('loginForm').classList.remove('hidden'); }
+  else if (tab === 'register'){ box.classList.remove('hidden'); rb.className = on; lb.className = off; document.getElementById('registerForm').classList.remove('hidden'); }
+  else { box.classList.add('hidden'); document.getElementById(tab === 'forgot' ? 'forgotForm' : 'syncForm').classList.remove('hidden'); }
+}
+
+function handleRegister(e){
+  e.preventDefault();
+  loadAccounts();
+  const username = document.getElementById('regUsername').value.trim();
+  const catName  = document.getElementById('regCatName').value.trim();
+  if (!username || !catName) return;
+  if (accounts[username]) { showToast('❌ Username already exists!', '⚠️'); return; }
+  if (cloudPlayers.some(p => (p.username||'').toLowerCase() === username.toLowerCase())) {
+    showToast('❌ That username is taken online!', '⚠️'); return;
+  }
+  const now = Date.now();
+  accounts[username] = {
+    username, catName,
+    password: document.getElementById('regPassword').value,
+    question: document.getElementById('regSecurityQuestion').value,
+    answer: document.getElementById('regSecurityAnswer').value.trim().toLowerCase(),
+    fish:100, weight:2.00, level:1, exp:0, energy:100, sleep:100,
+    contactInfo:'', joinedAt: now,
+    lastEnergyTick: now, lastSleepTick: now,
+    flags:{ energyLow:false, sleepLow:false },
+    unlockedItems:[], equipped:{ head:null, apron:null }
+  };
+  saveAccounts();
+  pushCloudProfile(accounts[username]);
+  showToast('✨ Account created! Please login.', '🎉');
+  switchAuthTab('login');
+  document.getElementById('registerForm').reset();
+}
+
+function handleLogin(e){
+  e.preventDefault();
+  loadAccounts();
+  const username = document.getElementById('loginUsername').value.trim();
+  const password = document.getElementById('loginPassword').value;
+  if (!accounts[username] || accounts[username].password !== password) {
+    showToast('❌ Invalid username or password', '⚠️'); return;
+  }
+  currentUser = username;
+  try { localStorage.setItem(SESS_KEY, username); } catch(e){}
+  document.getElementById('authModal').classList.add('hidden');
+  document.getElementById('loginForm').reset();
+  initUserSession();
+  showToast('Welcome back, ' + username + '!', '😸');
+}
+
+function handleForgotPassword(e){
+  e.preventDefault();
+  loadAccounts();
+  const username = document.getElementById('forgotUsername').value.trim();
+  const acc = accounts[username];
+  if (!acc) { showToast('❌ Username not found', '⚠️'); return; }
+  if (acc.question !== document.getElementById('forgotSecurityQuestion').value ||
+      acc.answer   !== document.getElementById('forgotSecurityAnswer').value.trim().toLowerCase()) {
+    showToast('❌ Incorrect security question or answer', '⚠️'); return;
+  }
+  acc.password = document.getElementById('forgotNewPassword').value;
+  saveAccounts();
+  showToast('🔑 Password reset! Please login.', '✨');
+  switchAuthTab('login');
+  document.getElementById('forgotForm').reset();
+}
+
+function exportAccountKey(){
+  const acc = cur(); if (!acc) return;
+  const key = btoa(unescape(encodeURIComponent(JSON.stringify(acc))));
+  copyText(key, '📋 Account Sync Key copied!', '🔑');
+}
+
+function handleImportData(e){
+  e.preventDefault();
+  try {
+    const obj = JSON.parse(decodeURIComponent(escape(atob(document.getElementById('syncDataInput').value.trim()))));
+    if (!obj.username || !obj.password) throw new Error('bad');
+    migrate(obj);
+    loadAccounts();
+    accounts[obj.username] = obj;
+    saveAccounts();
+    pushCloudProfile(obj);
+    showToast('📲 Account imported! Please login.', '✨');
+    switchAuthTab('login');
+    document.getElementById('syncForm').reset();
+  } catch(err){ showToast('❌ Invalid Sync Key Data!', '⚠️'); }
+}
+
+function logout(){
+  stopRest(false);
+  try { localStorage.removeItem(SESS_KEY); } catch(e){}
+  currentUser = null;
+  document.getElementById('authModal').classList.remove('hidden');
+  switchAuthTab('login');
+  showToast('Logged out successfully', '👋');
+}
+
+function checkAutoLogin(){
+  let s = null;
+  try { s = localStorage.getItem(SESS_KEY); } catch(e){}
+  if (s && accounts[s]) {
+    currentUser = s;
+    document.getElementById('authModal').classList.add('hidden');
+    initUserSession();
+  } else {
+    document.getElementById('authModal').classList.remove('hidden');
+  }
+}
+
+function initUserSession(){
+  applyDecay();
+  updateUI();
+  renderDressUpGrid();
+  renderLeaderboard();
+  pushCloudProfile();
+}
+
+/* ============ OFFLINE TIMESTAMP DECAY ============ */
+function applyDecay(){
+  const acc = cur(); if (!acc) return;
+  const now = Date.now();
+
+  const eLoss = Math.floor((now - acc.lastEnergyTick) / ENERGY_MS);
+  if (eLoss > 0) { acc.energy = Math.max(0, acc.energy - eLoss); acc.lastEnergyTick += eLoss * ENERGY_MS; }
+
+  if (!isResting) {
+    const sLoss = Math.floor((now - acc.lastSleepTick) / SLEEP_MS);
+    if (sLoss > 0) { acc.sleep = Math.max(0, acc.sleep - sLoss); acc.lastSleepTick += sLoss * SLEEP_MS; }
+  }
+
+  if (eLoss > 0 || (!isResting)) saveAccounts();
+  checkLowAlerts(acc);
+}
+
+function tickLoop(){
+  applyDecay();
+  updateUI();
+}
+
+/* ============ NOTIFICATIONS ============ */
+function notifySupported(){ try { return typeof Notification !== 'undefined'; } catch(e){ return false; } }
+
+function refreshNotifyButton(){
+  const btn = document.getElementById('notifyBtn');
+  if (!notifySupported()) { btn.innerText = '🔕'; btn.title = 'Notifications not available here'; return; }
+  btn.innerText = Notification.permission === 'granted' ? '🔔' : '🔕';
+}
+
+function enableNotifications(){
+  if (!notifySupported()) { showToast('⚠️ Notifications not supported in this view', '🔕'); return; }
+  if (Notification.permission === 'granted') { showToast('🔔 Low-stat alerts are already on', '✅'); return; }
+  Notification.requestPermission().then(p => {
+    refreshNotifyButton();
+    showToast(p === 'granted' ? '🔔 Alerts enabled! We will warn you under 20%' : '🔕 Alerts stay off', p === 'granted' ? '✅' : '👌');
+  }).catch(() => showToast('⚠️ Could not request permission', '🔕'));
+}
+
+function fireNotification(title, body){
+  if (!notifySupported() || Notification.permission !== 'granted') return;
+  try { new Notification(title, { body: body, tag: 'energy-cat', icon: '' }); } catch(e){}
+}
+
+function checkLowAlerts(acc){
+  let changed = false;
+  if (acc.energy < LOW && !acc.flags.energyLow) {
+    acc.flags.energyLow = true; changed = true;
+    fireNotification('😿 ' + acc.catName + ' is hungry!', 'Energy is at ' + acc.energy + '%. Feed your cat or run an eco mission.');
+  } else if (acc.energy >= LOW + 5 && acc.flags.energyLow) { acc.flags.energyLow = false; changed = true; }
+
+  if (acc.sleep < LOW && !acc.flags.sleepLow) {
+    acc.flags.sleepLow = true; changed = true;
+    fireNotification('💤 ' + acc.catName + ' is sleepy!', 'Sleep is at ' + acc.sleep + '%. Tap Rest to let your cat nap.');
+  } else if (acc.sleep >= LOW + 5 && acc.flags.sleepLow) { acc.flags.sleepLow = false; changed = true; }
+
+  if (changed) saveAccounts();
+}
+
+/* ============ UI ============ */
+function updateUI(){
+  const acc = cur(); if (!acc) return;
+
+  document.getElementById('displayUser').innerText = acc.username;
+  document.getElementById('displayCatName').innerText = acc.catName;
+  document.getElementById('fishCount').innerText = acc.fish;
+  document.getElementById('catLevelBadge').innerText = 'LVL ' + acc.level;
+  document.getElementById('catWeightBadge').innerText = '⚖️ ' + acc.weight.toFixed(2) + ' kg';
+  document.getElementById('expText').innerText = acc.exp + '/50 EXP';
+  document.getElementById('expBar').style.width = Math.min(100, (acc.exp / 50) * 100) + '%';
+
+  document.getElementById('energyText').innerText = acc.energy + '/100';
+  document.getElementById('energyBar').style.width = acc.energy + '%';
+  document.getElementById('sleepText').innerText = Math.round(acc.sleep) + '/100';
+  document.getElementById('sleepBar').style.width = acc.sleep + '%';
+
+  const awake = document.getElementById('catEyesAwake');
+  const sad   = document.getElementById('catEyesSad');
+  const asleep= document.getElementById('catEyesSleep');
+  const banner= document.getElementById('sadWarningBanner');
+  const zzz   = document.getElementById('sleepEffect');
+  const breath= document.getElementById('catBreath');
+
+  awake.classList.add('hidden'); sad.classList.add('hidden'); asleep.classList.add('hidden');
+
+  if (isResting) {
+    asleep.classList.remove('hidden');
+    zzz.classList.remove('hidden');
+    breath.classList.add('animate-breathe-slow'); breath.classList.remove('animate-breathe');
+    banner.classList.add('hidden');
+    document.getElementById('catStatusLabel').innerText = '💤 Sleeping… ' + Math.round(acc.sleep) + '%';
+  } else {
+    zzz.classList.add('hidden');
+    breath.classList.remove('animate-breathe-slow'); breath.classList.add('animate-breathe');
+    const lowE = acc.energy < LOW, lowS = acc.sleep < LOW;
+    if (lowE || lowS) {
+      sad.classList.remove('hidden');
+      banner.classList.remove('hidden');
+      document.getElementById('sadWarningText').innerText =
+        lowE && lowS ? 'Energy & Sleep below 20%! Your cat is hungry and exhausted!'
+        : lowE ? 'Energy below 20%! Your cat is hungry and sad!'
+        : 'Sleep below 20%! Your cat is exhausted and sad!';
+      document.getElementById('catStatusLabel').innerText = lowE && !lowS ? '😿 Hungry & Sad… (Low Energy!)'
+        : (!lowE && lowS ? '😿 Sleepy & Sad… (Low Sleep!)' : '😿 Hungry, sleepy & sad…');
+    } else {
+      awake.classList.remove('hidden');
+      banner.classList.add('hidden');
+      document.getElementById('catStatusLabel').innerText = '✨ Tap Cat to Show Love 💕';
+    }
+  }
+
+  updateRestButton();
+  renderEquippedOverlay();
+}
+
+function updateRestButton(){
+  const acc = cur();
+  const label = document.getElementById('restBtnLabel');
+  const btn = document.getElementById('restBtn');
+  if (!acc) return;
+  if (isResting) {
+    label.innerText = 'Sleeping… ' + Math.round(acc.sleep) + '% (tap to wake)';
+    btn.className = 'clay-btn bg-gradient-to-r from-slate-500 to-indigo-600 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md';
+  } else {
+    label.innerText = 'Rest (💤 fills slowly)';
+    btn.className = 'clay-btn bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md';
+  }
+}
+
+function renderEquippedOverlay(){
+  const acc = cur(); if (!acc) return;
+  const h = document.getElementById('slot-head'), a = document.getElementById('slot-apron');
+  h.innerHTML = ''; a.innerHTML = '';
+  if (acc.equipped.head)  { const it = dressItems.head.find(i => i.id === acc.equipped.head);   if (it) h.innerHTML = it.html; }
+  if (acc.equipped.apron) { const it = dressItems.apron.find(i => i.id === acc.equipped.apron); if (it) a.innerHTML = it.html; }
+}
+
+/* ============ ACTIONS ============ */
+function addExp(pts){
+  const acc = cur();
+  acc.exp += pts;
+  while (acc.exp >= 50) {
+    acc.level += 1; acc.exp -= 50; acc.fish += 20;
+    showToast('🎉 Level Up! Level ' + acc.level + '! Earned +20 🐟 Fish!', '🌟');
+  }
+  saveAccounts();
+}
+
+function petCat(e){
+  if (!currentUser) return;
+  const stage = document.getElementById('catStage');
+  const rect = stage.getBoundingClientRect();
+  const heart = document.createElement('div');
+  heart.className = 'heart-pop';
+  heart.innerText = isResting ? '💤' : '💖';
+  heart.style.left = (e.clientX - rect.left) + 'px';
+  heart.style.top  = (e.clientY - rect.top) + 'px';
+  stage.appendChild(heart);
+  setTimeout(() => heart.remove(), 900);
+}
+
+function feedCat(){
+  const acc = cur(); if (!acc) return;
+  if (isResting) { showToast('💤 Your cat is asleep — wake it first!', '😴'); return; }
+  if (acc.energy >= 100) { showToast('❌ Cat is full! Energy already 100%.', '🥣'); return; }
+  if (acc.fish < 5) { showToast('❌ Not enough Fish tokens!', '🐟'); return; }
+  acc.fish -= 5;
+  acc.weight += 0.15;
+  acc.energy = Math.min(100, acc.energy + 15);
+  acc.lastEnergyTick = Date.now();
+  addExp(10);
+  saveAccounts(); checkLowAlerts(acc); updateUI(); queueCloudPush();
+  showToast('🍱 Yum! Fed your cat (+0.15kg / +15⚡)', '😋');
+}
+
+/* ---- Gradual, time-based rest ---- */
+function toggleRest(){ isResting ? stopRest(true) : startRest(); }
+
+function startRest(){
+  const acc = cur(); if (!acc) return;
+  if (acc.sleep >= 100) { showToast('⚡ Sleep meter is already full!', '😴'); return; }
+  isResting = true; restGained = 0;
+  acc.lastSleepTick = Date.now();
+  updateUI();
+  showToast('😴 ' + acc.catName + ' curled up for a nap…', '💤');
+  restTimer = setInterval(restTick, 800);
+}
+
+function restTick(){
+  const acc = cur();
+  if (!acc) { stopRest(false); return; }
+  acc.sleep = Math.min(100, acc.sleep + 2);
+  acc.lastSleepTick = Date.now();
+  restGained += 2;
+  document.getElementById('sleepText').innerText = Math.round(acc.sleep) + '/100';
+  document.getElementById('sleepBar').style.width = acc.sleep + '%';
+  document.getElementById('catStatusLabel').innerText = '💤 Sleeping… ' + Math.round(acc.sleep) + '%';
+  updateRestButton();
+  if (acc.sleep >= 100) { stopRest(true, true); }
+}
+
+function stopRest(reward, full){
+  if (restTimer) { clearInterval(restTimer); restTimer = null; }
+  if (!isResting) return;
+  isResting = false;
+  const acc = cur();
+  if (acc && reward && restGained > 0) {
+    const gain = Math.min(0.05, 0.05 * (restGained / 100));
+    acc.weight += gain;
+    addExp(5);
+    showToast(full ? '🌞 Fully rested! 💤 100% (+' + gain.toFixed(2) + 'kg)' : '🌞 Woke up! 💤 ' + Math.round(acc.sleep) + '% (+' + gain.toFixed(2) + 'kg)', '✨');
+    queueCloudPush();
+  }
+  restGained = 0;
+  saveAccounts();
+  if (acc) checkLowAlerts(acc);
+  updateUI();
+}
+
+/* ============ ECO MISSIONS ============ */
+function openMissionUploadModal(name, fish, energy, sleep){
+  if (!currentUser) return;
+  activeMission = { name, fish, energy, sleep };
+  document.getElementById('modalMissionName').innerText = 'Mission: ' + name;
+  document.getElementById('photoPreview').classList.add('hidden');
+  document.getElementById('uploadPlaceholder').classList.remove('hidden');
+  document.getElementById('photoModal').classList.remove('hidden');
+}
+function closePhotoModal(){ document.getElementById('photoModal').classList.add('hidden'); activeMission = null; }
+function triggerFileSelect(){ document.getElementById('photoFileInput').click(); }
+function handlePhotoUpload(e){
+  const file = e.target.files[0]; if (!file) return;
+  const reader = new FileReader();
+  reader.onload = ev => {
+    const img = document.getElementById('photoPreview');
+    img.src = ev.target.result;
+    img.classList.remove('hidden');
+    document.getElementById('uploadPlaceholder').classList.add('hidden');
+  };
+  reader.readAsDataURL(file);
+}
+function submitMissionWithPhoto(){
+  if (document.getElementById('photoPreview').classList.contains('hidden')) {
+    showToast('⚠️ Please choose a photo proof first!', '📷'); return;
+  }
+  const acc = cur(); if (!acc || !activeMission) return;
+  acc.fish   += activeMission.fish;
+  acc.energy  = Math.min(100, acc.energy + activeMission.energy);
+  acc.sleep   = Math.min(100, acc.sleep  + activeMission.sleep);
+  acc.lastEnergyTick = acc.lastSleepTick = Date.now();
+  addExp(20);
+  const m = activeMission;
+  saveAccounts(); checkLowAlerts(acc); updateUI(); closePhotoModal(); queueCloudPush();
+  document.getElementById('photoFileInput').value = '';
+  showToast('🌱 Mission done! +' + m.fish + '🐟 +' + m.energy + '⚡ +' + m.sleep + '💤', '🎉');
+}
+
+/* ============ DRESS UP ============ */
+function switchDressCategory(cat){
+  currentDressCategory = cat;
+  const on  = "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300";
+  const off = "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200";
+  document.getElementById('cat-head-btn').className  = cat === 'head'  ? on : off;
+  document.getElementById('cat-apron-btn').className = cat === 'apron' ? on : off;
+  renderDressUpGrid();
+}
+
+function renderDressUpGrid(){
+  const acc = cur(); if (!acc) return;
+  const grid = document.getElementById('dressItemsGrid');
+  grid.innerHTML = '';
+  dressItems[currentDressCategory].forEach(item => {
+    const unlocked = acc.unlockedItems.includes(item.id);
+    const equipped = acc.equipped[currentDressCategory] === item.id;
+    const card = document.createElement('div');
+    card.className = 'p-2 rounded-xl border-2 flex flex-col items-center justify-between transition ' + (equipped ? 'bg-pink-100 border-pink-500' : 'bg-slate-50 border-rose-100');
+    card.innerHTML =
+      '<div class="text-2xl my-0.5">' + item.icon + '</div>' +
+      '<div class="text-[10px] font-black text-slate-800 text-center truncate w-full">' + item.name + '</div>' +
+      '<div class="mt-1 w-full">' + (
+        equipped ? '<button onclick="unequipItem(\'' + currentDressCategory + '\')" class="clay-btn w-full bg-rose-500 text-white font-black text-[9px] py-1 rounded-lg">Unequip</button>'
+        : unlocked ? '<button onclick="equipItem(\'' + currentDressCategory + '\',\'' + item.id + '\')" class="clay-btn w-full bg-emerald-500 text-white font-black text-[9px] py-1 rounded-lg">Equip</button>'
+        : '<button onclick="buyItem(\'' + currentDressCategory + '\',\'' + item.id + '\',' + item.price + ')" class="clay-btn w-full bg-amber-400 text-slate-900 font-black text-[9px] py-1 rounded-lg">Buy (' + item.price + '🐟)</button>'
+      ) + '</div>';
+    grid.appendChild(card);
+  });
+}
+
+function buyItem(cat, id, price){
+  const acc = cur();
+  if (acc.fish < price) { showToast('❌ Not enough Fish tokens!', '🐟'); return; }
+  acc.fish -= price;
+  acc.unlockedItems.push(id);
+  acc.equipped[cat] = id;
+  saveAccounts(); updateUI(); renderDressUpGrid();
+  showToast('🛍️ Outfit purchased and equipped!', '✨');
+}
+function equipItem(cat, id){ const a = cur(); a.equipped[cat] = id; saveAccounts(); updateUI(); renderDressUpGrid(); showToast('✨ Outfit equipped!', '👗'); }
+function unequipItem(cat){ const a = cur(); a.equipped[cat] = null; saveAccounts(); updateUI(); renderDressUpGrid(); showToast('🔄 Outfit unequipped', '👕'); }
+function resetOutfit(){ const a = cur(); a.equipped.head = null; a.equipped.apron = null; saveAccounts(); updateUI(); renderDressUpGrid(); showToast('🔄 All outfits removed!', '✨'); }
+
+/* ============ CLOUD LEADERBOARD (shared db) ============ */
+function slug(name){
+  const s = String(name).toLowerCase().replace(/[^a-z0-9_\-.~:@+]/g, '-').slice(0, 60);
+  return s || 'player';
+}
+
+async function initCloud(){
+  try {
+    if (!window.claude || typeof window.claude.use !== 'function') { setCloudStatus('offline'); return; }
+    cloud = await window.claude.use('db');
+  } catch(e){ cloud = null; }
+  if (!cloud) { setCloudStatus('offline'); return; }
+  cloudReady = true;
+  setCloudStatus('online');
+  subscribeCloud();
+  pushCloudProfile();
+}
+
+function subscribeCloud(){
+  if (!cloud || cloudUnsub) return;
+  try {
+    cloudUnsub = cloud.collection('players').orderBy('weight', 'desc').limit(300).onSnapshot(
+      snap => {
+        cloudPlayers = snap.docs.map(d => {
+          const v = d.data() || {};
+          return {
+            username: String(v.username || d.id),
+            catName:  String(v.catName || 'Cat'),
+            weight:   Number(v.weight) || 0,
+            level:    Number(v.level) || 1,
+            updatedAt: Number(v.updatedAt) || 0
+          };
         });
-
-        // Sync local storage across devices / sessions
-        window.addEventListener('storage', () => {
-            loadAccounts();
-            if (currentUser && accounts[currentUser]) {
-                updateUI();
-                renderDressUpGrid();
-                renderLeaderboard();
-            }
-        });
-
-        function loadAccounts() {
-            const raw = localStorage.getItem(DB_KEY);
-            accounts = raw ? JSON.parse(raw) : {};
-        }
-
-        function saveAccounts() {
-            localStorage.setItem(DB_KEY, JSON.stringify(accounts));
-        }
-
-        function checkAutoLogin() {
-            const sessionUser = localStorage.getItem('ENERGY_CAT_ACTIVE_USER');
-            if (sessionUser && accounts[sessionUser]) {
-                currentUser = sessionUser;
-                document.getElementById('authModal').classList.add('hidden');
-                initUserSession();
-            } else {
-                document.getElementById('authModal').classList.remove('hidden');
-            }
-        }
-
-        /* --- AUTHENTICATION & CROSS-DEVICE SYNC --- */
-        function switchAuthTab(tab) {
-            document.getElementById('loginForm').classList.add('hidden');
-            document.getElementById('registerForm').classList.add('hidden');
-            document.getElementById('forgotForm').classList.add('hidden');
-            document.getElementById('syncForm').classList.add('hidden');
-
-            const tabContainer = document.getElementById('authTabsContainer');
-            const loginBtn = document.getElementById('authTabLogin');
-            const regBtn = document.getElementById('authTabRegister');
-
-            if (tab === 'login') {
-                tabContainer.classList.remove('hidden');
-                loginBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
-                regBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition";
-                document.getElementById('loginForm').classList.remove('hidden');
-            } else if (tab === 'register') {
-                tabContainer.classList.remove('hidden');
-                regBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
-                loginBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition";
-                document.getElementById('registerForm').classList.remove('hidden');
-            } else if (tab === 'forgot') {
-                tabContainer.classList.add('hidden');
-                document.getElementById('forgotForm').classList.remove('hidden');
-            } else if (tab === 'sync') {
-                tabContainer.classList.add('hidden');
-                document.getElementById('syncForm').classList.remove('hidden');
-            }
-        }
-
-        function handleRegister(e) {
-            e.preventDefault();
-            loadAccounts();
-            const username = document.getElementById('regUsername').value.trim();
-            const catName = document.getElementById('regCatName').value.trim();
-            const password = document.getElementById('regPassword').value;
-            const question = document.getElementById('regSecurityQuestion').value;
-            const answer = document.getElementById('regSecurityAnswer').value.trim().toLowerCase();
-
-            if (accounts[username]) {
-                showToast('❌ Username already exists!', '⚠️');
-                return;
-            }
-
-            accounts[username] = {
-                username,
-                catName,
-                password,
-                question,
-                answer,
-                fish: 100,
-                weight: 2.00,
-                level: 1,
-                exp: 0,
-                energy: 100,
-                contactInfo: '',
-                lastDecayTime: Date.now(),
-                unlockedItems: [],
-                equipped: { head: null, apron: null }
-            };
-
-            saveAccounts();
-            showToast('✨ Account created successfully! Please login.', '🎉');
-            switchAuthTab('login');
-            document.getElementById('registerForm').reset();
-        }
-
-        function handleLogin(e) {
-            e.preventDefault();
-            loadAccounts();
-            const username = document.getElementById('loginUsername').value.trim();
-            const password = document.getElementById('loginPassword').value;
-
-            if (!accounts[username] || accounts[username].password !== password) {
-                showToast('❌ Invalid username or password', '⚠️');
-                return;
-            }
-
-            currentUser = username;
-            localStorage.setItem('ENERGY_CAT_ACTIVE_USER', username);
-            document.getElementById('authModal').classList.add('hidden');
-            document.getElementById('loginForm').reset();
-            initUserSession();
-            showToast(`Welcome back, ${username}!`, '😸');
-        }
-
-        function handleForgotPassword(e) {
-            e.preventDefault();
-            loadAccounts();
-            const username = document.getElementById('forgotUsername').value.trim();
-            const question = document.getElementById('forgotSecurityQuestion').value;
-            const answer = document.getElementById('forgotSecurityAnswer').value.trim().toLowerCase();
-            const newPassword = document.getElementById('forgotNewPassword').value;
-
-            if (!accounts[username]) {
-                showToast('❌ Username not found', '⚠️');
-                return;
-            }
-
-            const acc = accounts[username];
-            if (acc.question !== question || acc.answer !== answer) {
-                showToast('❌ Incorrect security question or answer', '⚠️');
-                return;
-            }
-
-            acc.password = newPassword;
-            saveAccounts();
-            showToast('🔑 Password reset successfully! Logging in...', '✨');
-            switchAuthTab('login');
-            document.getElementById('forgotForm').reset();
-        }
-
-        function exportAccountKey() {
-            if (!currentUser || !accounts[currentUser]) return;
-            const accData = JSON.stringify(accounts[currentUser]);
-            const encodedKey = btoa(unescape(encodeURIComponent(accData)));
-            navigator.clipboard.writeText(encodedKey);
-            showToast('📋 Account Sync Key copied to clipboard!', '🔑');
-        }
-
-        function handleImportData(e) {
-            e.preventDefault();
-            const key = document.getElementById('syncDataInput').value.trim();
-            try {
-                const decoded = decodeURIComponent(escape(atob(key)));
-                const accObj = JSON.parse(decoded);
-                if (!accObj.username || !accObj.password) throw new Error();
-
-                loadAccounts();
-                accounts[accObj.username] = accObj;
-                saveAccounts();
-
-                showToast('📲 Account imported successfully! Please login.', '✨');
-                switchAuthTab('login');
-                document.getElementById('syncForm').reset();
-            } catch (err) {
-                showToast('❌ Invalid Sync Key Data!', '⚠️');
-            }
-        }
-
-        function logout() {
-            localStorage.removeItem('ENERGY_CAT_ACTIVE_USER');
-            currentUser = null;
-            document.getElementById('authModal').classList.remove('hidden');
-            switchAuthTab('login');
-            showToast('Logged out successfully', '👋');
-        }
-
-        function initUserSession() {
-            calculateDecay();
-            updateUI();
-            renderDressUpGrid();
-            renderLeaderboard();
-        }
-
-        /* --- ENERGY DECAY MECHANICS --- */
-        function calculateDecay() {
-            if (!currentUser || !accounts[currentUser]) return;
-            const acc = accounts[currentUser];
-            const now = Date.now();
-            const diffMinutes = Math.floor((now - acc.lastDecayTime) / (1000 * 60));
-            const decayPoints = Math.floor(diffMinutes / 3);
-
-            if (decayPoints > 0) {
-                acc.energy = Math.max(0, acc.energy - decayPoints);
-                acc.lastDecayTime = now;
-                saveAccounts();
-            }
-        }
-
-        function setupEnergyDecayLoop() {
-            setInterval(() => {
-                calculateDecay();
-                updateUI();
-            }, 30000);
-        }
-
-        /* --- UI RENDER & CAT EXPRESSIONS --- */
-        function updateUI() {
-            if (!currentUser || !accounts[currentUser]) return;
-            const acc = accounts[currentUser];
-
-            document.getElementById('displayUser').innerText = acc.username;
-            document.getElementById('displayCatName').innerText = acc.catName;
-            document.getElementById('fishCount').innerText = acc.fish;
-
-            // Level & EXP
-            document.getElementById('catLevelBadge').innerText = `LVL ${acc.level}`;
-            document.getElementById('catWeightBadge').innerText = `⚖️ ${acc.weight.toFixed(2)} kg`;
-            document.getElementById('expText').innerText = `${acc.exp}/50 EXP`;
-            document.getElementById('expBar').style.width = `${Math.min(100, (acc.exp / 50) * 100)}%`;
-
-            // Energy Bar
-            document.getElementById('energyText').innerText = `${acc.energy}/100`;
-            document.getElementById('energyBar').style.width = `${acc.energy}%`;
-
-            // Cat Expressions & Warning Banner (<20% Sad Face)
-            const awakeEyes = document.getElementById('catEyesAwake');
-            const sadEyes = document.getElementById('catEyesSad');
-            const sleepEyes = document.getElementById('catEyesSleep');
-            const sadBanner = document.getElementById('sadWarningBanner');
-
-            awakeEyes.classList.add('hidden');
-            sadEyes.classList.add('hidden');
-            sleepEyes.classList.add('hidden');
-
-            if (acc.energy < 20) {
-                sadEyes.classList.remove('hidden');
-                sadBanner.classList.remove('hidden');
-                document.getElementById('catStatusLabel').innerText = '😿 Hungry & Sad... (Low Energy!)';
-            } else {
-                awakeEyes.classList.remove('hidden');
-                sadBanner.classList.add('hidden');
-                document.getElementById('catStatusLabel').innerText = '✨ Tap Cat to Show Love 💕';
-            }
-
-            // Render Clothes
-            renderEquippedOverlay();
-        }
-
-        function renderEquippedOverlay() {
-            const acc = accounts[currentUser];
-            const headSlot = document.getElementById('slot-head');
-            const apronSlot = document.getElementById('slot-apron');
-
-            headSlot.innerHTML = '';
-            apronSlot.innerHTML = '';
-
-            if (acc.equipped.head) {
-                const item = dressItems.head.find(i => i.id === acc.equipped.head);
-                if (item) headSlot.innerHTML = item.html;
-            }
-            if (acc.equipped.apron) {
-                const item = dressItems.apron.find(i => i.id === acc.equipped.apron);
-                if (item) apronSlot.innerHTML = item.html;
-            }
-        }
-
-        /* --- GAME ACTIONS --- */
-        function addExp(pts) {
-            const acc = accounts[currentUser];
-            acc.exp += pts;
-            if (acc.exp >= 50) {
-                acc.level += 1;
-                acc.exp -= 50;
-                acc.fish += 20; // Gain +20 Fish currency per Level Up
-                showToast(`🎉 Level Up! Level ${acc.level}! Earned +20 🐟 Fish!`, '🌟');
-            }
-            saveAccounts();
-        }
-
-        function petCat(e) {
-            if (!currentUser) return;
-
-            // NO EXP / NO LEVEL INCREASE ON HEART TAP
-            // Pop Heart Effect only for animation
-            const rect = document.getElementById('catStage').getBoundingClientRect();
-            const heart = document.createElement('div');
-            heart.className = 'heart-pop';
-            heart.innerText = '💖';
-            heart.style.left = `${e.clientX - rect.left}px`;
-            heart.style.top = `${e.clientY - rect.top}px`;
-            document.getElementById('catStage').appendChild(heart);
-            setTimeout(() => heart.remove(), 900);
-        }
-
-        function feedCat() {
-            const acc = accounts[currentUser];
-
-            if (acc.energy >= 100) {
-                showToast('❌ Cat is full! Energy is already at 100%.', '🥣');
-                return;
-            }
-
-            if (acc.fish < 5) {
-                showToast('❌ Not enough Fish tokens!', '🐟');
-                return;
-            }
-
-            acc.fish -= 5;
-            acc.weight += 0.15;
-            acc.energy = Math.min(100, acc.energy + 15);
-            addExp(10);
-
-            saveAccounts();
-            updateUI();
-            renderLeaderboard();
-            showToast('🍱 Yum! Fed your cat (+0.15kg / +15⚡)', '😋');
-        }
-
-        function restCat() {
-            const acc = accounts[currentUser];
-
-            if (acc.energy >= 100) {
-                showToast('⚡ Energy is already fully restored!', '😴');
-                return;
-            }
-
-            acc.energy = Math.min(100, acc.energy + 30);
-            acc.weight += 0.05;
-            addExp(5);
-
-            // Sleep Animation
-            document.getElementById('catEyesAwake').classList.add('hidden');
-            document.getElementById('catEyesSad').classList.add('hidden');
-            document.getElementById('catEyesSleep').classList.remove('hidden');
-            document.getElementById('sleepEffect').classList.remove('hidden');
-
-            setTimeout(() => {
-                document.getElementById('sleepEffect').classList.add('hidden');
-                updateUI();
-            }, 2000);
-
-            saveAccounts();
-            updateUI();
-            renderLeaderboard();
-            showToast('😴 Rested well! (+30⚡ / +0.05kg)', '✨');
-        }
-
-        /* --- ECO MISSIONS WITH PHOTO PROOF --- */
-        function openMissionUploadModal(name, rewardFish, rewardEnergy) {
-            activeMission = { name, rewardFish, rewardEnergy };
-            document.getElementById('modalMissionName').innerText = `Mission: ${name}`;
-            document.getElementById('photoPreview').classList.add('hidden');
-            document.getElementById('uploadPlaceholder').classList.remove('hidden');
-            document.getElementById('photoModal').classList.remove('hidden');
-        }
-
-        function closePhotoModal() {
-            document.getElementById('photoModal').classList.add('hidden');
-            activeMission = null;
-        }
-
-        function triggerFileSelect() {
-            document.getElementById('photoFileInput').click();
-        }
-
-        function handlePhotoUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(evt) {
-                    const img = document.getElementById('photoPreview');
-                    img.src = evt.target.result;
-                    img.classList.remove('hidden');
-                    document.getElementById('uploadPlaceholder').classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function submitMissionWithPhoto() {
-            const img = document.getElementById('photoPreview');
-            if (img.classList.contains('hidden')) {
-                showToast('⚠️ Please choose a photo proof first!', '📷');
-                return;
-            }
-
-            const acc = accounts[currentUser];
-            acc.fish += activeMission.rewardFish;
-            acc.energy = Math.min(100, acc.energy + activeMission.rewardEnergy);
-            addExp(20);
-
-            saveAccounts();
-            updateUI();
-            closePhotoModal();
-            showToast(`🌱 Mission completed! Received +${activeMission.rewardFish} 🐟 & +${activeMission.rewardEnergy}⚡`, '🎉');
-        }
-
-        /* --- DRESS-UP STUDIO --- */
-        function switchDressCategory(cat) {
-            currentDressCategory = cat;
-            document.getElementById('cat-head-btn').className = cat === 'head' 
-                ? "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300"
-                : "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200";
-            document.getElementById('cat-apron-btn').className = cat === 'apron' 
-                ? "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300"
-                : "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200";
-            renderDressUpGrid();
-        }
-
-        function renderDressUpGrid() {
-            if (!currentUser) return;
-            const acc = accounts[currentUser];
-            const grid = document.getElementById('dressItemsGrid');
-            grid.innerHTML = '';
-
-            const items = dressItems[currentDressCategory];
-            items.forEach(item => {
-                const isUnlocked = acc.unlockedItems.includes(item.id);
-                const isEquipped = acc.equipped[currentDressCategory] === item.id;
-
-                const card = document.createElement('div');
-                card.className = `p-2 rounded-xl border-2 flex flex-col items-center justify-between transition ${isEquipped ? 'bg-pink-100 border-pink-500' : 'bg-slate-50 border-rose-100'}`;
-                
-                card.innerHTML = `
-                    <div class="text-2xl my-0.5">${item.icon}</div>
-                    <div class="text-[10px] font-black text-slate-800 text-center truncate w-full">${item.name}</div>
-                    <div class="mt-1 w-full">
-                        ${isEquipped ? `
-                            <button onclick="unequipItem('${currentDressCategory}')" class="clay-btn w-full bg-rose-500 text-white font-black text-[9px] py-1 rounded-lg">Unequip</button>
-                        ` : isUnlocked ? `
-                            <button onclick="equipItem('${currentDressCategory}', '${item.id}')" class="clay-btn w-full bg-emerald-500 text-white font-black text-[9px] py-1 rounded-lg">Equip</button>
-                        ` : `
-                            <button onclick="buyItem('${currentDressCategory}', '${item.id}',${item.price})" class="clay-btn w-full bg-amber-400 text-slate-900 font-black text-[9px] py-1 rounded-lg">Buy (${item.price}🐟)</button>
-                        `}
-                    </div>
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function buyItem(category, itemId, price) {
-            const acc = accounts[currentUser];
-            if (acc.fish < price) {
-                showToast('❌ Not enough Fish tokens!', '🐟');
-                return;
-            }
-            acc.fish -= price;
-            acc.unlockedItems.push(itemId);
-            acc.equipped[category] = itemId;
-            saveAccounts();
-            updateUI();
-            renderDressUpGrid();
-            showToast('🛍️ Outfit purchased and equipped!', '✨');
-        }
-
-        function equipItem(category, itemId) {
-            const acc = accounts[currentUser];
-            acc.equipped[category] = itemId;
-            saveAccounts();
-            updateUI();
-            renderDressUpGrid();
-            showToast('✨ Outfit equipped!', '👗');
-        }
-
-        function unequipItem(category) {
-            const acc = accounts[currentUser];
-            acc.equipped[category] = null;
-            saveAccounts();
-            updateUI();
-            renderDressUpGrid();
-            showToast('🔄 Outfit unequipped', '👕');
-        }
-
-        function resetOutfit() {
-            const acc = accounts[currentUser];
-            acc.equipped.head = null;
-            acc.equipped.apron = null;
-            saveAccounts();
-            updateUI();
-            renderDressUpGrid();
-            showToast('🔄 All outfits removed!', '✨');
-        }
-
-        /* --- REAL PLAYER LEADERBOARD & MONTHLY CHAMPION FORM --- */
-        function renderLeaderboard() {
-            loadAccounts();
-            const rows = document.getElementById('leaderboardRows');
-            rows.innerHTML = '';
-
-            // REAL REGISTERED PLAYERS ONLY (NO MOCK DATA)
-            const playerList = Object.values(accounts).sort((a, b) => b.weight - a.weight);
-            document.getElementById('totalPlayersCount').innerText = `${playerList.length} Players`;
-
-            if (playerList.length > 0) {
-                const champ = playerList[0];
-                document.getElementById('monthlyChampionName').innerText = `${champ.username} (Cat: ${champ.catName} - ${champ.weight.toFixed(2)}kg)`;
-                
-                // Show contact submission form if current logged-in user is #1
-                const formBox = document.getElementById('winnerContactFormBox');
-                if (champ.username === currentUser) {
-                    formBox.classList.remove('hidden');
-                    if (champ.contactInfo) {
-                        document.getElementById('championContactInput').value = champ.contactInfo;
-                    }
-                } else {
-                    formBox.classList.add('hidden');
-                }
-            } else {
-                document.getElementById('monthlyChampionName').innerText = 'No registered players yet';
-                document.getElementById('winnerContactFormBox').classList.add('hidden');
-            }
-
-            playerList.forEach((p, idx) => {
-                const tr = document.createElement('tr');
-                tr.className = `border-b border-rose-50 ${p.username === currentUser ? 'bg-pink-50 font-black' : ''}`;
-                tr.innerHTML = `
-                    <td class="p-1 font-black text-rose-600">#${idx + 1}</td>
-                    <td class="p-1">
-                        <div class="font-black text-slate-800">${p.username} ${p.username === currentUser ? '⭐' : ''}</div>
-                        <div class="text-[9px] text-purple-600 font-bold">Cat: ${p.catName}</div>
-                    </td>
-                    <td class="p-1 text-right font-black text-purple-900">${p.weight.toFixed(2)} kg</td>
-                `;
-                rows.appendChild(tr);
-            });
-        }
-
-        function handleSaveContactInfo(e) {
-            e.preventDefault();
-            const contact = document.getElementById('championContactInput').value.trim();
-            const acc = accounts[currentUser];
-            acc.contactInfo = contact;
-            saveAccounts();
-            showToast('📩 Champion contact details saved!', '🎉');
-        }
-
-        /* --- NAVIGATION TABS --- */
-        function switchTab(tab) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.className = "nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]";
-            });
-
-            document.getElementById(`tab-${tab}`).classList.add('active');
-            const activeBtn = document.getElementById(`nav-${tab}`);
-            activeBtn.className = "nav-btn active flex flex-col items-center py-1.5 rounded-xl text-rose-600 bg-rose-100 font-black text-[10px]";
-
-            if (tab === 'dressup') renderDressUpGrid();
-            if (tab === 'ranks') renderLeaderboard();
-        }
-
-        /* --- TOAST NOTIFICATIONS --- */
-        function showToast(msg, icon = '✨') {
-            const toast = document.getElementById('toastNotification');
-            document.getElementById('toastMessage').innerText = msg;
-            document.getElementById('toastIcon').innerText = icon;
-
-            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-6');
-            toast.classList.add('opacity-100', 'translate-y-0');
-
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-6');
-            }, 2500);
-        }
-    </script>
+        setCloudStatus('online');
+        renderLeaderboard();
+      },
+      err => { cloudUnsub = null; setCloudStatus(err && err.code === 'revoked' ? 'offline' : 'offline'); renderLeaderboard(); }
+    );
+  } catch(e){ setCloudStatus('offline'); }
+}
+
+function queueCloudPush(){
+  if (cloudPending) return;
+  cloudPending = true;
+  setTimeout(() => { cloudPending = false; pushCloudProfile(); }, 1200);
+}
+
+async function pushCloudProfile(account){
+  const acc = account || cur();
+  if (!cloud || !acc) return;
+  try {
+    await cloud.doc('players/' + slug(acc.username)).set({
+      username: acc.username,
+      catName:  acc.catName,
+      weight:   Number(acc.weight.toFixed(2)),
+      level:    acc.level,
+      joinedAt: acc.joinedAt || Date.now(),
+      updatedAt: Date.now()
+    });
+  } catch(e){
+    if (e && (e.code === 'invalid_argument' || e.code === 'revoked')) setCloudStatus('readonly');
+  }
+}
+
+function setCloudStatus(mode){
+  const el = document.getElementById('cloudStatus');
+  if (!el) return;
+  if (mode === 'online')        { el.className = 'text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300'; el.innerText = '🌐 Live — synced across devices'; }
+  else if (mode === 'readonly') { el.className = 'text-[9px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300';   el.innerText = '👁️ Live (read-only view)'; }
+  else                          { el.className = 'text-[9px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200';   el.innerText = '📴 Offline — this device only'; }
+}
+
+/* Merge cloud players with local accounts (local wins only for fresher own data) */
+function mergedPlayers(){
+  const map = new Map();
+  cloudPlayers.forEach(p => map.set(p.username.toLowerCase(), Object.assign({ source:'cloud' }, p)));
+  Object.values(accounts).forEach(a => {
+    const k = a.username.toLowerCase();
+    const existing = map.get(k);
+    const local = { username:a.username, catName:a.catName, weight:a.weight, level:a.level, source:'local' };
+    if (!existing) map.set(k, local);
+    else if (a.username === currentUser && a.weight > existing.weight) map.set(k, Object.assign({}, existing, local));
+  });
+  return Array.from(map.values()).sort((a,b) => b.weight - a.weight);
+}
+
+function renderLeaderboard(){
+  const rows = document.getElementById('leaderboardRows');
+  if (!rows) return;
+  loadAccounts();
+  const list = mergedPlayers();
+  document.getElementById('totalPlayersCount').innerText = '👥 ' + list.length + (list.length === 1 ? ' User' : ' Users');
+  rows.innerHTML = '';
+
+  const champEl = document.getElementById('monthlyChampionName');
+  const formBox = document.getElementById('winnerContactFormBox');
+  if (list.length) {
+    const champ = list[0];
+    champEl.innerText = champ.username + ' (Cat: ' + champ.catName + ' — ' + champ.weight.toFixed(2) + 'kg)';
+    if (currentUser && champ.username === currentUser) {
+      formBox.classList.remove('hidden');
+      const acc = cur();
+      if (acc && acc.contactInfo) document.getElementById('championContactInput').value = acc.contactInfo;
+    } else formBox.classList.add('hidden');
+  } else {
+    champEl.innerText = 'No registered players yet';
+    formBox.classList.add('hidden');
+  }
+
+  list.forEach((p, i) => {
+    const me = p.username === currentUser;
+    const tr = document.createElement('tr');
+    tr.className = 'border-b border-rose-50 ' + (me ? 'bg-pink-50 font-black' : '');
+    tr.innerHTML =
+      '<td class="p-1 font-black text-rose-600">#' + (i + 1) + '</td>' +
+      '<td class="p-1"><div class="font-black text-slate-800"></div><div class="text-[9px] text-purple-600 font-bold"></div></td>' +
+      '<td class="p-1 text-right font-black text-purple-900">' + p.weight.toFixed(2) + ' kg</td>';
+    const cells = tr.querySelectorAll('td div');
+    cells[0].textContent = p.username + (me ? ' ⭐' : '') + (p.source === 'cloud' ? ' 🌐' : '');
+    cells[1].textContent = 'Cat: ' + p.catName;
+    rows.appendChild(tr);
+  });
+}
+
+function copyPlayerList(){
+  const list = mergedPlayers();
+  if (!list.length) { showToast('⚠️ No players to copy yet', '📋'); return; }
+  const lines = ['Energy Cat Studio — Registered Players (' + list.length + ')',
+                 'Exported: ' + new Date().toLocaleString(), ''];
+  list.forEach((p, i) => lines.push('#' + (i + 1) + '\t' + p.username + '\tCat: ' + p.catName + '\tLvl ' + p.level + '\t' + p.weight.toFixed(2) + ' kg'));
+  copyText(lines.join('\n'), '📋 Player list copied (' + list.length + ' users)', '✅');
+}
+
+function copyText(text, okMsg, icon){
+  const helper = document.getElementById('copyHelper');
+  helper.value = text;
+  const done = () => showToast(okMsg, icon || '📋');
+  if (navigator.clipboard && navigator.clipboard.writeText) {
+    navigator.clipboard.writeText(text).then(done).catch(() => legacyCopy(helper, done));
+  } else legacyCopy(helper, done);
+}
+function legacyCopy(helper, done){
+  try {
+    helper.style.left = '0'; helper.style.position = 'fixed'; helper.style.opacity = '0';
+    helper.select(); helper.setSelectionRange(0, helper.value.length);
+    const ok = document.execCommand('copy');
+    helper.style.left = '-9999px';
+    ok ? done() : showToast('⚠️ Press Ctrl/Cmd+C to copy', '📋');
+  } catch(e){ showToast('⚠️ Copy blocked by browser', '📋'); }
+}
+
+function handleSaveContactInfo(e){
+  e.preventDefault();
+  const acc = cur(); if (!acc) return;
+  acc.contactInfo = document.getElementById('championContactInput').value.trim();
+  saveAccounts();
+  showToast('📩 Champion contact details saved on this device!', '🎉');
+}
+
+/* ============ NAV + TOAST ============ */
+function switchTab(tab){
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(b => b.className = 'nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]');
+  document.getElementById('tab-' + tab).classList.add('active');
+  document.getElementById('nav-' + tab).className = 'nav-btn active flex flex-col items-center py-1.5 rounded-xl text-rose-600 bg-rose-100 font-black text-[10px]';
+  if (tab === 'dressup') renderDressUpGrid();
+  if (tab === 'ranks')   { renderLeaderboard(); if (cloudReady && !cloudUnsub) subscribeCloud(); }
+}
+
+let toastTimer = null;
+function showToast(msg, icon){
+  const toast = document.getElementById('toastNotification');
+  document.getElementById('toastMessage').innerText = msg;
+  document.getElementById('toastIcon').innerText = icon || '✨';
+  toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-6');
+  toast.classList.add('opacity-100', 'translate-y-0');
+  if (toastTimer) clearTimeout(toastTimer);
+  toastTimer = setTimeout(() => {
+    toast.classList.remove('opacity-100', 'translate-y-0');
+    toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-6');
+  }, 2600);
+}
+</script>
 </body>
 </html>
