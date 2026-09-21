@@ -3,929 +3,831 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat 3D - Kawaii Pet Simulator</title>
+    <title>Energy Cat 3D - Kawaii Dress-Up & Growth Studio</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@600;700;800&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --primary: #ff7675;
-            --secondary: #fd79a8;
-            --accent: #ffeaa7;
-            --bg-dark: #2d3436;
-            --panel-bg: rgba(255, 255, 255, 0.85);
-            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            user-select: none;
-        }
+        * { font-family: 'Fredoka', 'Quicksand', sans-serif; }
 
         body {
-            font-family: var(--font-main);
-            background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
-            height: 100vh;
-            overflow: hidden;
-            color: #2d3436;
+            background: radial-gradient(circle at 50% 30%, #FFE5EC 0%, #FFC2D1 50%, #B5FFFC 100%);
+            min-height: 100vh;
+            user-select: none;
+            overflow-x: hidden;
         }
 
-        #app-container {
-            display: flex;
-            width: 100vw;
-            height: 100vh;
-            position: relative;
-        }
-
-        /* 3D Canvas Area */
-        #canvas-container {
-            flex: 1;
-            height: 100%;
-            position: relative;
-        }
-
-        /* Floating UI Elements */
-        .hud-panel {
-            position: absolute;
-            background: var(--panel-bg);
-            backdrop-filter: blur(10px);
-            border-radius: 20px;
-            padding: 15px 25px;
-            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
-            border: 2px solid rgba(255, 255, 255, 0.4);
-            z-index: 10;
-        }
-
-        #top-hud {
-            top: 20px;
-            left: 20px;
-            display: flex;
-            gap: 20px;
-            align-items: center;
-        }
-
-        .stat-box {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            font-weight: bold;
-            font-size: 1.1rem;
-        }
-
-        .progress-bar-container {
-            width: 120px;
-            height: 16px;
-            background: #dfe6e9;
-            border-radius: 8px;
-            overflow: hidden;
-            border: 1px solid #b2bec3;
-        }
-
-        .progress-bar-fill {
-            height: 100%;
-            width: 50%;
-            transition: width 0.3s ease;
-        }
-
-        #energy-fill { background: linear-gradient(90deg, #00b894, #55efc4); }
-        #exp-fill { background: linear-gradient(90deg, #0984e3, #74b9ff); }
-
-        /* Action Buttons Area */
-        #action-bar {
-            bottom: 20px;
-            left: 50%;
-            transform: translateX(-50%);
-            display: flex;
-            gap: 15px;
-        }
-
-        .btn {
-            background: white;
-            border: none;
-            padding: 12px 24px;
-            border-radius: 50px;
-            font-weight: bold;
-            cursor: pointer;
-            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
-            transition: all 0.2s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            font-size: 1rem;
-        }
-
-        .btn:hover {
-            transform: translateY(-3px);
-            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
-        }
-
-        .btn:active {
-            transform: translateY(1px);
-        }
-
-        .btn-primary { background: var(--primary); color: white; }
-        .btn-secondary { background: var(--secondary); color: white; }
-
-        /* Side Navigation for Panels */
-        #side-nav {
-            position: absolute;
-            right: 20px;
-            top: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-            z-index: 10;
-        }
-
-        /* Overlay Drawer Panels */
-        .drawer-panel {
-            position: absolute;
-            right: -450px;
-            top: 0;
-            width: 420px;
-            height: 100%;
+        /* Claymorphism Styling */
+        .clay-card {
             background: rgba(255, 255, 255, 0.95);
-            backdrop-filter: blur(15px);
-            box-shadow: -10px 0 30px rgba(0,0,0,0.2);
-            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
-            z-index: 20;
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-            overflow-y: auto;
+            border-radius: 44px;
+            box-shadow: 
+                0 25px 50px -12px rgba(255, 182, 193, 0.5),
+                inset 0 4px 12px rgba(255, 255, 255, 1),
+                inset 0 -6px 12px rgba(255, 154, 162, 0.2);
+            border: 5px solid #FFFFFF;
         }
 
-        .drawer-panel.active {
-            right: 0;
+        .clay-inner {
+            background: linear-gradient(180deg, #FFFDF9 0%, #FFF5F7 100%);
+            border-radius: 36px;
+            box-shadow: 
+                inset 0 6px 16px rgba(251, 113, 133, 0.15),
+                inset 0 -6px 12px rgba(255, 255, 255, 0.9);
+            border: 3.5px solid #FFE4E6;
         }
 
-        .drawer-header {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            border-bottom: 2px solid #f1f2f6;
-            padding-bottom: 15px;
+        .clay-btn {
+            border-radius: 24px;
+            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
+            box-shadow: 
+                0 8px 0 0 rgba(225, 29, 72, 0.25),
+                0 12px 20px -4px rgba(244, 63, 94, 0.3),
+                inset 0 3px 6px rgba(255, 255, 255, 0.9);
+        }
+        .clay-btn:hover {
+            transform: translateY(-2px);
+            filter: brightness(1.05);
+        }
+        .clay-btn:active {
+            transform: translateY(5px);
+            box-shadow: 
+                0 3px 0 0 rgba(225, 29, 72, 0.25),
+                inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
-        .close-btn {
-            background: none;
-            border: none;
-            font-size: 1.5rem;
-            cursor: pointer;
-            color: #a4b0be;
+        .glass-modal {
+            background: rgba(15, 23, 42, 0.7);
+            backdrop-filter: blur(14px);
         }
 
-        /* Studio Customization Grid */
-        .studio-tabs {
-            display: flex;
-            gap: 8px;
-            margin-bottom: 10px;
-            overflow-x: auto;
-            padding-bottom: 5px;
+        /* Dynamic Animations */
+        @keyframes breathe {
+            0%, 100% { transform: translateY(0) scale(1, 1); }
+            50% { transform: translateY(-8px) scale(1.03, 0.97); }
         }
+        .animate-breathe { animation: breathe 3s ease-in-out infinite; }
 
-        .tab-btn {
-            padding: 8px 14px;
-            border: 1px solid #dfe6e9;
-            background: #f1f2f6;
-            border-radius: 12px;
-            cursor: pointer;
-            white-space: nowrap;
-            font-weight: 600;
-            font-size: 0.85rem;
+        @keyframes tailWag {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(18deg); }
         }
+        .animate-tail { transform-origin: 155px 165px; animation: tailWag 2s ease-in-out infinite; }
 
-        .tab-btn.active {
-            background: var(--primary);
-            color: white;
-            border-color: var(--primary);
+        @keyframes floatHeart {
+            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) translateY(0); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4) translateY(-80px); }
         }
-
-        .item-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 12px;
-        }
-
-        .item-card {
-            border: 2px solid #f1f2f6;
-            border-radius: 15px;
-            padding: 12px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.2s;
-            background: white;
-        }
-
-        .item-card:hover {
-            border-color: var(--secondary);
-            transform: scale(1.02);
-        }
-
-        .item-card.equipped {
-            border-color: var(--primary);
-            background: #fff0f0;
-        }
-
-        .item-preview {
-            width: 70px;
-            height: 70px;
-            margin: 0 auto 8px auto;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
-
-        /* Leaderboard Table */
-        .leaderboard-table {
-            width: 100%;
-            border-collapse: collapse;
-        }
-
-        .leaderboard-table th, .leaderboard-table td {
-            padding: 12px;
-            text-align: left;
-            border-bottom: 1px solid #dfe6e9;
-        }
-
-        .rank-badge {
-            width: 28px;
-            height: 28px;
-            border-radius: 50%;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            color: white;
-            font-weight: bold;
-        }
-
-        .rank-1 { background: #f1c40f; }
-        .rank-2 { background: #95a5a6; }
-        .rank-3 { background: #e67e22; }
-
-        /* Modal Screens */
-        .modal-overlay {
-            position: fixed;
-            top: 0;
-            left: 0;
-            width: 100vw;
-            height: 100vh;
-            background: rgba(0, 0, 0, 0.6);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            z-index: 100;
-            opacity: 0;
-            pointer-events: none;
-            transition: opacity 0.3s ease;
-        }
-
-        .modal-overlay.active {
-            opacity: 1;
-            pointer-events: all;
-        }
-
-        .modal-card {
-            background: white;
-            border-radius: 25px;
-            padding: 30px;
-            width: 90%;
-            max-width: 450px;
-            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
-            text-align: center;
-        }
-
-        .form-group {
-            margin-bottom: 15px;
-            text-align: left;
-        }
-
-        .form-group label {
-            display: block;
-            margin-bottom: 5px;
-            font-weight: 600;
-        }
-
-        .form-group input {
-            width: 100%;
-            padding: 10px 15px;
-            border: 2px solid #dfe6e9;
-            border-radius: 10px;
-            font-size: 1rem;
-        }
-
-        /* Floating Text Animations */
-        .floating-text {
+        .heart-pop {
             position: absolute;
-            font-weight: bold;
-            font-size: 1.5rem;
-            color: #26de81;
             pointer-events: none;
-            animation: floatUp 1.2s ease-out forwards;
-            z-index: 50;
+            animation: floatHeart 0.9s ease-out forwards;
+            font-size: 28px;
+            z-index: 30;
         }
 
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0); }
-            100% { opacity: 0; transform: translateY(-80px); }
+        @keyframes zzzFloat {
+            0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
+            50% { opacity: 1; transform: translate(16px, -22px) scale(1.2); }
+            100% { opacity: 0; transform: translate(32px, -45px) scale(0.8); }
         }
+        .animate-zzz { animation: zzzFloat 2.4s infinite ease-in-out; }
+
+        /* Eye Blink Animation */
+        @keyframes catBlink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+        .eye-blink {
+            transform-origin: center 82px;
+            animation: catBlink 4s infinite;
+        }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+
+        @keyframes popIn {
+            from { opacity: 0; transform: scale(0.96) translateY(8px); }
+            to { opacity: 1; transform: scale(1) translateY(0); }
+        }
+
+        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar-track { background: #FFF1F2; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #FB7185; border-radius: 10px; }
     </style>
-    <!-- Three.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 </head>
-<body>
+<body class="flex justify-center items-center min-h-screen p-3 md:p-6">
 
-    <div id="app-container">
-        <!-- 3D Canvas Context -->
-        <div id="canvas-container"></div>
-
-        <!-- Top Status HUD -->
-        <div id="top-hud" class="hud-panel">
-            <div class="stat-box">
-                <span id="level-display">LVL 1</span>
-            </div>
-            <div class="stat-box">
-                ⚡ Energy
-                <div class="progress-bar-container">
-                    <div id="energy-fill" class="progress-bar-fill"></div>
-                </div>
-            </div>
-            <div class="stat-box">
-                ✨ EXP
-                <div class="progress-bar-container">
-                    <div id="exp-fill" class="progress-bar-fill"></div>
-                </div>
-            </div>
-            <div class="stat-box">
-                🐟 <span id="fish-count">100</span>
-            </div>
-        </div>
-
-        <!-- Navigation Buttons -->
-        <div id="side-nav">
-            <button class="btn btn-primary" onclick="toggleDrawer('studio-panel')">🎨 Studio</button>
-            <button class="btn btn-secondary" onclick="toggleDrawer('missions-panel')">🌱 Eco Missions</button>
-            <button class="btn" style="background:#a29bfe; color:white;" onclick="toggleDrawer('leaderboard-panel')">🏆 Ranks</button>
-            <button class="btn" style="background:#6c5ce7; color:white;" onclick="openAdminModal()">⚙️ Admin</button>
-        </div>
-
-        <!-- Bottom Action Bar -->
-        <div id="action-bar" class="hud-panel">
-            <button class="btn btn-primary" onclick="interactCat('feed')">🐟 Feed (-5 Fish)</button>
-            <button class="btn btn-secondary" onclick="interactCat('pet')">🖐️ Pet (+EXP)</button>
-            <button class="btn" style="background:#e17055; color:white;" onclick="interactCat('rest')">💤 Rest (+Energy)</button>
-        </div>
-
-        <!-- DRAWER: Dress-Up Studio -->
-        <div id="studio-panel" class="drawer-panel">
-            <div class="drawer-header">
-                <h2>Styling Studio</h2>
-                <button class="close-btn" onclick="toggleDrawer('studio-panel')">&times;</button>
-            </div>
-            <div class="studio-tabs">
-                <button class="tab-btn active" onclick="switchStudioTab('bibs', this)">Large Bibs (10)</button>
-                <button class="tab-btn" onclick="switchStudioTab('bells', this)">Bells (10)</button>
-                <button class="tab-btn" onclick="switchStudioTab('head', this)">Headwear</button>
-                <button class="tab-btn" onclick="switchStudioTab('shoes', this)">Footwear</button>
-            </div>
-            <div id="studio-items-grid" class="item-grid">
-                <!-- Items populated dynamically via JavaScript -->
-            </div>
-        </div>
-
-        <!-- DRAWER: Eco Missions -->
-        <div id="missions-panel" class="drawer-panel">
-            <div class="drawer-header">
-                <h2>Eco Proof Missions</h2>
-                <button class="close-btn" onclick="toggleDrawer('missions-panel')">&times;</button>
-            </div>
-            <p>Upload real-life eco action photos to earn fish and boost your cat's status!</p>
-            <div style="display:flex; flex-direction:column; gap:15px; margin-top:15px;">
-                <div style="border:1px solid #dfe6e9; padding:15px; border-radius:12px; background:white;">
-                    <h4>🥤 Reusable Cup Proof</h4>
-                    <p style="font-size:0.85rem; color:#636e72;">Reward: 50 Fish + 100 EXP</p>
-                    <input type="file" id="eco-file-1" accept="image/*" style="display:none;" onchange="completeMission(1)">
-                    <button class="btn btn-primary" style="margin-top:10px; width:100%; justify-content:center;" onclick="document.getElementById('eco-file-1').click()">Upload Photo</button>
-                </div>
-                <div style="border:1px solid #dfe6e9; padding:15px; border-radius:12px; background:white;">
-                    <h4>🛍️ Shopping Bag Proof</h4>
-                    <p style="font-size:0.85rem; color:#636e72;">Reward: 40 Fish + 80 EXP</p>
-                    <input type="file" id="eco-file-2" accept="image/*" style="display:none;" onchange="completeMission(2)">
-                    <button class="btn btn-primary" style="margin-top:10px; width:100%; justify-content:center;" onclick="document.getElementById('eco-file-2').click()">Upload Photo</button>
-                </div>
-            </div>
-        </div>
-
-        <!-- DRAWER: Leaderboard -->
-        <div id="leaderboard-panel" class="drawer-panel">
-            <div class="drawer-header">
-                <h2>Global Rankings</h2>
-                <button class="close-btn" onclick="toggleDrawer('leaderboard-panel')">&times;</button>
-            </div>
-            <table class="leaderboard-table">
-                <thead>
-                    <tr>
-                        <th>Rank</th>
-                        <th>Agent</th>
-                        <th>LVL</th>
-                        <th>Fish</th>
-                    </tr>
-                </thead>
-                <tbody id="leaderboard-rows">
-                    <!-- Populated dynamically -->
-                </tbody>
-            </table>
-            <button class="btn btn-secondary" style="margin-top:20px; width:100%; justify-content:center;" onclick="openClaimModal()">🎁 Claim Rank Prize</button>
+    <!-- Toast Notification -->
+    <div id="toastNotification" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-6">
+        <div class="bg-slate-900/95 text-white px-7 py-3.5 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-3 font-extrabold text-sm tracking-wide">
+            <span id="toastIcon" class="text-2xl">✨</span>
+            <span id="toastMessage">Notification</span>
         </div>
     </div>
 
-    <!-- MODAL: Claim Winner Prize -->
-    <div id="claim-modal" class="modal-overlay">
-        <div class="modal-card">
-            <h3>Claim Prize Rewards</h3>
-            <p style="margin: 10px 0 20px 0; color:#636e72; font-size:0.9rem;">Submit your player details to claim rank physical gifts!</p>
-            <form id="claim-form" onsubmit="handleClaimSubmit(event)">
-                <div class="form-group">
-                    <label>Agent / Player Name</label>
-                    <input type="text" id="claim-name" required placeholder="John Doe">
+    <!-- Main Game Container -->
+    <div class="clay-card w-full max-w-md h-[860px] flex flex-col justify-between relative z-10 overflow-hidden p-5 border-4 border-white">
+        
+        <!-- Header Bar -->
+        <div class="bg-gradient-to-r from-rose-200 via-pink-200 to-amber-100 p-3.5 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-3xl shadow-md border-2 border-pink-200 animate-bounce">
+                    🐱
                 </div>
-                <div class="form-group">
-                    <label>Contact Email</label>
-                    <input type="email" id="claim-email" required placeholder="john@example.com">
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[10px] tracking-widest font-black text-rose-600 uppercase bg-white/80 px-2 py-0.5 rounded-full border border-rose-200">AGENT</span>
+                        <span id="totalUsersBadge" class="text-[10px] font-black bg-rose-500 text-white px-2.5 py-0.5 rounded-full shadow-sm">👥 1</span>
+                    </div>
+                    <div class="text-sm font-black text-slate-800 flex items-center gap-1.5 mt-0.5">
+                        <span id="displayUser">Guest Agent</span>
+                        <button onclick="logoutUser()" class="text-xs text-rose-600 hover:text-rose-800 font-extrabold underline ml-1">Logout</button>
+                    </div>
                 </div>
-                <div class="form-group">
-                    <label>Phone Number</label>
-                    <input type="tel" id="claim-phone" required placeholder="+1 234 567 890">
-                </div>
-                <div style="display:flex; gap:10px; margin-top:20px;">
-                    <button type="button" class="btn" style="flex:1; background:#b2bec3;" onclick="closeModal('claim-modal')">Cancel</button>
-                    <button type="submit" class="btn btn-primary" style="flex:1; justify-content:center;">Submit</button>
-                </div>
-            </form>
+            </div>
+            
+            <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border-2 border-rose-300 shadow-sm">
+                <span class="text-2xl animate-pulse">🐟</span>
+                <span id="fishCount" class="text-base font-black text-rose-600 tracking-tight">100</span>
+            </div>
         </div>
+
+        <!-- MAIN CONTENT AREA -->
+        <div class="flex-grow overflow-y-auto py-3">
+            
+            <!-- PAGE 1: HOME (CAT CARE & GROWTH) -->
+            <div id="tab-home" class="tab-content active space-y-3">
+                
+                <!-- Cat Level & Growth Progress Bar -->
+                <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 border-3 border-purple-300 rounded-3xl p-3 shadow-sm">
+                    <div class="flex justify-between items-center mb-1">
+                        <div class="flex items-center gap-1.5">
+                            <span class="text-sm font-black bg-purple-600 text-white px-2.5 py-0.5 rounded-full shadow-sm" id="catLevelBadge">LVL 1</span>
+                            <span class="text-xs font-black text-purple-900 tracking-wider" id="catTitleText">KITTEN</span>
+                        </div>
+                        <span id="expText" class="text-xs font-black bg-white text-purple-700 px-2.5 py-0.5 rounded-full border border-purple-300">0/50 EXP</span>
+                    </div>
+                    <div class="w-full bg-purple-200 h-3.5 rounded-full overflow-hidden p-0.5 border border-purple-300">
+                        <div id="expBar" class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
+                    </div>
+                </div>
+
+                <!-- Energy Progress Bar -->
+                <div class="bg-white border-3 border-rose-300 rounded-3xl p-3 shadow-sm">
+                    <div class="flex justify-between items-center mb-1">
+                        <span class="text-xs font-black text-rose-700 flex items-center gap-1.5 tracking-wider">
+                            <span class="text-base">⚡</span> CAT ENERGY
+                        </span>
+                        <span id="energyText" class="text-xs font-black bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded-full border border-rose-300">100/100</span>
+                    </div>
+                    <div class="w-full bg-rose-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-rose-200 shadow-inner">
+                        <div id="energyBar" class="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <!-- Kawaii 3D Cat Stage Screen -->
+                <div id="catStage" class="relative clay-inner p-2 flex flex-col items-center justify-center border-3 border-pink-200 h-[310px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
+                    
+                    <!-- Decorative Background Elements -->
+                    <div class="absolute top-3 left-4 text-2xl opacity-80">☁️</div>
+                    <div class="absolute top-4 right-5 text-2xl opacity-80">✨</div>
+                    <div class="absolute bottom-10 left-5 text-2xl opacity-80">🥛</div>
+                    <div class="absolute bottom-8 right-6 text-2xl opacity-80">🐟</div>
+
+                    <!-- Sleep Zzz FX -->
+                    <div id="sleepEffect" class="hidden absolute top-6 right-12 z-20 pointer-events-none">
+                        <span class="text-3xl font-black text-indigo-500 animate-zzz inline-block">Zzz...</span>
+                    </div>
+
+                    <!-- CAT CONTAINER WITH DYNAMIC GROWTH SCALE -->
+                    <div id="catScaleWrapper" class="relative flex items-center justify-center transition-all duration-500 transform scale-100">
+                        <div class="animate-breathe relative flex items-center justify-center z-10 w-[230px] h-[230px]">
+                            
+                            <!-- ORIGINAL KAWAII 3D CAT SVG -->
+                            <svg width="230" height="230" viewBox="0 0 200 200" class="drop-shadow-2xl">
+                                <defs>
+                                    <radialGradient id="catBody3D" cx="35%" cy="30%" r="70%">
+                                        <stop offset="0%" stop-color="#FFFFFF"/>
+                                        <stop offset="55%" stop-color="#FFEAD5"/>
+                                        <stop offset="100%" stop-color="#FDCEAB"/>
+                                    </radialGradient>
+                                    <radialGradient id="earInner" cx="50%" cy="50%" r="50%">
+                                        <stop offset="0%" stop-color="#FFB6C1"/>
+                                        <stop offset="100%" stop-color="#FF69B4"/>
+                                    </radialGradient>
+                                </defs>
+
+                                <!-- Tail -->
+                                <g class="animate-tail">
+                                    <path d="M 140 145 C 175 140, 185 105, 170 85 C 158 70, 145 88, 152 105 C 158 118, 142 135, 132 138 Z" 
+                                          fill="#FCB584" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" />
+                                    <path d="M 160 92 Q 165 98 158 105" stroke="#5C2C16" stroke-width="4" stroke-linecap="round" fill="none"/>
+                                </g>
+
+                                <!-- Feet Layer -->
+                                <ellipse cx="65" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
+                                <ellipse cx="135" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
+
+                                <!-- Body Shell -->
+                                <path d="M 50 120 C 42 155, 45 172, 65 172 C 85 172, 115 172, 135 172 C 155 172, 158 155, 150 120 Z" 
+                                      fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
+                                <ellipse cx="100" cy="148" rx="28" ry="20" fill="#FFFFFF" opacity="0.9"/>
+
+                                <!-- Raised Paws -->
+                                <ellipse cx="72" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
+                                <ellipse cx="128" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
+
+                                <!-- Head -->
+                                <path d="M 35 80 C 22 55, 42 22, 68 32 C 85 22, 115 22, 132 32 C 158 22, 178 55, 165 80 C 175 110, 155 128, 100 128 C 45 128, 25 110, 35 80 Z" 
+                                      fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
+
+                                <!-- Inner Ears -->
+                                <path d="M 48 42 C 43 32, 58 28, 64 36 Z" fill="url(#earInner)"/>
+                                <path d="M 152 42 C 157 32, 142 28, 136 36 Z" fill="url(#earInner)"/>
+
+                                <!-- Calico Patch -->
+                                <path d="M 35 80 C 30 60, 45 35, 62 34 C 52 55, 55 70, 58 82 Z" fill="#FB923C"/>
+
+                                <!-- Whiskers -->
+                                <path d="M 22 82 L 42 85 M 18 92 L 40 92 M 22 102 L 43 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M 178 82 L 158 85 M 182 92 L 160 92 M 178 102 L 157 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
+
+                                <!-- Awake Eyes & Face -->
+                                <g id="catEyesAwake">
+                                    <g class="eye-blink">
+                                        <circle cx="72" cy="82" r="11" fill="#3B170B"/>
+                                        <circle cx="69" cy="78" r="4" fill="#FFFFFF"/>
+                                        <circle cx="75" cy="85" r="2" fill="#FFFFFF"/>
+                                        
+                                        <circle cx="128" cy="82" r="11" fill="#3B170B"/>
+                                        <circle cx="125" cy="78" r="4" fill="#FFFFFF"/>
+                                        <circle cx="131" cy="85" r="2" fill="#FFFFFF"/>
+                                    </g>
+
+                                    <ellipse cx="58" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
+                                    <ellipse cx="142" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
+
+                                    <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
+                                    <path d="M 92 92 Q 100 100 100 92 Q 100 100 108 92" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                                </g>
+
+                                <!-- Sleeping Eyes -->
+                                <g id="catEyesSleep" class="hidden">
+                                    <path d="M 62 84 Q 72 94 82 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <path d="M 118 84 Q 128 94 138 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <ellipse cx="58" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
+                                    <ellipse cx="142" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
+                                    <path d="M 95 92 Q 100 96 105 92" stroke="#5C2C16" stroke-width="3" fill="none" stroke-linecap="round"/>
+                                </g>
+                            </svg>
+
+                            <!-- OVERLAY CLOTHES -->
+                            <div class="cat-outfit-container absolute inset-0 pointer-events-none flex items-center justify-center">
+                                <div id="slot-head" class="absolute inset-0 flex items-center justify-center"></div>
+                                <div id="slot-outfit" class="absolute inset-0 flex items-center justify-center"></div>
+                                <div id="slot-shoes" class="absolute inset-0 flex items-center justify-center"></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <p id="catStatusLabel" class="text-xs font-black text-rose-600 mt-1 bg-white px-4 py-1.5 rounded-full border-2 border-rose-300 shadow-md z-10 tracking-wide">
+                        ✨ TAP TO PET (+1⚡ / +2 EXP)
+                    </p>
+                </div>
+
+                <!-- Action Buttons -->
+                <div class="grid grid-cols-2 gap-3 pt-0.5">
+                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 text-white font-black py-3 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
+                        <span class="text-xl">🍱</span> FEED (-5🐟 / +15⚡ / +10 EXP)
+                    </button>
+                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-500 text-white font-black py-3 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
+                        <span class="text-xl">😴</span> REST (+30⚡ / +15 EXP)
+                    </button>
+                </div>
+            </div>
+
+            <!-- PAGE 2: MISSIONS -->
+            <div id="tab-missions" class="tab-content space-y-3.5">
+                <div class="bg-gradient-to-br from-emerald-100 via-teal-100 to-emerald-200 border-3 border-emerald-300 rounded-3xl p-4 shadow-sm">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-2xl">🌱</span>
+                        <p class="text-sm font-black text-emerald-950 uppercase tracking-wide">Eco Missions (Photo Proof)</p>
+                    </div>
+                    <p class="text-xs font-extrabold text-emerald-800 mb-3.5">Complete real-world eco tasks to earn fish & EXP!</p>
+
+                    <div class="space-y-3 text-xs font-black">
+                        <button onclick="openMissionUploadModal('Turn off lights / monitor', 15, 20)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2 text-xs">💡 Turn Off Unused Lights</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+15🐟 / +20⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Turn off AC when leaving room', 20, 30)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2 text-xs">❄️ Turn Off Air Conditioner</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+20🐟 / +30⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Unplug idle electronics', 10, 15)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2 text-xs">🔌 Unplug Idle Electronics</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+10🐟 / +15⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Take stairs instead of elevator', 10, 15)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2 text-xs">🚶 Take Stairs vs Elevator</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+10🐟 / +15⚡</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 3: DRESS-UP STUDIO -->
+            <div id="tab-dressup" class="tab-content space-y-3.5">
+                <div class="bg-white rounded-3xl p-3.5 border-3 border-pink-300 shadow-sm flex flex-col h-[480px]">
+                    <div class="flex justify-between items-center mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">🎀</span>
+                            <h3 class="font-black text-sm text-pink-900">Cat Dress-Up & Bow Studio</h3>
+                        </div>
+                        <button onclick="resetOutfit()" class="text-[11px] font-black bg-rose-100 text-rose-700 hover:bg-rose-200 px-3 py-1 rounded-full border border-rose-300">
+                            🔄 Strip All
+                        </button>
+                    </div>
+
+                    <!-- Category Selector Tabs -->
+                    <div class="grid grid-cols-3 gap-1.5 mb-2.5">
+                        <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300 shadow-sm">
+                            🎀 Bows & Hats
+                        </button>
+                        <button onclick="switchDressCategory('outfit')" id="cat-outfit-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200">
+                            👗 Outfits
+                        </button>
+                        <button onclick="switchDressCategory('shoes')" id="cat-shoes-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200">
+                            👟 Shoes
+                        </button>
+                    </div>
+
+                    <!-- Items Grid Scroll Area -->
+                    <div id="dressItemsGrid" class="flex-grow overflow-y-auto grid grid-cols-2 gap-2 p-1">
+                        <!-- Dynamic Item Cards Injected via JS -->
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 4: LEADERBOARD & REWARDS -->
+            <div id="tab-ranks" class="tab-content space-y-3.5">
+                
+                <!-- WINNER BANNER -->
+                <div class="bg-gradient-to-r from-rose-400 via-pink-500 to-amber-400 rounded-3xl p-4 border-3 border-white shadow-lg text-white">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-3xl animate-bounce">🏆</span>
+                        <div>
+                            <h4 class="text-xs font-black uppercase tracking-wider">Monthly Leaderboard Winner</h4>
+                            <p class="text-[11px] font-extrabold text-rose-100">Rank #1 player wins exclusive rewards!</p>
+                        </div>
+                    </div>
+                    <div class="mt-3 pt-2.5 border-t border-white/30 flex justify-between items-center">
+                        <p class="text-xs font-black bg-black/25 px-3 py-1 rounded-full border border-white/20">
+                            👑 Rank #1: <span id="topPlayerNameDisplay" class="underline">KittyHero99</span>
+                        </p>
+                        <button id="claimRewardBtn" onclick="openClaimModal()" class="clay-btn bg-white text-rose-600 hover:bg-rose-50 text-xs font-black px-3.5 py-2 rounded-2xl shadow-md border-2 border-rose-200">
+                            🎁 CLAIM
+                        </button>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Table -->
+                <div class="bg-white rounded-3xl p-3.5 border-3 border-rose-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-2xl">📊</span>
+                            <p class="text-xs font-black text-rose-900 uppercase tracking-wide">Player & Cat Growth Ranks</p>
+                        </div>
+                        <span id="totalPlayersCount" class="text-xs font-black bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded-full">3 Players</span>
+                    </div>
+                    <div class="overflow-y-auto max-h-[170px]">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[10px] uppercase">
+                                    <th class="p-1.5">Rank</th>
+                                    <th class="p-1.5">Agent & Cat Level</th>
+                                    <th class="p-1.5 text-right">Fish 🐟</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardRows"></tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Admin Action Footer -->
+                <div class="text-center pt-1">
+                    <button onclick="openAdminModal()" class="text-xs font-extrabold text-slate-500 hover:text-rose-600 underline">
+                        ⚙️ Admin Panel (Export Winner Data CSV)
+                    </button>
+                </div>
+            </div>
+
+        </div>
+
+        <!-- NAVIGATION BAR -->
+        <div class="bg-white p-2.5 rounded-3xl border-3 border-rose-200 grid grid-cols-4 gap-2 shrink-0 shadow-lg">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2.5 rounded-2xl text-rose-600 bg-rose-100 font-black text-xs">
+                <span class="text-xl">🏠</span> HOME
+            </button>
+            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
+                <span class="text-xl">🌱</span> MISSIONS
+            </button>
+            <button onclick="switchTab('dressup')" id="nav-dressup" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
+                <span class="text-xl">👗</span> DRESS-UP
+            </button>
+            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
+                <span class="text-xl">🏆</span> RANKS
+            </button>
+        </div>
+
     </div>
 
-    <!-- MODAL: Admin CSV Export Panel -->
-    <div id="admin-modal" class="modal-overlay">
-        <div class="modal-card">
-            <h3>Admin Panel</h3>
-            <p style="margin: 10px 0 20px 0; color:#636e72; font-size:0.9rem;">Export local leaderboard data & claim records to CSV file.</p>
-            <div style="display:flex; flex-direction:column; gap:12px;">
-                <button class="btn btn-primary" style="justify-content:center;" onclick="exportCSV()">📥 Download CSV Dataset</button>
-                <button class="btn" style="background:#ff7675; color:white; justify-content:center;" onclick="resetSystemData()">⚠️ Reset Local Data</button>
-                <button class="btn" style="background:#b2bec3; justify-content:center;" onclick="closeModal('admin-modal')">Close</button>
+    <!-- Hidden File Input for Mission Photo Proof -->
+    <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
+
+    <!-- MODAL 1: PHOTO PROOF UPLOAD -->
+    <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3.5 shadow-2xl border-4 border-emerald-300">
+            <h3 class="font-black text-base text-slate-800">📸 Attach Photo Proof</h3>
+            <p id="modalMissionName" class="text-xs font-black text-emerald-800 bg-emerald-50 p-3 rounded-2xl border border-emerald-200">Mission</p>
+            
+            <div onclick="triggerFileSelect()" class="w-full h-44 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
+                <img id="photoPreview" class="w-full h-full object-cover hidden" />
+                <div id="uploadPlaceholder" class="text-center p-3">
+                    <span class="text-4xl">📷</span>
+                    <p class="text-xs font-black text-emerald-700 mt-1">Tap to select photo</p>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-3 rounded-2xl">Cancel</button>
+                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white">Submit Proof</button>
             </div>
         </div>
     </div>
 
+    <!-- MODAL 2: CLAIM REWARD -->
+    <div id="claimModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-rose-300">
+            <div class="text-center">
+                <span class="text-4xl">👑🎁</span>
+                <h3 class="font-black text-base text-rose-600 mt-1">Winner Claim Form</h3>
+                <p class="text-xs font-bold text-slate-500">Exclusive for Verified Rank #1 Player</p>
+            </div>
+
+            <div class="space-y-2 text-xs font-black">
+                <div>
+                    <label class="text-slate-700">Full Name</label>
+                    <input type="text" id="claimName" placeholder="Agent Name" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 mt-0.5" />
+                </div>
+                <div>
+                    <label class="text-slate-700">Phone Number</label>
+                    <input type="text" id="claimPhone" placeholder="081-XXX-XXXX" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 mt-0.5" />
+                </div>
+                <div>
+                    <label class="text-slate-700">Shipping Address</label>
+                    <textarea id="claimAddress" rows="2" placeholder="Full address for prize shipment" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 mt-0.5"></textarea>
+                </div>
+            </div>
+
+            <div class="flex gap-2 mt-2">
+                <button onclick="closeClaimModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2.5 rounded-2xl">Cancel</button>
+                <button onclick="submitClaimForm()" class="clay-btn w-1/2 bg-rose-500 text-white text-xs font-black py-2.5 rounded-2xl border-2 border-white">Submit Claim</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 3: ADMIN PANEL -->
+    <div id="adminModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-slate-700">
+            <div class="text-center">
+                <span class="text-4xl">⚙️</span>
+                <h3 class="font-black text-base text-slate-800 mt-1">Admin Dashboard</h3>
+                <p class="text-xs font-bold text-slate-500">Data Management & CSV Export</p>
+            </div>
+
+            <button onclick="exportLeaderboardCSV()" class="clay-btn w-full bg-indigo-600 text-white text-xs font-black py-3 rounded-2xl border-2 border-white flex justify-center items-center gap-2">
+                📥 Export Winner CSV Dataset
+            </button>
+
+            <button onclick="closeAdminModal()" class="clay-btn w-full bg-slate-200 text-slate-700 text-xs font-black py-2.5 rounded-2xl">
+                Close Panel
+            </button>
+        </div>
+    </div>
+
+    <!-- GAME JAVASCRIPT ENGINE -->
     <script>
-        /* ==========================================
-           GAME STATE & DATA DECLARATIONS
-           ========================================== */
-        const gameState = {
-            level: 1,
-            energy: 80,
-            maxEnergy: 100,
-            exp: 20,
-            maxExp: 100,
+        // Game State
+        const state = {
+            username: 'Guest Agent',
             fish: 100,
-            equipped: {
-                bibs: null,
-                bells: null,
-                head: null,
-                shoes: null
-            }
+            energy: 100,
+            maxEnergy: 100,
+            exp: 0,
+            maxExp: 50,
+            level: 1,
+            isSleeping: false,
+            outfit: { head: null, outfit: null, shoes: null },
+            activeMission: null,
+            missionPhotoData: null
         };
 
-        const leaderboardData = [
-            { rank: 1, name: "EcoCatMaster", level: 12, fish: 1450 },
-            { rank: 2, name: "GreenPaw", level: 9, fish: 820 },
-            { rank: 3, name: "SolarWhiskers", level: 7, fish: 610 },
-            { rank: 4, name: "Current Player", level: 1, fish: 100 }
-        ];
-
-        // Customization Catalog
-        const studioItems = {
-            bibs: Array.from({length: 10}, (_, i) => ({
-                id: `bib_${i+1}`,
-                name: `Front Bib #${i+1}`,
-                color: ['#ff7675', '#74b9ff', '#55efc4', '#ffeaa7', '#a29bfe', '#fd79a8', '#e17055', '#00b894', '#6c5ce7', '#fdcb6e'][i]
-            })),
-            bells: Array.from({length: 10}, (_, i) => ({
-                id: `bell_${i+1}`,
-                name: `Choker Bell #${i+1}`,
-                color: ['#f1c40f', '#e67e22', '#e74c3c', '#1abc9c', '#3498db', '#9b59b6', '#34495e', '#f39c12', '#d35400', '#c0392b'][i]
-            })),
+        const dressItems = {
             head: [
-                { id: 'head_crown', name: 'Golden Crown', color: '#f1c40f' },
-                { id: 'head_bow', name: 'Pink Ribbon', color: '#fd79a8' },
-                { id: 'head_cap', name: 'Eco Cap', color: '#00b894' }
+                { id: 'h1', name: 'Red Ribbon', icon: '🎀', html: '<span style="font-size: 50px; position: absolute; top: 15px; left: 50px;">🎀</span>' },
+                { id: 'h2', name: 'Golden Crown', icon: '👑', html: '<span style="font-size: 45px; position: absolute; top: 10px; left: 90px;">👑</span>' },
+                { id: 'h3', name: 'Party Hat', icon: '🎉', html: '<span style="font-size: 45px; position: absolute; top: 10px; left: 90px;">🎉</span>' }
+            ],
+            outfit: [
+                { id: 'o1', name: 'Pink Dress', icon: '👗', html: '<span style="font-size: 60px; position: absolute; top: 110px; left: 85px;">👗</span>' },
+                { id: 'o2', name: 'Hero Cape', icon: '🦸‍♀️', html: '<span style="font-size: 60px; position: absolute; top: 105px; left: 85px;">🦸‍♀️</span>' }
             ],
             shoes: [
-                { id: 'shoe_boots', name: 'Kawaii Boots', color: '#6c5ce7' },
-                { id: 'shoe_paws', name: 'Soft Paws', color: '#fab1a0' }
+                { id: 's1', name: 'Red Shoes', icon: '👠', html: '<span style="font-size: 35px; position: absolute; top: 155px; left: 95px;">👠</span>' },
+                { id: 's2', name: 'Sneakers', icon: '👟', html: '<span style="font-size: 35px; position: absolute; top: 155px; left: 95px;">👟</span>' }
             ]
         };
 
-        /* ==========================================
-           THREE.JS 3D KAWAII CAT ENGINE
-           ========================================== */
-        let scene, camera, renderer, catGroup;
-        let bibMesh, bellMesh, headMesh, shoeMeshes = [];
+        let currentDressCategory = 'head';
 
-        function init3D() {
-            const container = document.getElementById('canvas-container');
+        const leaderboards = [
+            { rank: 1, name: 'KittyHero99', level: 8, fish: 1420 },
+            { rank: 2, name: 'EcoPaws', level: 5, fish: 890 },
+            { rank: 3, name: 'Guest Agent', level: 1, fish: 100 }
+        ];
+
+        // Core Functions
+        function updateUI() {
+            document.getElementById('fishCount').innerText = state.fish;
+            document.getElementById('energyText').innerText = `${state.energy}/${state.maxEnergy}`;
+            document.getElementById('energyBar').style.width = `${(state.energy / state.maxEnergy) * 100}%`;
             
-            scene = new THREE.Scene();
-            scene.background = new THREE.Color(0xa8c0ff);
+            document.getElementById('catLevelBadge').innerText = `LVL ${state.level}`;
+            document.getElementById('expText').innerText = `${state.exp}/${state.maxExp} EXP`;
+            document.getElementById('expBar').style.width = `${(state.exp / state.maxExp) * 100}%`;
 
-            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(0, 3, 10);
-            camera.lookAt(0, 1, 0);
+            // Cat Growth Scale
+            const scaleFactor = 1 + (state.level - 1) * 0.08;
+            document.getElementById('catScaleWrapper').style.transform = `scale(${scaleFactor})`;
 
-            renderer = new THREE.WebGLRenderer({ antialias: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.shadowMap.enabled = true;
-            container.appendChild(renderer.domElement);
-
-            // Lighting setup
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-            scene.add(ambientLight);
-
-            const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
-            dirLight.position.set(5, 12, 7);
-            dirLight.castShadow = true;
-            scene.add(dirLight);
-
-            // Floor Plane
-            const floorGeo = new THREE.PlaneGeometry(20, 20);
-            const floorMat = new THREE.MeshStandardMaterial({ color: 0x81ecec, roughness: 0.8 });
-            const floor = new THREE.Mesh(floorGeo, floorMat);
-            floor.rotation.x = -Math.PI / 2;
-            floor.receiveShadow = true;
-            scene.add(floor);
-
-            // Construct 3D Kawaii Cat
-            catGroup = new THREE.Group();
-
-            // Materials
-            const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 });
-            const earMat = new THREE.MeshStandardMaterial({ color: 0xffa8a8 });
-            const eyeMat = new THREE.MeshBasicMaterial({ color: 0x2d3436 });
-
-            // Body
-            const bodyGeo = new THREE.SphereGeometry(1.2, 32, 32);
-            bodyGeo.scale(1, 1.1, 1);
-            const body = new THREE.Mesh(bodyGeo, bodyMat);
-            body.position.y = 1.2;
-            body.castShadow = true;
-            catGroup.add(body);
-
-            // Head
-            const headGeo = new THREE.SphereGeometry(1.0, 32, 32);
-            headGeo.scale(1.1, 0.95, 1);
-            const head = new THREE.Mesh(headGeo, bodyMat);
-            head.position.set(0, 2.5, 0);
-            head.castShadow = true;
-            catGroup.add(head);
-
-            // Ears
-            const earGeo = new THREE.ConeGeometry(0.35, 0.6, 16);
-            const leftEar = new THREE.Mesh(earGeo, bodyMat);
-            leftEar.position.set(-0.6, 3.4, 0);
-            leftEar.rotation.z = -0.2;
-            catGroup.add(leftEar);
-
-            const rightEar = new THREE.Mesh(earGeo, bodyMat);
-            rightEar.position.set(0.6, 3.4, 0);
-            rightEar.rotation.z = 0.2;
-            catGroup.add(rightEar);
-
-            // Eyes
-            const eyeGeo = new THREE.SphereGeometry(0.1, 16, 16);
-            const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
-            leftEye.position.set(-0.35, 2.6, 0.9);
-            const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
-            rightEye.position.set(0.35, 2.6, 0.9);
-            catGroup.add(leftEye);
-            catGroup.add(rightEye);
-
-            // Snout/Nose
-            const noseGeo = new THREE.SphereGeometry(0.06, 16, 16);
-            const noseMat = new THREE.MeshBasicMaterial({ color: 0xff7675 });
-            const nose = new THREE.Mesh(noseGeo, noseMat);
-            nose.position.set(0, 2.45, 1.0);
-            catGroup.add(nose);
-
-            scene.add(catGroup);
-
-            // Window resize handler
-            window.addEventListener('resize', onWindowResize);
-
-            // Render loop animation
-            animate();
+            renderLeaderboard();
         }
 
-        let clock = new THREE.Clock();
-        function animate() {
-            requestAnimationFrame(animate);
-            const elapsedTime = clock.getElapsedTime();
+        function showToast(msg, icon = '✨') {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = msg;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-6');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-6');
+            }, 2500);
+        }
 
-            // Gentle Idle Animation
-            if (catGroup) {
-                catGroup.position.y = Math.sin(elapsedTime * 2) * 0.05;
+        function addEXP(amount) {
+            state.exp += amount;
+            if (state.exp >= state.maxExp) {
+                state.exp -= state.maxExp;
+                state.level += 1;
+                state.maxExp = Math.floor(state.maxExp * 1.5);
+                showToast(`LEVEL UP! Cat is now Level ${state.level}! 🎉`, '⭐');
+            }
+            updateUI();
+        }
+
+        function petCat(e) {
+            if (state.isSleeping) {
+                showToast('Shh... The cat is sleeping!', '😴');
+                return;
             }
 
-            renderer.render(scene, camera);
+            state.energy = Math.min(state.maxEnergy, state.energy + 1);
+            addEXP(2);
+
+            // Pop Heart FX
+            const heart = document.createElement('div');
+            heart.className = 'heart-pop';
+            heart.innerText = '💖';
+            heart.style.left = `${e.clientX}px`;
+            heart.style.top = `${e.clientY}px`;
+            document.body.appendChild(heart);
+            setTimeout(() => heart.remove(), 900);
         }
 
-        function onWindowResize() {
-            const container = document.getElementById('canvas-container');
-            camera.aspect = container.clientWidth / container.clientHeight;
-            camera.updateProjectionMatrix();
-            renderer.setSize(container.clientWidth, container.clientHeight);
+        function feedCat() {
+            if (state.fish < 5) {
+                showToast('Not enough fish! Complete Eco Missions!', '🐟');
+                return;
+            }
+            state.fish -= 5;
+            state.energy = Math.min(state.maxEnergy, state.energy + 15);
+            addEXP(10);
+            showToast('Yummy! Energy +15, EXP +10', '🍱');
+            updateUI();
         }
 
-        /* ==========================================
-           CUSTOMIZATION & STUDIO LOGIC
-           ========================================== */
-        let activeTab = 'bibs';
+        function restCat() {
+            state.isSleeping = true;
+            document.getElementById('catEyesAwake').classList.add('hidden');
+            document.getElementById('catEyesSleep').classList.remove('hidden');
+            document.getElementById('sleepEffect').classList.remove('hidden');
+            document.getElementById('catStatusLabel').innerText = '💤 SLEEPING... (+30⚡ / +15 EXP)';
 
-        function switchStudioTab(tab, element) {
-            activeTab = tab;
-            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
-            if (element) element.classList.add('active');
-            renderStudioGrid();
+            setTimeout(() => {
+                state.isSleeping = false;
+                state.energy = Math.min(state.maxEnergy, state.energy + 30);
+                addEXP(15);
+                document.getElementById('catEyesAwake').classList.remove('hidden');
+                document.getElementById('catEyesSleep').classList.add('hidden');
+                document.getElementById('sleepEffect').classList.add('hidden');
+                document.getElementById('catStatusLabel').innerText = '✨ TAP TO PET (+1⚡ / +2 EXP)';
+                showToast('Cat woke up fully rested!', '☀️');
+                updateUI();
+            }, 3000);
         }
 
-        function renderStudioGrid() {
-            const grid = document.getElementById('studio-items-grid');
+        // Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('active', 'text-rose-600', 'bg-rose-100');
+                el.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            const navBtn = document.getElementById(`nav-${tabId}`);
+            navBtn.classList.add('active', 'text-rose-600', 'bg-rose-100');
+            navBtn.classList.remove('text-slate-400');
+
+            if (tabId === 'dressup') renderDressGrid();
+        }
+
+        // Dress Up Engine
+        function switchDressCategory(cat) {
+            currentDressCategory = cat;
+            document.querySelectorAll('.dress-tab-btn').forEach(btn => {
+                btn.classList.remove('bg-pink-500', 'text-white');
+                btn.classList.add('bg-pink-100', 'text-pink-700');
+            });
+            document.getElementById(`cat-${cat}-btn`).classList.add('bg-pink-500', 'text-white');
+            renderDressGrid();
+        }
+
+        function renderDressGrid() {
+            const grid = document.getElementById('dressItemsGrid');
             grid.innerHTML = '';
-
-            const items = studioItems[activeTab] || [];
-            items.forEach(item => {
+            
+            dressItems[currentDressCategory].forEach(item => {
+                const isEquipped = state.outfit[currentDressCategory] === item.id;
                 const card = document.createElement('div');
-                card.className = `item-card ${gameState.equipped[activeTab] === item.id ? 'equipped' : ''}`;
-                card.onclick = () => equipItem(activeTab, item);
+                card.className = `clay-btn p-3 bg-white border-2 ${isEquipped ? 'border-rose-500 bg-rose-50' : 'border-pink-200'} rounded-2xl flex flex-col items-center justify-between cursor-pointer`;
+                card.onclick = () => toggleEquip(currentDressCategory, item);
 
                 card.innerHTML = `
-                    <div class="item-preview">
-                        <div style="width:40px; height:40px; border-radius:50%; background:${item.color}; border:2px solid #2d3436;"></div>
-                    </div>
-                    <div style="font-weight:bold; font-size:0.85rem;">${item.name}</div>
+                    <span class="text-3xl my-1">${item.icon}</span>
+                    <span class="text-xs font-black text-slate-800">${item.name}</span>
+                    <span class="text-[10px] font-bold ${isEquipped ? 'text-rose-600' : 'text-slate-400'} mt-1">
+                        ${isEquipped ? 'EQUIPPED' : 'TAP TO WEAR'}
+                    </span>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        function equipItem(category, item) {
-            if (gameState.equipped[category] === item.id) {
-                // Unequip
-                gameState.equipped[category] = null;
-                removeMeshFromCat(category);
+        function toggleEquip(category, item) {
+            const slot = document.getElementById(`slot-${category}`);
+            if (state.outfit[category] === item.id) {
+                state.outfit[category] = null;
+                slot.innerHTML = '';
             } else {
-                // Equip
-                gameState.equipped[category] = item.id;
-                applyMeshToCat(category, item);
+                state.outfit[category] = item.id;
+                slot.innerHTML = item.html;
             }
-            renderStudioGrid();
+            renderDressGrid();
         }
 
-        function applyMeshToCat(category, item) {
-            removeMeshFromCat(category);
+        function resetOutfit() {
+            state.outfit = { head: null, outfit: null, shoes: null };
+            document.getElementById('slot-head').innerHTML = '';
+            document.getElementById('slot-outfit').innerHTML = '';
+            document.getElementById('slot-shoes').innerHTML = '';
+            renderDressGrid();
+            showToast('Stripped all clothes!', '🧹');
+        }
 
-            const material = new THREE.MeshStandardMaterial({ color: item.color, roughness: 0.4 });
+        // Mission & Photo Upload
+        function openMissionUploadModal(name, fishReward, energyReward) {
+            state.activeMission = { name, fishReward, energyReward };
+            document.getElementById('modalMissionName').innerText = `Mission: ${name}`;
+            document.getElementById('photoModal').classList.remove('hidden');
+        }
 
-            if (category === 'bibs') {
-                // LARGE BIB COVERING FRONT BODY
-                const bibGeo = new THREE.CylinderGeometry(0.9, 1.1, 0.9, 32, 1, false, -Math.PI / 3, (2 * Math.PI) / 3);
-                bibMesh = new THREE.Mesh(bibGeo, material);
-                bibMesh.position.set(0, 1.25, 0.25);
-                catGroup.add(bibMesh);
-            } else if (category === 'bells') {
-                // SEPARATE CHOKER & BELL
-                const bellGroup = new THREE.Group();
-                const collarGeo = new THREE.TorusGeometry(0.85, 0.06, 16, 32);
-                const collarMesh = new THREE.Mesh(collarGeo, material);
-                collarMesh.rotation.x = Math.PI / 2;
-                collarGroup.add(collarMesh);
+        function closePhotoModal() {
+            document.getElementById('photoModal').classList.add('hidden');
+            document.getElementById('photoPreview').classList.add('hidden');
+            document.getElementById('uploadPlaceholder').classList.remove('hidden');
+            state.missionPhotoData = null;
+        }
 
-                const bellGeo = new THREE.SphereGeometry(0.18, 16, 16);
-                const goldMat = new THREE.MeshStandardMaterial({ color: 0xf1c40f, metalness: 0.8 });
-                const bellSphere = new THREE.Mesh(bellGeo, goldMat);
-                bellSphere.position.set(0, -0.05, 0.88);
-                collarGroup.add(bellSphere);
+        function triggerFileSelect() {
+            document.getElementById('photoFileInput').click();
+        }
 
-                collarGroup.position.set(0, 2.0, 0);
-                bellMesh = collarGroup;
-                catGroup.add(bellMesh);
-            } else if (category === 'head') {
-                const crownGeo = new THREE.CylinderGeometry(0.3, 0.2, 0.3, 6);
-                headMesh = new THREE.Mesh(crownGeo, material);
-                headMesh.position.set(0, 3.4, 0);
-                catGroup.add(headMesh);
-            } else if (category === 'shoes') {
-                const shoeGeo = new THREE.SphereGeometry(0.25, 16, 16);
-                const shoeL = new THREE.Mesh(shoeGeo, material);
-                const shoeR = new THREE.Mesh(shoeGeo, material);
-                shoeL.position.set(-0.5, 0.2, 0.5);
-                shoeR.position.set(0.5, 0.2, 0.5);
-                
-                const shoeGroup = new THREE.Group();
-                shoeGroup.add(shoeL);
-                shoeGroup.add(shoeR);
-                shoeMeshes = shoeGroup;
-                catGroup.add(shoeMeshes);
+        function handlePhotoUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(evt) {
+                    state.missionPhotoData = evt.target.result;
+                    document.getElementById('photoPreview').src = evt.target.result;
+                    document.getElementById('photoPreview').classList.remove('hidden');
+                    document.getElementById('uploadPlaceholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        function removeMeshFromCat(category) {
-            if (category === 'bibs' && bibMesh) {
-                catGroup.remove(bibMesh);
-                bibMesh = null;
-            } else if (category === 'bells' && bellMesh) {
-                catGroup.remove(bellMesh);
-                bellMesh = null;
-            } else if (category === 'head' && headMesh) {
-                catGroup.remove(headMesh);
-                headMesh = null;
-            } else if (category === 'shoes' && shoeMeshes) {
-                catGroup.remove(shoeMeshes);
-                shoeMeshes = null;
+        function submitMissionWithPhoto() {
+            if (!state.missionPhotoData) {
+                showToast('Please attach a photo proof first!', '⚠️');
+                return;
             }
+            state.fish += state.activeMission.fishReward;
+            state.energy = Math.min(state.maxEnergy, state.energy + state.activeMission.energyReward);
+            addEXP(20);
+            showToast(`Mission Completed! +${state.activeMission.fishReward} 🐟`, '🌱');
+            closePhotoModal();
+            updateUI();
         }
 
-        /* ==========================================
-           GAME INTERACTIONS & STATS LOGIC
-           ========================================== */
-        function interactCat(action) {
-            if (action === 'feed') {
-                if (gameState.fish < 5) {
-                    showFloatingText("Not enough fish!");
-                    return;
-                }
-                gameState.fish -= 5;
-                gameState.energy = Math.min(gameState.maxEnergy, gameState.energy + 15);
-                addExp(20);
-                showFloatingText("+20 EXP!");
-            } else if (action === 'pet') {
-                if (gameState.energy < 5) {
-                    showFloatingText("Too tired! Rest first.");
-                    return;
-                }
-                gameState.energy -= 5;
-                addExp(15);
-                showFloatingText("❤️ Happy!");
-            } else if (action === 'rest') {
-                gameState.energy = Math.min(gameState.maxEnergy, gameState.energy + 30);
-                showFloatingText("💤 Rested!");
-            }
-            updateHUD();
-        }
-
-        function addExp(amount) {
-            gameState.exp += amount;
-            if (gameState.exp >= gameState.maxExp) {
-                gameState.exp -= gameState.maxExp;
-                gameState.level += 1;
-                gameState.maxExp = Math.floor(gameState.maxExp * 1.2);
-                showFloatingText("LEVEL UP! 🎉");
-                
-                // Scale 3D Cat with level
-                catGroup.scale.multiplyScalar(1.05);
-            }
-            updateHUD();
-        }
-
-        function updateHUD() {
-            document.getElementById('level-display').innerText = `LVL ${gameState.level}`;
-            document.getElementById('fish-count').innerText = gameState.fish;
-            document.getElementById('energy-fill').style.width = `${(gameState.energy / gameState.maxEnergy) * 100}%`;
-            document.getElementById('exp-fill').style.width = `${(gameState.exp / gameState.maxExp) * 100}%`;
-
-            // Sync leaderboards current player entry
-            const playerEntry = leaderboardData.find(e => e.name === "Current Player");
-            if (playerEntry) {
-                playerEntry.level = gameState.level;
-                playerEntry.fish = gameState.fish;
-            }
-            renderLeaderboard();
-        }
-
-        function showFloatingText(text) {
-            const el = document.createElement('div');
-            el.className = 'floating-text';
-            el.innerText = text;
-            el.style.left = '50%';
-            el.style.top = '50%';
-            document.body.appendChild(el);
-
-            setTimeout(() => {
-                el.remove();
-            }, 1200);
-        }
-
-        /* ==========================================
-           MISSIONS & ECO PROOF SYSTEM
-           ========================================== */
-        function completeMission(id) {
-            if (id === 1) {
-                gameState.fish += 50;
-                addExp(100);
-                showFloatingText("+50 Fish & +100 EXP!");
-            } else if (id === 2) {
-                gameState.fish += 40;
-                addExp(80);
-                showFloatingText("+40 Fish & +80 EXP!");
-            }
-            updateHUD();
-        }
-
-        /* ==========================================
-           LEADERBOARD & UI PANELS
-           ========================================== */
-        function toggleDrawer(id) {
-            const panel = document.getElementById(id);
-            const isActive = panel.classList.contains('active');
-            
-            document.querySelectorAll('.drawer-panel').forEach(p => p.classList.remove('active'));
-            if (!isActive) {
-                panel.classList.add('active');
-                if (id === 'studio-panel') renderStudioGrid();
-            }
-        }
-
+        // Leaderboards & Ranks
         function renderLeaderboard() {
-            const tbody = document.getElementById('leaderboard-rows');
+            const myRank = leaderboards.find(u => u.name === state.username);
+            if (myRank) {
+                myRank.level = state.level;
+                myRank.fish = state.fish;
+            }
+
+            leaderboards.sort((a, b) => b.level - a.level || b.fish - a.fish);
+            leaderboards.forEach((item, index) => item.rank = index + 1);
+
+            const tbody = document.getElementById('leaderboardRows');
             tbody.innerHTML = '';
 
-            const sorted = [...leaderboardData].sort((a, b) => b.level - a.level || b.fish - a.fish);
-
-            sorted.forEach((item, index) => {
+            leaderboards.forEach(row => {
                 const tr = document.createElement('tr');
-                const rankClass = index < 3 ? `rank-${index + 1}` : '';
+                tr.className = "border-b border-rose-50 font-extrabold";
                 tr.innerHTML = `
-                    <td><div class="rank-badge ${rankClass}">${index + 1}</div></td>
-                    <td><strong>${item.name}</strong></td>
-                    <td>${item.level}</td>
-                    <td>${item.fish}</td>
+                    <td class="p-2">${row.rank === 1 ? '👑 #1' : `#${row.rank}`}</td>
+                    <td class="p-2">${row.name} (LVL ${row.level})</td>
+                    <td class="p-2 text-right text-rose-600">${row.fish}</td>
                 `;
                 tbody.appendChild(tr);
             });
+
+            document.getElementById('topPlayerNameDisplay').innerText = leaderboards[0].name;
+            document.getElementById('totalPlayersCount').innerText = `${leaderboards.length} Players`;
         }
 
-        /* ==========================================
-           MODALS & ADMIN CSV EXPORT
-           ========================================== */
-        function openClaimModal() {
-            document.getElementById('claim-modal').classList.add('active');
+        // Modals
+        function openClaimModal() { document.getElementById('claimModal').classList.remove('hidden'); }
+        function closeClaimModal() { document.getElementById('claimModal').classList.add('hidden'); }
+        
+        function submitClaimForm() {
+            const name = document.getElementById('claimName').value;
+            if (!name) { showToast('Please enter full name', '⚠️'); return; }
+            showToast('Claim submitted successfully!', '🎁');
+            closeClaimModal();
         }
 
-        function openAdminModal() {
-            document.getElementById('admin-modal').classList.add('active');
-        }
+        function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
+        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
 
-        function closeModal(id) {
-            document.getElementById(id).classList.remove('active');
-        }
-
-        function handleClaimSubmit(event) {
-            event.preventDefault();
-            const name = document.getElementById('claim-name').value;
-            alert(`Claim submitted successfully for ${name}!`);
-            closeModal('claim-modal');
-        }
-
-        function exportCSV() {
-            let csvContent = "data:text/csv;charset=utf-8,Rank,Name,Level,Fish\n";
-            leaderboardData.forEach(row => {
-                csvContent += `${row.rank},${row.name},${row.level},${row.fish}\n`;
+        function exportLeaderboardCSV() {
+            let csv = 'Rank,Agent Name,Cat Level,Fish Count\n';
+            leaderboards.forEach(r => {
+                csv += `${r.rank},${r.name},${r.level},${r.fish}\n`;
             });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", "energy_cat_leaderboard.csv");
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
+            const blob = new Blob([csv], { type: 'text/csv' });
+            const url = window.URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.setAttribute('href', url);
+            a.setAttribute('download', 'leaderboard_winners.csv');
+            a.click();
+            showToast('Downloaded Winner CSV!', '📥');
         }
 
-        function resetSystemData() {
-            if (confirm("Reset all game stats to default?")) {
-                gameState.level = 1;
-                gameState.energy = 80;
-                gameState.exp = 20;
-                gameState.fish = 100;
-                updateHUD();
-                closeModal('admin-modal');
-            }
+        function logoutUser() {
+            showToast('Logged out to Guest Mode');
         }
 
-        // Initialize Window
+        // Init Game
         window.onload = () => {
-            init3D();
-            updateHUD();
+            updateUI();
         };
     </script>
 </body>
