@@ -14,43 +14,43 @@
             background: radial-gradient(circle at 50% 30%, #FFE5EC 0%, #FFC2D1 50%, #B5FFFC 100%);
             min-height: 100vh;
             user-select: none;
-            overflow-x: hidden;
+            overflow: hidden;
         }
 
         /* Claymorphism Styling */
         .clay-card {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 40px;
+            border-radius: 36px;
             box-shadow: 
-                0 25px 50px -12px rgba(255, 182, 193, 0.5),
-                inset 0 4px 12px rgba(255, 255, 255, 1),
-                inset 0 -6px 12px rgba(255, 154, 162, 0.2);
-            border: 5px solid #FFFFFF;
+                0 20px 40px -12px rgba(255, 182, 193, 0.5),
+                inset 0 4px 10px rgba(255, 255, 255, 1),
+                inset 0 -5px 10px rgba(255, 154, 162, 0.2);
+            border: 4px solid #FFFFFF;
         }
 
         .clay-inner {
             background: linear-gradient(180deg, #FFFDF9 0%, #FFF5F7 100%);
-            border-radius: 32px;
+            border-radius: 28px;
             box-shadow: 
-                inset 0 6px 16px rgba(251, 113, 133, 0.15),
-                inset 0 -6px 12px rgba(255, 255, 255, 0.9);
-            border: 3px solid #FFE4E6;
+                inset 0 5px 12px rgba(251, 113, 133, 0.12),
+                inset 0 -5px 10px rgba(255, 255, 255, 0.9);
+            border: 2.5px solid #FFE4E6;
         }
 
         .clay-btn {
-            border-radius: 20px;
+            border-radius: 18px;
             transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 
-                0 6px 0 0 rgba(225, 29, 72, 0.25),
-                0 10px 16px -4px rgba(244, 63, 94, 0.3),
-                inset 0 3px 6px rgba(255, 255, 255, 0.9);
+                0 5px 0 0 rgba(225, 29, 72, 0.25),
+                0 8px 12px -3px rgba(244, 63, 94, 0.3),
+                inset 0 2px 5px rgba(255, 255, 255, 0.9);
         }
         .clay-btn:hover {
             transform: translateY(-2px);
             filter: brightness(1.05);
         }
         .clay-btn:active {
-            transform: translateY(4px);
+            transform: translateY(3px);
             box-shadow: 
                 0 2px 0 0 rgba(225, 29, 72, 0.25),
                 inset 0 2px 4px rgba(0, 0, 0, 0.1);
@@ -58,13 +58,13 @@
 
         .glass-modal {
             background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(12px);
+            backdrop-filter: blur(10px);
         }
 
         /* Animations */
         @keyframes breathe {
             0%, 100% { transform: translateY(0) scale(1, 1); }
-            50% { transform: translateY(-6px) scale(1.02, 0.98); }
+            50% { transform: translateY(-5px) scale(1.02, 0.98); }
         }
         .animate-breathe { animation: breathe 3.5s ease-in-out infinite; }
 
@@ -82,108 +82,108 @@
 
         @keyframes floatHeart {
             0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) translateY(0); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4) translateY(-70px); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4) translateY(-60px); }
         }
         .heart-pop {
             position: absolute;
             pointer-events: none;
             animation: floatHeart 0.9s ease-out forwards;
-            font-size: 28px;
+            font-size: 26px;
             z-index: 30;
         }
 
         @keyframes zzzFloat {
             0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
-            50% { opacity: 1; transform: translate(14px, -18px) scale(1.1); }
-            100% { opacity: 0; transform: translate(28px, -38px) scale(0.8); }
+            50% { opacity: 1; transform: translate(12px, -16px) scale(1.1); }
+            100% { opacity: 0; transform: translate(24px, -32px) scale(0.8); }
         }
         .animate-zzz { animation: zzzFloat 2.4s infinite ease-in-out; }
 
         .tab-content { display: none; }
-        .tab-content.active { display: block; animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
+        .tab-content.active { display: block; animation: popIn 0.25s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
         @keyframes popIn {
-            from { opacity: 0; transform: scale(0.96) translateY(6px); }
+            from { opacity: 0; transform: scale(0.97) translateY(4px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar { width: 5px; }
         ::-webkit-scrollbar-track { background: #FFF1F2; border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: #FB7185; border-radius: 10px; }
     </style>
 </head>
-<body class="flex justify-center items-center min-h-screen p-2 md:p-6">
+<body class="flex justify-center items-center min-h-screen p-2 md:p-4">
 
     <!-- Toast Notification -->
-    <div id="toastNotification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-6">
-        <div class="bg-slate-900/95 text-white px-6 py-3 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-2.5 font-bold text-xs md:text-sm tracking-wide">
-            <span id="toastIcon" class="text-xl">✨</span>
+    <div id="toastNotification" class="fixed top-4 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-6">
+        <div class="bg-slate-900/95 text-white px-5 py-2.5 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-2 font-bold text-xs tracking-wide">
+            <span id="toastIcon" class="text-lg">✨</span>
             <span id="toastMessage">Notification</span>
         </div>
     </div>
 
     <!-- AUTH MODAL (LOGIN / REGISTER / FORGOT PASSWORD / SYNC DEVICE) -->
     <div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-2xl border-4 border-pink-300">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-pink-300">
             <div class="text-center">
-                <span class="text-5xl inline-block animate-bounce">🐱</span>
-                <h2 class="text-xl font-black text-rose-600 mt-2">Energy Cat Studio</h2>
-                <p class="text-xs font-bold text-slate-500">Sign in to track weight and dress up your cat</p>
+                <span class="text-4xl inline-block animate-bounce">🐱</span>
+                <h2 class="text-lg font-black text-rose-600 mt-1">Energy Cat Studio</h2>
+                <p class="text-[11px] font-bold text-slate-500">Sign in to track weight & dress up your cat</p>
             </div>
 
             <!-- Tabs -->
             <div class="flex bg-rose-100 p-1 rounded-2xl" id="authTabsContainer">
-                <button onclick="switchAuthTab('login')" id="authTabLogin" class="w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition">Login</button>
-                <button onclick="switchAuthTab('register')" id="authTabRegister" class="w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition">Register</button>
+                <button onclick="switchAuthTab('login')" id="authTabLogin" class="w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition">Login</button>
+                <button onclick="switchAuthTab('register')" id="authTabRegister" class="w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition">Register</button>
             </div>
 
             <!-- Login Form -->
-            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-3">
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-2.5">
                 <div>
-                    <label class="text-xs font-black text-slate-700">Username</label>
-                    <input type="text" id="loginUsername" required placeholder="Enter username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-[11px] font-black text-slate-700">Username</label>
+                    <input type="text" id="loginUsername" required placeholder="Enter username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-1.5 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">Password</label>
-                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-[11px] font-black text-slate-700">Password</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-1.5 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                 </div>
-                <div class="flex justify-between items-center text-[11px] font-bold">
-                    <button type="button" onclick="switchAuthTab('sync')" class="text-purple-600 hover:underline">📲 Sync Account (Other Device)</button>
+                <div class="flex justify-between items-center text-[10px] font-bold">
+                    <button type="button" onclick="switchAuthTab('sync')" class="text-purple-600 hover:underline">📲 Sync Account</button>
                     <button type="button" onclick="switchAuthTab('forgot')" class="text-rose-500 hover:underline">Forgot Password?</button>
                 </div>
-                <button type="submit" class="clay-btn w-full bg-rose-500 text-white font-black py-2.5 text-xs border-2 border-white mt-1">Login 🐾</button>
+                <button type="submit" class="clay-btn w-full bg-rose-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Login 🐾</button>
             </form>
 
             <!-- Cross-Device Sync Form -->
-            <form id="syncForm" onsubmit="handleImportData(event)" class="space-y-3 hidden">
-                <div class="bg-purple-50 p-2.5 rounded-xl border border-purple-200 text-[11px] font-bold text-purple-900">
-                    Paste your Account Sync Key below to import your account onto this device!
+            <form id="syncForm" onsubmit="handleImportData(event)" class="space-y-2.5 hidden">
+                <div class="bg-purple-50 p-2 rounded-xl border border-purple-200 text-[10px] font-bold text-purple-900">
+                    Paste your Sync Key to import your account onto this device:
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">Account Sync Key Data</label>
-                    <textarea id="syncDataInput" required rows="3" placeholder="Paste sync code here..." class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl p-2 text-[10px] font-mono mt-1 focus:outline-none focus:border-rose-400"></textarea>
+                    <label class="text-[11px] font-black text-slate-700">Account Sync Key</label>
+                    <textarea id="syncDataInput" required rows="3" placeholder="Paste key code..." class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl p-2 text-[10px] font-mono mt-0.5 focus:outline-none focus:border-rose-400"></textarea>
                 </div>
-                <button type="submit" class="clay-btn w-full bg-purple-600 text-white font-black py-2.5 text-xs border-2 border-white">Import Account to Device 📲</button>
-                <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-1">Back to Login</button>
+                <button type="submit" class="clay-btn w-full bg-purple-600 text-white font-black py-2 text-xs border-2 border-white">Import Account 📲</button>
+                <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-0.5">Back to Login</button>
             </form>
 
             <!-- Register Form -->
-            <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-3 hidden">
+            <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-2 hidden">
                 <div>
-                    <label class="text-xs font-black text-slate-700">Username</label>
-                    <input type="text" id="regUsername" required placeholder="Create username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-[11px] font-black text-slate-700">Username</label>
+                    <input type="text" id="regUsername" required placeholder="Create username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">Cat Name</label>
-                    <input type="text" id="regCatName" required placeholder="Name your cat" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-[11px] font-black text-slate-700">Cat Name</label>
+                    <input type="text" id="regCatName" required placeholder="Name your cat" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">Password</label>
-                    <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-[11px] font-black text-slate-700">Password</label>
+                    <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">Security Question</label>
-                    <select id="regSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-[11px] font-black text-slate-700">Security Question</label>
+                    <select id="regSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                         <option value="" disabled selected>Select a question</option>
                         <option value="pet">What was your first pet's name?</option>
                         <option value="city">What city were you born in?</option>
@@ -191,55 +191,55 @@
                     </select>
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">Security Answer</label>
-                    <input type="text" id="regSecurityAnswer" required placeholder="Your answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-[11px] font-black text-slate-700">Security Answer</label>
+                    <input type="text" id="regSecurityAnswer" required placeholder="Your answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                 </div>
-                <button type="submit" class="clay-btn w-full bg-emerald-500 text-white font-black py-2.5 text-xs border-2 border-white mt-1">Create Account ✨</button>
+                <button type="submit" class="clay-btn w-full bg-emerald-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Create Account ✨</button>
             </form>
 
             <!-- Forgot Password Form -->
-            <form id="forgotForm" onsubmit="handleForgotPassword(event)" class="space-y-3 hidden">
+            <form id="forgotForm" onsubmit="handleForgotPassword(event)" class="space-y-2 hidden">
                 <div>
-                    <label class="text-xs font-black text-slate-700">Username</label>
-                    <input type="text" id="forgotUsername" required placeholder="Enter your username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-[11px] font-black text-slate-700">Username</label>
+                    <input type="text" id="forgotUsername" required placeholder="Enter username" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">Security Question</label>
-                    <select id="forgotSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
-                        <option value="" disabled selected>Select your registered question</option>
+                    <label class="text-[11px] font-black text-slate-700">Security Question</label>
+                    <select id="forgotSecurityQuestion" required class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
+                        <option value="" disabled selected>Select registered question</option>
                         <option value="pet">What was your first pet's name?</option>
                         <option value="city">What city were you born in?</option>
                         <option value="color">What is your favorite color?</option>
                     </select>
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">Security Answer</label>
-                    <input type="text" id="forgotSecurityAnswer" required placeholder="Enter answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-[11px] font-black text-slate-700">Security Answer</label>
+                    <input type="text" id="forgotSecurityAnswer" required placeholder="Enter answer" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                 </div>
                 <div>
-                    <label class="text-xs font-black text-slate-700">New Password</label>
-                    <input type="password" id="forgotNewPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                    <label class="text-[11px] font-black text-slate-700">New Password</label>
+                    <input type="password" id="forgotNewPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-2.5 py-1 text-xs font-bold mt-0.5 focus:outline-none focus:border-rose-400">
                 </div>
-                <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-2.5 text-xs border-2 border-white mt-1">Reset Password 🔑</button>
-                <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-1">Back to Login</button>
+                <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-2 text-xs border-2 border-white mt-1">Reset Password 🔑</button>
+                <button type="button" onclick="switchAuthTab('login')" class="w-full text-center text-xs font-bold text-slate-500 hover:underline pt-0.5">Back to Login</button>
             </form>
         </div>
     </div>
 
-    <!-- MAIN GAME CONTAINER -->
-    <div class="clay-card w-full max-w-md h-[840px] flex flex-col justify-between relative z-10 overflow-hidden p-4 border-4 border-white">
+    <!-- MAIN GAME CONTAINER (MOBILE COMPACT FIT) -->
+    <div class="clay-card w-full max-w-sm h-[720px] max-h-[100dvh] flex flex-col justify-between relative z-10 overflow-hidden p-3 border-4 border-white">
         
         <!-- Header Bar -->
-        <div class="bg-gradient-to-r from-rose-200 via-pink-200 to-amber-100 p-3 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
-            <div class="flex items-center gap-2.5">
-                <div class="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-2xl shadow-md border-2 border-pink-200">
+        <div class="bg-gradient-to-r from-rose-200 via-pink-200 to-amber-100 p-2.5 rounded-2xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-2">
+                <div class="w-9 h-9 rounded-xl bg-white flex items-center justify-center text-xl shadow-md border-2 border-pink-200">
                     🐱
                 </div>
                 <div>
                     <div class="flex items-center gap-1">
                         <span id="displayUser" class="text-xs font-black text-slate-800">Agent</span>
-                        <button onclick="exportAccountKey()" class="text-[9px] font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-md hover:bg-purple-700 ml-1">Export Key 🔑</button>
-                        <button onclick="logout()" class="text-[10px] font-black text-rose-600 hover:underline ml-1">(Logout)</button>
+                        <button onclick="exportAccountKey()" class="text-[9px] font-black bg-purple-600 text-white px-1.5 py-0.5 rounded-md hover:bg-purple-700">Key 🔑</button>
+                        <button onclick="logout()" class="text-[10px] font-black text-rose-600 hover:underline">(Logout)</button>
                     </div>
                     <div class="text-[10px] font-black text-purple-700">
                         Cat: <span id="displayCatName" class="text-rose-600">Mikan</span>
@@ -247,67 +247,67 @@
                 </div>
             </div>
             
-            <div class="flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-2xl border-2 border-rose-300 shadow-sm">
-                <span class="text-xl">🐟</span>
-                <span id="fishCount" class="text-sm font-black text-rose-600">100</span>
+            <div class="flex items-center gap-1 bg-white px-3 py-1 rounded-xl border-2 border-rose-300 shadow-sm">
+                <span class="text-lg">🐟</span>
+                <span id="fishCount" class="text-xs font-black text-rose-600">100</span>
             </div>
         </div>
 
         <!-- MAIN CONTENT AREA -->
-        <div class="flex-grow overflow-y-auto py-2.5">
+        <div class="flex-grow overflow-y-auto py-2">
             
             <!-- PAGE 1: HOME (CAT CARE & WEIGHT GROWTH) -->
-            <div id="tab-home" class="tab-content active space-y-2.5">
+            <div id="tab-home" class="tab-content active space-y-2">
                 
                 <!-- Weight & Level Banner -->
-                <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 border-2 border-purple-300 rounded-3xl p-2.5 shadow-sm">
-                    <div class="flex justify-between items-center mb-1">
+                <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 border-2 border-purple-300 rounded-2xl p-2 shadow-sm">
+                    <div class="flex justify-between items-center mb-0.5">
                         <div class="flex items-center gap-1.5">
-                            <span class="text-xs font-black bg-purple-600 text-white px-2.5 py-0.5 rounded-full shadow-sm" id="catLevelBadge">LVL 1</span>
+                            <span class="text-[10px] font-black bg-purple-600 text-white px-2 py-0.5 rounded-full shadow-sm" id="catLevelBadge">LVL 1</span>
                             <span class="text-xs font-black text-purple-900" id="catWeightBadge">⚖️ 2.00 kg</span>
                         </div>
                         <span id="expText" class="text-[10px] font-black bg-white text-purple-700 px-2 py-0.5 rounded-full border border-purple-300">0/50 EXP</span>
                     </div>
-                    <div class="w-full bg-purple-200 h-3 rounded-full overflow-hidden p-0.5 border border-purple-300">
+                    <div class="w-full bg-purple-200 h-2.5 rounded-full overflow-hidden p-0.5 border border-purple-300">
                         <div id="expBar" class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
                     </div>
                 </div>
 
                 <!-- Energy Bar -->
-                <div class="bg-white border-2 border-rose-300 rounded-3xl p-2.5 shadow-sm">
-                    <div class="flex justify-between items-center mb-1">
+                <div class="bg-white border-2 border-rose-300 rounded-2xl p-2 shadow-sm">
+                    <div class="flex justify-between items-center mb-0.5">
                         <span class="text-xs font-black text-rose-700 flex items-center gap-1">
                             <span>⚡</span> Energy
                         </span>
                         <span id="energyText" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full border border-rose-300">100/100</span>
                     </div>
-                    <div class="w-full bg-rose-100 h-3 rounded-full overflow-hidden p-0.5 border border-rose-200">
+                    <div class="w-full bg-rose-100 h-2.5 rounded-full overflow-hidden p-0.5 border border-rose-200">
                         <div id="energyBar" class="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
                     </div>
                 </div>
 
                 <!-- Low Energy Warning Banner -->
-                <div id="sadWarningBanner" class="hidden bg-amber-100 border-2 border-amber-400 text-amber-900 px-3 py-1.5 rounded-2xl text-[11px] font-black flex items-center gap-2">
-                    <span class="text-lg">😿</span> Energy below 20%! Your cat is hungry and sad. Feed or let it rest soon!
+                <div id="sadWarningBanner" class="hidden bg-amber-100 border-2 border-amber-400 text-amber-900 px-2.5 py-1 rounded-xl text-[10px] font-black flex items-center gap-1.5">
+                    <span class="text-base">😿</span> Energy below 20%! Your cat is hungry and sad!
                 </div>
 
                 <!-- Kawaii Cat Stage Screen -->
-                <div id="catStage" class="relative clay-inner p-2 flex flex-col items-center justify-center border-2 border-pink-200 h-[300px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
+                <div id="catStage" class="relative clay-inner p-1 flex flex-col items-center justify-center border-2 border-pink-200 h-[240px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
                     
-                    <div class="absolute top-3 left-4 text-xl opacity-70">☁️</div>
-                    <div class="absolute top-4 right-5 text-xl opacity-70">✨</div>
+                    <div class="absolute top-2 left-3 text-lg opacity-70">☁️</div>
+                    <div class="absolute top-3 right-4 text-lg opacity-70">✨</div>
 
                     <!-- Sleep FX -->
-                    <div id="sleepEffect" class="hidden absolute top-6 right-12 z-20 pointer-events-none">
-                        <span class="text-2xl font-black text-indigo-500 animate-zzz inline-block">Zzz...</span>
+                    <div id="sleepEffect" class="hidden absolute top-4 right-10 z-20 pointer-events-none">
+                        <span class="text-xl font-black text-indigo-500 animate-zzz inline-block">Zzz...</span>
                     </div>
 
                     <!-- CAT SVG WRAPPER -->
-                    <div id="catScaleWrapper" class="relative flex items-center justify-center transition-all duration-500 transform scale-100">
-                        <div class="animate-breathe relative flex items-center justify-center z-10 w-[230px] h-[230px]">
+                    <div id="catScaleWrapper" class="relative flex items-center justify-center transition-all duration-500 transform scale-95">
+                        <div class="animate-breathe relative flex items-center justify-center z-10 w-[200px] h-[200px]">
                             
                             <!-- ORIGINAL KAWAII CAT SVG -->
-                            <svg width="230" height="230" viewBox="0 0 200 200" class="drop-shadow-xl relative z-10">
+                            <svg width="200" height="200" viewBox="0 0 200 200" class="drop-shadow-lg relative z-10">
                                 <defs>
                                     <radialGradient id="catBody3D" cx="35%" cy="30%" r="70%">
                                         <stop offset="0%" stop-color="#FFFFFF"/>
@@ -387,7 +387,7 @@
                                 </g>
                             </svg>
 
-                            <!-- OVERLAY CLOTHES (HEAD ACCESSORIES & FRONT APRON) -->
+                            <!-- OVERLAY CLOTHES (HEAD ACCESSORIES & BODY APRON) -->
                             <div class="absolute inset-0 pointer-events-none z-20">
                                 <div id="slot-head" class="absolute inset-0"></div>
                                 <div id="slot-apron" class="absolute inset-0"></div>
@@ -395,122 +395,122 @@
                         </div>
                     </div>
 
-                    <p id="catStatusLabel" class="text-[11px] font-black text-rose-600 mt-1 bg-white px-3.5 py-1 rounded-full border border-rose-300 shadow-sm z-10">
-                        ✨ Pet Cat (+1⚡ / +2 EXP)
+                    <p id="catStatusLabel" class="text-[10px] font-black text-rose-600 bg-white px-3 py-0.5 rounded-full border border-rose-300 shadow-sm z-10">
+                        ✨ Tap Cat to Show Love 💕
                     </p>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="grid grid-cols-2 gap-2.5 pt-1">
-                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 to-orange-400 text-white font-black py-2.5 px-2 border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-md">
-                        <span class="text-lg">🍱</span> Feed (-5🐟 / +0.15kg)
+                <div class="grid grid-cols-2 gap-2 pt-0.5">
+                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 to-orange-400 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md">
+                        <span class="text-base">🍱</span> Feed (-5🐟 / +0.15kg)
                     </button>
-                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-black py-2.5 px-2 border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-md">
-                        <span class="text-lg">😴</span> Rest (+30⚡ / +0.05kg)
+                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md">
+                        <span class="text-base">😴</span> Rest (+30⚡ / +0.05kg)
                     </button>
                 </div>
             </div>
 
             <!-- PAGE 2: ECO MISSIONS -->
-            <div id="tab-missions" class="tab-content space-y-3">
-                <div class="bg-gradient-to-br from-emerald-100 to-teal-100 border-2 border-emerald-300 rounded-3xl p-3.5 shadow-sm">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="text-2xl">🌱</span>
+            <div id="tab-missions" class="tab-content space-y-2.5">
+                <div class="bg-gradient-to-br from-emerald-100 to-teal-100 border-2 border-emerald-300 rounded-2xl p-3 shadow-sm">
+                    <div class="flex items-center gap-1.5 mb-1">
+                        <span class="text-xl">🌱</span>
                         <p class="text-xs font-black text-emerald-950 uppercase">Eco Energy Missions (Attach Photo)</p>
                     </div>
-                    <p class="text-[11px] font-extrabold text-emerald-800 mb-3">Complete real-life eco tasks and upload photos to earn fish & energy!</p>
+                    <p class="text-[10px] font-extrabold text-emerald-800 mb-2.5">Complete eco tasks and upload photos to earn fish & energy!</p>
 
-                    <div class="space-y-2 text-xs font-black">
-                        <button onclick="openMissionUploadModal('Turn off unused lights & screens', 15, 20)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span>💡 Turn off unused lights/screens</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+15🐟 / +20⚡</span>
+                    <div class="space-y-1.5 text-xs font-black">
+                        <button onclick="openMissionUploadModal('Turn off unused lights & screens', 15, 20)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+                            <span>💡 Turn off lights/screens</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+15🐟 / +20⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('Turn off AC before leaving room', 20, 30)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span>❄️ Turn off AC before leaving</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+20🐟 / +30⚡</span>
+                        <button onclick="openMissionUploadModal('Turn off AC before leaving room', 20, 30)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+                            <span>❄️ Turn off AC when leaving</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+20🐟 / +30⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('Unplug idle electronics', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span>🔌 Unplug unused devices</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+10🐟 / +15⚡</span>
+                        <button onclick="openMissionUploadModal('Unplug idle electronics', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+                            <span>🔌 Unplug idle devices</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+10🐟 / +15⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('Use stairs instead of elevator', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span>🚶 Take stairs instead of elevator</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+10🐟 / +15⚡</span>
+                        <button onclick="openMissionUploadModal('Use stairs instead of elevator', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-2.5 px-2.5 border border-emerald-300 rounded-xl flex justify-between items-center shadow-sm">
+                            <span>🚶 Take stairs over elevator</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[9px]">+10🐟 / +15⚡</span>
                         </button>
                     </div>
                 </div>
             </div>
 
             <!-- PAGE 3: DRESS-UP STUDIO (HEAD ACCESSORIES & FRONT APRONS) -->
-            <div id="tab-dressup" class="tab-content space-y-3">
-                <div class="bg-white rounded-3xl p-3 border-2 border-pink-300 shadow-sm flex flex-col h-[480px]">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-2xl">🎀</span>
-                            <h3 class="font-black text-xs text-pink-900">Wardrobe Catalog (10 Each)</h3>
+            <div id="tab-dressup" class="tab-content space-y-2">
+                <div class="bg-white rounded-2xl p-2.5 border-2 border-pink-300 shadow-sm flex flex-col h-[400px]">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <div class="flex items-center gap-1">
+                            <span class="text-xl">🎀</span>
+                            <h3 class="font-black text-xs text-pink-900">Wardrobe Catalog</h3>
                         </div>
-                        <button onclick="resetOutfit()" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2.5 py-1 rounded-full border border-rose-300">
+                        <button onclick="resetOutfit()" class="text-[9px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full border border-rose-300">
                             🔄 Take off all
                         </button>
                     </div>
 
                     <!-- Category Selector Tabs -->
-                    <div class="grid grid-cols-2 gap-2 mb-2">
-                        <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300">
+                    <div class="grid grid-cols-2 gap-1.5 mb-1.5">
+                        <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300">
                             👑 Headwear (10)
                         </button>
-                        <button onclick="switchDressCategory('apron')" id="cat-apron-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200">
+                        <button onclick="switchDressCategory('apron')" id="cat-apron-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200">
                             🎽 Front Aprons (10)
                         </button>
                     </div>
 
                     <!-- Items Grid Scroll Area -->
-                    <div id="dressItemsGrid" class="flex-grow overflow-y-auto grid grid-cols-2 gap-2 p-1">
+                    <div id="dressItemsGrid" class="flex-grow overflow-y-auto grid grid-cols-2 gap-1.5 p-0.5">
                         <!-- Dynamic Item Cards -->
                     </div>
                 </div>
             </div>
 
-            <!-- PAGE 4: CAT WEIGHT LEADERBOARD (MONTHLY CHAMPION & CONTACT FORM) -->
-            <div id="tab-ranks" class="tab-content space-y-3">
+            <!-- PAGE 4: CAT WEIGHT LEADERBOARD (REAL PLAYERS & MONTHLY CHAMPION) -->
+            <div id="tab-ranks" class="tab-content space-y-2">
                 
                 <!-- Monthly Winner Banner & Reward Claim Form -->
-                <div class="bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400 rounded-3xl p-3.5 border-2 border-white shadow-md text-white">
-                    <div class="flex items-center gap-2 mb-2">
-                        <span class="text-3xl animate-bounce">👑</span>
+                <div class="bg-gradient-to-r from-amber-300 via-orange-400 to-rose-400 rounded-2xl p-2.5 border-2 border-white shadow-md text-white">
+                    <div class="flex items-center gap-1.5 mb-1">
+                        <span class="text-2xl animate-bounce">👑</span>
                         <div>
                             <h4 class="text-xs font-black uppercase tracking-wider">Monthly Champion Rewards</h4>
-                            <p class="text-[10px] font-extrabold text-amber-100">Top player wins monthly cat care prizes!</p>
+                            <p class="text-[9px] font-extrabold text-amber-100">Top player wins monthly cat care prizes!</p>
                         </div>
                     </div>
 
-                    <div id="monthlyWinnerInfo" class="bg-white/20 backdrop-blur-md p-2 rounded-2xl text-[11px] font-bold text-slate-900 border border-white/30 mb-2">
-                        🏆 Current #1 Champion: <span id="monthlyChampionName" class="text-rose-900 font-black">Loading...</span>
+                    <div id="monthlyWinnerInfo" class="bg-white/20 backdrop-blur-md p-1.5 rounded-xl text-[10px] font-bold text-slate-900 border border-white/30 mb-1">
+                        🏆 Current #1 Champion: <span id="monthlyChampionName" class="text-rose-900 font-black">No real players yet</span>
                     </div>
 
                     <!-- Contact Form for Monthly Champion -->
-                    <div id="winnerContactFormBox" class="bg-white/95 p-2.5 rounded-2xl text-slate-800 shadow-sm hidden">
-                        <p class="text-[11px] font-black text-amber-900 mb-1">🎉 You are in 1st Place! Enter contact info to receive prize:</p>
-                        <form onsubmit="handleSaveContactInfo(event)" class="space-y-1.5">
-                            <input type="text" id="championContactInput" required placeholder="Email / Phone / LINE ID" class="w-full bg-slate-50 border border-amber-300 rounded-xl px-2.5 py-1.5 text-xs font-bold outline-none focus:border-amber-500">
-                            <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-1.5 text-xs">Submit Contact Info 📩</button>
+                    <div id="winnerContactFormBox" class="bg-white/95 p-2 rounded-xl text-slate-800 shadow-sm hidden">
+                        <p class="text-[10px] font-black text-amber-900 mb-1">🎉 You are in 1st Place! Enter contact info for prize:</p>
+                        <form onsubmit="handleSaveContactInfo(event)" class="space-y-1">
+                            <input type="text" id="championContactInput" required placeholder="Email / Phone / LINE ID" class="w-full bg-slate-50 border border-amber-300 rounded-lg px-2 py-1 text-xs font-bold outline-none focus:border-amber-500">
+                            <button type="submit" class="clay-btn w-full bg-amber-500 text-white font-black py-1 text-[11px]">Submit Contact Info 📩</button>
                         </form>
                     </div>
                 </div>
 
                 <!-- Leaderboard Table -->
-                <div class="bg-white rounded-3xl p-3 border-2 border-rose-200 shadow-sm">
-                    <div class="flex items-center justify-between mb-2">
-                        <span class="text-xs font-black text-rose-900">📊 Active Players Ranking</span>
+                <div class="bg-white rounded-2xl p-2.5 border-2 border-rose-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-1.5">
+                        <span class="text-xs font-black text-rose-900">📊 Registered Players Ranking</span>
                         <span id="totalPlayersCount" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">0 Players</span>
                     </div>
-                    <div class="overflow-y-auto max-h-[220px]">
+                    <div class="overflow-y-auto max-h-[190px]">
                         <table class="w-full text-left text-xs">
                             <thead>
                                 <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[10px] uppercase">
-                                    <th class="p-1.5">Rank</th>
-                                    <th class="p-1.5">Player & Cat</th>
-                                    <th class="p-1.5 text-right">Weight ⚖️</th>
+                                    <th class="p-1">Rank</th>
+                                    <th class="p-1">Player & Cat</th>
+                                    <th class="p-1 text-right">Weight ⚖️</th>
                                 </tr>
                             </thead>
                             <tbody id="leaderboardRows"></tbody>
@@ -522,18 +522,18 @@
         </div>
 
         <!-- NAVIGATION BAR -->
-        <div class="bg-white p-2 rounded-3xl border-2 border-rose-200 grid grid-cols-4 gap-1.5 shrink-0 shadow-md">
-            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2 rounded-2xl text-rose-600 bg-rose-100 font-black text-[11px]">
-                <span class="text-lg">🏠</span> Home
+        <div class="bg-white p-1.5 rounded-2xl border-2 border-rose-200 grid grid-cols-4 gap-1 shrink-0 shadow-md">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-1.5 rounded-xl text-rose-600 bg-rose-100 font-black text-[10px]">
+                <span class="text-base">🏠</span> Home
             </button>
-            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
-                <span class="text-lg">🌱</span> Missions
+            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]">
+                <span class="text-base">🌱</span> Missions
             </button>
-            <button onclick="switchTab('dressup')" id="nav-dressup" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
-                <span class="text-lg">👗</span> Dress Up
+            <button onclick="switchTab('dressup')" id="nav-dressup" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]">
+                <span class="text-base">👗</span> Dress Up
             </button>
-            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
-                <span class="text-lg">🏆</span> Rank
+            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]">
+                <span class="text-base">🏆</span> Rank
             </button>
         </div>
 
@@ -544,21 +544,21 @@
 
     <!-- PHOTO PROOF MODAL -->
     <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-emerald-300">
-            <h3 class="font-black text-sm text-slate-800">📸 Upload Eco Proof Photo</h3>
-            <p id="modalMissionName" class="text-xs font-black text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">Mission</p>
+        <div class="bg-white rounded-3xl p-4 w-full max-w-xs flex flex-col gap-2.5 shadow-2xl border-4 border-emerald-300">
+            <h3 class="font-black text-xs text-slate-800">📸 Upload Eco Proof Photo</h3>
+            <p id="modalMissionName" class="text-[11px] font-black text-emerald-800 bg-emerald-50 p-2 rounded-xl border border-emerald-200">Mission</p>
             
-            <div onclick="triggerFileSelect()" class="w-full h-40 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
+            <div onclick="triggerFileSelect()" class="w-full h-36 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
                 <img id="photoPreview" class="w-full h-full object-cover hidden" />
                 <div id="uploadPlaceholder" class="text-center p-2">
-                    <span class="text-3xl">📷</span>
-                    <p class="text-xs font-black text-emerald-700 mt-1">Click to choose image</p>
+                    <span class="text-2xl">📷</span>
+                    <p class="text-[11px] font-black text-emerald-700 mt-1">Click to choose image</p>
                 </div>
             </div>
 
             <div class="flex gap-2">
-                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2.5 rounded-xl">Cancel</button>
-                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-2.5 rounded-xl border-2 border-white">Submit Photo</button>
+                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2 rounded-xl">Cancel</button>
+                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-2 rounded-xl border-2 border-white">Submit Photo</button>
             </div>
         </div>
     </div>
@@ -568,31 +568,31 @@
         // Global LocalStorage Database Key
         const DB_KEY = 'ENERGY_CAT_ACCOUNTS_V2';
 
-        // 10 HEAD ACCESSORIES & 10 FRONT APRONS CATALOG
+        // 10 HEAD ACCESSORIES & 10 FRONT BODY APRONS CATALOG
         const dressItems = {
             head: [
-                { id: 'h1', name: 'Red Bow', price: 10, icon: '🎀', html: '<span style="font-size: 42px; position: absolute; top: 18px; left: 52px; transform: rotate(-15deg);">🎀</span>' },
-                { id: 'h2', name: 'Golden Crown', price: 20, icon: '👑', html: '<span style="font-size: 38px; position: absolute; top: 10px; left: 81px;">👑</span>' },
-                { id: 'h3', name: 'Party Hat', price: 15, icon: '🎉', html: '<span style="font-size: 40px; position: absolute; top: 8px; left: 80px;">🎉</span>' },
-                { id: 'h4', name: 'Graduation Cap', price: 25, icon: '🎓', html: '<span style="font-size: 40px; position: absolute; top: 8px; left: 78px;">🎓</span>' },
-                { id: 'h5', name: 'Flower Crown', price: 15, icon: '🌸', html: '<span style="font-size: 38px; position: absolute; top: 18px; left: 76px;">🌸</span>' },
-                { id: 'h6', name: 'Bear Ears', price: 12, icon: '🐻', html: '<span style="font-size: 38px; position: absolute; top: 12px; left: 78px;">🐻</span>' },
-                { id: 'h7', name: 'Witch Hat', price: 18, icon: '🧙‍♀️', html: '<span style="font-size: 42px; position: absolute; top: 6px; left: 75px;">🧙‍♀️</span>' },
-                { id: 'h8', name: 'Chef Hat', price: 15, icon: '👨‍🍳', html: '<span style="font-size: 42px; position: absolute; top: 4px; left: 78px;">👨‍🍳</span>' },
-                { id: 'h9', name: 'Cowboy Hat', price: 18, icon: '🤠', html: '<span style="font-size: 40px; position: absolute; top: 10px; left: 76px;">🤠</span>' },
-                { id: 'h10', name: 'Santa Hat', price: 15, icon: '🎅', html: '<span style="font-size: 42px; position: absolute; top: 6px; left: 78px;">🎅</span>' }
+                { id: 'h1', name: 'Red Bow', price: 10, icon: '🎀', html: '<span style="font-size: 36px; position: absolute; top: 12px; left: 45px; transform: rotate(-15deg);">🎀</span>' },
+                { id: 'h2', name: 'Golden Crown', price: 20, icon: '👑', html: '<span style="font-size: 32px; position: absolute; top: 6px; left: 70px;">👑</span>' },
+                { id: 'h3', name: 'Party Hat', price: 15, icon: '🎉', html: '<span style="font-size: 34px; position: absolute; top: 4px; left: 68px;">🎉</span>' },
+                { id: 'h4', name: 'Graduation Cap', price: 25, icon: '🎓', html: '<span style="font-size: 34px; position: absolute; top: 4px; left: 66px;">🎓</span>' },
+                { id: 'h5', name: 'Flower Crown', price: 15, icon: '🌸', html: '<span style="font-size: 32px; position: absolute; top: 12px; left: 66px;">🌸</span>' },
+                { id: 'h6', name: 'Bear Ears', price: 12, icon: '🐻', html: '<span style="font-size: 32px; position: absolute; top: 8px; left: 68px;">🐻</span>' },
+                { id: 'h7', name: 'Witch Hat', price: 18, icon: '🧙‍♀️', html: '<span style="font-size: 36px; position: absolute; top: 2px; left: 65px;">🧙‍♀️</span>' },
+                { id: 'h8', name: 'Chef Hat', price: 15, icon: '👨‍🍳', html: '<span style="font-size: 36px; position: absolute; top: 0px; left: 68px;">👨‍🍳</span>' },
+                { id: 'h9', name: 'Cowboy Hat', price: 18, icon: '🤠', html: '<span style="font-size: 34px; position: absolute; top: 6px; left: 66px;">🤠</span>' },
+                { id: 'h10', name: 'Santa Hat', price: 15, icon: '🎅', html: '<span style="font-size: 36px; position: absolute; top: 2px; left: 68px;">🎅</span>' }
             ],
             apron: [
-                { id: 'a1', name: 'Strawberry Apron', price: 15, icon: '🍓', html: '<span style="font-size: 52px; position: absolute; top: 132px; left: 74px;">🍓</span>' },
-                { id: 'a2', name: 'Bee Bib', price: 15, icon: '🐝', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🐝</span>' },
-                { id: 'a3', name: 'Star Bib', price: 12, icon: '⭐', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">⭐</span>' },
-                { id: 'a4', name: 'Heart Apron', price: 15, icon: '💖', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">💖</span>' },
-                { id: 'a5', name: 'Fish Bib', price: 18, icon: '🐟', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🐟</span>' },
-                { id: 'a6', name: 'Flower Apron', price: 15, icon: '🌻', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🌻</span>' },
-                { id: 'a7', name: 'Clover Apron', price: 12, icon: '🍀', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🍀</span>' },
-                { id: 'a8', name: 'Ribbon Bib', price: 15, icon: '🎀', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🎀</span>' },
-                { id: 'a9', name: 'Paw Print Bib', price: 20, icon: '🐾', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🐾</span>' },
-                { id: 'a10', name: 'Rainbow Apron', price: 22, icon: '🌈', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🌈</span>' }
+                { id: 'a1', name: 'Strawberry Apron', price: 15, icon: '🍓', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FF4D6D; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🍓</div>' },
+                { id: 'a2', name: 'Bee Bib', price: 15, icon: '🐝', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FFCA3A; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🐝</div>' },
+                { id: 'a3', name: 'Star Bib', price: 12, icon: '⭐', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FFD166; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">⭐</div>' },
+                { id: 'a4', name: 'Heart Apron', price: 15, icon: '💖', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #FF8FA3; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">💖</div>' },
+                { id: 'a5', name: 'Fish Bib', price: 18, icon: '🐟', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #4EA8DE; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🐟</div>' },
+                { id: 'a6', name: 'Flower Apron', price: 15, icon: '🌻', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #8AC926; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🌻</div>' },
+                { id: 'a7', name: 'Clover Apron', price: 12, icon: '🍀', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #52B788; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🍀</div>' },
+                { id: 'a8', name: 'Ribbon Bib', price: 15, icon: '🎀', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #F72585; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🎀</div>' },
+                { id: 'a9', name: 'Paw Print Bib', price: 20, icon: '🐾', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: #B5179E; border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🐾</div>' },
+                { id: 'a10', name: 'Rainbow Apron', price: 22, icon: '🌈', html: '<div style="position: absolute; top: 110px; left: 50px; width: 100px; height: 50px; background: linear-gradient(90deg, #ffadad,#ffd6a5,#fdffb6,#caffbf,#9bf6ff,#a0c4ff,#bdb2ff); border: 3px solid #5C2C16; border-radius: 12px 12px 24px 24px; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 6px rgba(0,0,0,0.15); z-index: 25;">🌈</div>' }
             ]
         };
 
@@ -652,13 +652,13 @@
 
             if (tab === 'login') {
                 tabContainer.classList.remove('hidden');
-                loginBtn.className = "w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
-                regBtn.className = "w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition";
+                loginBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
+                regBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition";
                 document.getElementById('loginForm').classList.remove('hidden');
             } else if (tab === 'register') {
                 tabContainer.classList.remove('hidden');
-                regBtn.className = "w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
-                loginBtn.className = "w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition";
+                regBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
+                loginBtn.className = "w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition";
                 document.getElementById('registerForm').classList.remove('hidden');
             } else if (tab === 'forgot') {
                 tabContainer.classList.add('hidden');
@@ -852,7 +852,7 @@
             } else {
                 awakeEyes.classList.remove('hidden');
                 sadBanner.classList.add('hidden');
-                document.getElementById('catStatusLabel').innerText = '✨ Pet Cat (+1⚡ / +2 EXP)';
+                document.getElementById('catStatusLabel').innerText = '✨ Tap Cat to Show Love 💕';
             }
 
             // Render Clothes
@@ -884,21 +884,17 @@
             if (acc.exp >= 50) {
                 acc.level += 1;
                 acc.exp -= 50;
-                showToast(`🎉 Level Up! Your cat reached Level ${acc.level}!`, '🌟');
+                acc.fish += 20; // Gain +20 Fish currency per Level Up
+                showToast(`🎉 Level Up! Level ${acc.level}! Earned +20 🐟 Fish!`, '🌟');
             }
             saveAccounts();
         }
 
         function petCat(e) {
             if (!currentUser) return;
-            const acc = accounts[currentUser];
-            
-            if (acc.energy < 100) {
-                acc.energy = Math.min(100, acc.energy + 1);
-            }
-            addExp(2);
 
-            // Pop Heart Effect
+            // NO EXP / NO LEVEL INCREASE ON HEART TAP
+            // Pop Heart Effect only for animation
             const rect = document.getElementById('catStage').getBoundingClientRect();
             const heart = document.createElement('div');
             heart.className = 'heart-pop';
@@ -907,9 +903,6 @@
             heart.style.top = `${e.clientY - rect.top}px`;
             document.getElementById('catStage').appendChild(heart);
             setTimeout(() => heart.remove(), 900);
-
-            saveAccounts();
-            updateUI();
         }
 
         function feedCat() {
@@ -1019,11 +1012,11 @@
         function switchDressCategory(cat) {
             currentDressCategory = cat;
             document.getElementById('cat-head-btn').className = cat === 'head' 
-                ? "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300"
-                : "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200";
+                ? "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300"
+                : "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200";
             document.getElementById('cat-apron-btn').className = cat === 'apron' 
-                ? "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300"
-                : "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200";
+                ? "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300"
+                : "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200";
             renderDressUpGrid();
         }
 
@@ -1039,18 +1032,18 @@
                 const isEquipped = acc.equipped[currentDressCategory] === item.id;
 
                 const card = document.createElement('div');
-                card.className = `p-2.5 rounded-2xl border-2 flex flex-col items-center justify-between transition ${isEquipped ? 'bg-pink-100 border-pink-500' : 'bg-slate-50 border-rose-100'}`;
+                card.className = `p-2 rounded-xl border-2 flex flex-col items-center justify-between transition ${isEquipped ? 'bg-pink-100 border-pink-500' : 'bg-slate-50 border-rose-100'}`;
                 
                 card.innerHTML = `
-                    <div class="text-3xl my-1">${item.icon}</div>
-                    <div class="text-[11px] font-black text-slate-800 text-center">${item.name}</div>
-                    <div class="mt-2 w-full">
+                    <div class="text-2xl my-0.5">${item.icon}</div>
+                    <div class="text-[10px] font-black text-slate-800 text-center truncate w-full">${item.name}</div>
+                    <div class="mt-1 w-full">
                         ${isEquipped ? `
-                            <button onclick="unequipItem('${currentDressCategory}')" class="clay-btn w-full bg-rose-500 text-white font-black text-[10px] py-1 rounded-xl">Unequip</button>
+                            <button onclick="unequipItem('${currentDressCategory}')" class="clay-btn w-full bg-rose-500 text-white font-black text-[9px] py-1 rounded-lg">Unequip</button>
                         ` : isUnlocked ? `
-                            <button onclick="equipItem('${currentDressCategory}', '${item.id}')" class="clay-btn w-full bg-emerald-500 text-white font-black text-[10px] py-1 rounded-xl">Equip</button>
+                            <button onclick="equipItem('${currentDressCategory}', '${item.id}')" class="clay-btn w-full bg-emerald-500 text-white font-black text-[9px] py-1 rounded-lg">Equip</button>
                         ` : `
-                            <button onclick="buyItem('${currentDressCategory}', '${item.id}',${item.price})" class="clay-btn w-full bg-amber-400 text-slate-900 font-black text-[10px] py-1 rounded-xl">Buy (${item.price}🐟)</button>
+                            <button onclick="buyItem('${currentDressCategory}', '${item.id}',${item.price})" class="clay-btn w-full bg-amber-400 text-slate-900 font-black text-[9px] py-1 rounded-lg">Buy (${item.price}🐟)</button>
                         `}
                     </div>
                 `;
@@ -1101,11 +1094,13 @@
             showToast('🔄 All outfits removed!', '✨');
         }
 
-        /* --- LEADERBOARD & MONTHLY CHAMPION FORM --- */
+        /* --- REAL PLAYER LEADERBOARD & MONTHLY CHAMPION FORM --- */
         function renderLeaderboard() {
+            loadAccounts();
             const rows = document.getElementById('leaderboardRows');
             rows.innerHTML = '';
 
+            // REAL REGISTERED PLAYERS ONLY (NO MOCK DATA)
             const playerList = Object.values(accounts).sort((a, b) => b.weight - a.weight);
             document.getElementById('totalPlayersCount').innerText = `${playerList.length} Players`;
 
@@ -1113,7 +1108,7 @@
                 const champ = playerList[0];
                 document.getElementById('monthlyChampionName').innerText = `${champ.username} (Cat: ${champ.catName} - ${champ.weight.toFixed(2)}kg)`;
                 
-                // Show contact submission form if the logged in user is currently #1
+                // Show contact submission form if current logged-in user is #1
                 const formBox = document.getElementById('winnerContactFormBox');
                 if (champ.username === currentUser) {
                     formBox.classList.remove('hidden');
@@ -1123,18 +1118,21 @@
                 } else {
                     formBox.classList.add('hidden');
                 }
+            } else {
+                document.getElementById('monthlyChampionName').innerText = 'No registered players yet';
+                document.getElementById('winnerContactFormBox').classList.add('hidden');
             }
 
             playerList.forEach((p, idx) => {
                 const tr = document.createElement('tr');
                 tr.className = `border-b border-rose-50 ${p.username === currentUser ? 'bg-pink-50 font-black' : ''}`;
                 tr.innerHTML = `
-                    <td class="p-2 font-black text-rose-600">#${idx + 1}</td>
-                    <td class="p-2">
+                    <td class="p-1 font-black text-rose-600">#${idx + 1}</td>
+                    <td class="p-1">
                         <div class="font-black text-slate-800">${p.username} ${p.username === currentUser ? '⭐' : ''}</div>
-                        <div class="text-[10px] text-purple-600 font-bold">Cat: ${p.catName}</div>
+                        <div class="text-[9px] text-purple-600 font-bold">Cat: ${p.catName}</div>
                     </td>
-                    <td class="p-2 text-right font-black text-purple-900">${p.weight.toFixed(2)} kg</td>
+                    <td class="p-1 text-right font-black text-purple-900">${p.weight.toFixed(2)} kg</td>
                 `;
                 rows.appendChild(tr);
             });
@@ -1146,19 +1144,19 @@
             const acc = accounts[currentUser];
             acc.contactInfo = contact;
             saveAccounts();
-            showToast('📩 Monthly Champion contact details saved!', '🎉');
+            showToast('📩 Champion contact details saved!', '🎉');
         }
 
         /* --- NAVIGATION TABS --- */
         function switchTab(tab) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(btn => {
-                btn.className = "nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]";
+                btn.className = "nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]";
             });
 
             document.getElementById(`tab-${tab}`).classList.add('active');
             const activeBtn = document.getElementById(`nav-${tab}`);
-            activeBtn.className = "nav-btn active flex flex-col items-center py-2 rounded-2xl text-rose-600 bg-rose-100 font-black text-[11px]";
+            activeBtn.className = "nav-btn active flex flex-col items-center py-1.5 rounded-xl text-rose-600 bg-rose-100 font-black text-[10px]";
 
             if (tab === 'dressup') renderDressUpGrid();
             if (tab === 'ranks') renderLeaderboard();
