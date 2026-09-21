@@ -262,7 +262,7 @@
                 <div class="bg-white border-2 border-rose-300 rounded-3xl p-2.5 shadow-sm">
                     <div class="flex justify-between items-center mb-1">
                         <span class="text-xs font-black text-rose-700 flex items-center gap-1">
-                            <span>⚡</span> Energy (-1 per 3 min)
+                            <span>⚡</span> Energy
                         </span>
                         <span id="energyText" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full border border-rose-300">100/100</span>
                     </div>
@@ -292,7 +292,7 @@
                         <div class="animate-breathe relative flex items-center justify-center z-10 w-[230px] h-[230px]">
                             
                             <!-- ORIGINAL KAWAII CAT SVG -->
-                            <svg width="230" height="230" viewBox="0 0 200 200" class="drop-shadow-xl">
+                            <svg width="230" height="230" viewBox="0 0 200 200" class="drop-shadow-xl relative z-10">
                                 <defs>
                                     <radialGradient id="catBody3D" cx="35%" cy="30%" r="70%">
                                         <stop offset="0%" stop-color="#FFFFFF"/>
@@ -373,9 +373,9 @@
                             </svg>
 
                             <!-- OVERLAY CLOTHES (HEAD ACCESSORIES & FRONT APRON) -->
-                            <div class="absolute inset-0 pointer-events-none flex items-center justify-center">
-                                <div id="slot-head" class="absolute inset-0 flex items-center justify-center"></div>
-                                <div id="slot-apron" class="absolute inset-0 flex items-center justify-center"></div>
+                            <div class="absolute inset-0 pointer-events-none z-20">
+                                <div id="slot-head" class="absolute inset-0"></div>
+                                <div id="slot-apron" class="absolute inset-0"></div>
                             </div>
                         </div>
                     </div>
@@ -535,51 +535,60 @@
 
     <!-- GAME ENGINE JAVASCRIPT -->
     <script>
-        // Database key for local storage
+        // Global LocalStorage Database Key
         const DB_KEY = 'ENERGY_CAT_ACCOUNTS_V2';
 
-        // 10 HEAD ACCESSORIES & 10 FRONT APRONS (SVG Overlay Definitions)
+        // 10 HEAD ACCESSORIES & 10 FRONT APRONS (Positioned Overlays)
         const dressItems = {
             head: [
                 { id: 'h1', name: 'Red Bow', price: 10, icon: '🎀', html: '<span style="font-size: 42px; position: absolute; top: 18px; left: 52px; transform: rotate(-15deg);">🎀</span>' },
-                { id: 'h2', name: 'Golden Crown', price: 20, icon: '👑', html: '<span style="font-size: 38px; position: absolute; top: 12px; left: 81px;">👑</span>' },
-                { id: 'h3', name: 'Party Hat', price: 15, icon: '🎉', html: '<span style="font-size: 40px; position: absolute; top: 10px; left: 80px;">🎉</span>' },
-                { id: 'h4', name: 'Graduation Cap', price: 25, icon: '🎓', html: '<span style="font-size: 40px; position: absolute; top: 10px; left: 78px;">🎓</span>' },
-                { id: 'h5', name: 'Flower Crown', price: 15, icon: '🌸', html: '<span style="font-size: 38px; position: absolute; top: 20px; left: 76px;">🌸</span>' },
-                { id: 'h6', name: 'Bear Ears', price: 12, icon: '🐻', html: '<span style="font-size: 38px; position: absolute; top: 14px; left: 78px;">🐻</span>' },
-                { id: 'h7', name: 'Witch Hat', price: 18, icon: '🧙‍♀️', html: '<span style="font-size: 42px; position: absolute; top: 8px; left: 75px;">🧙‍♀️</span>' },
-                { id: 'h8', name: 'Chef Hat', price: 15, icon: '👨‍🍳', html: '<span style="font-size: 42px; position: absolute; top: 6px; left: 78px;">👨‍🍳</span>' },
-                { id: 'h9', name: 'Cowboy Hat', price: 18, icon: '🤠', html: '<span style="font-size: 40px; position: absolute; top: 12px; left: 76px;">🤠</span>' },
-                { id: 'h10', name: 'Santa Hat', price: 15, icon: '🎅', html: '<span style="font-size: 42px; position: absolute; top: 8px; left: 78px;">🎅</span>' }
+                { id: 'h2', name: 'Golden Crown', price: 20, icon: '👑', html: '<span style="font-size: 38px; position: absolute; top: 10px; left: 81px;">👑</span>' },
+                { id: 'h3', name: 'Party Hat', price: 15, icon: '🎉', html: '<span style="font-size: 40px; position: absolute; top: 8px; left: 80px;">🎉</span>' },
+                { id: 'h4', name: 'Graduation Cap', price: 25, icon: '🎓', html: '<span style="font-size: 40px; position: absolute; top: 8px; left: 78px;">🎓</span>' },
+                { id: 'h5', name: 'Flower Crown', price: 15, icon: '🌸', html: '<span style="font-size: 38px; position: absolute; top: 18px; left: 76px;">🌸</span>' },
+                { id: 'h6', name: 'Bear Ears', price: 12, icon: '🐻', html: '<span style="font-size: 38px; position: absolute; top: 12px; left: 78px;">🐻</span>' },
+                { id: 'h7', name: 'Witch Hat', price: 18, icon: '🧙‍♀️', html: '<span style="font-size: 42px; position: absolute; top: 6px; left: 75px;">🧙‍♀️</span>' },
+                { id: 'h8', name: 'Chef Hat', price: 15, icon: '👨‍🍳', html: '<span style="font-size: 42px; position: absolute; top: 4px; left: 78px;">👨‍🍳</span>' },
+                { id: 'h9', name: 'Cowboy Hat', price: 18, icon: '🤠', html: '<span style="font-size: 40px; position: absolute; top: 10px; left: 76px;">🤠</span>' },
+                { id: 'h10', name: 'Santa Hat', price: 15, icon: '🎅', html: '<span style="font-size: 42px; position: absolute; top: 6px; left: 78px;">🎅</span>' }
             ],
             apron: [
-                { id: 'a1', name: 'Strawberry Apron', price: 15, icon: '🍓', html: '<span style="font-size: 52px; position: absolute; top: 135px; left: 74px; z-index: 25;">🍓</span>' },
-                { id: 'a2', name: 'Bee Bib', price: 15, icon: '🐝', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🐝</span>' },
-                { id: 'a3', name: 'Star Bib', price: 12, icon: '⭐', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">⭐</span>' },
-                { id: 'a4', name: 'Heart Apron', price: 15, icon: '💖', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">💖</span>' },
-                { id: 'a5', name: 'Fish Bib', price: 18, icon: '🐟', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🐟</span>' },
-                { id: 'a6', name: 'Flower Apron', price: 15, icon: '🌻', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🌻</span>' },
-                { id: 'a7', name: 'Clover Apron', price: 12, icon: '🍀', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🍀</span>' },
-                { id: 'a8', name: 'Ribbon Bib', price: 15, icon: '🎀', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🎀</span>' },
-                { id: 'a9', name: 'Paw Print Bib', price: 20, icon: '🐾', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🐾</span>' },
-                { id: 'a10', name: 'Rainbow Apron', price: 22, icon: '🌈', html: '<span style="font-size: 50px; position: absolute; top: 135px; left: 75px; z-index: 25;">🌈</span>' }
+                { id: 'a1', name: 'Strawberry Apron', price: 15, icon: '🍓', html: '<span style="font-size: 52px; position: absolute; top: 132px; left: 74px;">🍓</span>' },
+                { id: 'a2', name: 'Bee Bib', price: 15, icon: '🐝', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🐝</span>' },
+                { id: 'a3', name: 'Star Bib', price: 12, icon: '⭐', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">⭐</span>' },
+                { id: 'a4', name: 'Heart Apron', price: 15, icon: '💖', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">💖</span>' },
+                { id: 'a5', name: 'Fish Bib', price: 18, icon: '🐟', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🐟</span>' },
+                { id: 'a6', name: 'Flower Apron', price: 15, icon: '🌻', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🌻</span>' },
+                { id: 'a7', name: 'Clover Apron', price: 12, icon: '🍀', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🍀</span>' },
+                { id: 'a8', name: 'Ribbon Bib', price: 15, icon: '🎀', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🎀</span>' },
+                { id: 'a9', name: 'Paw Print Bib', price: 20, icon: '🐾', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🐾</span>' },
+                { id: 'a10', name: 'Rainbow Apron', price: 22, icon: '🌈', html: '<span style="font-size: 50px; position: absolute; top: 132px; left: 75px;">🌈</span>' }
             ]
         };
 
-        // App State
+        // App State Variables
         let currentUser = null;
         let accounts = {};
         let currentDressCategory = 'head';
         let activeMission = null;
 
-        // Initialize App
+        // Initialize App & Sync Storage
         window.addEventListener('DOMContentLoaded', () => {
             loadAccounts();
             checkAutoLogin();
             setupEnergyDecayLoop();
         });
 
-        // Save & Load LocalStorage Accounts
+        // Sync local storage across devices / sessions
+        window.addEventListener('storage', () => {
+            loadAccounts();
+            if (currentUser && accounts[currentUser]) {
+                updateUI();
+                renderDressUpGrid();
+                renderLeaderboard();
+            }
+        });
+
         function loadAccounts() {
             const raw = localStorage.getItem(DB_KEY);
             accounts = raw ? JSON.parse(raw) : {};
@@ -590,7 +599,7 @@
         }
 
         function checkAutoLogin() {
-            const sessionUser = sessionStorage.getItem('ENERGY_CAT_ACTIVE_USER');
+            const sessionUser = localStorage.getItem('ENERGY_CAT_ACTIVE_USER');
             if (sessionUser && accounts[sessionUser]) {
                 currentUser = sessionUser;
                 document.getElementById('authModal').classList.add('hidden');
@@ -600,7 +609,7 @@
             }
         }
 
-        /* --- AUTH SYSTEM --- */
+        /* --- AUTHENTICATION SYSTEM --- */
         function switchAuthTab(tab) {
             document.getElementById('loginForm').classList.add('hidden');
             document.getElementById('registerForm').classList.add('hidden');
@@ -628,6 +637,7 @@
 
         function handleRegister(e) {
             e.preventDefault();
+            loadAccounts();
             const username = document.getElementById('regUsername').value.trim();
             const catName = document.getElementById('regCatName').value.trim();
             const password = document.getElementById('regPassword').value;
@@ -663,6 +673,7 @@
 
         function handleLogin(e) {
             e.preventDefault();
+            loadAccounts();
             const username = document.getElementById('loginUsername').value.trim();
             const password = document.getElementById('loginPassword').value;
 
@@ -672,7 +683,7 @@
             }
 
             currentUser = username;
-            sessionStorage.setItem('ENERGY_CAT_ACTIVE_USER', username);
+            localStorage.setItem('ENERGY_CAT_ACTIVE_USER', username);
             document.getElementById('authModal').classList.add('hidden');
             document.getElementById('loginForm').reset();
             initUserSession();
@@ -681,6 +692,7 @@
 
         function handleForgotPassword(e) {
             e.preventDefault();
+            loadAccounts();
             const username = document.getElementById('forgotUsername').value.trim();
             const question = document.getElementById('forgotSecurityQuestion').value;
             const answer = document.getElementById('forgotSecurityAnswer').value.trim().toLowerCase();
@@ -705,7 +717,7 @@
         }
 
         function logout() {
-            sessionStorage.removeItem('ENERGY_CAT_ACTIVE_USER');
+            localStorage.removeItem('ENERGY_CAT_ACTIVE_USER');
             currentUser = null;
             document.getElementById('authModal').classList.remove('hidden');
             switchAuthTab('login');
@@ -719,7 +731,7 @@
             renderLeaderboard();
         }
 
-        /* --- ENERGY DECAY MECHANICS (-1 Energy every 3 minutes) --- */
+        /* --- ENERGY DECAY MECHANICS --- */
         function calculateDecay() {
             if (!currentUser || !accounts[currentUser]) return;
             const acc = accounts[currentUser];
@@ -738,7 +750,7 @@
             setInterval(() => {
                 calculateDecay();
                 updateUI();
-            }, 30000); // Check every 30 seconds
+            }, 30000);
         }
 
         /* --- UI RENDER & CAT EXPRESSIONS --- */
@@ -780,7 +792,7 @@
                 document.getElementById('catStatusLabel').innerText = '✨ Pet Cat (+1⚡ / +2 EXP)';
             }
 
-            // Clothes Overlays
+            // Render Clothes
             renderEquippedOverlay();
         }
 
@@ -817,7 +829,10 @@
         function petCat(e) {
             if (!currentUser) return;
             const acc = accounts[currentUser];
-            acc.energy = Math.min(100, acc.energy + 1);
+            
+            if (acc.energy < 100) {
+                acc.energy = Math.min(100, acc.energy + 1);
+            }
             addExp(2);
 
             // Pop Heart Effect
@@ -836,14 +851,23 @@
 
         function feedCat() {
             const acc = accounts[currentUser];
+
+            // Check if energy is full (100%)
+            if (acc.energy >= 100) {
+                showToast('❌ Cat is full! Energy is already at 100%.', '🥣');
+                return;
+            }
+
             if (acc.fish < 5) {
                 showToast('❌ Not enough Fish tokens!', '🐟');
                 return;
             }
+
             acc.fish -= 5;
             acc.weight += 0.15;
             acc.energy = Math.min(100, acc.energy + 15);
             addExp(10);
+
             saveAccounts();
             updateUI();
             renderLeaderboard();
@@ -852,11 +876,17 @@
 
         function restCat() {
             const acc = accounts[currentUser];
+
+            if (acc.energy >= 100) {
+                showToast('⚡ Energy is already fully restored!', '😴');
+                return;
+            }
+
             acc.energy = Math.min(100, acc.energy + 30);
             acc.weight += 0.05;
             addExp(5);
 
-            // Sleep Eyes Trigger
+            // Trigger Sleep Animation
             document.getElementById('catEyesAwake').classList.add('hidden');
             document.getElementById('catEyesSad').classList.add('hidden');
             document.getElementById('catEyesSleep').classList.remove('hidden');
