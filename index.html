@@ -1,430 +1,932 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Cat Pet Care & Dress-Up Studio</title>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
-  <style>
-    body {
-      font-family: 'Fredoka', sans-serif;
-      background-color: #fceade;
-    }
-    
-    .game-card {
-      background: #ffffff;
-      border: 3px solid #ffd6ba;
-      border-radius: 32px;
-      box-shadow: 0 12px 35px rgba(224, 139, 82, 0.15);
-    }
-
-    /* Progress & Status Bars */
-    .bar-bg {
-      background-color: #f3f4f6;
-      border-radius: 12px;
-      overflow: hidden;
-      border: 1px solid #e5e7eb;
-    }
-
-    /* Navigation Tabs */
-    .tab-btn {
-      background-color: #fff0f5;
-      color: #ff3366;
-      border: 2px solid #ffe0ea;
-      border-radius: 18px;
-      font-weight: 700;
-      transition: all 0.2s ease;
-    }
-    .tab-btn.active {
-      background-color: #ff3377 !important;
-      color: #ffffff !important;
-      border-color: #ff3377 !important;
-      box-shadow: 0 4px 12px rgba(255, 51, 119, 0.3);
-    }
-
-    /* Action Buttons */
-    .act-btn {
-      background-color: #ffffff;
-      border: 2px solid #e2e8f0;
-      border-radius: 18px;
-      font-weight: 700;
-      transition: all 0.2s ease;
-    }
-    .act-btn:hover {
-      transform: translateY(-2px);
-      box-shadow: 0 4px 10px rgba(0,0,0,0.05);
-    }
-
-    /* Studio Item Card */
-    .item-card {
-      background-color: #f8fafc;
-      border: 2px solid #f1f5f9;
-      border-radius: 20px;
-      transition: all 0.2s ease;
-    }
-    .item-card:hover {
-      border-color: #ffb6c1;
-      transform: translateY(-2px);
-    }
-    .item-card.equipped {
-      border-color: #ff3377;
-      background-color: #fff0f5;
-    }
-
-    /* Custom Scrollbar */
-    .custom-scroll::-webkit-scrollbar {
-      width: 6px;
-    }
-    .custom-scroll::-webkit-scrollbar-track {
-      background: #fff0f5;
-      border-radius: 10px;
-    }
-    .custom-scroll::-webkit-scrollbar-thumb {
-      background: #ffb6c1;
-      border-radius: 10px;
-    }
-  </style>
-</head>
-<body class="min-h-screen flex items-center justify-center p-3 md:p-6">
-
-  <div class="max-w-md w-full game-card p-5 md:p-6">
-    
-    <!-- Top Status Bar: Fish, Rank, Level -->
-    <div class="grid grid-cols-3 gap-2 mb-4 bg-orange-50 p-3 rounded-2xl border border-orange-100">
-      <div class="flex items-center gap-1.5 justify-center">
-        <span class="text-xl">🐟</span>
-        <div>
-          <div class="text-[10px] text-gray-500 font-bold leading-none">FISH COINS</div>
-          <div id="ui-fish" class="text-sm font-extrabold text-amber-600">150</div>
-        </div>
-      </div>
-      <div class="flex items-center gap-1.5 justify-center border-x border-orange-200">
-        <span class="text-xl">🏆</span>
-        <div>
-          <div class="text-[10px] text-gray-500 font-bold leading-none">RANK</div>
-          <div id="ui-rank" class="text-sm font-extrabold text-indigo-600">Bronze</div>
-        </div>
-      </div>
-      <div class="flex items-center gap-1.5 justify-center">
-        <span class="text-xl">⭐</span>
-        <div>
-          <div class="text-[10px] text-gray-500 font-bold leading-none">LEVEL</div>
-          <div id="ui-level" class="text-sm font-extrabold text-pink-600">Lv.1</div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Energy & EXP Bars -->
-    <div class="space-y-2 mb-4">
-      <div>
-        <div class="flex justify-between text-xs font-bold mb-1 text-gray-600">
-          <span>⚡ Energy</span>
-          <span id="ui-energy-text">80 / 100</span>
-        </div>
-        <div class="bar-bg h-3.5">
-          <div id="ui-energy-bar" class="bg-amber-400 h-full transition-all duration-300" style="width: 80%;"></div>
-        </div>
-      </div>
-      <div>
-        <div class="flex justify-between text-xs font-bold mb-1 text-gray-600">
-          <span>✨ EXP Progress</span>
-          <span id="ui-exp-text">20 / 100</span>
-        </div>
-        <div class="bar-bg h-2.5">
-          <div id="ui-exp-bar" class="bg-pink-500 h-full transition-all duration-300" style="width: 20%;"></div>
-        </div>
-      </div>
-    </div>
-
-    <!-- Main View Switcher Buttons (Pet Care vs Studio) -->
-    <div class="grid grid-cols-2 gap-2 mb-4">
-      <button onclick="setView('care')" id="mode-care" class="tab-btn active py-2 text-sm flex items-center justify-center gap-1">
-        🐾 Pet Care
-      </button>
-      <button onclick="setView('studio')" id="mode-studio" class="tab-btn py-2 text-sm flex items-center justify-center gap-1">
-        🎀 Dressing Studio
-      </button>
-    </div>
-
-    <!-- CAT AVATAR DISPLAY STAGE -->
-    <div class="bg-gradient-to-b from-orange-50 to-white rounded-3xl p-3 mb-4 border-2 border-orange-100 flex flex-col items-center justify-center relative min-h-[230px]">
-      <svg id="cat-avatar" viewBox="0 0 300 300" class="w-52 h-52 filter drop-shadow-sm">
-        <!-- Body & Paws -->
-        <ellipse cx="150" cy="210" rx="60" ry="55" fill="#ffd5b5" stroke="#e08b52" stroke-width="4" />
-        <ellipse cx="118" cy="255" rx="16" ry="10" fill="#fff" stroke="#e08b52" stroke-width="3" />
-        <ellipse cx="182" cy="255" rx="16" ry="10" fill="#fff" stroke="#e08b52" stroke-width="3" />
-
-        <!-- Head -->
-        <ellipse cx="150" cy="120" rx="70" ry="55" fill="#ffd5b5" stroke="#e08b52" stroke-width="4" />
-        
-        <!-- Ears -->
-        <polygon points="90,80 75,25 118,55" fill="#ffd5b5" stroke="#e08b52" stroke-width="4" stroke-linejoin="round" />
-        <polygon points="95,75 83,37 113,58" fill="#ffb0b0" />
-        <polygon points="210,80 225,25 182,55" fill="#ffd5b5" stroke="#e08b52" stroke-width="4" stroke-linejoin="round" />
-        <polygon points="205,75 217,37 187,58" fill="#ffb0b0" />
-
-        <!-- Face Details -->
-        <ellipse cx="122" cy="115" rx="7" ry="10" fill="#2d3748" />
-        <circle cx="120" cy="111" r="2.5" fill="#fff" />
-        <ellipse cx="178" cy="115" rx="7" ry="10" fill="#2d3748" />
-        <circle cx="176" cy="111" r="2.5" fill="#fff" />
-        <ellipse cx="102" cy="128" rx="9" ry="5" fill="#ff9999" opacity="0.6" />
-        <ellipse cx="198" cy="128" rx="9" ry="5" fill="#ff9999" opacity="0.6" />
-        <polygon points="150,122 146,117 154,117" fill="#ff8080" />
-        <path d="M 143 126 Q 150 132 150 126 Q 150 132 157 126" fill="none" stroke="#2d3748" stroke-width="2" stroke-linecap="round" />
-
-        <!-- DYNAMIC ACCESSORIES LAYERS -->
-        <!-- Layer 1: Large Chest Bibs (Covers front chest) -->
-        <g id="layer-bib"></g>
-        <!-- Layer 2: Collars & Bells -->
-        <g id="layer-collar"></g>
-        <!-- Layer 3: Head Bows & Hats -->
-        <g id="layer-head"></g>
-      </svg>
-    </div>
-
-    <!-- VIEW 1: PET CARE CONTROLS -->
-    <div id="view-care" class="space-y-3">
-      <div class="grid grid-cols-2 gap-2.5">
-        <button onclick="doAction('feed')" class="act-btn p-3 flex items-center justify-between text-orange-600">
-          <span class="text-xl">🍖 Feed</span>
-          <span class="text-xs bg-orange-100 px-2 py-0.5 rounded-full font-bold">+25 Energy</span>
-        </button>
-        <button onclick="doAction('play')" class="act-btn p-3 flex items-center justify-between text-blue-600">
-          <span class="text-xl">🎾 Play</span>
-          <span class="text-xs bg-blue-100 px-2 py-0.5 rounded-full font-bold">-15 Energy</span>
-        </button>
-        <button onclick="doAction('sleep')" class="act-btn p-3 flex items-center justify-between text-indigo-600">
-          <span class="text-xl">💤 Sleep</span>
-          <span class="text-xs bg-indigo-100 px-2 py-0.5 rounded-full font-bold">+40 Energy</span>
-        </button>
-        <button onclick="doAction('clean')" class="act-btn p-3 flex items-center justify-between text-teal-600">
-          <span class="text-xl">🧼 Clean</span>
-          <span class="text-xs bg-teal-100 px-2 py-0.5 rounded-full font-bold">+15 EXP</span>
-        </button>
-      </div>
-    </div>
-
-    <!-- VIEW 2: DRESSING STUDIO -->
-    <div id="view-studio" class="hidden space-y-3">
-      <!-- Category Tabs in Studio -->
-      <div class="grid grid-cols-3 gap-1.5">
-        <button onclick="switchStudioTab('bibs')" id="stab-bibs" class="tab-btn active py-2 text-xs">
-          🍼 Chest Bibs
-        </button>
-        <button onclick="switchStudioTab('collars')" id="stab-collars" class="tab-btn py-2 text-xs">
-          🔔 Collars
-        </button>
-        <button onclick="switchStudioTab('hats')" id="stab-hats" class="tab-btn py-2 text-xs">
-          🎀 Bows/Hats
-        </button>
-      </div>
-
-      <!-- Strip All Button -->
-      <div class="flex justify-end">
-        <button onclick="stripAll()" class="text-xs text-red-500 font-bold bg-red-50 hover:bg-red-100 border border-red-200 px-3 py-1 rounded-full flex items-center gap-1">
-          🔄 Strip Accessories
-        </button>
-      </div>
-
-      <!-- Items Grid -->
-      <div id="studio-grid" class="grid grid-cols-2 gap-2.5 max-h-[200px] overflow-y-auto pr-1 custom-scroll">
-        <!-- Rendered via JS -->
-      </div>
-    </div>
-
-  </div>
-
-  <script>
-    // Game State
-    let state = {
-      fish: 150,
-      level: 1,
-      exp: 20,
-      maxExp: 100,
-      energy: 80,
-      maxEnergy: 100,
-      rankIndex: 0
-    };
-
-    const ranks = ['Bronze', 'Silver', 'Gold', 'Diamond'];
-    let studioTab = 'bibs';
-    let equipped = { bib: null, collar: null, head: null };
-
-    // Item Databases (10 Items Per Category)
-    const itemsData = {
-      // 10 Large Chest Bibs
-      bibs: [
-        { id: 'b1', name: 'Strawberry Bib', price: 0, icon: '🍓', svg: `<path d="M 95 155 Q 150 140 205 155 C 215 220, 185 255, 150 255 C 115 255, 85 220, 95 155 Z" fill="#ff4d6d" stroke="#c9184a" stroke-width="3"/><path d="M 95 155 Q 150 170 205 155 Q 150 140 95 155 Z" fill="#fff" stroke="#c9184a" stroke-width="2"/><circle cx="130" cy="185" r="3" fill="#fff"/><circle cx="170" cy="185" r="3" fill="#fff"/><circle cx="150" cy="215" r="3" fill="#fff"/><circle cx="125" cy="220" r="3" fill="#fff"/><circle cx="175" cy="220" r="3" fill="#fff"/>` },
-        { id: 'b2', name: 'Pastel Bear Bib', price: 15, icon: '🧸', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 190 260, 150 260 C 110 260, 80 225, 90 155 Z" fill="#fde2e4" stroke="#ffb3c1" stroke-width="3"/><circle cx="150" cy="205" r="24" fill="#fff"/><circle cx="141" cy="200" r="3" fill="#555"/><circle cx="159" cy="200" r="3" fill="#555"/><ellipse cx="150" cy="210" rx="7" ry="4" fill="#ffb3c1"/>` },
-        { id: 'b3', name: 'Duckie Bib', price: 20, icon: '🐤', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 230, 185 255, 150 255 C 115 255, 80 230, 90 155 Z" fill="#ffea00" stroke="#ffd000" stroke-width="3"/><circle cx="150" cy="200" r="16" fill="#fff"/><circle cx="150" cy="200" r="12" fill="#ffea00"/><circle cx="145" cy="195" r="2" fill="#000"/><path d="M 148 200 Q 155 200 152 205 Z" fill="#ff7b00"/>` },
-        { id: 'b4', name: 'Lace Flower Bib', price: 25, icon: '🌸', svg: `<path d="M 85 155 Q 150 140 215 155 C 225 235, 185 265, 150 265 C 115 265, 75 235, 85 155 Z" fill="#ffffff" stroke="#ffb7c5" stroke-width="3"/><path d="M 90 165 Q 150 255 210 165" fill="none" stroke="#ffb7c5" stroke-width="2" stroke-dasharray="4,4"/><circle cx="150" cy="205" r="14" fill="#ffb7c5"/><circle cx="150" cy="205" r="5" fill="#fff"/>` },
-        { id: 'b5', name: 'Dino Green Bib', price: 20, icon: '🦖', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#70e000" stroke="#38b000" stroke-width="3"/><path d="M 120 175 L 130 235 L 140 175 L 150 235 L 160 175 L 170 235 L 180 175" fill="none" stroke="#fff" stroke-width="4"/>` },
-        { id: 'b6', name: 'Sailor Navy Bib', price: 30, icon: '⚓', svg: `<path d="M 85 155 L 215 155 L 195 250 L 150 215 L 105 250 Z" fill="#184e77" stroke="#1e6091" stroke-width="3"/><path d="M 95 160 L 205 160 L 190 235 L 150 205 L 110 235 Z" fill="none" stroke="#fff" stroke-width="3"/>` },
-        { id: 'b7', name: 'Sunshine Bib', price: 35, icon: '🌈', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#ffbc42" stroke="#d81159" stroke-width="3"/><path d="M 110 185 Q 150 225 190 185" fill="none" stroke="#ff595e" stroke-width="5"/><path d="M 115 195 Q 150 233 185 195" fill="none" stroke="#ffca3a" stroke-width="5"/><path d="M 120 205 Q 150 241 180 205" fill="none" stroke="#8ac926" stroke-width="5"/>` },
-        { id: 'b8', name: 'Froggy Green Bib', price: 25, icon: '🐸', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#52b788" stroke="#2d6a4f" stroke-width="3"/><circle cx="130" cy="190" r="10" fill="#fff"/><circle cx="130" cy="190" r="4" fill="#000"/><circle cx="170" cy="190" r="10" fill="#fff"/><circle cx="170" cy="190" r="4" fill="#000"/><path d="M 135 215 Q 150 225 165 215" fill="none" stroke="#2d6a4f" stroke-width="3"/>` },
-        { id: 'b9', name: 'Midnight Star Bib', price: 40, icon: '⭐', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#2b2d42" stroke="#8d99ae" stroke-width="3"/><polygon points="150,180 154,193 168,193 157,201 161,214 150,205 139,214 143,201 132,193 146,193" fill="#ffd166"/>` },
-        { id: 'b10', name: 'Royal Velvet Bib', price: 50, icon: '👑', svg: `<path d="M 85 155 Q 150 140 215 155 C 225 235, 185 260, 150 260 C 115 260, 75 235, 85 155 Z" fill="#7209b7" stroke="#3f37c9" stroke-width="3"/><path d="M 85 155 Q 150 175 215 155" fill="none" stroke="#ffd700" stroke-width="5"/><circle cx="150" cy="215" r="12" fill="#ffd700"/><circle cx="150" cy="215" r="6" fill="#f72585"/>` }
-      ],
-
-      // 10 Collars & Bells
-      collars: [
-        { id: 'c1', name: 'Polka Dot Collar', price: 20, icon: '🎀', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ef233c" stroke-width="12" stroke-linecap="round"/><circle cx="118" cy="160" r="2.5" fill="#fff"/><circle cx="138" cy="166" r="2.5" fill="#fff"/><circle cx="162" cy="166" r="2.5" fill="#fff"/><circle cx="182" cy="160" r="2.5" fill="#fff"/>` },
-        { id: 'c2', name: 'Golden Bell Collar', price: 30, icon: '🔔', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#d90429" stroke-width="10" stroke-linecap="round"/><circle cx="150" cy="173" r="12" fill="#ffb703" stroke="#fb8500" stroke-width="2"/><circle cx="150" cy="177" r="2.5" fill="#000"/>` },
-        { id: 'c3', name: 'Pearl Necklace', price: 30, icon: '🦪', svg: `<circle cx="103" cy="157" r="6" fill="#fff" stroke="#ddd"/><circle cx="116" cy="162" r="6" fill="#fff" stroke="#ddd"/><circle cx="130" cy="166" r="6" fill="#fff" stroke="#ddd"/><circle cx="150" cy="168" r="7" fill="#fff" stroke="#ddd"/><circle cx="170" cy="166" r="6" fill="#fff" stroke="#ddd"/><circle cx="184" cy="162" r="6" fill="#fff" stroke="#ddd"/><circle cx="197" cy="157" r="6" fill="#fff" stroke="#ddd"/>` },
-        { id: 'c4', name: 'Gentleman Bowtie', price: 25, icon: '👔', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#023e8a" stroke-width="9" stroke-linecap="round"/><polygon points="135,165 150,173 135,181" fill="#0077b6"/><polygon points="165,165 150,173 165,181" fill="#0077b6"/><rect x="146" y="168" width="8" height="10" rx="2" fill="#03045e"/>` },
-        { id: 'c5', name: 'Pink Scarf Collar', price: 20, icon: '📐', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ff4d6d" stroke-width="8"/><polygon points="130,165 170,165 150,195" fill="#ff758f"/><circle cx="150" cy="177" r="3" fill="#fff"/>` },
-        { id: 'c6', name: 'Spiked Rock Collar', price: 35, icon: '⚡', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#212529" stroke-width="12" stroke-linecap="round"/><polygon points="118,155 121,145 124,157" fill="#e9ecef"/><polygon points="138,162 141,150 144,164" fill="#e9ecef"/><polygon points="162,162 165,150 168,164" fill="#e9ecef"/><polygon points="182,155 185,145 188,157" fill="#e9ecef"/>` },
-        { id: 'c7', name: 'Emerald Charm Collar', price: 25, icon: '💎', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#38b000" stroke-width="10" stroke-linecap="round"/><polygon points="150,167 158,177 150,187 142,177" fill="#70e000" stroke="#007200" stroke-width="1.5"/>` },
-        { id: 'c8', name: 'Daisy Flower Collar', price: 20, icon: '🌼', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ffb703" stroke-width="8"/><circle cx="150" cy="171" r="10" fill="#fff"/><circle cx="150" cy="171" r="4" fill="#fb8500"/>` },
-        { id: 'c9', name: 'Heart Charm Collar', price: 30, icon: '💖', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ff0a54" stroke-width="9" stroke-linecap="round"/><path d="M 150 171 C 150 165, 142 165, 142 171 C 142 178, 150 183, 150 186 C 150 183, 158 178, 158 171 C 158 165, 150 165, 150 171 Z" fill="#ff477e"/>` },
-        { id: 'c10', name: 'Silver Chime Collar', price: 15, icon: '🎐', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#4a5568" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="173" r="10" fill="#e2e8f0" stroke="#a0aec0" stroke-width="2"/>` }
-      ],
-
-      // 10 Bows & Hats
-      hats: [
-        { id: 'h1', name: 'Red Ribbon Bow', price: 0, icon: '🎀', svg: `<path d="M 120 50 Q 100 35 125 25 Q 150 45 150 50 Q 150 45 175 25 Q 200 35 180 50 Z" fill="#ff0a54"/><circle cx="150" cy="48" r="7" fill="#ff477e"/>` },
-        { id: 'h2', name: 'Party Cone Hat', price: 15, icon: '🥳', svg: `<polygon points="150,10 120,65 180,65" fill="#ffb703"/><circle cx="150" cy="10" r="6" fill="#ff0a54"/><line x1="120" y1="65" x2="180" y2="65" stroke="#8ecae6" stroke-width="6"/>` },
-        { id: 'h3', name: 'Golden Crown', price: 40, icon: '👑', svg: `<path d="M 125 65 L 120 30 L 135 45 L 150 20 L 165 45 L 180 30 L 175 65 Z" fill="#ffb703" stroke="#fb8500" stroke-width="2"/><circle cx="120" cy="28" r="3" fill="#e63946"/><circle cx="150" cy="18" r="3" fill="#e63946"/><circle cx="180" cy="28" r="3" fill="#e63946"/>` },
-        { id: 'h4', name: 'Froggy Beanie', price: 25, icon: '🐸', svg: `<path d="M 105 65 C 105 30, 195 30, 195 65 Z" fill="#70e000"/><circle cx="125" cy="32" r="10" fill="#70e000"/><circle cx="125" cy="32" r="4" fill="#fff"/><circle cx="175" cy="32" r="10" fill="#70e000"/><circle cx="175" cy="32" r="4" fill="#fff"/>` },
-        { id: 'h5', name: 'Witch Hat', price: 30, icon: '🧙‍♀️', svg: `<polygon points="150,5 115,60 185,60" fill="#2b2d42"/><ellipse cx="150" cy="62" rx="45" ry="8" fill="#1d3557"/><rect x="130" y="52" width="40" height="8" fill="#e63946"/>` },
-        { id: 'h6', name: 'Chef Top Hat', price: 20, icon: '🧑‍🍳', svg: `<path d="M 125 65 L 125 40 C 110 35, 120 15, 140 20 C 150 10, 170 15, 170 25 C 185 25, 185 40, 175 40 L 175 65 Z" fill="#ffffff" stroke="#ddd" stroke-width="2"/>` },
-        { id: 'h7', name: 'Angel Halo', price: 35, icon: '😇', svg: `<ellipse cx="150" cy="25" rx="35" ry="8" fill="none" stroke="#ffbe0b" stroke-width="5"/>` },
-        { id: 'h8', name: 'Bear Headband', price: 20, icon: '🐻', svg: `<path d="M 100 65 Q 150 40 200 65" fill="none" stroke="#212529" stroke-width="4"/><circle cx="110" cy="50" r="14" fill="#b08968"/><circle cx="110" cy="50" r="8" fill="#ede0d4"/><circle cx="190" cy="50" r="14" fill="#b08968"/><circle cx="190" cy="50" r="8" fill="#ede0d4"/>` },
-        { id: 'h9', name: 'Flower Clip', price: 15, icon: '🌸', svg: `<circle cx="180" cy="55" r="8" fill="#ffb7c5"/><circle cx="192" cy="60" r="8" fill="#ffb7c5"/><circle cx="188" cy="72" r="8" fill="#ffb7c5"/><circle cx="173" cy="72" r="8" fill="#ffb7c5"/><circle cx="168" cy="60" r="8" fill="#ffb7c5"/><circle cx="180" cy="64" r="5" fill="#fff"/>` },
-        { id: 'h10', name: 'Pirate Bandana', price: 25, icon: '🏴‍☠️', svg: `<path d="M 90 70 C 95 30, 205 30, 210 70 Z" fill="#d90429"/><circle cx="150" cy="50" r="5" fill="#fff"/>` }
-      ]
-    };
-
-    // UI View Switcher
-    function setView(mode) {
-      document.getElementById('view-care').classList.toggle('hidden', mode !== 'care');
-      document.getElementById('view-studio').classList.toggle('hidden', mode !== 'studio');
-      
-      document.getElementById('mode-care').classList.toggle('active', mode === 'care');
-      document.getElementById('mode-studio').classList.toggle('active', mode === 'studio');
-
-      if(mode === 'studio') renderStudioGrid();
-    }
-
-    // Care Actions Logic
-    function doAction(action) {
-      if (action === 'feed') {
-        state.energy = Math.min(state.maxEnergy, state.energy + 25);
-        addExp(10);
-      } else if (action === 'play') {
-        if (state.energy < 15) {
-          alert("Too tired to play! Feed or let your cat sleep.");
-          return;
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Energy Cat 3D - Kawaii Pet Simulator</title>
+    <style>
+        :root {
+            --primary: #ff7675;
+            --secondary: #fd79a8;
+            --accent: #ffeaa7;
+            --bg-dark: #2d3436;
+            --panel-bg: rgba(255, 255, 255, 0.85);
+            --font-main: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
-        state.energy -= 15;
-        state.fish += 10;
-        addExp(25);
-      } else if (action === 'sleep') {
-        state.energy = Math.min(state.maxEnergy, state.energy + 40);
-        addExp(15);
-      } else if (action === 'clean') {
-        addExp(15);
-        state.fish += 5;
-      }
 
-      updateUI();
-    }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            user-select: none;
+        }
 
-    function addExp(amount) {
-      state.exp += amount;
-      if (state.exp >= state.maxExp) {
-        state.exp -= state.maxExp;
-        state.level += 1;
-        state.maxExp += 20;
+        body {
+            font-family: var(--font-main);
+            background: linear-gradient(135deg, #a8c0ff 0%, #3f2b96 100%);
+            height: 100vh;
+            overflow: hidden;
+            color: #2d3436;
+        }
 
-        // Rank Promotion check
-        if (state.level >= 10 && state.rankIndex === 0) state.rankIndex = 1;
-        else if (state.level >= 20 && state.rankIndex === 1) state.rankIndex = 2;
-        else if (state.level >= 30 && state.rankIndex === 2) state.rankIndex = 3;
-      }
-    }
+        #app-container {
+            display: flex;
+            width: 100vw;
+            height: 100vh;
+            position: relative;
+        }
 
-    function updateUI() {
-      document.getElementById('ui-fish').innerText = state.fish;
-      document.getElementById('ui-rank').innerText = ranks[state.rankIndex];
-      document.getElementById('ui-level').innerText = `Lv.${state.level}`;
+        /* 3D Canvas Area */
+        #canvas-container {
+            flex: 1;
+            height: 100%;
+            position: relative;
+        }
 
-      document.getElementById('ui-energy-text').innerText = `${state.energy} / ${state.maxEnergy}`;
-      document.getElementById('ui-energy-bar').style.width = `${(state.energy / state.maxEnergy) * 100}%`;
+        /* Floating UI Elements */
+        .hud-panel {
+            position: absolute;
+            background: var(--panel-bg);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            padding: 15px 25px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.2);
+            border: 2px solid rgba(255, 255, 255, 0.4);
+            z-index: 10;
+        }
 
-      document.getElementById('ui-exp-text').innerText = `${state.exp} / ${state.maxExp}`;
-      document.getElementById('ui-exp-bar').style.width = `${(state.exp / state.maxExp) * 100}%`;
-    }
+        #top-hud {
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 20px;
+            align-items: center;
+        }
 
-    // Studio Logic
-    function switchStudioTab(tab) {
-      studioTab = tab;
-      document.querySelectorAll('#view-studio .tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`stab-${tab}`).classList.add('active');
-      renderStudioGrid();
-    }
+        .stat-box {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-weight: bold;
+            font-size: 1.1rem;
+        }
 
-    function renderStudioGrid() {
-      const grid = document.getElementById('studio-grid');
-      grid.innerHTML = '';
+        .progress-bar-container {
+            width: 120px;
+            height: 16px;
+            background: #dfe6e9;
+            border-radius: 8px;
+            overflow: hidden;
+            border: 1px solid #b2bec3;
+        }
 
-      const items = itemsData[studioTab];
-      const categoryKey = studioTab === 'bibs' ? 'bib' : studioTab === 'collars' ? 'collar' : 'head';
+        .progress-bar-fill {
+            height: 100%;
+            width: 50%;
+            transition: width 0.3s ease;
+        }
 
-      items.forEach(item => {
-        const isEquipped = equipped[categoryKey] && equipped[categoryKey].id === item.id;
+        #energy-fill { background: linear-gradient(90deg, #00b894, #55efc4); }
+        #exp-fill { background: linear-gradient(90deg, #0984e3, #74b9ff); }
 
-        const card = document.createElement('div');
-        card.className = `item-card p-3 flex flex-col items-center justify-between cursor-pointer ${isEquipped ? 'equipped' : ''}`;
-        card.onclick = () => selectStudioItem(categoryKey, item);
+        /* Action Buttons Area */
+        #action-bar {
+            bottom: 20px;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            gap: 15px;
+        }
 
-        card.innerHTML = `
-          <div class="text-2xl mb-1">${item.icon}</div>
-          <div class="text-xs font-bold text-gray-700 text-center mb-1">${item.name}</div>
-          <div class="bg-amber-300 text-amber-900 text-[11px] font-extrabold px-2.5 py-0.5 rounded-full flex items-center gap-1">
-            <span>🐟</span> ${item.price}
-          </div>
-        `;
+        .btn {
+            background: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 50px;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 4px 15px rgba(0,0,0,0.15);
+            transition: all 0.2s ease;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 1rem;
+        }
 
-        grid.appendChild(card);
-      });
-    }
+        .btn:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 6px 20px rgba(0,0,0,0.2);
+        }
 
-    function selectStudioItem(category, item) {
-      if (equipped[category] && equipped[category].id === item.id) {
-        equipped[category] = null;
-      } else {
-        equipped[category] = item;
-      }
+        .btn:active {
+            transform: translateY(1px);
+        }
 
-      updateAvatarLayers();
-      renderStudioGrid();
-    }
+        .btn-primary { background: var(--primary); color: white; }
+        .btn-secondary { background: var(--secondary); color: white; }
 
-    function updateAvatarLayers() {
-      document.getElementById('layer-bib').innerHTML = equipped.bib ? equipped.bib.svg : '';
-      document.getElementById('layer-collar').innerHTML = equipped.collar ? equipped.collar.svg : '';
-      document.getElementById('layer-head').innerHTML = equipped.head ? equipped.head.svg : '';
-    }
+        /* Side Navigation for Panels */
+        #side-nav {
+            position: absolute;
+            right: 20px;
+            top: 20px;
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+            z-index: 10;
+        }
 
-    function stripAll() {
-      equipped = { bib: null, collar: null, head: null };
-      updateAvatarLayers();
-      renderStudioGrid();
-    }
+        /* Overlay Drawer Panels */
+        .drawer-panel {
+            position: absolute;
+            right: -450px;
+            top: 0;
+            width: 420px;
+            height: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            box-shadow: -10px 0 30px rgba(0,0,0,0.2);
+            transition: right 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+            z-index: 20;
+            padding: 25px;
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+            overflow-y: auto;
+        }
 
-    // Auto energy drop slowly over time
-    setInterval(() => {
-      if (state.energy > 0) {
-        state.energy = Math.max(0, state.energy - 1);
-        updateUI();
-      }
-    }, 8000);
+        .drawer-panel.active {
+            right: 0;
+        }
 
-    // Initial render
-    updateUI();
-  </script>
+        .drawer-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            border-bottom: 2px solid #f1f2f6;
+            padding-bottom: 15px;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            cursor: pointer;
+            color: #a4b0be;
+        }
+
+        /* Studio Customization Grid */
+        .studio-tabs {
+            display: flex;
+            gap: 8px;
+            margin-bottom: 10px;
+            overflow-x: auto;
+            padding-bottom: 5px;
+        }
+
+        .tab-btn {
+            padding: 8px 14px;
+            border: 1px solid #dfe6e9;
+            background: #f1f2f6;
+            border-radius: 12px;
+            cursor: pointer;
+            white-space: nowrap;
+            font-weight: 600;
+            font-size: 0.85rem;
+        }
+
+        .tab-btn.active {
+            background: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+
+        .item-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+        }
+
+        .item-card {
+            border: 2px solid #f1f2f6;
+            border-radius: 15px;
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s;
+            background: white;
+        }
+
+        .item-card:hover {
+            border-color: var(--secondary);
+            transform: scale(1.02);
+        }
+
+        .item-card.equipped {
+            border-color: var(--primary);
+            background: #fff0f0;
+        }
+
+        .item-preview {
+            width: 70px;
+            height: 70px;
+            margin: 0 auto 8px auto;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        /* Leaderboard Table */
+        .leaderboard-table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        .leaderboard-table th, .leaderboard-table td {
+            padding: 12px;
+            text-align: left;
+            border-bottom: 1px solid #dfe6e9;
+        }
+
+        .rank-badge {
+            width: 28px;
+            height: 28px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+        }
+
+        .rank-1 { background: #f1c40f; }
+        .rank-2 { background: #95a5a6; }
+        .rank-3 { background: #e67e22; }
+
+        /* Modal Screens */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            background: rgba(0, 0, 0, 0.6);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 100;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.3s ease;
+        }
+
+        .modal-overlay.active {
+            opacity: 1;
+            pointer-events: all;
+        }
+
+        .modal-card {
+            background: white;
+            border-radius: 25px;
+            padding: 30px;
+            width: 90%;
+            max-width: 450px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.3);
+            text-align: center;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 600;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 10px 15px;
+            border: 2px solid #dfe6e9;
+            border-radius: 10px;
+            font-size: 1rem;
+        }
+
+        /* Floating Text Animations */
+        .floating-text {
+            position: absolute;
+            font-weight: bold;
+            font-size: 1.5rem;
+            color: #26de81;
+            pointer-events: none;
+            animation: floatUp 1.2s ease-out forwards;
+            z-index: 50;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0); }
+            100% { opacity: 0; transform: translateY(-80px); }
+        }
+    </style>
+    <!-- Three.js Library -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+</head>
+<body>
+
+    <div id="app-container">
+        <!-- 3D Canvas Context -->
+        <div id="canvas-container"></div>
+
+        <!-- Top Status HUD -->
+        <div id="top-hud" class="hud-panel">
+            <div class="stat-box">
+                <span id="level-display">LVL 1</span>
+            </div>
+            <div class="stat-box">
+                ⚡ Energy
+                <div class="progress-bar-container">
+                    <div id="energy-fill" class="progress-bar-fill"></div>
+                </div>
+            </div>
+            <div class="stat-box">
+                ✨ EXP
+                <div class="progress-bar-container">
+                    <div id="exp-fill" class="progress-bar-fill"></div>
+                </div>
+            </div>
+            <div class="stat-box">
+                🐟 <span id="fish-count">100</span>
+            </div>
+        </div>
+
+        <!-- Navigation Buttons -->
+        <div id="side-nav">
+            <button class="btn btn-primary" onclick="toggleDrawer('studio-panel')">🎨 Studio</button>
+            <button class="btn btn-secondary" onclick="toggleDrawer('missions-panel')">🌱 Eco Missions</button>
+            <button class="btn" style="background:#a29bfe; color:white;" onclick="toggleDrawer('leaderboard-panel')">🏆 Ranks</button>
+            <button class="btn" style="background:#6c5ce7; color:white;" onclick="openAdminModal()">⚙️ Admin</button>
+        </div>
+
+        <!-- Bottom Action Bar -->
+        <div id="action-bar" class="hud-panel">
+            <button class="btn btn-primary" onclick="interactCat('feed')">🐟 Feed (-5 Fish)</button>
+            <button class="btn btn-secondary" onclick="interactCat('pet')">🖐️ Pet (+EXP)</button>
+            <button class="btn" style="background:#e17055; color:white;" onclick="interactCat('rest')">💤 Rest (+Energy)</button>
+        </div>
+
+        <!-- DRAWER: Dress-Up Studio -->
+        <div id="studio-panel" class="drawer-panel">
+            <div class="drawer-header">
+                <h2>Styling Studio</h2>
+                <button class="close-btn" onclick="toggleDrawer('studio-panel')">&times;</button>
+            </div>
+            <div class="studio-tabs">
+                <button class="tab-btn active" onclick="switchStudioTab('bibs', this)">Large Bibs (10)</button>
+                <button class="tab-btn" onclick="switchStudioTab('bells', this)">Bells (10)</button>
+                <button class="tab-btn" onclick="switchStudioTab('head', this)">Headwear</button>
+                <button class="tab-btn" onclick="switchStudioTab('shoes', this)">Footwear</button>
+            </div>
+            <div id="studio-items-grid" class="item-grid">
+                <!-- Items populated dynamically via JavaScript -->
+            </div>
+        </div>
+
+        <!-- DRAWER: Eco Missions -->
+        <div id="missions-panel" class="drawer-panel">
+            <div class="drawer-header">
+                <h2>Eco Proof Missions</h2>
+                <button class="close-btn" onclick="toggleDrawer('missions-panel')">&times;</button>
+            </div>
+            <p>Upload real-life eco action photos to earn fish and boost your cat's status!</p>
+            <div style="display:flex; flex-direction:column; gap:15px; margin-top:15px;">
+                <div style="border:1px solid #dfe6e9; padding:15px; border-radius:12px; background:white;">
+                    <h4>🥤 Reusable Cup Proof</h4>
+                    <p style="font-size:0.85rem; color:#636e72;">Reward: 50 Fish + 100 EXP</p>
+                    <input type="file" id="eco-file-1" accept="image/*" style="display:none;" onchange="completeMission(1)">
+                    <button class="btn btn-primary" style="margin-top:10px; width:100%; justify-content:center;" onclick="document.getElementById('eco-file-1').click()">Upload Photo</button>
+                </div>
+                <div style="border:1px solid #dfe6e9; padding:15px; border-radius:12px; background:white;">
+                    <h4>🛍️ Shopping Bag Proof</h4>
+                    <p style="font-size:0.85rem; color:#636e72;">Reward: 40 Fish + 80 EXP</p>
+                    <input type="file" id="eco-file-2" accept="image/*" style="display:none;" onchange="completeMission(2)">
+                    <button class="btn btn-primary" style="margin-top:10px; width:100%; justify-content:center;" onclick="document.getElementById('eco-file-2').click()">Upload Photo</button>
+                </div>
+            </div>
+        </div>
+
+        <!-- DRAWER: Leaderboard -->
+        <div id="leaderboard-panel" class="drawer-panel">
+            <div class="drawer-header">
+                <h2>Global Rankings</h2>
+                <button class="close-btn" onclick="toggleDrawer('leaderboard-panel')">&times;</button>
+            </div>
+            <table class="leaderboard-table">
+                <thead>
+                    <tr>
+                        <th>Rank</th>
+                        <th>Agent</th>
+                        <th>LVL</th>
+                        <th>Fish</th>
+                    </tr>
+                </thead>
+                <tbody id="leaderboard-rows">
+                    <!-- Populated dynamically -->
+                </tbody>
+            </table>
+            <button class="btn btn-secondary" style="margin-top:20px; width:100%; justify-content:center;" onclick="openClaimModal()">🎁 Claim Rank Prize</button>
+        </div>
+    </div>
+
+    <!-- MODAL: Claim Winner Prize -->
+    <div id="claim-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Claim Prize Rewards</h3>
+            <p style="margin: 10px 0 20px 0; color:#636e72; font-size:0.9rem;">Submit your player details to claim rank physical gifts!</p>
+            <form id="claim-form" onsubmit="handleClaimSubmit(event)">
+                <div class="form-group">
+                    <label>Agent / Player Name</label>
+                    <input type="text" id="claim-name" required placeholder="John Doe">
+                </div>
+                <div class="form-group">
+                    <label>Contact Email</label>
+                    <input type="email" id="claim-email" required placeholder="john@example.com">
+                </div>
+                <div class="form-group">
+                    <label>Phone Number</label>
+                    <input type="tel" id="claim-phone" required placeholder="+1 234 567 890">
+                </div>
+                <div style="display:flex; gap:10px; margin-top:20px;">
+                    <button type="button" class="btn" style="flex:1; background:#b2bec3;" onclick="closeModal('claim-modal')">Cancel</button>
+                    <button type="submit" class="btn btn-primary" style="flex:1; justify-content:center;">Submit</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- MODAL: Admin CSV Export Panel -->
+    <div id="admin-modal" class="modal-overlay">
+        <div class="modal-card">
+            <h3>Admin Panel</h3>
+            <p style="margin: 10px 0 20px 0; color:#636e72; font-size:0.9rem;">Export local leaderboard data & claim records to CSV file.</p>
+            <div style="display:flex; flex-direction:column; gap:12px;">
+                <button class="btn btn-primary" style="justify-content:center;" onclick="exportCSV()">📥 Download CSV Dataset</button>
+                <button class="btn" style="background:#ff7675; color:white; justify-content:center;" onclick="resetSystemData()">⚠️ Reset Local Data</button>
+                <button class="btn" style="background:#b2bec3; justify-content:center;" onclick="closeModal('admin-modal')">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        /* ==========================================
+           GAME STATE & DATA DECLARATIONS
+           ========================================== */
+        const gameState = {
+            level: 1,
+            energy: 80,
+            maxEnergy: 100,
+            exp: 20,
+            maxExp: 100,
+            fish: 100,
+            equipped: {
+                bibs: null,
+                bells: null,
+                head: null,
+                shoes: null
+            }
+        };
+
+        const leaderboardData = [
+            { rank: 1, name: "EcoCatMaster", level: 12, fish: 1450 },
+            { rank: 2, name: "GreenPaw", level: 9, fish: 820 },
+            { rank: 3, name: "SolarWhiskers", level: 7, fish: 610 },
+            { rank: 4, name: "Current Player", level: 1, fish: 100 }
+        ];
+
+        // Customization Catalog
+        const studioItems = {
+            bibs: Array.from({length: 10}, (_, i) => ({
+                id: `bib_${i+1}`,
+                name: `Front Bib #${i+1}`,
+                color: ['#ff7675', '#74b9ff', '#55efc4', '#ffeaa7', '#a29bfe', '#fd79a8', '#e17055', '#00b894', '#6c5ce7', '#fdcb6e'][i]
+            })),
+            bells: Array.from({length: 10}, (_, i) => ({
+                id: `bell_${i+1}`,
+                name: `Choker Bell #${i+1}`,
+                color: ['#f1c40f', '#e67e22', '#e74c3c', '#1abc9c', '#3498db', '#9b59b6', '#34495e', '#f39c12', '#d35400', '#c0392b'][i]
+            })),
+            head: [
+                { id: 'head_crown', name: 'Golden Crown', color: '#f1c40f' },
+                { id: 'head_bow', name: 'Pink Ribbon', color: '#fd79a8' },
+                { id: 'head_cap', name: 'Eco Cap', color: '#00b894' }
+            ],
+            shoes: [
+                { id: 'shoe_boots', name: 'Kawaii Boots', color: '#6c5ce7' },
+                { id: 'shoe_paws', name: 'Soft Paws', color: '#fab1a0' }
+            ]
+        };
+
+        /* ==========================================
+           THREE.JS 3D KAWAII CAT ENGINE
+           ========================================== */
+        let scene, camera, renderer, catGroup;
+        let bibMesh, bellMesh, headMesh, shoeMeshes = [];
+
+        function init3D() {
+            const container = document.getElementById('canvas-container');
+            
+            scene = new THREE.Scene();
+            scene.background = new THREE.Color(0xa8c0ff);
+
+            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
+            camera.position.set(0, 3, 10);
+            camera.lookAt(0, 1, 0);
+
+            renderer = new THREE.WebGLRenderer({ antialias: true });
+            renderer.setSize(container.clientWidth, container.clientHeight);
+            renderer.shadowMap.enabled = true;
+            container.appendChild(renderer.domElement);
+
+            // Lighting setup
+            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
+            scene.add(ambientLight);
+
+            const dirLight = new THREE.DirectionalLight(0xffffff, 0.6);
+            dirLight.position.set(5, 12, 7);
+            dirLight.castShadow = true;
+            scene.add(dirLight);
+
+            // Floor Plane
+            const floorGeo = new THREE.PlaneGeometry(20, 20);
+            const floorMat = new THREE.MeshStandardMaterial({ color: 0x81ecec, roughness: 0.8 });
+            const floor = new THREE.Mesh(floorGeo, floorMat);
+            floor.rotation.x = -Math.PI / 2;
+            floor.receiveShadow = true;
+            scene.add(floor);
+
+            // Construct 3D Kawaii Cat
+            catGroup = new THREE.Group();
+
+            // Materials
+            const bodyMat = new THREE.MeshStandardMaterial({ color: 0xffffff, roughness: 0.3 });
+            const earMat = new THREE.MeshStandardMaterial({ color: 0xffa8a8 });
+            const eyeMat = new THREE.MeshBasicMaterial({ color: 0x2d3436 });
+
+            // Body
+            const bodyGeo = new THREE.SphereGeometry(1.2, 32, 32);
+            bodyGeo.scale(1, 1.1, 1);
+            const body = new THREE.Mesh(bodyGeo, bodyMat);
+            body.position.y = 1.2;
+            body.castShadow = true;
+            catGroup.add(body);
+
+            // Head
+            const headGeo = new THREE.SphereGeometry(1.0, 32, 32);
+            headGeo.scale(1.1, 0.95, 1);
+            const head = new THREE.Mesh(headGeo, bodyMat);
+            head.position.set(0, 2.5, 0);
+            head.castShadow = true;
+            catGroup.add(head);
+
+            // Ears
+            const earGeo = new THREE.ConeGeometry(0.35, 0.6, 16);
+            const leftEar = new THREE.Mesh(earGeo, bodyMat);
+            leftEar.position.set(-0.6, 3.4, 0);
+            leftEar.rotation.z = -0.2;
+            catGroup.add(leftEar);
+
+            const rightEar = new THREE.Mesh(earGeo, bodyMat);
+            rightEar.position.set(0.6, 3.4, 0);
+            rightEar.rotation.z = 0.2;
+            catGroup.add(rightEar);
+
+            // Eyes
+            const eyeGeo = new THREE.SphereGeometry(0.1, 16, 16);
+            const leftEye = new THREE.Mesh(eyeGeo, eyeMat);
+            leftEye.position.set(-0.35, 2.6, 0.9);
+            const rightEye = new THREE.Mesh(eyeGeo, eyeMat);
+            rightEye.position.set(0.35, 2.6, 0.9);
+            catGroup.add(leftEye);
+            catGroup.add(rightEye);
+
+            // Snout/Nose
+            const noseGeo = new THREE.SphereGeometry(0.06, 16, 16);
+            const noseMat = new THREE.MeshBasicMaterial({ color: 0xff7675 });
+            const nose = new THREE.Mesh(noseGeo, noseMat);
+            nose.position.set(0, 2.45, 1.0);
+            catGroup.add(nose);
+
+            scene.add(catGroup);
+
+            // Window resize handler
+            window.addEventListener('resize', onWindowResize);
+
+            // Render loop animation
+            animate();
+        }
+
+        let clock = new THREE.Clock();
+        function animate() {
+            requestAnimationFrame(animate);
+            const elapsedTime = clock.getElapsedTime();
+
+            // Gentle Idle Animation
+            if (catGroup) {
+                catGroup.position.y = Math.sin(elapsedTime * 2) * 0.05;
+            }
+
+            renderer.render(scene, camera);
+        }
+
+        function onWindowResize() {
+            const container = document.getElementById('canvas-container');
+            camera.aspect = container.clientWidth / container.clientHeight;
+            camera.updateProjectionMatrix();
+            renderer.setSize(container.clientWidth, container.clientHeight);
+        }
+
+        /* ==========================================
+           CUSTOMIZATION & STUDIO LOGIC
+           ========================================== */
+        let activeTab = 'bibs';
+
+        function switchStudioTab(tab, element) {
+            activeTab = tab;
+            document.querySelectorAll('.tab-btn').forEach(btn => btn.classList.remove('active'));
+            if (element) element.classList.add('active');
+            renderStudioGrid();
+        }
+
+        function renderStudioGrid() {
+            const grid = document.getElementById('studio-items-grid');
+            grid.innerHTML = '';
+
+            const items = studioItems[activeTab] || [];
+            items.forEach(item => {
+                const card = document.createElement('div');
+                card.className = `item-card ${gameState.equipped[activeTab] === item.id ? 'equipped' : ''}`;
+                card.onclick = () => equipItem(activeTab, item);
+
+                card.innerHTML = `
+                    <div class="item-preview">
+                        <div style="width:40px; height:40px; border-radius:50%; background:${item.color}; border:2px solid #2d3436;"></div>
+                    </div>
+                    <div style="font-weight:bold; font-size:0.85rem;">${item.name}</div>
+                `;
+                grid.appendChild(card);
+            });
+        }
+
+        function equipItem(category, item) {
+            if (gameState.equipped[category] === item.id) {
+                // Unequip
+                gameState.equipped[category] = null;
+                removeMeshFromCat(category);
+            } else {
+                // Equip
+                gameState.equipped[category] = item.id;
+                applyMeshToCat(category, item);
+            }
+            renderStudioGrid();
+        }
+
+        function applyMeshToCat(category, item) {
+            removeMeshFromCat(category);
+
+            const material = new THREE.MeshStandardMaterial({ color: item.color, roughness: 0.4 });
+
+            if (category === 'bibs') {
+                // LARGE BIB COVERING FRONT BODY
+                const bibGeo = new THREE.CylinderGeometry(0.9, 1.1, 0.9, 32, 1, false, -Math.PI / 3, (2 * Math.PI) / 3);
+                bibMesh = new THREE.Mesh(bibGeo, material);
+                bibMesh.position.set(0, 1.25, 0.25);
+                catGroup.add(bibMesh);
+            } else if (category === 'bells') {
+                // SEPARATE CHOKER & BELL
+                const bellGroup = new THREE.Group();
+                const collarGeo = new THREE.TorusGeometry(0.85, 0.06, 16, 32);
+                const collarMesh = new THREE.Mesh(collarGeo, material);
+                collarMesh.rotation.x = Math.PI / 2;
+                collarGroup.add(collarMesh);
+
+                const bellGeo = new THREE.SphereGeometry(0.18, 16, 16);
+                const goldMat = new THREE.MeshStandardMaterial({ color: 0xf1c40f, metalness: 0.8 });
+                const bellSphere = new THREE.Mesh(bellGeo, goldMat);
+                bellSphere.position.set(0, -0.05, 0.88);
+                collarGroup.add(bellSphere);
+
+                collarGroup.position.set(0, 2.0, 0);
+                bellMesh = collarGroup;
+                catGroup.add(bellMesh);
+            } else if (category === 'head') {
+                const crownGeo = new THREE.CylinderGeometry(0.3, 0.2, 0.3, 6);
+                headMesh = new THREE.Mesh(crownGeo, material);
+                headMesh.position.set(0, 3.4, 0);
+                catGroup.add(headMesh);
+            } else if (category === 'shoes') {
+                const shoeGeo = new THREE.SphereGeometry(0.25, 16, 16);
+                const shoeL = new THREE.Mesh(shoeGeo, material);
+                const shoeR = new THREE.Mesh(shoeGeo, material);
+                shoeL.position.set(-0.5, 0.2, 0.5);
+                shoeR.position.set(0.5, 0.2, 0.5);
+                
+                const shoeGroup = new THREE.Group();
+                shoeGroup.add(shoeL);
+                shoeGroup.add(shoeR);
+                shoeMeshes = shoeGroup;
+                catGroup.add(shoeMeshes);
+            }
+        }
+
+        function removeMeshFromCat(category) {
+            if (category === 'bibs' && bibMesh) {
+                catGroup.remove(bibMesh);
+                bibMesh = null;
+            } else if (category === 'bells' && bellMesh) {
+                catGroup.remove(bellMesh);
+                bellMesh = null;
+            } else if (category === 'head' && headMesh) {
+                catGroup.remove(headMesh);
+                headMesh = null;
+            } else if (category === 'shoes' && shoeMeshes) {
+                catGroup.remove(shoeMeshes);
+                shoeMeshes = null;
+            }
+        }
+
+        /* ==========================================
+           GAME INTERACTIONS & STATS LOGIC
+           ========================================== */
+        function interactCat(action) {
+            if (action === 'feed') {
+                if (gameState.fish < 5) {
+                    showFloatingText("Not enough fish!");
+                    return;
+                }
+                gameState.fish -= 5;
+                gameState.energy = Math.min(gameState.maxEnergy, gameState.energy + 15);
+                addExp(20);
+                showFloatingText("+20 EXP!");
+            } else if (action === 'pet') {
+                if (gameState.energy < 5) {
+                    showFloatingText("Too tired! Rest first.");
+                    return;
+                }
+                gameState.energy -= 5;
+                addExp(15);
+                showFloatingText("❤️ Happy!");
+            } else if (action === 'rest') {
+                gameState.energy = Math.min(gameState.maxEnergy, gameState.energy + 30);
+                showFloatingText("💤 Rested!");
+            }
+            updateHUD();
+        }
+
+        function addExp(amount) {
+            gameState.exp += amount;
+            if (gameState.exp >= gameState.maxExp) {
+                gameState.exp -= gameState.maxExp;
+                gameState.level += 1;
+                gameState.maxExp = Math.floor(gameState.maxExp * 1.2);
+                showFloatingText("LEVEL UP! 🎉");
+                
+                // Scale 3D Cat with level
+                catGroup.scale.multiplyScalar(1.05);
+            }
+            updateHUD();
+        }
+
+        function updateHUD() {
+            document.getElementById('level-display').innerText = `LVL ${gameState.level}`;
+            document.getElementById('fish-count').innerText = gameState.fish;
+            document.getElementById('energy-fill').style.width = `${(gameState.energy / gameState.maxEnergy) * 100}%`;
+            document.getElementById('exp-fill').style.width = `${(gameState.exp / gameState.maxExp) * 100}%`;
+
+            // Sync leaderboards current player entry
+            const playerEntry = leaderboardData.find(e => e.name === "Current Player");
+            if (playerEntry) {
+                playerEntry.level = gameState.level;
+                playerEntry.fish = gameState.fish;
+            }
+            renderLeaderboard();
+        }
+
+        function showFloatingText(text) {
+            const el = document.createElement('div');
+            el.className = 'floating-text';
+            el.innerText = text;
+            el.style.left = '50%';
+            el.style.top = '50%';
+            document.body.appendChild(el);
+
+            setTimeout(() => {
+                el.remove();
+            }, 1200);
+        }
+
+        /* ==========================================
+           MISSIONS & ECO PROOF SYSTEM
+           ========================================== */
+        function completeMission(id) {
+            if (id === 1) {
+                gameState.fish += 50;
+                addExp(100);
+                showFloatingText("+50 Fish & +100 EXP!");
+            } else if (id === 2) {
+                gameState.fish += 40;
+                addExp(80);
+                showFloatingText("+40 Fish & +80 EXP!");
+            }
+            updateHUD();
+        }
+
+        /* ==========================================
+           LEADERBOARD & UI PANELS
+           ========================================== */
+        function toggleDrawer(id) {
+            const panel = document.getElementById(id);
+            const isActive = panel.classList.contains('active');
+            
+            document.querySelectorAll('.drawer-panel').forEach(p => p.classList.remove('active'));
+            if (!isActive) {
+                panel.classList.add('active');
+                if (id === 'studio-panel') renderStudioGrid();
+            }
+        }
+
+        function renderLeaderboard() {
+            const tbody = document.getElementById('leaderboard-rows');
+            tbody.innerHTML = '';
+
+            const sorted = [...leaderboardData].sort((a, b) => b.level - a.level || b.fish - a.fish);
+
+            sorted.forEach((item, index) => {
+                const tr = document.createElement('tr');
+                const rankClass = index < 3 ? `rank-${index + 1}` : '';
+                tr.innerHTML = `
+                    <td><div class="rank-badge ${rankClass}">${index + 1}</div></td>
+                    <td><strong>${item.name}</strong></td>
+                    <td>${item.level}</td>
+                    <td>${item.fish}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        /* ==========================================
+           MODALS & ADMIN CSV EXPORT
+           ========================================== */
+        function openClaimModal() {
+            document.getElementById('claim-modal').classList.add('active');
+        }
+
+        function openAdminModal() {
+            document.getElementById('admin-modal').classList.add('active');
+        }
+
+        function closeModal(id) {
+            document.getElementById(id).classList.remove('active');
+        }
+
+        function handleClaimSubmit(event) {
+            event.preventDefault();
+            const name = document.getElementById('claim-name').value;
+            alert(`Claim submitted successfully for ${name}!`);
+            closeModal('claim-modal');
+        }
+
+        function exportCSV() {
+            let csvContent = "data:text/csv;charset=utf-8,Rank,Name,Level,Fish\n";
+            leaderboardData.forEach(row => {
+                csvContent += `${row.rank},${row.name},${row.level},${row.fish}\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", "energy_cat_leaderboard.csv");
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+        }
+
+        function resetSystemData() {
+            if (confirm("Reset all game stats to default?")) {
+                gameState.level = 1;
+                gameState.energy = 80;
+                gameState.exp = 20;
+                gameState.fish = 100;
+                updateHUD();
+                closeModal('admin-modal');
+            }
+        }
+
+        // Initialize Window
+        window.onload = () => {
+            init3D();
+            updateHUD();
+        };
+    </script>
 </body>
 </html>
