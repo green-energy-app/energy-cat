@@ -3,669 +3,885 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Eco Energy Cat: Smartphone Edition</title>
+    <title>Energy Cat - Cute Box Edition</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- FontAwesome Icons -->
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-    <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
-
+    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
     <style>
-        :root {
-            --pink-main: #f72585;
-            --purple-main: #7209b7;
-            --purple-light: #b5179e;
-            --pastel-bg-start: #ffc6ff;
-            --pastel-bg-end: #e0aaff;
-        }
+        * { font-family: 'Plus Jakarta Sans', sans-serif; }
 
         body {
-            font-family: 'Nunito', sans-serif;
-            background: linear-gradient(135deg, var(--pastel-bg-start) 0%, var(--pastel-bg-end) 100%);
+            background: linear-gradient(135deg, #FFF7ED 0%, #FEF3C7 40%, #FCE7F3 100%);
             min-height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 10px;
-            margin: 0;
+            user-select: none;
+            overflow-x: hidden;
         }
 
-        h1, h2, h3, .font-heading {
-            font-family: 'Fredoka', sans-serif;
+        .cute-card {
+            background: rgba(255, 255, 255, 0.96);
+            backdrop-filter: blur(20px);
+            border: 4px solid #FDE68A;
+            box-shadow: 0 20px 40px -10px rgba(217, 119, 6, 0.2);
         }
 
-        /* --- SMARTPHONE CONTAINER FRAME --- */
-        .phone-frame {
-            width: 100%;
-            max-width: 410px;
-            height: 820px;
-            background: #ffffff;
-            border-radius: 42px;
-            box-shadow: 0 20px 50px rgba(114, 9, 183, 0.3), 0 0 0 12px #2b2b2b;
-            display: flex;
-            flex-direction: column;
-            position: relative;
-            overflow: hidden;
+        .glass-modal {
+            background: rgba(15, 23, 42, 0.75);
+            backdrop-filter: blur(12px);
         }
 
-        /* Phone Notch */
-        .phone-notch {
-            width: 140px;
-            height: 22px;
-            background: #2b2b2b;
-            position: absolute;
-            top: 0;
-            left: 50%;
-            transform: translateX(-50%);
-            border-bottom-left-radius: 14px;
-            border-bottom-right-radius: 14px;
-            z-index: 50;
+        @keyframes earTwitch {
+            0%, 90%, 100% { transform: rotate(0deg); }
+            93% { transform: rotate(-8deg); }
+            96% { transform: rotate(8deg); }
+        }
+        .animate-ear-left { transform-origin: 30px 20px; animation: earTwitch 4s ease-in-out infinite; }
+        .animate-ear-right { transform-origin: 70px 20px; animation: earTwitch 4s ease-in-out infinite 0.2s; }
+
+        @keyframes catBreathe {
+            0%, 100% { transform: translateY(0) scale(1); }
+            50% { transform: translateY(-3px) scale(1.01, 0.99); }
+        }
+        .animate-breathe { animation: catBreathe 3s ease-in-out infinite; }
+
+        @keyframes sleepFloat {
+            0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
+            50% { opacity: 1; transform: translate(12px, -20px) scale(1.1); }
+            100% { opacity: 0; transform: translate(25px, -40px) scale(0.8); }
+        }
+        .animate-zzz { animation: sleepFloat 2.5s infinite ease-in-out; }
+
+        .tab-content { display: none; }
+        .tab-content.active { display: block; animation: fadeIn 0.25s ease-out; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
         }
 
-        /* Pink-Purple Theme Buttons */
-        .btn-purple {
-            background: linear-gradient(135deg, var(--pink-main), var(--purple-main));
-            color: white;
-            transition: all 0.2s ease;
+        .btn-cute {
+            transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 0 0 rgba(0,0,0,0.1);
         }
-        .btn-purple:hover {
-            opacity: 0.95;
-            transform: translateY(-1px);
-        }
+        .btn-cute:active { transform: translateY(3px); box-shadow: 0 1px 0 0 rgba(0,0,0,0.1); }
 
-        /* 2D Cat Stage Avatar */
-        .cat-stage {
-            width: 180px;
-            height: 180px;
-            border-radius: 50%;
-            background: radial-gradient(circle, #ffffff 60%, #f3c4fb 100%);
-            border: 4px solid var(--purple-light);
-            position: relative;
-            display: flex;
-            align-items: center;
-            justify-content: center;
-            margin: 0 auto;
-            box-shadow: 0 8px 20px rgba(114, 9, 183, 0.15);
-        }
-
-        .cat-avatar {
-            font-size: 5.8rem;
-            transition: all 0.3s ease;
-            position: relative;
-            z-index: 1;
-        }
-
-        .cat-hat-layer {
-            position: absolute;
-            top: -12px;
-            font-size: 2.8rem;
-            z-index: 10;
-        }
-
-        .cat-apron-layer {
-            position: absolute;
-            bottom: 20px;
-            font-size: 3.2rem;
-            z-index: 5;
-        }
-
-        .progress-bar-inner {
-            transition: width 0.4s ease, background-color 0.4s ease;
-        }
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FEF3C7; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #F59E0B; border-radius: 10px; }
     </style>
 </head>
-<body>
+<body class="flex justify-center items-center min-h-screen p-3 md:p-6 relative">
 
-    <!-- SMARTPHONE CONTAINER -->
-    <div class="phone-frame">
-        <div class="phone-notch"></div>
+    <!-- Notification Toast -->
+    <div id="toastNotification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-5">
+        <div class="bg-slate-900/90 text-white px-6 py-3 rounded-full shadow-2xl border-2 border-amber-300 flex items-center gap-3 font-extrabold text-xs tracking-wide">
+            <span id="toastIcon" class="text-xl">✨</span>
+            <span id="toastMessage">Notification</span>
+        </div>
+    </div>
 
-        <!-- AUTH OVERLAY (PINK & PURPLE THEME) -->
-        <div id="auth-overlay" class="absolute inset-0 bg-gradient-to-br from-pink-600 via-purple-700 to-indigo-800 z-40 flex items-center justify-center p-6 text-white text-center">
-            <div class="w-full mt-4">
-                <div class="text-6xl mb-2"><i class="fa-solid fa-cat text-pink-300"></i></div>
-                <h2 class="text-3xl font-heading mb-1">Energy Cat</h2>
-                <p class="text-xs text-pink-200 mb-6">Mobile Eco-Pet & Weight Studio</p>
-
-                <!-- Auth Tabs -->
-                <div class="flex bg-white/20 p-1 rounded-xl mb-4 backdrop-blur-md">
-                    <button id="tab-login" onclick="switchAuth('login')" class="flex-1 py-1.5 text-xs font-bold rounded-lg bg-white text-purple-900 shadow">Login</button>
-                    <button id="tab-register" onclick="switchAuth('register')" class="flex-1 py-1.5 text-xs font-bold rounded-lg text-pink-100">Register</button>
+    <!-- Main Container App -->
+    <div class="cute-card rounded-[42px] w-full max-w-md h-[760px] flex flex-col justify-between relative z-10 overflow-hidden p-5">
+        
+        <!-- Header Zone -->
+        <div class="bg-gradient-to-r from-amber-100 via-orange-100 to-pink-100 p-3 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-2xl shadow-sm border border-amber-200">
+                    📦
                 </div>
-
-                <!-- Login Form -->
-                <form id="form-login" onsubmit="handleLogin(event)" class="space-y-3">
-                    <input type="text" id="login-user" placeholder="Username" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
-                    <input type="password" id="login-pass" placeholder="Password" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
-                    <div class="text-right">
-                        <button type="button" onclick="switchAuth('forgot')" class="text-xs text-pink-200 underline">Forgot Password?</button>
+                <div>
+                    <div class="flex items-center gap-1.5">
+                        <span class="text-[9px] tracking-widest font-black text-amber-600 uppercase">VERIFIED AGENT</span>
+                        <span id="totalUsersBadge" class="text-[9px] font-extrabold bg-white/80 px-2 py-0.5 rounded-full text-amber-800 border border-amber-200">👥 0</span>
                     </div>
-                    <button type="submit" class="w-full py-3 rounded-xl font-bold bg-pink-500 hover:bg-pink-600 text-white shadow-lg">Login & Play 🐾</button>
-                </form>
-
-                <!-- Register Form -->
-                <form id="form-register" onsubmit="handleRegister(event)" class="space-y-3 hidden">
-                    <input type="text" id="reg-user" placeholder="Create Username" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
-                    <input type="password" id="reg-pass" placeholder="Create Password" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
-                    <select id="reg-question" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
-                        <option value="" disabled selected>Select Security Question</option>
-                        <option value="pet">First pet's name?</option>
-                        <option value="city">Birth city?</option>
-                        <option value="color">Favorite color?</option>
-                    </select>
-                    <input type="text" id="reg-answer" placeholder="Security Answer" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
-                    <button type="submit" class="w-full py-3 rounded-xl font-bold bg-purple-500 hover:bg-purple-600 text-white shadow-lg">Create Account 🌿</button>
-                </form>
-
-                <!-- Forgot Password Form -->
-                <form id="form-forgot" onsubmit="handleForgot(event)" class="space-y-3 hidden">
-                    <input type="text" id="forgot-user" placeholder="Your Username" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
-                    <select id="forgot-question" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
-                        <option value="" disabled selected>Select Security Question</option>
-                        <option value="pet">First pet's name?</option>
-                        <option value="city">Birth city?</option>
-                        <option value="color">Favorite color?</option>
-                    </select>
-                    <input type="text" id="forgot-answer" placeholder="Security Answer" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
-                    <input type="password" id="forgot-newpass" placeholder="New Password" class="w-full p-2.5 bg-white/90 text-gray-800 text-sm rounded-xl outline-none" required>
-                    <button type="submit" class="w-full py-3 rounded-xl font-bold bg-yellow-500 text-white shadow-lg">Reset Password 🔑</button>
-                    <button type="button" onclick="switchAuth('login')" class="text-xs text-pink-200 underline block mx-auto pt-1">Back to Login</button>
-                </form>
+                    <div class="text-xs font-black text-slate-800 flex items-center gap-1">
+                        <span id="displayUser">Guest Agent</span>
+                        <button onclick="logoutUser()" class="text-[10px] text-amber-600 hover:underline font-bold ml-1">🔒 Logout</button>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-2xl border border-amber-200 shadow-sm">
+                <span class="text-xl">🐟</span>
+                <span id="fishCount" class="text-sm font-black text-amber-500">0</span>
             </div>
         </div>
 
-        <!-- APP HEADER (STATUS & LOGOUT) -->
-        <header class="pt-7 px-5 pb-3 bg-gradient-to-r from-pink-500 to-purple-600 text-white flex justify-between items-center shadow-md">
-            <div>
-                <h1 class="font-heading text-lg leading-tight">Eco Energy Cat</h1>
-                <p class="text-[10px] text-pink-200">Level <span id="display-level">1</span> Pet Companion</p>
+        <!-- MAIN PAGES AREA -->
+        <div class="flex-grow overflow-y-auto py-3">
+            
+            <!-- PAGE 1: HOME (CAT CARE) -->
+            <div id="tab-home" class="tab-content active space-y-3.5">
+                <div class="bg-white border-2 border-emerald-200 rounded-2xl p-3 shadow-sm">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-xs text-emerald-700 font-extrabold flex items-center gap-1">
+                            <span>⚡</span> CAT ENERGY
+                        </span>
+                        <span id="energyText" class="text-xs font-black text-emerald-700">100/100</span>
+                    </div>
+                    <div class="w-full bg-emerald-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-emerald-200">
+                        <div id="energyBar" class="bg-gradient-to-r from-emerald-400 to-teal-300 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+                    </div>
+                </div>
+
+                <!-- Box Cat Stage Vector Graphic -->
+                <div id="catStage" class="relative bg-gradient-to-b from-amber-50 via-orange-50 to-pink-50 rounded-3xl p-3 flex flex-col items-center justify-center border-2 border-amber-200 shadow-inner h-[290px] cursor-pointer group" onclick="petCat(event)">
+                    
+                    <!-- Sleep Floating Zzz Effect -->
+                    <div id="sleepEffect" class="hidden absolute top-6 right-12 z-20 pointer-events-none">
+                        <span class="text-2xl font-black text-indigo-400 animate-zzz inline-block">Zzz...</span>
+                    </div>
+
+                    <div class="animate-breathe relative flex items-center justify-center mt-2">
+                        <svg width="220" height="210" viewBox="0 0 100 100" class="drop-shadow-xl transition-transform duration-300 group-hover:scale-105">
+                            
+                            <!-- Cat Tail Outside Box -->
+                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#CBD5E1" stroke-width="7" fill="none" stroke-linecap="round" />
+
+                            <!-- Cardboard Box Back Flaps -->
+                            <polygon points="12,48 50,38 88,48 50,56" fill="#D97706" />
+                            <polygon points="12,48 30,32 50,38" fill="#B45309" />
+                            <polygon points="88,48 70,32 50,38" fill="#B45309" />
+
+                            <!-- Cat Body & Head Sitting inside Box -->
+                            <!-- Ears -->
+                            <g class="animate-ear-left">
+                                <polygon points="22,34 28,6 48,24" fill="#E2E8F0" />
+                                <polygon points="25,30 30,12 43,23" fill="#F472B6" opacity="0.65" />
+                            </g>
+                            <g class="animate-ear-right">
+                                <polygon points="78,34 72,6 52,24" fill="#E2E8F0" />
+                                <polygon points="75,30 70,12 57,23" fill="#F472B6" opacity="0.65" />
+                            </g>
+
+                            <!-- Head Circle -->
+                            <circle cx="50" cy="40" r="30" fill="#F1F5F9" />
+
+                            <!-- Gray Fur Patch on Head -->
+                            <path d="M 32 18 Q 50 14 62 26 Q 50 28 32 18 Z" fill="#94A3B8" />
+
+                            <!-- Cheeks Blush -->
+                            <ellipse cx="32" cy="46" rx="5" ry="3.5" fill="#F472B6" opacity="0.65" />
+                            <ellipse cx="68" cy="46" rx="5" ry="3.5" fill="#F472B6" opacity="0.65" />
+
+                            <!-- AWAKE EYES (Anime Sparkle) -->
+                            <g id="catEyesAwake">
+                                <circle cx="36" cy="38" r="5" fill="#0F172A" />
+                                <circle cx="64" cy="38" r="5" fill="#0F172A" />
+                                <circle cx="34" cy="36" r="2" fill="#FFFFFF" />
+                                <circle cx="62" cy="36" r="2" fill="#FFFFFF" />
+                            </g>
+
+                            <!-- SLEEPING EYES (Closed Arcs) -->
+                            <g id="catEyesSleep" class="hidden">
+                                <path d="M 31 39 Q 36 44 41 39" stroke="#0F172A" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                                <path d="M 59 39 Q 64 44 69 39" stroke="#0F172A" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                            </g>
+
+                            <!-- Whiskers -->
+                            <path d="M 18 38 L 27 40" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 17 44 L 26 44" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 82 38 L 73 40" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 83 44 L 74 44" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" />
+
+                            <!-- Nose & Mouth -->
+                            <polygon points="50,43 47,46 53,46" fill="#FB7185" />
+                            <path d="M 44 48 Q 50 52 56 48" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round" />
+
+                            <!-- Front Paws Resting on Box Edge -->
+                            <ellipse cx="36" cy="56" rx="6" ry="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+                            <ellipse cx="64" cy="56" rx="6" ry="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+
+                            <!-- Cardboard Box Front Body -->
+                            <polygon points="12,52 50,62 88,52 88,88 50,96 12,88" fill="#F59E0B" />
+                            <polygon points="12,52 50,62 50,96 12,88" fill="#D97706" opacity="0.25" />
+                            <!-- Box Tape Decor -->
+                            <polygon points="44,61 56,64 56,95 44,93" fill="#FEF3C7" opacity="0.7" />
+                        </svg>
+                    </div>
+
+                    <p id="catStatusLabel" class="text-xs font-black text-amber-700 mt-1 bg-white/90 px-3.5 py-1 rounded-full border border-amber-200">
+                        ✨ Tap cat to pet (+1⚡ Energy)
+                    </p>
+                </div>
+
+                <!-- Feed & Rest Actions -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="feedCat()" class="btn-cute bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white font-black py-3 px-2 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-sm">
+                        <span class="text-base">🍱</span> Feed (-5🐟 / +15⚡)
+                    </button>
+                    <button onclick="restCat()" class="btn-cute bg-gradient-to-r from-indigo-400 to-purple-400 hover:from-indigo-500 hover:to-purple-500 text-white font-black py-3 px-2 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-sm">
+                        <span class="text-base">😴</span> Rest / Sleep (+30⚡)
+                    </button>
+                </div>
             </div>
-            <div class="flex items-center gap-2">
-                <div class="bg-yellow-400 text-purple-950 px-3 py-1 rounded-full text-xs font-bold flex items-center gap-1 shadow-sm">
-                    <i class="fa-solid fa-fish"></i> <span id="display-fish">0</span>
+
+            <!-- PAGE 2: MISSIONS -->
+            <div id="tab-missions" class="tab-content space-y-3">
+                <div class="bg-gradient-to-br from-emerald-100/80 to-teal-100/80 border-2 border-emerald-200 rounded-3xl p-4">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-xl">🌱</span>
+                        <p class="text-xs font-black text-emerald-900 uppercase tracking-wider">Photo Proof Eco Missions</p>
+                    </div>
+                    <p class="text-[11px] font-bold text-slate-600 mb-3">Upload real photo proof to earn fish points!</p>
+
+                    <div class="space-y-2.5 text-xs">
+                        <button onclick="openMissionUploadModal('Turned off unused lights/monitors', 15, 20)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">💡 Turn Off Lights / Monitor</span>
+                            <span class="text-emerald-600 font-black">+15🐟 / +20⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Turn Off AC After Room Use', 20, 30)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">❄️ Turn Off AC After Room Use</span>
+                            <span class="text-emerald-600 font-black">+20🐟 / +30⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Unplugged idle electronics', 10, 15)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">🔌 Unplug Electronics</span>
+                            <span class="text-emerald-600 font-black">+10🐟 / +15⚡</span>
+                        </button>
+                        <button onclick="openMissionUploadModal('Took stairs instead of lift', 10, 15)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">🚶 Use Stairs Instead of Lift</span>
+                            <span class="text-emerald-600 font-black">+10🐟 / +15⚡</span>
+                        </button>
+                    </div>
                 </div>
-                <button onclick="logout()" class="text-white/80 hover:text-white text-sm ml-1"><i class="fa-solid fa-right-from-bracket"></i></button>
             </div>
-        </header>
 
-        <!-- VIEW PANELS CONTAINER -->
-        <div class="flex-1 overflow-y-auto p-4 space-y-4">
-
-            <!-- PAGE 1: PET CARE & LEVEL -->
-            <section id="view-page1" class="view-panel space-y-4">
-                <!-- Level & Progress -->
-                <div class="bg-purple-50 p-3 rounded-2xl border border-purple-100 flex items-center justify-between">
-                    <div class="text-xs font-bold text-purple-900">Pet Level Status</div>
-                    <div class="text-xs font-bold text-pink-600">Lv. <span id="stat-level">1</span> (<span id="stat-exp">0</span>/100 EXP)</div>
-                </div>
-
-                <!-- Cat Stage -->
-                <div class="bg-white p-4 rounded-3xl shadow-sm text-center border border-pink-100 relative">
-                    <div class="cat-stage">
-                        <div id="cat-hat" class="cat-hat-layer"></div>
-                        <div id="cat-apron" class="cat-apron-layer"></div>
-                        <div id="cat-avatar" class="cat-avatar">😸</div>
+            <!-- PAGE 3: MINI-GAME -->
+            <div id="tab-game" class="tab-content space-y-3">
+                <div class="bg-white rounded-3xl p-4 border-2 border-sky-200 shadow-sm flex flex-col justify-between h-[380px]">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xl">🎣</span>
+                            <h3 class="font-black text-sm text-sky-800">Catch Fish Speed Game</h3>
+                        </div>
+                        <p class="text-[11px] font-bold text-slate-500">Tap appearing fish fast in 10 seconds!</p>
                     </div>
 
-                    <!-- Energy Bar -->
-                    <div class="mt-4 space-y-1">
-                        <div class="flex justify-between text-xs font-bold text-gray-600">
-                            <span>Energy</span>
-                            <span id="energy-text">100 / 100%</span>
+                    <div id="gameBox" class="relative bg-gradient-to-b from-sky-100 to-blue-50 rounded-2xl border-2 border-sky-200 h-56 overflow-hidden flex items-center justify-center">
+                        <p id="gameStartText" class="text-xs font-black text-sky-600 bg-white px-4 py-2 rounded-full border border-sky-200">Tap Start Button Below!</p>
+                        <button id="targetFish" onclick="catchFish()" class="hidden absolute text-4xl transition-all duration-150 active:scale-75">🐟</button>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <p class="text-xs font-extrabold text-slate-600">Caught: <span id="gameScore" class="text-amber-500 font-black text-lg">0</span></p>
+                        <button id="startGameBtn" onclick="startMiniGame()" class="btn-cute bg-gradient-to-r from-sky-400 to-blue-500 text-white text-xs font-black px-5 py-2.5 rounded-xl shadow-md border-2 border-white">
+                            Start Game (10s)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 4: RANKS & SHOP -->
+            <div id="tab-ranks" class="tab-content space-y-3.5">
+                
+                <!-- WINNER BANNER -->
+                <div class="bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500 rounded-3xl p-3.5 border-2 border-white shadow-md text-white">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-2xl animate-bounce">🏆</span>
+                        <div>
+                            <h4 class="text-xs font-black uppercase tracking-wider">Monthly Winner Announcement</h4>
+                            <p class="text-[10px] font-extrabold text-amber-100">Top verified player wins monthly reward!</p>
                         </div>
-                        <div class="w-full bg-gray-200 h-4 rounded-full overflow-hidden p-0.5">
-                            <div id="energy-bar" class="progress-bar-inner bg-green-500 h-full rounded-full w-full"></div>
-                        </div>
-                        <p id="cat-status-msg" class="text-[11px] font-semibold text-purple-600 pt-1">Mood: Happy & Full of Energy! ✨</p>
+                    </div>
+                    <div class="mt-2.5 pt-2 border-t border-white/30 flex justify-between items-center">
+                        <p class="text-[10px] font-extrabold bg-black/20 px-2.5 py-1 rounded-full">
+                            👑 Rank #1: <span id="topPlayerNameDisplay" class="underline">Loading...</span>
+                        </p>
+                        <button id="claimRewardBtn" onclick="openClaimModal()" class="btn-cute bg-white text-pink-600 hover:bg-pink-50 text-[10px] font-black px-3 py-1.5 rounded-xl shadow-sm border border-pink-200">
+                            🎁 Claim Reward
+                        </button>
                     </div>
                 </div>
 
-                <!-- Care Action Buttons -->
-                <div class="grid grid-cols-3 gap-2">
-                    <button onclick="careAction('feed')" class="btn-purple p-3 rounded-2xl text-center shadow-sm">
-                        <i class="fa-solid fa-bowl-food text-lg block mb-1"></i>
-                        <span class="text-[11px] font-bold block">Feed (+20)</span>
-                    </button>
-                    <button onclick="careAction('play')" class="btn-purple p-3 rounded-2xl text-center shadow-sm">
-                        <i class="fa-solid fa-baseball text-lg block mb-1"></i>
-                        <span class="text-[11px] font-bold block">Play (+10)</span>
-                    </button>
-                    <button onclick="careAction('sleep')" class="btn-purple p-3 rounded-2xl text-center shadow-sm">
-                        <i class="fa-solid fa-bed text-lg block mb-1"></i>
-                        <span class="text-[11px] font-bold block">Sleep (+40)</span>
-                    </button>
-                </div>
-            </section>
-
-            <!-- PAGE 2: ECO PHOTO PROOF -->
-            <section id="view-page2" class="view-panel space-y-4 hidden">
-                <div class="bg-white p-4 rounded-3xl shadow-sm border border-pink-100">
-                    <h2 class="font-heading text-lg text-purple-900 mb-1">Eco-Photo Proof</h2>
-                    <p class="text-xs text-gray-500 mb-4">Complete eco activities, upload photos, and earn Fish Tokens!</p>
-
-                    <div class="space-y-3">
-                        <div class="border p-3 rounded-2xl bg-pink-50/50 space-y-2">
-                            <div class="flex justify-between items-center text-xs font-bold text-purple-900">
-                                <span>1. Unplug Appliance</span>
-                                <span class="text-yellow-600">+15 Fish 🐟</span>
-                            </div>
-                            <input type="file" accept="image/*" id="file-p1" class="text-[10px] text-gray-500 w-full">
-                            <button onclick="submitEcoProof('p1', 15)" class="w-full bg-pink-500 text-white text-xs font-bold py-2 rounded-xl">Upload & Claim Reward</button>
+                <!-- Leaderboard Section -->
+                <div class="bg-white rounded-3xl p-3 border-2 border-amber-200 shadow-sm">
+                    <div class="flex items-center justify-between mb-2">
+                        <div class="flex items-center gap-2">
+                            <span class="text-xl">📊</span>
+                            <p class="text-xs font-black text-amber-900">Verified Players Leaderboard</p>
                         </div>
-
-                        <div class="border p-3 rounded-2xl bg-purple-50/50 space-y-2">
-                            <div class="flex justify-between items-center text-xs font-bold text-purple-900">
-                                <span>2. Water Garden Plants</span>
-                                <span class="text-yellow-600">+20 Fish 🐟</span>
-                            </div>
-                            <input type="file" accept="image/*" id="file-p2" class="text-[10px] text-gray-500 w-full">
-                            <button onclick="submitEcoProof('p2', 20)" class="w-full bg-purple-600 text-white text-xs font-bold py-2 rounded-xl">Upload & Claim Reward</button>
-                        </div>
+                        <span id="totalPlayersCount" class="text-[10px] font-black text-slate-500">0 Players</span>
                     </div>
-                </div>
-            </section>
-
-            <!-- PAGE 3: DRESS-UP SHOP -->
-            <section id="view-page3" class="view-panel space-y-4 hidden">
-                <div class="bg-white p-4 rounded-3xl shadow-sm border border-pink-100">
-                    <h2 class="font-heading text-lg text-purple-900 mb-1">Dress-Up Closet</h2>
-                    <p class="text-xs text-gray-500 mb-3">Buy hats & aprons using Fish Currency!</p>
-
-                    <div class="grid grid-cols-2 gap-3" id="wardrobe-grid">
-                        <!-- Dynamic Outfits Injected -->
-                    </div>
-                </div>
-            </section>
-
-            <!-- PAGE 4: WEIGHT LEADERBOARD -->
-            <section id="view-page4" class="view-panel space-y-4 hidden">
-                <div class="bg-white p-4 rounded-3xl shadow-sm border border-pink-100 space-y-3">
-                    <h2 class="font-heading text-lg text-purple-900">Weight & Rank</h2>
-
-                    <!-- Log Weight Form -->
-                    <form onsubmit="logPlayerWeight(event)" class="bg-purple-50 p-3 rounded-2xl flex gap-2">
-                        <input type="number" step="0.1" id="input-weight" placeholder="Weight (kg)" class="w-full p-2 bg-white text-xs rounded-xl border outline-none" required>
-                        <button type="submit" class="bg-purple-600 text-white text-xs font-bold px-3 py-2 rounded-xl whitespace-nowrap">Save (+5 Fish)</button>
-                    </form>
-
-                    <!-- Leaderboard Table -->
-                    <div class="overflow-x-auto">
+                    <div class="overflow-y-auto max-h-[160px]">
                         <table class="w-full text-left text-xs">
                             <thead>
-                                <tr class="border-b text-gray-400">
-                                    <th class="pb-2">Rank</th>
-                                    <th class="pb-2">Player</th>
-                                    <th class="pb-2">Weight</th>
-                                    <th class="pb-2">Fish</th>
+                                <tr class="border-b border-amber-100 text-amber-500 font-black text-[10px] uppercase">
+                                    <th class="p-1.5">Rank</th>
+                                    <th class="p-1.5">Player Username</th>
+                                    <th class="p-1.5 text-right">Fish 🐟</th>
                                 </tr>
                             </thead>
-                            <tbody id="leaderboard-list" class="divide-y font-semibold">
-                                <!-- Dynamic Rank Rows -->
-                            </tbody>
+                            <tbody id="leaderboardRows"></tbody>
                         </table>
                     </div>
                 </div>
-            </section>
+
+                <!-- Admin Action Footer -->
+                <div class="text-center pt-1">
+                    <button onclick="openAdminModal()" class="text-[10px] font-bold text-slate-400 hover:text-amber-600 underline">
+                        ⚙️ Admin Control Panel (Export Winners)
+                    </button>
+                </div>
+            </div>
 
         </div>
 
-        <!-- BOTTOM NAV BAR (4 TABS) -->
-        <nav class="bg-white border-t border-pink-100 py-2 px-3 flex justify-around items-center">
-            <button onclick="switchPage(1)" id="nav-p1" class="text-pink-600 flex flex-col items-center">
-                <i class="fa-solid fa-cat text-lg"></i>
-                <span class="text-[10px] font-bold">Pet Care</span>
+        <!-- NAVIGATION TABS -->
+        <div class="bg-white p-2 rounded-3xl border-2 border-amber-200 grid grid-cols-4 gap-1.5 shrink-0 shadow-md">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2 rounded-2xl text-amber-600 bg-amber-100 font-black text-[11px]">
+                <span class="text-lg">🏠</span> Home
             </button>
-            <button onclick="switchPage(2)" id="nav-p2" class="text-gray-400 flex flex-col items-center">
-                <i class="fa-solid fa-camera text-lg"></i>
-                <span class="text-[10px] font-bold">Eco Proof</span>
+            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
+                <span class="text-lg">🌱</span> Missions
             </button>
-            <button onclick="switchPage(3)" id="nav-p3" class="text-gray-400 flex flex-col items-center">
-                <i class="fa-solid fa-shirt text-lg"></i>
-                <span class="text-[10px] font-bold">Closet</span>
+            <button onclick="switchTab('game')" id="nav-game" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
+                <span class="text-lg">🎣</span> Game
             </button>
-            <button onclick="switchPage(4)" id="nav-p4" class="text-gray-400 flex flex-col items-center">
-                <i class="fa-solid fa-trophy text-lg"></i>
-                <span class="text-[10px] font-bold">Leaderboard</span>
+            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
+                <span class="text-lg">🏆</span> Ranks
             </button>
-        </nav>
+        </div>
 
     </div>
 
-    <!-- JS LOGIC -->
+    <!-- Hidden File Input for Mission Upload -->
+    <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
+
+    <!-- MODAL 1: PHOTO PROOF UPLOAD -->
+    <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-emerald-300">
+            <h3 class="font-black text-sm text-slate-800">📸 Verify Photo Proof</h3>
+            <p id="modalMissionName" class="text-xs font-bold text-emerald-700 bg-emerald-50 p-2.5 rounded-2xl border border-emerald-200">Mission</p>
+            
+            <div onclick="triggerFileSelect()" class="w-full h-44 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-300 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
+                <img id="photoPreview" class="w-full h-full object-cover hidden" />
+                <div id="uploadPlaceholder" class="text-center p-3">
+                    <span class="text-3xl">📷</span>
+                    <p class="text-xs font-bold text-emerald-700 mt-1">Tap to select photo</p>
+                </div>
+            </div>
+
+            <div class="flex gap-2">
+                <button onclick="closePhotoModal()" class="btn-cute w-1/2 bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-2xl">Cancel</button>
+                <button onclick="submitMissionWithPhoto()" class="btn-cute w-1/2 bg-emerald-500 text-white text-xs font-bold py-2.5 rounded-2xl border-2 border-white">Confirm</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 2: AUTHENTICATION (LOGIN / REGISTER) -->
+    <div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-amber-300">
+            <div class="text-center">
+                <span class="text-4xl">🔐</span>
+                <h3 id="authTitle" class="font-black text-base text-slate-800 mt-1">Player Login</h3>
+                <p class="text-[11px] font-bold text-slate-500">Sign in to protect your score & rewards!</p>
+            </div>
+
+            <div class="space-y-2.5 text-xs">
+                <div>
+                    <label class="font-black text-slate-700 text-[10px] uppercase">Username</label>
+                    <input type="text" id="authUsername" placeholder="e.g. AshCat99" class="w-full bg-slate-50 border-2 border-amber-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
+                </div>
+                <div id="emailContainer" class="hidden">
+                    <label class="font-black text-slate-700 text-[10px] uppercase">Email Address</label>
+                    <input type="email" id="authEmail" placeholder="cat@example.com" class="w-full bg-slate-50 border-2 border-amber-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
+                </div>
+                <div>
+                    <label class="font-black text-slate-700 text-[10px] uppercase">Password</label>
+                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-slate-50 border-2 border-amber-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
+                </div>
+            </div>
+
+            <button onclick="handleAuthSubmit()" id="authSubmitBtn" class="btn-cute w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white mt-1">
+                Log In
+            </button>
+
+            <p class="text-center text-[11px] font-extrabold text-slate-500">
+                <span id="authToggleText">Don't have an account?</span>
+                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-amber-600 underline font-black ml-1">Register</button>
+            </p>
+        </div>
+    </div>
+
+    <!-- MODAL 3: CLAIM REWARD FOR WINNER -->
+    <div id="claimModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-amber-300">
+            <div class="text-center">
+                <span class="text-4xl">👑🎁</span>
+                <h3 class="font-black text-base text-amber-600 mt-1">Winner Claiming Form</h3>
+                <p class="text-[11px] font-bold text-slate-500 mt-0.5">Verified Rank #1 player submission</p>
+            </div>
+
+            <div class="space-y-2 text-xs">
+                <div>
+                    <label class="font-black text-slate-700 text-[10px] uppercase">Full Real Name</label>
+                    <input type="text" id="claimFullName" placeholder="Firstname Lastname" class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
+                </div>
+                <div>
+                    <label class="font-black text-slate-700 text-[10px] uppercase">Phone Number</label>
+                    <input type="text" id="claimPhone" placeholder="081-XXX-XXXX" class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
+                </div>
+                <div>
+                    <label class="font-black text-slate-700 text-[10px] uppercase">Shipping Address</label>
+                    <textarea id="claimAddress" rows="2" placeholder="House No, Street, City..." class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none"></textarea>
+                </div>
+                <div>
+                    <label class="font-black text-slate-700 text-[10px] uppercase">Confirm Account Password</label>
+                    <input type="password" id="claimConfirmPassword" placeholder="••••••••" class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
+                </div>
+            </div>
+
+            <div class="flex gap-2 mt-1">
+                <button onclick="closeClaimModal()" class="btn-cute w-1/2 bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-2xl">Cancel</button>
+                <button onclick="submitWinnerClaim()" class="btn-cute w-1/2 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-black py-2.5 rounded-2xl border-2 border-white">Submit Info</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- MODAL 4: ADMIN DASHBOARD (EXPORT CSV) -->
+    <div id="adminModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-sm flex flex-col gap-3 shadow-2xl border-4 border-amber-300">
+            <div class="flex justify-between items-center">
+                <h3 class="font-black text-sm text-amber-900">⚙️ Admin Control Panel</h3>
+                <button onclick="closeAdminModal()" class="text-xs font-bold text-slate-400">✕ Close</button>
+            </div>
+
+            <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 text-xs font-bold text-amber-900 flex justify-between items-center">
+                <span>Total Registered Accounts:</span>
+                <span id="adminTotalUsersCount" class="font-black text-lg text-amber-600">0</span>
+            </div>
+
+            <p class="text-[11px] font-black text-slate-700 uppercase">Monthly Verified Claimed Winners:</p>
+            <div id="adminWinnersList" class="bg-slate-50 border border-slate-200 rounded-2xl p-2.5 max-h-36 overflow-y-auto space-y-1.5 text-xs">
+                <!-- Winners Rendered Here -->
+            </div>
+
+            <button onclick="exportWinnersCSV()" class="btn-cute w-full bg-emerald-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white flex items-center justify-center gap-2">
+                <span>📥</span> Export Winner Claims (CSV / Excel)
+            </button>
+        </div>
+    </div>
+
+    <!-- JavaScript Engine -->
     <script>
-        /* GLOBAL USER STATE */
+        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        function playSound(freq, type, duration) {
+            try {
+                const osc = audioCtx.createOscillator();
+                const gain = audioCtx.createGain();
+                osc.type = type;
+                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
+                gain.gain.setValueAtTime(0.1, audioCtx.currentTime);
+                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
+                osc.connect(gain);
+                gain.connect(audioCtx.destination);
+                osc.start();
+                osc.stop(audioCtx.currentTime + duration);
+            } catch(e) {}
+        }
+
+        function showToast(message, icon = '✨') {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = message;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-5');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-5');
+            }, 2500);
+        }
+
+        async function hashPassword(str) {
+            const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
+            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
+        }
+
         let currentUser = null;
-        let userData = {
-            username: '',
-            password: '',
-            question: '',
-            answer: '',
-            level: 1,
-            exp: 0,
-            energy: 100,
-            fish: 25,
-            weight: 0,
-            equippedHat: null,
-            equippedApron: null,
-            lastDecayTime: Date.now()
-        };
+        let authMode = 'login';
+        let isSleeping = false;
 
-        const wardrobeCatalog = [
-            { id: 'h1', name: 'Party Hat', type: 'hat', icon: '🎉', price: 5 },
-            { id: 'h2', name: 'Crown', type: 'hat', icon: '👑', price: 15 },
-            { id: 'h3', name: 'Bow', type: 'hat', icon: '🎀', price: 8 },
-            { id: 'a1', name: 'Strawberry Apron', type: 'apron', icon: '🍓', price: 10 },
-            { id: 'a2', name: 'Bee Bib', type: 'apron', icon: '🐝', price: 10 },
-            { id: 'a3', name: 'Star Apron', type: 'apron', icon: '⭐', price: 12 }
-        ];
+        function getUsersDB() { return JSON.parse(localStorage.getItem('energycat_users_db') || '{}'); }
+        function saveUsersDB(db) { localStorage.setItem('energycat_users_db', JSON.stringify(db)); }
 
-        /* AUTH LOGIC */
-        function switchAuth(mode) {
-            document.getElementById('form-login').classList.add('hidden');
-            document.getElementById('form-register').classList.add('hidden');
-            document.getElementById('form-forgot').classList.add('hidden');
+        function toggleAuthMode() {
+            authMode = authMode === 'login' ? 'register' : 'login';
+            document.getElementById('authTitle').innerText = authMode === 'login' ? 'Player Login' : 'Create Account';
+            document.getElementById('emailContainer').classList.toggle('hidden', authMode === 'login');
+            document.getElementById('authSubmitBtn').innerText = authMode === 'login' ? 'Log In' : 'Register Account';
+            document.getElementById('authToggleText').innerText = authMode === 'login' ? "Don't have an account?" : "Already registered?";
+            document.getElementById('authToggleBtn').innerText = authMode === 'login' ? 'Register' : 'Log In';
+        }
 
-            document.getElementById('tab-login').className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-pink-100";
-            document.getElementById('tab-register').className = "flex-1 py-1.5 text-xs font-bold rounded-lg text-pink-100";
+        async function handleAuthSubmit() {
+            const username = document.getElementById('authUsername').value.trim();
+            const password = document.getElementById('authPassword').value.trim();
+            const email = document.getElementById('authEmail').value.trim();
 
-            if (mode === 'login') {
-                document.getElementById('form-login').classList.remove('hidden');
-                document.getElementById('tab-login').className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white text-purple-900 shadow";
-            } else if (mode === 'register') {
-                document.getElementById('form-register').classList.remove('hidden');
-                document.getElementById('tab-register').className = "flex-1 py-1.5 text-xs font-bold rounded-lg bg-white text-purple-900 shadow";
-            } else if (mode === 'forgot') {
-                document.getElementById('form-forgot').classList.remove('hidden');
+            if (!username || !password || (authMode === 'register' && !email)) {
+                showToast("Please fill in all required fields!", "⚠️");
+                return;
+            }
+
+            const db = getUsersDB();
+            const passwordHash = await hashPassword(password);
+
+            if (authMode === 'register') {
+                if (db[username]) {
+                    showToast("Username already exists!", "❌");
+                    return;
+                }
+                db[username] = { email, passwordHash, fish: 10, energy: 100, registeredAt: new Date().toISOString() };
+                saveUsersDB(db);
+                currentUser = username;
+                localStorage.setItem('energycat_current_session', currentUser);
+                document.getElementById('authModal').classList.add('hidden');
+                showToast(`Welcome, ${currentUser}! Registered successfully.`, "🎉");
+                loadUserData();
+            } else {
+                if (!db[username] || db[username].passwordHash !== passwordHash) {
+                    showToast("Invalid Username or Password!", "❌");
+                    return;
+                }
+                currentUser = username;
+                localStorage.setItem('energycat_current_session', currentUser);
+                document.getElementById('authModal').classList.add('hidden');
+                showToast(`Welcome back, ${currentUser}!`, "🔓");
+                loadUserData();
             }
         }
 
-        function handleRegister(e) {
-            e.preventDefault();
-            const u = document.getElementById('reg-user').value.trim();
-            const p = document.getElementById('reg-pass').value;
-            const q = document.getElementById('reg-question').value;
-            const a = document.getElementById('reg-answer').value.trim().toLowerCase();
-
-            if (localStorage.getItem('sm_user_' + u)) {
-                alert('Username already exists!');
-                return;
-            }
-
-            userData = {
-                username: u,
-                password: p,
-                question: q,
-                answer: a,
-                level: 1,
-                exp: 0,
-                energy: 100,
-                fish: 25,
-                weight: 55.0,
-                equippedHat: null,
-                equippedApron: null,
-                lastDecayTime: Date.now()
-            };
-
-            saveUserData();
-            loginSuccess(u);
+        function logoutUser() {
+            localStorage.removeItem('energycat_current_session');
+            currentUser = null;
+            document.getElementById('authModal').classList.remove('hidden');
+            showToast("Logged out successfully.", "🔒");
         }
 
-        function handleLogin(e) {
-            e.preventDefault();
-            const u = document.getElementById('login-user').value.trim();
-            const p = document.getElementById('login-pass').value;
+        let gameState = { fish: 10, energy: 100 };
 
-            const stored = localStorage.getItem('sm_user_' + u);
-            if (!stored) {
-                alert('User not found!');
-                return;
+        function loadUserData() {
+            if (!currentUser) return;
+            const db = getUsersDB();
+            if (db[currentUser]) {
+                gameState.fish = db[currentUser].fish || 10;
+                gameState.energy = db[currentUser].energy || 100;
             }
-
-            const parsed = JSON.parse(stored);
-            if (parsed.password !== p) {
-                alert('Incorrect password!');
-                return;
-            }
-
-            userData = parsed;
-            loginSuccess(u);
-        }
-
-        function handleForgot(e) {
-            e.preventDefault();
-            const u = document.getElementById('forgot-user').value.trim();
-            const q = document.getElementById('forgot-question').value;
-            const a = document.getElementById('forgot-answer').value.trim().toLowerCase();
-            const newP = document.getElementById('forgot-newpass').value;
-
-            const stored = localStorage.getItem('sm_user_' + u);
-            if (!stored) {
-                alert('Username not found!');
-                return;
-            }
-
-            const parsed = JSON.parse(stored);
-            if (parsed.question !== q || parsed.answer.toLowerCase() !== a) {
-                alert('Security question or answer incorrect!');
-                return;
-            }
-
-            parsed.password = newP;
-            localStorage.setItem('sm_user_' + u, JSON.stringify(parsed));
-            alert('Password reset successful! Logging in...');
-            userData = parsed;
-            loginSuccess(u);
-        }
-
-        function loginSuccess(u) {
-            currentUser = u;
-            document.getElementById('auth-overlay').classList.add('hidden');
-            calculateDecay();
+            document.getElementById('displayUser').innerText = currentUser;
             updateUI();
-            setInterval(calculateDecay, 30000);
-        }
-
-        function logout() {
-            location.reload();
         }
 
         function saveUserData() {
-            if (currentUser) {
-                localStorage.setItem('sm_user_' + currentUser, JSON.stringify(userData));
+            if (!currentUser) return;
+            const db = getUsersDB();
+            if (db[currentUser]) {
+                db[currentUser].fish = gameState.fish;
+                db[currentUser].energy = gameState.energy;
+                saveUsersDB(db);
             }
+            updateUI();
         }
 
-        /* TIMED DECAY (-1 energy per 3 mins) */
-        function calculateDecay() {
-            const now = Date.now();
-            const elapsedMins = (now - userData.lastDecayTime) / (1000 * 60);
-            const loss = Math.floor(elapsedMins / 3);
-
-            if (loss > 0) {
-                userData.energy = Math.max(0, userData.energy - loss);
-                userData.lastDecayTime = now;
-                saveUserData();
-                updateUI();
-            }
-        }
-
-        /* UPDATE UI & EXPRESSIONS */
         function updateUI() {
-            document.getElementById('display-fish').innerText = userData.fish;
-            document.getElementById('display-level').innerText = userData.level;
-            document.getElementById('stat-level').innerText = userData.level;
-            document.getElementById('stat-exp').innerText = userData.exp;
-            document.getElementById('energy-text').innerText = `${userData.energy} / 100%`;
+            document.getElementById('fishCount').innerText = gameState.fish;
+            document.getElementById('energyText').innerText = `${gameState.energy}/100`;
+            document.getElementById('energyBar').style.width = `${gameState.energy}%`;
 
-            const bar = document.getElementById('energy-bar');
-            bar.style.width = userData.energy + '%';
+            const db = getUsersDB();
+            const allUsers = Object.keys(db);
+            document.getElementById('totalUsersBadge').innerText = `👥 ${allUsers.length}`;
+            document.getElementById('totalPlayersCount').innerText = `${allUsers.length} Players`;
 
-            const catAvatar = document.getElementById('cat-avatar');
-            const statusMsg = document.getElementById('cat-status-msg');
-
-            /* SAD CAT FACE WHEN ENERGY < 20% */
-            if (userData.energy < 20) {
-                bar.className = 'progress-bar-inner bg-red-500 h-full rounded-full';
-                catAvatar.innerText = '😿';
-                statusMsg.innerText = 'Mood: Sad & Sleepy (<20% Energy) 💔';
-            } else if (userData.energy < 60) {
-                bar.className = 'progress-bar-inner bg-yellow-500 h-full rounded-full';
-                catAvatar.innerText = '🐱';
-                statusMsg.innerText = 'Mood: Hungry for a snack 🍃';
-            } else {
-                bar.className = 'progress-bar-inner bg-green-500 h-full rounded-full';
-                catAvatar.innerText = '😸';
-                statusMsg.innerText = 'Mood: Happy & Full of Energy! ✨';
-            }
-
-            // Equipped Layers
-            const hItem = wardrobeCatalog.find(i => i.id === userData.equippedHat);
-            const aItem = wardrobeCatalog.find(i => i.id === userData.equippedApron);
-            document.getElementById('cat-hat').innerText = hItem ? hItem.icon : '';
-            document.getElementById('cat-apron').innerText = aItem ? aItem.icon : '';
-
-            renderWardrobe();
             renderLeaderboard();
         }
 
-        function addExp(pts) {
-            userData.exp += pts;
-            if (userData.exp >= 100) {
-                userData.level += 1;
-                userData.exp = userData.exp - 100;
-                alert(`🎉 Level Up! Cat reached Level ${userData.level}!`);
+        function renderLeaderboard() {
+            const db = getUsersDB();
+            const playersList = Object.keys(db).map(username => ({
+                username,
+                fish: db[username].fish || 0
+            })).sort((a, b) => b.fish - a.fish);
+
+            const container = document.getElementById('leaderboardRows');
+            container.innerHTML = '';
+
+            const topPlayer = playersList[0];
+            document.getElementById('topPlayerNameDisplay').innerText = topPlayer ? topPlayer.username : 'None';
+
+            const isYouTop = topPlayer && topPlayer.username === currentUser;
+            const claimBtn = document.getElementById('claimRewardBtn');
+            if (isYouTop) {
+                claimBtn.disabled = false;
+                claimBtn.classList.remove('opacity-50', 'cursor-not-allowed');
+                claimBtn.classList.add('animate-pulse');
+            } else {
+                claimBtn.classList.remove('animate-pulse');
+            }
+
+            playersList.forEach((p, index) => {
+                const isYou = p.username === currentUser;
+                const tr = document.createElement('tr');
+                tr.className = `border-b border-amber-100 ${isYou ? 'bg-amber-50 font-bold text-amber-900' : 'text-slate-700'}`;
+
+                let rankBadge = `#${index + 1}`;
+                if (index === 0) rankBadge = '🥇';
+                if (index === 1) rankBadge = '🥈';
+                if (index === 2) rankBadge = '🥉';
+
+                tr.innerHTML = `
+                    <td class="p-1.5 font-bold">${rankBadge}</td>
+                    <td class="p-1.5 flex items-center gap-1">${p.username} ${isYou ? '<span class="text-[8px] bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-black">YOU</span>' : ''}</td>
+                    <td class="p-1.5 text-right font-black text-amber-500">${p.fish}</td>
+                `;
+                container.appendChild(tr);
+            });
+        }
+
+        // Mission Photo Upload Mechanics
+        let activeMissionData = null;
+
+        function openMissionUploadModal(name, rewardFish, rewardEnergy) {
+            activeMissionData = { name, rewardFish, rewardEnergy };
+            document.getElementById('modalMissionName').innerText = `Mission: ${name}`;
+            document.getElementById('photoPreview').classList.add('hidden');
+            document.getElementById('uploadPlaceholder').classList.remove('hidden');
+            document.getElementById('photoModal').classList.remove('hidden');
+        }
+
+        function triggerFileSelect() {
+            document.getElementById('photoFileInput').click();
+        }
+
+        function handlePhotoUpload(e) {
+            const file = e.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function(event) {
+                    const img = document.getElementById('photoPreview');
+                    img.src = event.target.result;
+                    img.classList.remove('hidden');
+                    document.getElementById('uploadPlaceholder').classList.add('hidden');
+                };
+                reader.readAsDataURL(file);
             }
         }
 
-        /* CARE ACTIONS */
-        function careAction(type) {
-            if (type === 'feed') {
-                userData.energy = Math.min(100, userData.energy + 20);
-                addExp(10);
-            } else if (type === 'play') {
-                userData.energy = Math.min(100, userData.energy + 10);
-                userData.fish += 2;
-                addExp(15);
-            } else if (type === 'sleep') {
-                userData.energy = Math.min(100, userData.energy + 40);
-                addExp(20);
-            }
-            saveUserData();
-            updateUI();
+        function closePhotoModal() {
+            document.getElementById('photoModal').classList.add('hidden');
+            document.getElementById('photoFileInput').value = '';
         }
 
-        /* ECO PROOF */
-        function submitEcoProof(id, reward) {
-            const input = document.getElementById('file-' + id);
-            if (input.files.length === 0) {
-                alert('Please upload photo proof first!');
+        function submitMissionWithPhoto() {
+            const preview = document.getElementById('photoPreview');
+            if (preview.classList.contains('hidden') || !preview.src) {
+                showToast('Please attach a photo proof first!', '⚠️');
                 return;
             }
-            userData.fish += reward;
-            addExp(25);
-            input.value = '';
+            playSound(600, 'sine', 0.2);
+            gameState.fish += activeMissionData.rewardFish;
+            gameState.energy = Math.min(100, gameState.energy + activeMissionData.rewardEnergy);
             saveUserData();
-            updateUI();
-            alert(`Proof uploaded! Claimed +${reward} Fish Tokens! 🐟`);
+            closePhotoModal();
+            showToast(`Proof Verified! +${activeMissionData.rewardFish} 🐟 & +${activeMissionData.rewardEnergy}⚡`, '🌿');
         }
 
-        /* WEIGHT LOGGING */
-        function logPlayerWeight(e) {
-            e.preventDefault();
-            const w = parseFloat(document.getElementById('input-weight').value);
-            if (w) {
-                userData.weight = w;
-                userData.fish += 5;
-                addExp(15);
-                document.getElementById('input-weight').value = '';
+        // REAL CAT SLEEPING MECHANIC
+        function setCatSleepState(sleep) {
+            isSleeping = sleep;
+            const awakeEyes = document.getElementById('catEyesAwake');
+            const sleepEyes = document.getElementById('catEyesSleep');
+            const zzz = document.getElementById('sleepEffect');
+            const label = document.getElementById('catStatusLabel');
+
+            if (sleep) {
+                awakeEyes.classList.add('hidden');
+                sleepEyes.classList.remove('hidden');
+                zzz.classList.remove('hidden');
+                label.innerText = "😴 Shh... Cat is sleeping soundly!";
+                label.className = "text-xs font-black text-purple-700 mt-1 bg-purple-100 px-3.5 py-1 rounded-full border border-purple-200";
+            } else {
+                awakeEyes.classList.remove('hidden');
+                sleepEyes.classList.add('hidden');
+                zzz.classList.add('hidden');
+                label.innerText = "✨ Tap cat to pet (+1⚡ Energy)";
+                label.className = "text-xs font-black text-amber-700 mt-1 bg-white/90 px-3.5 py-1 rounded-full border border-amber-200";
+            }
+        }
+
+        function petCat(e) {
+            if (isSleeping) {
+                setCatSleepState(false);
+                showToast("Woke up the cat!", "🐱");
+                return;
+            }
+            playSound(750, 'sine', 0.15);
+            gameState.energy = Math.min(100, gameState.energy + 1);
+            saveUserData();
+        }
+
+        function feedCat() {
+            if (isSleeping) setCatSleepState(false);
+            if (gameState.fish < 5) { showToast('Not enough fish! Complete missions first.', '⚠️'); return; }
+            playSound(400, 'triangle', 0.12);
+            gameState.fish -= 5;
+            gameState.energy = Math.min(100, gameState.energy + 15);
+            saveUserData();
+            showToast('Fed the cat! (-5🐟 / +15⚡)', '🍱');
+        }
+
+        function restCat() {
+            playSound(320, 'sine', 0.3);
+            gameState.energy = Math.min(100, gameState.energy + 30);
+            saveUserData();
+            setCatSleepState(true);
+            showToast('Cat went to sleep (+30⚡)', '😴');
+        }
+
+        function openClaimModal() {
+            const db = getUsersDB();
+            const playersList = Object.keys(db).map(u => ({ username: u, fish: db[u].fish || 0 })).sort((a, b) => b.fish - a.fish);
+            
+            if (playersList.length > 0 && playersList[0].username !== currentUser) {
+                showToast("Only Rank #1 verified player can claim!", "🔒");
+                return;
+            }
+            document.getElementById('claimModal').classList.remove('hidden');
+        }
+        function closeClaimModal() { document.getElementById('claimModal').classList.add('hidden'); }
+
+        async function submitWinnerClaim() {
+            const fullName = document.getElementById('claimFullName').value.trim();
+            const phone = document.getElementById('claimPhone').value.trim();
+            const address = document.getElementById('claimAddress').value.trim();
+            const confirmPass = document.getElementById('claimConfirmPassword').value.trim();
+
+            if (!fullName || !phone || !address || !confirmPass) {
+                showToast("Please fill in all claim details!", "⚠️");
+                return;
+            }
+
+            const db = getUsersDB();
+            const passHash = await hashPassword(confirmPass);
+            if (db[currentUser].passwordHash !== passHash) {
+                showToast("Incorrect Account Password!", "❌");
+                return;
+            }
+
+            let winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
+            winners.push({ username: currentUser, fullName, phone, address, claimedAt: new Date().toISOString() });
+            localStorage.setItem('energycat_winners_claims', JSON.stringify(winners));
+
+            playSound(700, 'sine', 0.25);
+            closeClaimModal();
+            showToast("Winner claim verified & submitted successfully! 🎁", "🎉");
+        }
+
+        function openAdminModal() {
+            const db = getUsersDB();
+            document.getElementById('adminTotalUsersCount').innerText = Object.keys(db).length;
+
+            const winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
+            const listContainer = document.getElementById('adminWinnersList');
+            listContainer.innerHTML = '';
+
+            if (winners.length === 0) {
+                listContainer.innerHTML = `<p class="text-slate-400 italic font-bold text-center py-2">No winner claims submitted yet.</p>`;
+            } else {
+                winners.forEach(w => {
+                    const div = document.createElement('div');
+                    div.className = "bg-white p-2 rounded-xl border border-slate-200 shadow-sm";
+                    div.innerHTML = `
+                        <p class="font-black text-amber-900">🏆 ${w.username} (${w.fullName})</p>
+                        <p class="text-[10px] text-slate-600">📞 ${w.phone} | 🏠 ${w.address}</p>
+                    `;
+                    listContainer.appendChild(div);
+                });
+            }
+
+            document.getElementById('adminModal').classList.remove('hidden');
+        }
+        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
+
+        function exportWinnersCSV() {
+            const winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
+            if (winners.length === 0) {
+                showToast("No winner claims data to export!", "⚠️");
+                return;
+            }
+
+            let csvContent = "data:text/csv;charset=utf-8,Username,Full Name,Phone,Address,Claim Date\n";
+            winners.forEach(w => {
+                csvContent += `"${w.username}","${w.fullName}","${w.phone}","${w.address}","${w.claimedAt}"\n`;
+            });
+
+            const encodedUri = encodeURI(csvContent);
+            const link = document.createElement("a");
+            link.setAttribute("href", encodedUri);
+            link.setAttribute("download", `energy_cat_winners_${Date.now()}.csv`);
+            document.body.appendChild(link);
+            link.click();
+            document.body.removeChild(link);
+            showToast("Winners CSV exported successfully!", "📥");
+        }
+
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('text-amber-600', 'bg-amber-100');
+                el.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            activeNav.classList.remove('text-slate-400');
+            activeNav.classList.add('text-amber-600', 'bg-amber-100');
+            playSound(500, 'sine', 0.1);
+        }
+
+        let gameScore = 0;
+        function startMiniGame() {
+            if (isSleeping) setCatSleepState(false);
+            gameScore = 0;
+            document.getElementById('gameScore').innerText = gameScore;
+            document.getElementById('gameStartText').classList.add('hidden');
+            document.getElementById('startGameBtn').disabled = true;
+            
+            spawnFish();
+            setTimeout(() => {
+                document.getElementById('targetFish').classList.add('hidden');
+                document.getElementById('gameStartText').innerText = `Time's up! Earned +${gameScore * 2} 🐟`;
+                document.getElementById('gameStartText').classList.remove('hidden');
+                document.getElementById('startGameBtn').disabled = false;
+                
+                gameState.fish += gameScore * 2;
                 saveUserData();
-                updateUI();
-                alert('Weight saved! Earned +5 Fish Tokens! 🐟');
-            }
+            }, 10000);
         }
 
-        /* WARDROBE SYSTEM */
-        function renderWardrobe() {
-            const grid = document.getElementById('wardrobe-grid');
-            grid.innerHTML = '';
-
-            wardrobeCatalog.forEach(item => {
-                const isEquipped = (userData.equippedHat === item.id) || (userData.equippedApron === item.id);
-
-                const card = document.createElement('div');
-                card.className = `p-3 border rounded-2xl text-center cursor-pointer transition ${isEquipped ? 'border-pink-500 bg-pink-50' : 'border-gray-100 bg-white'}`;
-                card.innerHTML = `
-                    <div class="text-3xl mb-1">${item.icon}</div>
-                    <div class="font-bold text-xs truncate">${item.name}</div>
-                    <div class="text-[10px] text-yellow-600 font-bold mb-2">${item.price} Fish</div>
-                    <button class="w-full text-[10px] font-bold py-1 rounded-lg ${isEquipped ? 'bg-red-400 text-white' : 'bg-pink-500 text-white'}">
-                        ${isEquipped ? 'Unequip' : 'Equip'}
-                    </button>
-                `;
-                card.onclick = () => toggleEquip(item);
-                grid.appendChild(card);
-            });
+        function spawnFish() {
+            const fish = document.getElementById('targetFish');
+            const box = document.getElementById('gameBox').getBoundingClientRect();
+            const x = Math.random() * (box.width - 50);
+            const y = Math.random() * (box.height - 50);
+            fish.style.left = `${x}px`;
+            fish.style.top = `${y}px`;
+            fish.classList.remove('hidden');
         }
 
-        function toggleEquip(item) {
-            if (item.type === 'hat') {
-                if (userData.equippedHat === item.id) userData.equippedHat = null;
-                else {
-                    if (userData.fish >= item.price) userData.equippedHat = item.id;
-                    else return alert('Not enough Fish Tokens!');
-                }
-            } else if (item.type === 'apron') {
-                if (userData.equippedApron === item.id) userData.equippedApron = null;
-                else {
-                    if (userData.fish >= item.price) userData.equippedApron = item.id;
-                    else return alert('Not enough Fish Tokens!');
-                }
-            }
-            saveUserData();
-            updateUI();
+        function catchFish() {
+            playSound(850, 'sine', 0.08);
+            gameScore++;
+            document.getElementById('gameScore').innerText = gameScore;
+            spawnFish();
         }
 
-        /* LEADERBOARD */
-        function renderLeaderboard() {
-            const tbody = document.getElementById('leaderboard-list');
-            tbody.innerHTML = '';
-
-            let players = [];
-            for (let i = 0; i < localStorage.length; i++) {
-                const key = localStorage.key(i);
-                if (key.startsWith('sm_user_')) {
-                    players.push(JSON.parse(localStorage.getItem(key)));
-                }
-            }
-
-            players.sort((a, b) => b.fish - a.fish);
-
-            players.forEach((p, idx) => {
-                const tr = document.createElement('tr');
-                tr.innerHTML = `
-                    <td class="py-2 text-gray-400">#${idx + 1}</td>
-                    <td class="py-2">${p.username} ${p.username === currentUser ? '⭐' : ''}</td>
-                    <td class="py-2">${p.weight ? p.weight + ' kg' : '--'}</td>
-                    <td class="py-2 text-yellow-600">${p.fish} 🐟</td>
-                `;
-                tbody.appendChild(tr);
-            });
-        }
-
-        /* NAVIGATION TABS */
-        function switchPage(pageNum) {
-            document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
-            document.getElementById('view-page' + pageNum).classList.remove('hidden');
-
-            for (let i = 1; i <= 4; i++) {
-                const navBtn = document.getElementById('nav-p' + i);
-                if (i === pageNum) {
-                    navBtn.className = "text-pink-600 flex flex-col items-center";
-                } else {
-                    navBtn.className = "text-gray-400 flex flex-col items-center";
-                }
-            }
+        // Init App Session
+        const sessionUser = localStorage.getItem('energycat_current_session');
+        if (sessionUser && getUsersDB()[sessionUser]) {
+            currentUser = sessionUser;
+            document.getElementById('authModal').classList.add('hidden');
+            loadUserData();
+        } else {
+            document.getElementById('authModal').classList.remove('hidden');
         }
     </script>
 </body>
