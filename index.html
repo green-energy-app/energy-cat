@@ -1,14 +1,14 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat 3D - Kawaii Dress-Up & Growth Studio</title>
+    <title>Energy Cat - Kawaii Dress-Up & Weight Studio</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Mitr:wght@400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Fredoka', 'Quicksand', sans-serif; }
+        * { font-family: 'Mitr', 'Fredoka', sans-serif; }
 
         body {
             background: radial-gradient(circle at 50% 30%, #FFE5EC 0%, #FFC2D1 50%, #B5FFFC 100%);
@@ -20,7 +20,7 @@
         /* Claymorphism Styling */
         .clay-card {
             background: rgba(255, 255, 255, 0.95);
-            border-radius: 44px;
+            border-radius: 40px;
             box-shadow: 
                 0 25px 50px -12px rgba(255, 182, 193, 0.5),
                 inset 0 4px 12px rgba(255, 255, 255, 1),
@@ -30,19 +30,19 @@
 
         .clay-inner {
             background: linear-gradient(180deg, #FFFDF9 0%, #FFF5F7 100%);
-            border-radius: 36px;
+            border-radius: 32px;
             box-shadow: 
                 inset 0 6px 16px rgba(251, 113, 133, 0.15),
                 inset 0 -6px 12px rgba(255, 255, 255, 0.9);
-            border: 3.5px solid #FFE4E6;
+            border: 3px solid #FFE4E6;
         }
 
         .clay-btn {
-            border-radius: 24px;
+            border-radius: 20px;
             transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
             box-shadow: 
-                0 8px 0 0 rgba(225, 29, 72, 0.25),
-                0 12px 20px -4px rgba(244, 63, 94, 0.3),
+                0 6px 0 0 rgba(225, 29, 72, 0.25),
+                0 10px 16px -4px rgba(244, 63, 94, 0.3),
                 inset 0 3px 6px rgba(255, 255, 255, 0.9);
         }
         .clay-btn:hover {
@@ -50,33 +50,39 @@
             filter: brightness(1.05);
         }
         .clay-btn:active {
-            transform: translateY(5px);
+            transform: translateY(4px);
             box-shadow: 
-                0 3px 0 0 rgba(225, 29, 72, 0.25),
+                0 2px 0 0 rgba(225, 29, 72, 0.25),
                 inset 0 2px 4px rgba(0, 0, 0, 0.1);
         }
 
         .glass-modal {
             background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(14px);
+            backdrop-filter: blur(12px);
         }
 
-        /* Dynamic Animations */
+        /* Animations */
         @keyframes breathe {
             0%, 100% { transform: translateY(0) scale(1, 1); }
-            50% { transform: translateY(-8px) scale(1.03, 0.97); }
+            50% { transform: translateY(-6px) scale(1.02, 0.98); }
         }
-        .animate-breathe { animation: breathe 3s ease-in-out infinite; }
+        .animate-breathe { animation: breathe 3.5s ease-in-out infinite; }
 
         @keyframes tailWag {
             0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(18deg); }
+            50% { transform: rotate(16deg); }
         }
         .animate-tail { transform-origin: 155px 165px; animation: tailWag 2s ease-in-out infinite; }
 
+        @keyframes catBlink {
+            0%, 90%, 100% { transform: scaleY(1); }
+            95% { transform: scaleY(0.1); }
+        }
+        .eye-blink { transform-origin: center 82px; animation: catBlink 4s infinite; }
+
         @keyframes floatHeart {
             0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) translateY(0); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4) translateY(-80px); }
+            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4) translateY(-70px); }
         }
         .heart-pop {
             position: absolute;
@@ -88,124 +94,162 @@
 
         @keyframes zzzFloat {
             0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
-            50% { opacity: 1; transform: translate(16px, -22px) scale(1.2); }
-            100% { opacity: 0; transform: translate(32px, -45px) scale(0.8); }
+            50% { opacity: 1; transform: translate(14px, -18px) scale(1.1); }
+            100% { opacity: 0; transform: translate(28px, -38px) scale(0.8); }
         }
         .animate-zzz { animation: zzzFloat 2.4s infinite ease-in-out; }
-
-        /* Eye Blink Animation */
-        @keyframes catBlink {
-            0%, 90%, 100% { transform: scaleY(1); }
-            95% { transform: scaleY(0.1); }
-        }
-        .eye-blink {
-            transform-origin: center 82px;
-            animation: catBlink 4s infinite;
-        }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
 
         @keyframes popIn {
-            from { opacity: 0; transform: scale(0.96) translateY(8px); }
+            from { opacity: 0; transform: scale(0.96) translateY(6px); }
             to { opacity: 1; transform: scale(1) translateY(0); }
         }
 
-        ::-webkit-scrollbar { width: 8px; }
+        ::-webkit-scrollbar { width: 6px; }
         ::-webkit-scrollbar-track { background: #FFF1F2; border-radius: 10px; }
         ::-webkit-scrollbar-thumb { background: #FB7185; border-radius: 10px; }
     </style>
 </head>
-<body class="flex justify-center items-center min-h-screen p-3 md:p-6">
+<body class="flex justify-center items-center min-h-screen p-2 md:p-6">
 
     <!-- Toast Notification -->
-    <div id="toastNotification" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-6">
-        <div class="bg-slate-900/95 text-white px-7 py-3.5 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-3 font-extrabold text-sm tracking-wide">
-            <span id="toastIcon" class="text-2xl">✨</span>
-            <span id="toastMessage">Notification</span>
+    <div id="toastNotification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-6">
+        <div class="bg-slate-900/95 text-white px-6 py-3 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-2.5 font-bold text-xs md:text-sm tracking-wide">
+            <span id="toastIcon" class="text-xl">✨</span>
+            <span id="toastMessage">แจ้งเตือน</span>
         </div>
     </div>
 
-    <!-- Main Game Container -->
-    <div class="clay-card w-full max-w-md h-[860px] flex flex-col justify-between relative z-10 overflow-hidden p-5 border-4 border-white">
+    <!-- AUTH MODAL (LOGIN / REGISTER) -->
+    <div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-sm flex flex-col gap-4 shadow-2xl border-4 border-pink-300">
+            <div class="text-center">
+                <span class="text-5xl inline-block animate-bounce">🐱</span>
+                <h2 class="text-xl font-black text-rose-600 mt-2">Energy Cat Studio</h2>
+                <p class="text-xs font-bold text-slate-500">ลงชื่อเข้าใช้เพื่อสะสมน้ำหนักและแต่งตัวน้องแมว</p>
+            </div>
+
+            <!-- Tabs -->
+            <div class="flex bg-rose-100 p-1 rounded-2xl">
+                <button onclick="switchAuthTab('login')" id="authTabLogin" class="w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition">เข้าสู่ระบบ</button>
+                <button onclick="switchAuthTab('register')" id="authTabRegister" class="w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition">สมัครสมาชิก</button>
+            </div>
+
+            <!-- Login Form -->
+            <form id="loginForm" onsubmit="handleLogin(event)" class="space-y-3">
+                <div>
+                    <label class="text-xs font-black text-slate-700">ชื่อผู้ใช้งาน (Username)</label>
+                    <input type="text" id="loginUsername" required placeholder="ป้อนชื่อผู้ใช้" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                </div>
+                <div>
+                    <label class="text-xs font-black text-slate-700">รหัสผ่าน (Password)</label>
+                    <input type="password" id="loginPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                </div>
+                <button type="submit" class="clay-btn w-full bg-rose-500 text-white font-black py-2.5 text-xs border-2 border-white mt-2">เข้าสู่ระบบ 🐾</button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="registerForm" onsubmit="handleRegister(event)" class="space-y-3 hidden">
+                <div>
+                    <label class="text-xs font-black text-slate-700">ชื่อผู้ใช้งาน (Username)</label>
+                    <input type="text" id="regUsername" required placeholder="ตั้งชื่อผู้ใช้" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                </div>
+                <div>
+                    <label class="text-xs font-black text-slate-700">ชื่อน้องแมว (Cat Name)</label>
+                    <input type="text" id="regCatName" required placeholder="ตั้งชื่อแมวของคุณ" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                </div>
+                <div>
+                    <label class="text-xs font-black text-slate-700">รหัสผ่าน (Password)</label>
+                    <input type="password" id="regPassword" required placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 text-xs font-bold mt-1 focus:outline-none focus:border-rose-400">
+                </div>
+                <button type="submit" class="clay-btn w-full bg-emerald-500 text-white font-black py-2.5 text-xs border-2 border-white mt-2">สร้างบัญชีใหม่ ✨</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- MAIN GAME CONTAINER -->
+    <div class="clay-card w-full max-w-md h-[840px] flex flex-col justify-between relative z-10 overflow-hidden p-4 border-4 border-white">
         
         <!-- Header Bar -->
-        <div class="bg-gradient-to-r from-rose-200 via-pink-200 to-amber-100 p-3.5 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-3xl shadow-md border-2 border-pink-200 animate-bounce">
+        <div class="bg-gradient-to-r from-rose-200 via-pink-200 to-amber-100 p-3 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-2.5">
+                <div class="w-10 h-10 rounded-2xl bg-white flex items-center justify-center text-2xl shadow-md border-2 border-pink-200">
                     🐱
                 </div>
                 <div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] tracking-widest font-black text-rose-600 uppercase bg-white/80 px-2 py-0.5 rounded-full border border-rose-200">AGENT</span>
-                        <span id="totalUsersBadge" class="text-[10px] font-black bg-rose-500 text-white px-2.5 py-0.5 rounded-full shadow-sm">👥 1</span>
+                    <div class="flex items-center gap-1">
+                        <span id="displayUser" class="text-xs font-black text-slate-800">Agent</span>
+                        <button onclick="logout()" class="text-[10px] font-black text-rose-600 hover:underline ml-1">(ออกจากระบบ)</button>
                     </div>
-                    <div class="text-sm font-black text-slate-800 flex items-center gap-1.5 mt-0.5">
-                        <span id="displayUser">Guest Agent</span>
-                        <button onclick="logoutUser()" class="text-xs text-rose-600 hover:text-rose-800 font-extrabold underline ml-1">Logout</button>
+                    <div class="text-[10px] font-black text-purple-700">
+                        แมว: <span id="displayCatName" class="text-rose-600">น้องส้ม</span>
                     </div>
                 </div>
             </div>
             
-            <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border-2 border-rose-300 shadow-sm">
-                <span class="text-2xl animate-pulse">🐟</span>
-                <span id="fishCount" class="text-base font-black text-rose-600 tracking-tight">100</span>
+            <div class="flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-2xl border-2 border-rose-300 shadow-sm">
+                <span class="text-xl">🐟</span>
+                <span id="fishCount" class="text-sm font-black text-rose-600">100</span>
             </div>
         </div>
 
         <!-- MAIN CONTENT AREA -->
-        <div class="flex-grow overflow-y-auto py-3">
+        <div class="flex-grow overflow-y-auto py-2.5">
             
-            <!-- PAGE 1: HOME (CAT CARE & GROWTH) -->
-            <div id="tab-home" class="tab-content active space-y-3">
+            <!-- PAGE 1: HOME (CAT CARE & WEIGHT GROWTH) -->
+            <div id="tab-home" class="tab-content active space-y-2.5">
                 
-                <!-- Cat Level & Growth Progress Bar -->
-                <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 border-3 border-purple-300 rounded-3xl p-3 shadow-sm">
+                <!-- Weight & Level Banner -->
+                <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 border-2 border-purple-300 rounded-3xl p-2.5 shadow-sm">
                     <div class="flex justify-between items-center mb-1">
                         <div class="flex items-center gap-1.5">
-                            <span class="text-sm font-black bg-purple-600 text-white px-2.5 py-0.5 rounded-full shadow-sm" id="catLevelBadge">LVL 1</span>
-                            <span class="text-xs font-black text-purple-900 tracking-wider" id="catTitleText">KITTEN</span>
+                            <span class="text-xs font-black bg-purple-600 text-white px-2.5 py-0.5 rounded-full shadow-sm" id="catLevelBadge">LVL 1</span>
+                            <span class="text-xs font-black text-purple-900" id="catWeightBadge">⚖️ 2.00 kg</span>
                         </div>
-                        <span id="expText" class="text-xs font-black bg-white text-purple-700 px-2.5 py-0.5 rounded-full border border-purple-300">0/50 EXP</span>
+                        <span id="expText" class="text-[10px] font-black bg-white text-purple-700 px-2 py-0.5 rounded-full border border-purple-300">0/50 EXP</span>
                     </div>
-                    <div class="w-full bg-purple-200 h-3.5 rounded-full overflow-hidden p-0.5 border border-purple-300">
+                    <div class="w-full bg-purple-200 h-3 rounded-full overflow-hidden p-0.5 border border-purple-300">
                         <div id="expBar" class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
                     </div>
                 </div>
 
-                <!-- Energy Progress Bar -->
-                <div class="bg-white border-3 border-rose-300 rounded-3xl p-3 shadow-sm">
+                <!-- Energy Bar -->
+                <div class="bg-white border-2 border-rose-300 rounded-3xl p-2.5 shadow-sm">
                     <div class="flex justify-between items-center mb-1">
-                        <span class="text-xs font-black text-rose-700 flex items-center gap-1.5 tracking-wider">
-                            <span class="text-base">⚡</span> CAT ENERGY
+                        <span class="text-xs font-black text-rose-700 flex items-center gap-1">
+                            <span>⚡</span> พลังงาน (ลด 1 ทุก 3 น.)
                         </span>
-                        <span id="energyText" class="text-xs font-black bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded-full border border-rose-300">100/100</span>
+                        <span id="energyText" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full border border-rose-300">100/100</span>
                     </div>
-                    <div class="w-full bg-rose-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-rose-200 shadow-inner">
+                    <div class="w-full bg-rose-100 h-3 rounded-full overflow-hidden p-0.5 border border-rose-200">
                         <div id="energyBar" class="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
                     </div>
                 </div>
 
-                <!-- Kawaii 3D Cat Stage Screen -->
-                <div id="catStage" class="relative clay-inner p-2 flex flex-col items-center justify-center border-3 border-pink-200 h-[310px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
-                    
-                    <!-- Decorative Background Elements -->
-                    <div class="absolute top-3 left-4 text-2xl opacity-80">☁️</div>
-                    <div class="absolute top-4 right-5 text-2xl opacity-80">✨</div>
-                    <div class="absolute bottom-10 left-5 text-2xl opacity-80">🥛</div>
-                    <div class="absolute bottom-8 right-6 text-2xl opacity-80">🐟</div>
+                <!-- Low Energy Warning Banner -->
+                <div id="sadWarningBanner" class="hidden bg-amber-100 border-2 border-amber-400 text-amber-900 px-3 py-1.5 rounded-2xl text-[11px] font-black flex items-center gap-2">
+                    <span class="text-lg">😿</span> พลังงานต่ำกว่า 20%! น้องแมวหิวและหงอยแล้ว รีบให้อาหารหรือพักผ่อนเร็วจ้า
+                </div>
 
-                    <!-- Sleep Zzz FX -->
+                <!-- Kawaii Cat Stage Screen -->
+                <div id="catStage" class="relative clay-inner p-2 flex flex-col items-center justify-center border-2 border-pink-200 h-[300px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
+                    
+                    <div class="absolute top-3 left-4 text-xl opacity-70">☁️</div>
+                    <div class="absolute top-4 right-5 text-xl opacity-70">✨</div>
+
+                    <!-- Sleep FX -->
                     <div id="sleepEffect" class="hidden absolute top-6 right-12 z-20 pointer-events-none">
-                        <span class="text-3xl font-black text-indigo-500 animate-zzz inline-block">Zzz...</span>
+                        <span class="text-2xl font-black text-indigo-500 animate-zzz inline-block">Zzz...</span>
                     </div>
 
-                    <!-- CAT CONTAINER WITH DYNAMIC GROWTH SCALE -->
+                    <!-- CAT SVG WRAPPER -->
                     <div id="catScaleWrapper" class="relative flex items-center justify-center transition-all duration-500 transform scale-100">
                         <div class="animate-breathe relative flex items-center justify-center z-10 w-[230px] h-[230px]">
                             
-                            <!-- ORIGINAL KAWAII 3D CAT SVG -->
-                            <svg width="230" height="230" viewBox="0 0 200 200" class="drop-shadow-2xl">
+                            <!-- ORIGINAL KAWAII CAT SVG -->
+                            <svg width="230" height="230" viewBox="0 0 200 200" class="drop-shadow-xl">
                                 <defs>
                                     <radialGradient id="catBody3D" cx="35%" cy="30%" r="70%">
                                         <stop offset="0%" stop-color="#FFFFFF"/>
@@ -222,14 +266,13 @@
                                 <g class="animate-tail">
                                     <path d="M 140 145 C 175 140, 185 105, 170 85 C 158 70, 145 88, 152 105 C 158 118, 142 135, 132 138 Z" 
                                           fill="#FCB584" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" />
-                                    <path d="M 160 92 Q 165 98 158 105" stroke="#5C2C16" stroke-width="4" stroke-linecap="round" fill="none"/>
                                 </g>
 
-                                <!-- Feet Layer -->
+                                <!-- Feet -->
                                 <ellipse cx="65" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
                                 <ellipse cx="135" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
 
-                                <!-- Body Shell -->
+                                <!-- Body -->
                                 <path d="M 50 120 C 42 155, 45 172, 65 172 C 85 172, 115 172, 135 172 C 155 172, 158 155, 150 120 Z" 
                                       fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
                                 <ellipse cx="100" cy="148" rx="28" ry="20" fill="#FFFFFF" opacity="0.9"/>
@@ -250,362 +293,389 @@
                                 <path d="M 35 80 C 30 60, 45 35, 62 34 C 52 55, 55 70, 58 82 Z" fill="#FB923C"/>
 
                                 <!-- Whiskers -->
-                                <path d="M 22 82 L 42 85 M 18 92 L 40 92 M 22 102 L 43 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
-                                <path d="M 178 82 L 158 85 M 182 92 L 160 92 M 178 102 L 157 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M 22 82 L 42 85 M 18 92 L 40 92" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
+                                <path d="M 178 82 L 158 85 M 182 92 L 160 92" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
 
-                                <!-- Awake Eyes & Face -->
+                                <!-- AWAKE / HAPPY EYES -->
                                 <g id="catEyesAwake">
                                     <g class="eye-blink">
                                         <circle cx="72" cy="82" r="11" fill="#3B170B"/>
                                         <circle cx="69" cy="78" r="4" fill="#FFFFFF"/>
-                                        <circle cx="75" cy="85" r="2" fill="#FFFFFF"/>
-                                        
                                         <circle cx="128" cy="82" r="11" fill="#3B170B"/>
                                         <circle cx="125" cy="78" r="4" fill="#FFFFFF"/>
-                                        <circle cx="131" cy="85" r="2" fill="#FFFFFF"/>
                                     </g>
-
                                     <ellipse cx="58" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
                                     <ellipse cx="142" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
-
                                     <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
                                     <path d="M 92 92 Q 100 100 100 92 Q 100 100 108 92" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
                                 </g>
 
-                                <!-- Sleeping Eyes -->
+                                <!-- SAD / LOW ENERGY EYES (<20%) -->
+                                <g id="catEyesSad" class="hidden">
+                                    <path d="M 62 88 Q 72 78 82 88" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <path d="M 118 88 Q 128 78 138 88" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
+                                    <path d="M 60 74 L 75 78" stroke="#5C2C16" stroke-width="3" stroke-linecap="round"/>
+                                    <path d="M 140 74 L 125 78" stroke="#5C2C16" stroke-width="3" stroke-linecap="round"/>
+                                    <path d="M 94 96 Q 100 90 106 96" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
+                                    <path d="M 142 86 C 146 92, 142 98, 140 98 C 138 98, 138 92, 142 86 Z" fill="#60A5FA"/>
+                                </g>
+
+                                <!-- SLEEPING EYES -->
                                 <g id="catEyesSleep" class="hidden">
                                     <path d="M 62 84 Q 72 94 82 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
                                     <path d="M 118 84 Q 128 94 138 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
-                                    <ellipse cx="58" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
-                                    <ellipse cx="142" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
+                                    <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
                                     <path d="M 95 92 Q 100 96 105 92" stroke="#5C2C16" stroke-width="3" fill="none" stroke-linecap="round"/>
                                 </g>
                             </svg>
 
-                            <!-- OVERLAY CLOTHES -->
-                            <div class="cat-outfit-container absolute inset-0 pointer-events-none flex items-center justify-center">
+                            <!-- OVERLAY CLOTHES (HEAD ACCESSORIES & FRONT APRON) -->
+                            <div class="absolute inset-0 pointer-events-none flex items-center justify-center">
                                 <div id="slot-head" class="absolute inset-0 flex items-center justify-center"></div>
-                                <div id="slot-outfit" class="absolute inset-0 flex items-center justify-center"></div>
-                                <div id="slot-shoes" class="absolute inset-0 flex items-center justify-center"></div>
+                                <div id="slot-apron" class="absolute inset-0 flex items-center justify-center"></div>
                             </div>
                         </div>
                     </div>
 
-                    <p id="catStatusLabel" class="text-xs font-black text-rose-600 mt-1 bg-white px-4 py-1.5 rounded-full border-2 border-rose-300 shadow-md z-10 tracking-wide">
-                        ✨ TAP TO PET (+1⚡ / +2 EXP)
+                    <p id="catStatusLabel" class="text-[11px] font-black text-rose-600 mt-1 bg-white px-3.5 py-1 rounded-full border border-rose-300 shadow-sm z-10">
+                        ✨ ลูบตัวน้อง (+1⚡ / +2 EXP)
                     </p>
                 </div>
 
                 <!-- Action Buttons -->
-                <div class="grid grid-cols-2 gap-3 pt-0.5">
-                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 text-white font-black py-3 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
-                        <span class="text-xl">🍱</span> FEED (-5🐟 / +15⚡ / +10 EXP)
+                <div class="grid grid-cols-2 gap-2.5 pt-1">
+                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 to-orange-400 text-white font-black py-2.5 px-2 border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-md">
+                        <span class="text-lg">🍱</span> ให้อาหาร (-5🐟 / +0.15kg)
                     </button>
-                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-500 text-white font-black py-3 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
-                        <span class="text-xl">😴</span> REST (+30⚡ / +15 EXP)
+                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-black py-2.5 px-2 border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-md">
+                        <span class="text-lg">😴</span> พักผ่อน (+30⚡ / +0.05kg)
                     </button>
                 </div>
             </div>
 
-            <!-- PAGE 2: MISSIONS -->
-            <div id="tab-missions" class="tab-content space-y-3.5">
-                <div class="bg-gradient-to-br from-emerald-100 via-teal-100 to-emerald-200 border-3 border-emerald-300 rounded-3xl p-4 shadow-sm">
+            <!-- PAGE 2: ECO MISSIONS -->
+            <div id="tab-missions" class="tab-content space-y-3">
+                <div class="bg-gradient-to-br from-emerald-100 to-teal-100 border-2 border-emerald-300 rounded-3xl p-3.5 shadow-sm">
                     <div class="flex items-center gap-2 mb-1">
                         <span class="text-2xl">🌱</span>
-                        <p class="text-sm font-black text-emerald-950 uppercase tracking-wide">Eco Missions (Photo Proof)</p>
+                        <p class="text-xs font-black text-emerald-950 uppercase">ภารกิจประหยัดพลังงาน (แนบรูปถ่าย)</p>
                     </div>
-                    <p class="text-xs font-extrabold text-emerald-800 mb-3.5">Complete real-world eco tasks to earn fish & EXP!</p>
+                    <p class="text-[11px] font-extrabold text-emerald-800 mb-3">ทำภารกิจในชีวิตจริงแล้วแนบรูปถ่ายเพื่อรับปลาและพลังงาน!</p>
 
-                    <div class="space-y-3 text-xs font-black">
-                        <button onclick="openMissionUploadModal('Turn off lights / monitor', 15, 20)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2 text-xs">💡 Turn Off Unused Lights</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+15🐟 / +20⚡</span>
+                    <div class="space-y-2 text-xs font-black">
+                        <button onclick="openMissionUploadModal('ปิดไฟเมื่อไม่ใช้งาน', 15, 20)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span>💡 ปิดไฟ/จอคอมที่ไม่ใช้</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+15🐟 / +20⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('Turn off AC when leaving room', 20, 30)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2 text-xs">❄️ Turn Off Air Conditioner</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+20🐟 / +30⚡</span>
+                        <button onclick="openMissionUploadModal('ปิดเครื่องปรับอากาศก่อนออกจากห้อง', 20, 30)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span>❄️ ปิดแอร์เมื่อออกนอกห้อง</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+20🐟 / +30⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('Unplug idle electronics', 10, 15)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2 text-xs">🔌 Unplug Idle Electronics</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+10🐟 / +15⚡</span>
+                        <button onclick="openMissionUploadModal('ถอดปลั๊กเครื่องใช้ไฟฟ้า', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span>🔌 ถอดปลั๊กไฟที่ไม่ใช้</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+10🐟 / +15⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('Take stairs instead of elevator', 10, 15)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2 text-xs">🚶 Take Stairs vs Elevator</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+10🐟 / +15⚡</span>
+                        <button onclick="openMissionUploadModal('ใช้บันไดแทนลิฟต์', 10, 15)" class="clay-btn w-full bg-white text-slate-800 py-3 px-3 border border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span>🚶 เดินขึ้นบันไดแทนลิฟต์</span>
+                            <span class="bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full text-[10px]">+10🐟 / +15⚡</span>
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PAGE 3: DRESS-UP STUDIO -->
-            <div id="tab-dressup" class="tab-content space-y-3.5">
-                <div class="bg-white rounded-3xl p-3.5 border-3 border-pink-300 shadow-sm flex flex-col h-[480px]">
+            <!-- PAGE 3: DRESS-UP STUDIO (HEAD ACCESSORIES & FRONT APRONS) -->
+            <div id="tab-dressup" class="tab-content space-y-3">
+                <div class="bg-white rounded-3xl p-3 border-2 border-pink-300 shadow-sm flex flex-col h-[480px]">
                     <div class="flex justify-between items-center mb-2">
-                        <div class="flex items-center gap-2">
+                        <div class="flex items-center gap-1.5">
                             <span class="text-2xl">🎀</span>
-                            <h3 class="font-black text-sm text-pink-900">Cat Dress-Up & Bow Studio</h3>
+                            <h3 class="font-black text-xs text-pink-900">ห้องแต่งตัวแมว (อย่างละ 10 แบบ)</h3>
                         </div>
-                        <button onclick="resetOutfit()" class="text-[11px] font-black bg-rose-100 text-rose-700 hover:bg-rose-200 px-3 py-1 rounded-full border border-rose-300">
-                            🔄 Strip All
+                        <button onclick="resetOutfit()" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2.5 py-1 rounded-full border border-rose-300">
+                            🔄 ถอดชุดทั้งหมด
                         </button>
                     </div>
 
                     <!-- Category Selector Tabs -->
-                    <div class="grid grid-cols-3 gap-1.5 mb-2.5">
-                        <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300 shadow-sm">
-                            🎀 Bows & Hats
+                    <div class="grid grid-cols-2 gap-2 mb-2">
+                        <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300">
+                            👑 เครื่องหัว (10)
                         </button>
-                        <button onclick="switchDressCategory('outfit')" id="cat-outfit-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200">
-                            👗 Outfits
-                        </button>
-                        <button onclick="switchDressCategory('shoes')" id="cat-shoes-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200">
-                            👟 Shoes
+                        <button onclick="switchDressCategory('apron')" id="cat-apron-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200">
+                            🎽 ผ้ากันเปื้อนปิดหน้า (10)
                         </button>
                     </div>
 
                     <!-- Items Grid Scroll Area -->
                     <div id="dressItemsGrid" class="flex-grow overflow-y-auto grid grid-cols-2 gap-2 p-1">
-                        <!-- Dynamic Item Cards Injected via JS -->
+                        <!-- Dynamic Item Cards -->
                     </div>
                 </div>
             </div>
 
-            <!-- PAGE 4: LEADERBOARD & REWARDS -->
-            <div id="tab-ranks" class="tab-content space-y-3.5">
-                
-                <!-- WINNER BANNER -->
-                <div class="bg-gradient-to-r from-rose-400 via-pink-500 to-amber-400 rounded-3xl p-4 border-3 border-white shadow-lg text-white">
+            <!-- PAGE 4: CAT WEIGHT LEADERBOARD (REAL PLAYERS ONLY) -->
+            <div id="tab-ranks" class="tab-content space-y-3">
+                <div class="bg-gradient-to-r from-rose-400 via-pink-500 to-amber-400 rounded-3xl p-3.5 border-2 border-white shadow-md text-white">
                     <div class="flex items-center gap-2 mb-1">
                         <span class="text-3xl animate-bounce">🏆</span>
                         <div>
-                            <h4 class="text-xs font-black uppercase tracking-wider">Monthly Leaderboard Winner</h4>
-                            <p class="text-[11px] font-extrabold text-rose-100">Rank #1 player wins exclusive rewards!</p>
+                            <h4 class="text-xs font-black uppercase">ตารางแข่งน้ำหนักแมว (Cat Weight)</h4>
+                            <p class="text-[10px] font-extrabold text-rose-100">อันดับวัดจากน้ำหนักแมวที่เลี้ยงดู (เฉพาะผู้เล่นจริง)</p>
                         </div>
-                    </div>
-                    <div class="mt-3 pt-2.5 border-t border-white/30 flex justify-between items-center">
-                        <p class="text-xs font-black bg-black/25 px-3 py-1 rounded-full border border-white/20">
-                            👑 Rank #1: <span id="topPlayerNameDisplay" class="underline">KittyHero99</span>
-                        </p>
-                        <button id="claimRewardBtn" onclick="openClaimModal()" class="clay-btn bg-white text-rose-600 hover:bg-rose-50 text-xs font-black px-3.5 py-2 rounded-2xl shadow-md border-2 border-rose-200">
-                            🎁 CLAIM
-                        </button>
                     </div>
                 </div>
 
                 <!-- Leaderboard Table -->
-                <div class="bg-white rounded-3xl p-3.5 border-3 border-rose-200 shadow-sm">
+                <div class="bg-white rounded-3xl p-3 border-2 border-rose-200 shadow-sm">
                     <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">📊</span>
-                            <p class="text-xs font-black text-rose-900 uppercase tracking-wide">Player & Cat Growth Ranks</p>
-                        </div>
-                        <span id="totalPlayersCount" class="text-xs font-black bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded-full">3 Players</span>
+                        <span class="text-xs font-black text-rose-900">📊 รายชื่อผู้เล่นจริงทั้งหมด</span>
+                        <span id="totalPlayersCount" class="text-[10px] font-black bg-rose-100 text-rose-700 px-2 py-0.5 rounded-full">0 ผู้เล่น</span>
                     </div>
-                    <div class="overflow-y-auto max-h-[170px]">
+                    <div class="overflow-y-auto max-h-[260px]">
                         <table class="w-full text-left text-xs">
                             <thead>
                                 <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[10px] uppercase">
-                                    <th class="p-1.5">Rank</th>
-                                    <th class="p-1.5">Agent & Cat Level</th>
-                                    <th class="p-1.5 text-right">Fish 🐟</th>
+                                    <th class="p-1.5">อันดับ</th>
+                                    <th class="p-1.5">ผู้เล่น & แมว</th>
+                                    <th class="p-1.5 text-right">น้ำหนัก ⚖️</th>
                                 </tr>
                             </thead>
                             <tbody id="leaderboardRows"></tbody>
                         </table>
                     </div>
                 </div>
-
-                <!-- Admin Action Footer -->
-                <div class="text-center pt-1">
-                    <button onclick="openAdminModal()" class="text-xs font-extrabold text-slate-500 hover:text-rose-600 underline">
-                        ⚙️ Admin Panel (Export Winner Data CSV)
-                    </button>
-                </div>
             </div>
 
         </div>
 
         <!-- NAVIGATION BAR -->
-        <div class="bg-white p-2.5 rounded-3xl border-3 border-rose-200 grid grid-cols-4 gap-2 shrink-0 shadow-lg">
-            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2.5 rounded-2xl text-rose-600 bg-rose-100 font-black text-xs">
-                <span class="text-xl">🏠</span> HOME
+        <div class="bg-white p-2 rounded-3xl border-2 border-rose-200 grid grid-cols-4 gap-1.5 shrink-0 shadow-md">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2 rounded-2xl text-rose-600 bg-rose-100 font-black text-[11px]">
+                <span class="text-lg">🏠</span> หน้าแรก
             </button>
-            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
-                <span class="text-xl">🌱</span> MISSIONS
+            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
+                <span class="text-lg">🌱</span> ภารกิจ
             </button>
-            <button onclick="switchTab('dressup')" id="nav-dressup" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
-                <span class="text-xl">👗</span> DRESS-UP
+            <button onclick="switchTab('dressup')" id="nav-dressup" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
+                <span class="text-lg">👗</span> แต่งตัว
             </button>
-            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
-                <span class="text-xl">🏆</span> RANKS
+            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
+                <span class="text-lg">🏆</span> อันดับ
             </button>
         </div>
 
     </div>
 
-    <!-- Hidden File Input for Mission Photo Proof -->
+    <!-- Hidden File Input for Mission Upload -->
     <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
 
-    <!-- MODAL 1: PHOTO PROOF UPLOAD -->
+    <!-- PHOTO PROOF MODAL -->
     <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3.5 shadow-2xl border-4 border-emerald-300">
-            <h3 class="font-black text-base text-slate-800">📸 Attach Photo Proof</h3>
-            <p id="modalMissionName" class="text-xs font-black text-emerald-800 bg-emerald-50 p-3 rounded-2xl border border-emerald-200">Mission</p>
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-emerald-300">
+            <h3 class="font-black text-sm text-slate-800">📸 แนบรูปถ่ายยืนยันภารกิจ</h3>
+            <p id="modalMissionName" class="text-xs font-black text-emerald-800 bg-emerald-50 p-2.5 rounded-xl border border-emerald-200">ภารกิจ</p>
             
-            <div onclick="triggerFileSelect()" class="w-full h-44 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
+            <div onclick="triggerFileSelect()" class="w-full h-40 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
                 <img id="photoPreview" class="w-full h-full object-cover hidden" />
-                <div id="uploadPlaceholder" class="text-center p-3">
-                    <span class="text-4xl">📷</span>
-                    <p class="text-xs font-black text-emerald-700 mt-1">Tap to select photo</p>
+                <div id="uploadPlaceholder" class="text-center p-2">
+                    <span class="text-3xl">📷</span>
+                    <p class="text-xs font-black text-emerald-700 mt-1">กดเพื่อเลือกรูปภาพ</p>
                 </div>
             </div>
 
             <div class="flex gap-2">
-                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-3 rounded-2xl">Cancel</button>
-                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white">Submit Proof</button>
+                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2.5 rounded-xl">ยกเลิก</button>
+                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-2.5 rounded-xl border-2 border-white">ส่งรูปถ่าย</button>
             </div>
         </div>
     </div>
 
-    <!-- MODAL 2: CLAIM REWARD -->
-    <div id="claimModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-rose-300">
-            <div class="text-center">
-                <span class="text-4xl">👑🎁</span>
-                <h3 class="font-black text-base text-rose-600 mt-1">Winner Claim Form</h3>
-                <p class="text-xs font-bold text-slate-500">Exclusive for Verified Rank #1 Player</p>
-            </div>
-
-            <div class="space-y-2 text-xs font-black">
-                <div>
-                    <label class="text-slate-700">Full Name</label>
-                    <input type="text" id="claimName" placeholder="Agent Name" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 mt-0.5" />
-                </div>
-                <div>
-                    <label class="text-slate-700">Phone Number</label>
-                    <input type="text" id="claimPhone" placeholder="081-XXX-XXXX" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 mt-0.5" />
-                </div>
-                <div>
-                    <label class="text-slate-700">Shipping Address</label>
-                    <textarea id="claimAddress" rows="2" placeholder="Full address for prize shipment" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 mt-0.5"></textarea>
-                </div>
-            </div>
-
-            <div class="flex gap-2 mt-2">
-                <button onclick="closeClaimModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2.5 rounded-2xl">Cancel</button>
-                <button onclick="submitClaimForm()" class="clay-btn w-1/2 bg-rose-500 text-white text-xs font-black py-2.5 rounded-2xl border-2 border-white">Submit Claim</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL 3: ADMIN PANEL -->
-    <div id="adminModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-slate-700">
-            <div class="text-center">
-                <span class="text-4xl">⚙️</span>
-                <h3 class="font-black text-base text-slate-800 mt-1">Admin Dashboard</h3>
-                <p class="text-xs font-bold text-slate-500">Data Management & CSV Export</p>
-            </div>
-
-            <button onclick="exportLeaderboardCSV()" class="clay-btn w-full bg-indigo-600 text-white text-xs font-black py-3 rounded-2xl border-2 border-white flex justify-center items-center gap-2">
-                📥 Export Winner CSV Dataset
-            </button>
-
-            <button onclick="closeAdminModal()" class="clay-btn w-full bg-slate-200 text-slate-700 text-xs font-black py-2.5 rounded-2xl">
-                Close Panel
-            </button>
-        </div>
-    </div>
-
-    <!-- GAME JAVASCRIPT ENGINE -->
+    <!-- GAME ENGINE JAVASCRIPT -->
     <script>
-        // Game State
-        const state = {
-            username: 'Guest Agent',
-            fish: 100,
-            energy: 100,
-            maxEnergy: 100,
-            exp: 0,
-            maxExp: 50,
-            level: 1,
-            isSleeping: false,
-            outfit: { head: null, outfit: null, shoes: null },
-            activeMission: null,
-            missionPhotoData: null
-        };
+        // Database key for local storage
+        const DB_KEY = 'ENERGY_CAT_ACCOUNTS_V2';
 
+        // 10 HEAD ACCESSORIES & 10 FRONT APRONS (Perfect SVG overlays)
         const dressItems = {
             head: [
-                { id: 'h1', name: 'Red Ribbon', icon: '🎀', html: '<span style="font-size: 50px; position: absolute; top: 15px; left: 50px;">🎀</span>' },
-                { id: 'h2', name: 'Golden Crown', icon: '👑', html: '<span style="font-size: 45px; position: absolute; top: 10px; left: 90px;">👑</span>' },
-                { id: 'h3', name: 'Party Hat', icon: '🎉', html: '<span style="font-size: 45px; position: absolute; top: 10px; left: 90px;">🎉</span>' }
+                { id: 'h1', name: 'โบว์สีแดง', price: 10, icon: '🎀', html: '<span style="font-size: 42px; position: absolute; top: 18px; left: 52px; transform: rotate(-15deg);">🎀</span>' },
+                { id: 'h2', name: 'มงกุฎทอง', price: 20, icon: '👑', html: '<span style="font-size: 38px; position: absolute; top: 12px; left: 81px;">👑</span>' },
+                { id: 'h3', name: 'หมวกปาร์ตี้', price: 15, icon: '🎉', html: '<span style="font-size: 40px; position: absolute; top: 10px; left: 80px;">🎉</span>' },
+                { id: 'h4', name: 'หมวกรับปริญญา', price: 25, icon: '🎓', html: '<span style="font-size: 42px; position: absolute; top: 12px; left: 79px;">🎓</span>' },
+                { id: 'h5', name: 'ดอกไม้สีหวาน', price: 12, icon: '🌺', html: '<span style="font-size: 38px; position: absolute; top: 22px; left: 110px;">🌺</span>' },
+                { id: 'h6', name: 'หูกระต่ายขาว', price: 30, icon: '🐰', html: '<span style="font-size: 44px; position: absolute; top: 5px; left: 78px;">🐰</span>' },
+                { id: 'h7', name: 'หมวกเชฟ', price: 20, icon: '👨‍🍳', html: '<span style="font-size: 42px; position: absolute; top: 8px; left: 79px;">👨‍🍳</span>' },
+                { id: 'h8', name: 'แว่นตากันแดด', price: 18, icon: '🕶️', html: '<span style="font-size: 36px; position: absolute; top: 48px; left: 78px;">🕶️</span>' },
+                { id: 'h9', name: 'วิกผมเทวดา', price: 35, icon: '😇', html: '<span style="font-size: 40px; position: absolute; top: 6px; left: 80px;">😇</span>' },
+                { id: 'h10', name: 'หมวกซานต้า', price: 25, icon: '🎅', html: '<span style="font-size: 42px; position: absolute; top: 8px; left: 82px;">🎅</span>' }
             ],
-            outfit: [
-                { id: 'o1', name: 'Pink Dress', icon: '👗', html: '<span style="font-size: 60px; position: absolute; top: 110px; left: 85px;">👗</span>' },
-                { id: 'o2', name: 'Hero Cape', icon: '🦸‍♀️', html: '<span style="font-size: 60px; position: absolute; top: 105px; left: 85px;">🦸‍♀️</span>' }
-            ],
-            shoes: [
-                { id: 's1', name: 'Red Shoes', icon: '👠', html: '<span style="font-size: 35px; position: absolute; top: 155px; left: 95px;">👠</span>' },
-                { id: 's2', name: 'Sneakers', icon: '👟', html: '<span style="font-size: 35px; position: absolute; top: 155px; left: 95px;">👟</span>' }
+            apron: [
+                { id: 'a1', name: 'ผ้ากันเปื้อน สตอเบอร์รี่', price: 15, icon: '🍓', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FFB6C1; border: 3px solid #E11D48; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🍓</div>' },
+                { id: 'a2', name: 'ผ้ากันเปื้อน โบว์ชมพู', price: 15, icon: '🎀', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FFE4E6; border: 3px solid #FB7185; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🎀</div>' },
+                { id: 'a3', name: 'ผ้ากันเปื้อน เป็ดน้อย', price: 20, icon: '🐥', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FEF08A; border: 3px solid #CA8A04; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🐥</div>' },
+                { id: 'a4', name: 'ผ้ากันเปื้อน หัวใจ', price: 20, icon: '💖', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FCE7F3; border: 3px solid #DB2777; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">💖</div>' },
+                { id: 'a5', name: 'ผ้ากันเปื้อน ยิ้มแจ่มใส', price: 18, icon: '😊', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #BAF7D0; border: 3px solid #16A34A; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">😊</div>' },
+                { id: 'a6', name: 'ผ้ากันเปื้อน ดาวทอง', price: 25, icon: '⭐', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FEF3C7; border: 3px solid #D97706; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">⭐</div>' },
+                { id: 'a7', name: 'ผ้ากันเปื้อน กุหลาบ', price: 22, icon: '🌹', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #FFE4E6; border: 3px solid #E11D48; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🌹</div>' },
+                { id: 'a8', name: 'ผ้ากันเปื้อน รอยเท้าแมว', price: 25, icon: '🐾', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #E0E7FF; border: 3px solid #4F46E5; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🐾</div>' },
+                { id: 'a9', name: 'ผ้ากันเปื้อน แคนดี้', price: 30, icon: '🍬', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #F5D0FE; border: 3px solid #C084FC; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🍬</div>' },
+                { id: 'a10', name: 'ผ้ากันเปื้อน ปลาน้อย', price: 30, icon: '🐟', html: '<div style="position: absolute; top: 118px; left: 70px; width: 60px; height: 42px; background: #CFFAFE; border: 3px solid #0891B2; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.1);">🐟</div>' }
             ]
         };
 
+        // App Current State
+        let currentUser = null;
+        let accounts = {};
         let currentDressCategory = 'head';
+        let activeMission = null;
+        let missionPhotoData = null;
 
-        const leaderboards = [
-            { rank: 1, name: 'KittyHero99', level: 8, fish: 1420 },
-            { rank: 2, name: 'EcoPaws', level: 5, fish: 890 },
-            { rank: 3, name: 'Guest Agent', level: 1, fish: 100 }
-        ];
-
-        // Core Functions
-        function updateUI() {
-            document.getElementById('fishCount').innerText = state.fish;
-            document.getElementById('energyText').innerText = `${state.energy}/${state.maxEnergy}`;
-            document.getElementById('energyBar').style.width = `${(state.energy / state.maxEnergy) * 100}%`;
-            
-            document.getElementById('catLevelBadge').innerText = `LVL ${state.level}`;
-            document.getElementById('expText').innerText = `${state.exp}/${state.maxExp} EXP`;
-            document.getElementById('expBar').style.width = `${(state.exp / state.maxExp) * 100}%`;
-
-            // Cat Growth Scale
-            const scaleFactor = 1 + (state.level - 1) * 0.08;
-            document.getElementById('catScaleWrapper').style.transform = `scale(${scaleFactor})`;
-
-            renderLeaderboard();
-        }
-
-        function showToast(msg, icon = '✨') {
-            const toast = document.getElementById('toastNotification');
-            document.getElementById('toastMessage').innerText = msg;
-            document.getElementById('toastIcon').innerText = icon;
-            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-6');
-            toast.classList.add('opacity-100', 'translate-y-0');
-            
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-6');
-            }, 2500);
-        }
-
-        function addEXP(amount) {
-            state.exp += amount;
-            if (state.exp >= state.maxExp) {
-                state.exp -= state.maxExp;
-                state.level += 1;
-                state.maxExp = Math.floor(state.maxExp * 1.5);
-                showToast(`LEVEL UP! Cat is now Level ${state.level}! 🎉`, '⭐');
+        // Init App & Load Accounts
+        function initStorage() {
+            const data = localStorage.getItem(DB_KEY);
+            if (data) {
+                accounts = JSON.parse(data);
+            } else {
+                accounts = {};
+                saveStorage();
             }
-            updateUI();
         }
 
-        function petCat(e) {
-            if (state.isSleeping) {
-                showToast('Shh... The cat is sleeping!', '😴');
+        function saveStorage() {
+            localStorage.setItem(DB_KEY, JSON.stringify(accounts));
+        }
+
+        // AUTH SYSTEM
+        function switchAuthTab(type) {
+            if (type === 'login') {
+                document.getElementById('loginForm').classList.remove('hidden');
+                document.getElementById('registerForm').classList.add('hidden');
+                document.getElementById('authTabLogin').className = 'w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition';
+                document.getElementById('authTabRegister').className = 'w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition';
+            } else {
+                document.getElementById('loginForm').classList.add('hidden');
+                document.getElementById('registerForm').classList.remove('hidden');
+                document.getElementById('authTabRegister').className = 'w-1/2 py-2 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition';
+                document.getElementById('authTabLogin').className = 'w-1/2 py-2 text-xs font-black rounded-xl text-rose-700 transition';
+            }
+        }
+
+        function handleLogin(e) {
+            e.preventDefault();
+            const u = document.getElementById('loginUsername').value.trim();
+            const p = document.getElementById('loginPassword').value.trim();
+
+            if (!accounts[u] || accounts[u].password !== p) {
+                showToast('ชื่อผู้ใช้หรือรหัสผ่านไม่ถูกต้อง!', '❌');
                 return;
             }
 
-            state.energy = Math.min(state.maxEnergy, state.energy + 1);
+            currentUser = u;
+            document.getElementById('authModal').classList.add('hidden');
+            showToast(`ยินดีต้อนรับกลับ คุณ ${u}!`, '🐱');
+            updateUI();
+        }
+
+        function handleRegister(e) {
+            e.preventDefault();
+            const u = document.getElementById('regUsername').value.trim();
+            const c = document.getElementById('regCatName').value.trim();
+            const p = document.getElementById('regPassword').value.trim();
+
+            if (accounts[u]) {
+                showToast('ชื่อผู้ใช้นี้ถูกใช้งานแล้ว!', '⚠️');
+                return;
+            }
+
+            accounts[u] = {
+                username: u,
+                catName: c,
+                password: p,
+                fish: 100,
+                energy: 100,
+                maxEnergy: 100,
+                exp: 0,
+                maxExp: 50,
+                level: 1,
+                weight: 2.00, // Initial Cat Weight in Kg
+                unlockedItems: [],
+                outfit: { head: null, apron: null }
+            };
+
+            saveStorage();
+            currentUser = u;
+            document.getElementById('authModal').classList.add('hidden');
+            showToast('สร้างบัญชีสำเร็จแล้ว!', '🎉');
+            updateUI();
+        }
+
+        function logout() {
+            currentUser = null;
+            document.getElementById('authModal').classList.remove('hidden');
+            showToast('ออกจากระบบเรียบร้อยแล้ว');
+        }
+
+        // UPDATE UI & CAT STATE
+        function updateUI() {
+            if (!currentUser || !accounts[currentUser]) return;
+            const acc = accounts[currentUser];
+
+            document.getElementById('displayUser').innerText = acc.username;
+            document.getElementById('displayCatName').innerText = acc.catName;
+            document.getElementById('fishCount').innerText = acc.fish;
+
+            document.getElementById('catLevelBadge').innerText = `LVL ${acc.level}`;
+            document.getElementById('catWeightBadge').innerText = `⚖️ ${acc.weight.toFixed(2)} kg`;
+            document.getElementById('expText').innerText = `${acc.exp}/${acc.maxExp} EXP`;
+            document.getElementById('expBar').style.width = `${(acc.exp / acc.maxExp) * 100}%`;
+
+            document.getElementById('energyText').innerText = `${acc.energy}/${acc.maxEnergy}`;
+            document.getElementById('energyBar').style.width = `${(acc.energy / acc.maxEnergy) * 100}%`;
+
+            // Cat Growth Scale based on Weight
+            const scaleFactor = 1 + (acc.weight - 2.00) * 0.05;
+            document.getElementById('catScaleWrapper').style.transform = `scale(${Math.min(scaleFactor, 1.35)})`;
+
+            // Energy Status & Sad Expression Check (<20%)
+            const sadBanner = document.getElementById('sadWarningBanner');
+            const eyesAwake = document.getElementById('catEyesAwake');
+            const eyesSad = document.getElementById('catEyesSad');
+
+            if (acc.energy < 20) {
+                sadBanner.classList.remove('hidden');
+                eyesAwake.classList.add('hidden');
+                eyesSad.classList.remove('hidden');
+            } else {
+                sadBanner.classList.add('hidden');
+                eyesAwake.classList.remove('hidden');
+                eyesSad.classList.add('hidden');
+            }
+
+            renderEquippedOutfit();
+            renderLeaderboard();
+        }
+
+        function addEXP(amount) {
+            const acc = accounts[currentUser];
+            acc.exp += amount;
+            if (acc.exp >= acc.maxExp) {
+                acc.exp -= acc.maxExp;
+                acc.level += 1;
+                acc.maxExp = Math.floor(acc.maxExp * 1.4);
+                showToast(`LEVEL UP! น้องแมวเลเวล ${acc.level} แล้ว! 🎉`, '⭐');
+            }
+            saveStorage();
+            updateUI();
+        }
+
+        // PET, FEED & REST ACTIONS
+        function petCat(e) {
+            const acc = accounts[currentUser];
+            if (acc.energy >= acc.maxEnergy) {
+                showToast('พลังงานเต็มแล้ว ไม่จำเป็นต้องลูบตัวเพิ่ม!', '⚡');
+                return;
+            }
+            acc.energy = Math.min(acc.maxEnergy, acc.energy + 1);
             addEXP(2);
 
             // Pop Heart FX
@@ -619,110 +689,172 @@
         }
 
         function feedCat() {
-            if (state.fish < 5) {
-                showToast('Not enough fish! Complete Eco Missions!', '🐟');
+            const acc = accounts[currentUser];
+
+            if (acc.energy >= acc.maxEnergy) {
+                showToast('พลังงานเต็มแล้ว ไม่จำเป็นต้องกินอาหาร!', '🍱');
                 return;
             }
-            state.fish -= 5;
-            state.energy = Math.min(state.maxEnergy, state.energy + 15);
+            if (acc.fish < 5) {
+                showToast('ปลาไม่พอ! ทำภารกิจถ่ายรูปเพื่อสะสมปลา', '🐟');
+                return;
+            }
+
+            acc.fish -= 5;
+            acc.energy = Math.min(acc.maxEnergy, acc.energy + 15);
+            acc.weight += 0.15; // Increase weight
             addEXP(10);
-            showToast('Yummy! Energy +15, EXP +10', '🍱');
+            showToast('อิ่มอร่อย! พลังงาน +15, น้ำหนัก +0.15kg', '🍱');
+            saveStorage();
             updateUI();
         }
 
         function restCat() {
-            state.isSleeping = true;
+            const acc = accounts[currentUser];
+
+            if (acc.energy >= acc.maxEnergy) {
+                showToast('พลังงานเต็มแล้ว ไม่จำเป็นต้องนอนหลับ!', '😴');
+                return;
+            }
+
             document.getElementById('catEyesAwake').classList.add('hidden');
+            document.getElementById('catEyesSad').classList.add('hidden');
             document.getElementById('catEyesSleep').classList.remove('hidden');
             document.getElementById('sleepEffect').classList.remove('hidden');
-            document.getElementById('catStatusLabel').innerText = '💤 SLEEPING... (+30⚡ / +15 EXP)';
+            document.getElementById('catStatusLabel').innerText = '💤 กำลังพักผ่อน...';
 
             setTimeout(() => {
-                state.isSleeping = false;
-                state.energy = Math.min(state.maxEnergy, state.energy + 30);
+                acc.energy = Math.min(acc.maxEnergy, acc.energy + 30);
+                acc.weight += 0.05;
                 addEXP(15);
-                document.getElementById('catEyesAwake').classList.remove('hidden');
+
                 document.getElementById('catEyesSleep').classList.add('hidden');
                 document.getElementById('sleepEffect').classList.add('hidden');
-                document.getElementById('catStatusLabel').innerText = '✨ TAP TO PET (+1⚡ / +2 EXP)';
-                showToast('Cat woke up fully rested!', '☀️');
+                document.getElementById('catStatusLabel').innerText = '✨ ลูบตัวน้อง (+1⚡ / +2 EXP)';
+
+                showToast('น้องแมวตื่นนอนแล้ว! พลังงาน +30', '☀️');
+                saveStorage();
                 updateUI();
-            }, 3000);
+            }, 2500);
         }
 
-        // Navigation
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('active', 'text-rose-600', 'bg-rose-100');
-                el.classList.add('text-slate-400');
+        // ENERGY DECAY SYSTEM: Reduce 1 energy every 3 minutes
+        setInterval(() => {
+            let changed = false;
+            Object.keys(accounts).forEach(u => {
+                if (accounts[u].energy > 0) {
+                    accounts[u].energy -= 1;
+                    changed = true;
+                }
             });
+            if (changed) {
+                saveStorage();
+                updateUI();
+            }
+        }, 180000); // 3 minutes = 180,000 ms
 
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            const navBtn = document.getElementById(`nav-${tabId}`);
-            navBtn.classList.add('active', 'text-rose-600', 'bg-rose-100');
-            navBtn.classList.remove('text-slate-400');
-
-            if (tabId === 'dressup') renderDressGrid();
-        }
-
-        // Dress Up Engine
+        // DRESS-UP STUDIO & SHOP
         function switchDressCategory(cat) {
             currentDressCategory = cat;
             document.querySelectorAll('.dress-tab-btn').forEach(btn => {
-                btn.classList.remove('bg-pink-500', 'text-white');
-                btn.classList.add('bg-pink-100', 'text-pink-700');
+                btn.className = 'dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2 rounded-xl border border-pink-200';
             });
-            document.getElementById(`cat-${cat}-btn`).classList.add('bg-pink-500', 'text-white');
+            document.getElementById(`cat-${cat}-btn`).className = 'dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2 rounded-xl border border-pink-300';
             renderDressGrid();
         }
 
         function renderDressGrid() {
             const grid = document.getElementById('dressItemsGrid');
             grid.innerHTML = '';
-            
+            const acc = accounts[currentUser];
+
             dressItems[currentDressCategory].forEach(item => {
-                const isEquipped = state.outfit[currentDressCategory] === item.id;
+                const isUnlocked = acc.unlockedItems.includes(item.id);
+                const isEquipped = acc.outfit[currentDressCategory] === item.id;
+
                 const card = document.createElement('div');
-                card.className = `clay-btn p-3 bg-white border-2 ${isEquipped ? 'border-rose-500 bg-rose-50' : 'border-pink-200'} rounded-2xl flex flex-col items-center justify-between cursor-pointer`;
-                card.onclick = () => toggleEquip(currentDressCategory, item);
+                card.className = `clay-btn p-2.5 bg-white border-2 ${isEquipped ? 'border-rose-500 bg-rose-50' : 'border-pink-200'} rounded-2xl flex flex-col items-center justify-between cursor-pointer`;
+                card.onclick = () => handleItemClick(currentDressCategory, item);
+
+                let btnLabel = '';
+                if (isEquipped) btnLabel = '<span class="text-rose-600 font-black">สวมใส่อยู่</span>';
+                else if (isUnlocked) btnLabel = '<span class="text-emerald-600 font-black">กดใส่ชุด</span>';
+                else btnLabel = `<span class="text-amber-600 font-black">ซื้อ 🐟 ${item.price}</span>`;
 
                 card.innerHTML = `
                     <span class="text-3xl my-1">${item.icon}</span>
-                    <span class="text-xs font-black text-slate-800">${item.name}</span>
-                    <span class="text-[10px] font-bold ${isEquipped ? 'text-rose-600' : 'text-slate-400'} mt-1">
-                        ${isEquipped ? 'EQUIPPED' : 'TAP TO WEAR'}
-                    </span>
+                    <span class="text-[11px] font-black text-slate-800">${item.name}</span>
+                    <div class="mt-1 text-[10px]">${btnLabel}</div>
                 `;
                 grid.appendChild(card);
             });
         }
 
-        function toggleEquip(category, item) {
-            const slot = document.getElementById(`slot-${category}`);
-            if (state.outfit[category] === item.id) {
-                state.outfit[category] = null;
-                slot.innerHTML = '';
+        function handleItemClick(category, item) {
+            const acc = accounts[currentUser];
+            const isUnlocked = acc.unlockedItems.includes(item.id);
+            const isEquipped = acc.outfit[category] === item.id;
+
+            if (isEquipped) {
+                // Unequip
+                acc.outfit[category] = null;
+                showToast(`ถอด ${item.name} แล้ว`);
+            } else if (isUnlocked) {
+                // Equip
+                acc.outfit[category] = item.id;
+                showToast(`สวมใส่ ${item.name} ✨`);
             } else {
-                state.outfit[category] = item.id;
-                slot.innerHTML = item.html;
+                // Buy item
+                if (acc.fish < item.price) {
+                    showToast(`ปลาไม่พอ! ต้องการ 🐟 ${item.price}`, '⚠️');
+                    return;
+                }
+                acc.fish -= item.price;
+                acc.unlockedItems.push(item.id);
+                acc.outfit[category] = item.id;
+                showToast(`ปลดล็อกและสวมใส่ ${item.name} แล้ว! 🎉`, '🛍️');
             }
+
+            saveStorage();
+            updateUI();
             renderDressGrid();
+        }
+
+        function renderEquippedOutfit() {
+            const acc = accounts[currentUser];
+            const headSlot = document.getElementById('slot-head');
+            const apronSlot = document.getElementById('slot-apron');
+
+            // Render Head
+            if (acc.outfit.head) {
+                const item = dressItems.head.find(i => i.id === acc.outfit.head);
+                headSlot.innerHTML = item ? item.html : '';
+            } else {
+                headSlot.innerHTML = '';
+            }
+
+            // Render Apron
+            if (acc.outfit.apron) {
+                const item = dressItems.apron.find(i => i.id === acc.outfit.apron);
+                apronSlot.innerHTML = item ? item.html : '';
+            } else {
+                apronSlot.innerHTML = '';
+            }
         }
 
         function resetOutfit() {
-            state.outfit = { head: null, outfit: null, shoes: null };
-            document.getElementById('slot-head').innerHTML = '';
-            document.getElementById('slot-outfit').innerHTML = '';
-            document.getElementById('slot-shoes').innerHTML = '';
-            renderDressGrid();
-            showToast('Stripped all clothes!', '🧹');
+            const acc = accounts[currentUser];
+            acc.outfit = { head: null, apron: null };
+            saveStorage();
+            updateUI();
+            if (currentDressCategory) renderDressGrid();
+            showToast('ถอดชุดทั้งหมดแล้ว!', '🧹');
         }
 
-        // Mission & Photo Upload
+        // MISSION PHOTO PROOF UPLOAD
         function openMissionUploadModal(name, fishReward, energyReward) {
-            state.activeMission = { name, fishReward, energyReward };
-            document.getElementById('modalMissionName').innerText = `Mission: ${name}`;
+            activeMission = { name, fishReward, energyReward };
+            document.getElementById('modalMissionName').innerText = `ภารกิจ: ${name}`;
             document.getElementById('photoModal').classList.remove('hidden');
         }
 
@@ -730,7 +862,7 @@
             document.getElementById('photoModal').classList.add('hidden');
             document.getElementById('photoPreview').classList.add('hidden');
             document.getElementById('uploadPlaceholder').classList.remove('hidden');
-            state.missionPhotoData = null;
+            missionPhotoData = null;
         }
 
         function triggerFileSelect() {
@@ -742,7 +874,7 @@
             if (file) {
                 const reader = new FileReader();
                 reader.onload = function(evt) {
-                    state.missionPhotoData = evt.target.result;
+                    missionPhotoData = evt.target.result;
                     document.getElementById('photoPreview').src = evt.target.result;
                     document.getElementById('photoPreview').classList.remove('hidden');
                     document.getElementById('uploadPlaceholder').classList.add('hidden');
@@ -752,82 +884,81 @@
         }
 
         function submitMissionWithPhoto() {
-            if (!state.missionPhotoData) {
-                showToast('Please attach a photo proof first!', '⚠️');
+            if (!missionPhotoData) {
+                showToast('กรุณาแนบรูปถ่ายก่อนส่งภารกิจ!', '⚠️');
                 return;
             }
-            state.fish += state.activeMission.fishReward;
-            state.energy = Math.min(state.maxEnergy, state.energy + state.activeMission.energyReward);
+            const acc = accounts[currentUser];
+            acc.fish += activeMission.fishReward;
+            acc.energy = Math.min(acc.maxEnergy, acc.energy + activeMission.energyReward);
             addEXP(20);
-            showToast(`Mission Completed! +${state.activeMission.fishReward} 🐟`, '🌱');
+
+            showToast(`สำเร็จภารกิจ! รับ +${activeMission.fishReward} 🐟`, '🌱');
             closePhotoModal();
+            saveStorage();
             updateUI();
         }
 
-        // Leaderboards & Ranks
+        // LEADERBOARD (REAL PLAYERS ONLY - RANKED BY CAT WEIGHT)
         function renderLeaderboard() {
-            const myRank = leaderboards.find(u => u.name === state.username);
-            if (myRank) {
-                myRank.level = state.level;
-                myRank.fish = state.fish;
-            }
-
-            leaderboards.sort((a, b) => b.level - a.level || b.fish - a.fish);
-            leaderboards.forEach((item, index) => item.rank = index + 1);
-
             const tbody = document.getElementById('leaderboardRows');
             tbody.innerHTML = '';
 
-            leaderboards.forEach(row => {
+            // Convert accounts object into array of real players
+            const realPlayers = Object.values(accounts);
+
+            // Sort by Cat Weight descending
+            realPlayers.sort((a, b) => b.weight - a.weight);
+
+            document.getElementById('totalPlayersCount').innerText = `${realPlayers.length} ผู้เล่น`;
+
+            realPlayers.forEach((player, index) => {
+                const rank = index + 1;
                 const tr = document.createElement('tr');
                 tr.className = "border-b border-rose-50 font-extrabold";
                 tr.innerHTML = `
-                    <td class="p-2">${row.rank === 1 ? '👑 #1' : `#${row.rank}`}</td>
-                    <td class="p-2">${row.name} (LVL ${row.level})</td>
-                    <td class="p-2 text-right text-rose-600">${row.fish}</td>
+                    <td class="p-2">${rank === 1 ? '👑 #1' : `#${rank}`}</td>
+                    <td class="p-2">
+                        <div class="text-xs font-black text-slate-800">${player.username}</div>
+                        <div class="text-[10px] text-purple-600">แมว: ${player.catName} (LVL ${player.level})</div>
+                    </td>
+                    <td class="p-2 text-right text-rose-600 font-black">${player.weight.toFixed(2)} kg</td>
                 `;
                 tbody.appendChild(tr);
             });
-
-            document.getElementById('topPlayerNameDisplay').innerText = leaderboards[0].name;
-            document.getElementById('totalPlayersCount').innerText = `${leaderboards.length} Players`;
         }
 
-        // Modals
-        function openClaimModal() { document.getElementById('claimModal').classList.remove('hidden'); }
-        function closeClaimModal() { document.getElementById('claimModal').classList.add('hidden'); }
-        
-        function submitClaimForm() {
-            const name = document.getElementById('claimName').value;
-            if (!name) { showToast('Please enter full name', '⚠️'); return; }
-            showToast('Claim submitted successfully!', '🎁');
-            closeClaimModal();
-        }
-
-        function openAdminModal() { document.getElementById('adminModal').classList.remove('hidden'); }
-        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
-
-        function exportLeaderboardCSV() {
-            let csv = 'Rank,Agent Name,Cat Level,Fish Count\n';
-            leaderboards.forEach(r => {
-                csv += `${r.rank},${r.name},${r.level},${r.fish}\n`;
+        // NAVIGATION TABS
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.className = 'nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]';
             });
-            const blob = new Blob([csv], { type: 'text/csv' });
-            const url = window.URL.createObjectURL(blob);
-            const a = document.createElement('a');
-            a.setAttribute('href', url);
-            a.setAttribute('download', 'leaderboard_winners.csv');
-            a.click();
-            showToast('Downloaded Winner CSV!', '📥');
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            const navBtn = document.getElementById(`nav-${tabId}`);
+            navBtn.className = 'nav-btn active flex flex-col items-center py-2 rounded-2xl text-rose-600 bg-rose-100 font-black text-[11px]';
+
+            if (tabId === 'dressup') renderDressGrid();
         }
 
-        function logoutUser() {
-            showToast('Logged out to Guest Mode');
+        // TOAST NOTIFICATION
+        function showToast(msg, icon = '✨') {
+            const toast = document.getElementById('toastNotification');
+            document.getElementById('toastMessage').innerText = msg;
+            document.getElementById('toastIcon').innerText = icon;
+            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-6');
+            toast.classList.add('opacity-100', 'translate-y-0');
+            
+            setTimeout(() => {
+                toast.classList.remove('opacity-100', 'translate-y-0');
+                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-6');
+            }, 2500);
         }
 
-        // Init Game
+        // STARTUP
         window.onload = () => {
-            updateUI();
+            initStorage();
         };
     </script>
 </body>
