@@ -5,79 +5,81 @@
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Bows & Chest Bibs Studio</title>
   <script src="https://cdn.tailwindcss.com"></script>
-  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
   <style>
     body {
       font-family: 'Fredoka', sans-serif;
-      background-color: #fff0f3;
-    }
-    
-    /* Studio Container Card */
-    .studio-card {
-      background: #ffffff;
-      border: 2px solid #ffe3ec;
-      border-radius: 36px;
-      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.2);
+      background-color: #fffbfa;
     }
 
-    /* Tab Buttons */
-    .tab-btn {
-      background-color: #fff0f5;
-      color: #ff3366;
-      border: 2px solid #ffe0ea;
+    /* Original Curved Studio Card Container */
+    .studio-container {
+      background: #ffffff;
+      border: 2px solid #fff0f3;
+      border-radius: 32px;
+      box-shadow: 0 10px 30px rgba(255, 182, 193, 0.15);
+    }
+
+    /* Category Navigation Buttons */
+    .nav-btn {
       border-radius: 20px;
       font-weight: 700;
       transition: all 0.2s ease;
+      font-size: 15px;
     }
-    .tab-btn.active {
-      background-color: #ff3377 !important;
+    .nav-btn-inactive {
+      background-color: #fff0f5;
+      color: #e03167;
+      border: 1.5px solid #ffe3ec;
+    }
+    .nav-btn-active {
+      background-color: #f1356d !important;
       color: #ffffff !important;
-      border-color: #ff3377 !important;
-      box-shadow: 0 4px 12px rgba(255, 51, 119, 0.3);
+      box-shadow: 0 4px 12px rgba(241, 53, 109, 0.3);
     }
 
-    /* Item Card */
+    /* Strip All Button */
+    .strip-btn {
+      background-color: #ffe8ee;
+      color: #f1356d;
+      border-radius: 18px;
+      font-weight: 700;
+      font-size: 14px;
+      padding: 6px 14px;
+      transition: all 0.2s ease;
+    }
+    .strip-btn:hover {
+      background-color: #ffd6e0;
+    }
+
+    /* Item Card Grid UI */
     .item-card {
       background-color: #f8fafc;
       border: 2px solid #f1f5f9;
       border-radius: 24px;
       transition: all 0.2s ease;
+      min-height: 140px;
     }
     .item-card:hover {
       border-color: #ffb6c1;
       transform: translateY(-2px);
     }
-    .item-card.equipped {
-      border-color: #ff3377;
+    .item-card.selected {
+      border-color: #f1356d;
       background-color: #fff0f5;
     }
 
-    /* Price Badge */
-    .price-badge {
+    /* Fish Coin Badge */
+    .fish-badge {
       background-color: #ffcc00;
       color: #5c3a00;
-      font-weight: 800;
-      border-radius: 20px;
-      padding: 4px 16px;
-      font-size: 14px;
+      font-weight: 700;
+      border-radius: 16px;
+      padding: 2px 14px;
+      font-size: 13px;
       display: inline-flex;
       align-items: center;
       gap: 4px;
-      box-shadow: 0 2px 4px rgba(0,0,0,0.05);
-    }
-
-    /* Strip All Button */
-    .strip-btn {
-      background-color: #ffe6ed;
-      color: #ff1a53;
-      border: 2px solid #ffccd8;
-      border-radius: 20px;
-      font-weight: 700;
-      padding: 6px 16px;
-      transition: all 0.2s ease;
-    }
-    .strip-btn:hover {
-      background-color: #ffd1dc;
     }
 
     /* Custom Scrollbar */
@@ -96,41 +98,38 @@
 </head>
 <body class="min-h-screen flex items-center justify-center p-4">
 
-  <div class="max-w-xl w-full studio-card p-6 md:p-8">
+  <div class="max-w-md w-full studio-container p-6">
     
-    <!-- Top Header Bar -->
-    <div class="flex items-center justify-between mb-6">
+    <!-- Header Bar -->
+    <div class="flex items-center justify-between mb-5">
       <div class="flex items-center gap-2">
         <span class="text-3xl">🎀</span>
-        <h1 class="text-2xl font-bold text-pink-950">Bows & Chest Bibs Studio</h1>
+        <h1 class="text-xl font-bold text-red-950">Bows & Chest Bibs Studio</h1>
       </div>
-      <button onclick="stripAll()" class="strip-btn flex items-center gap-1.5 text-sm">
-        <span class="bg-blue-500 text-white rounded-md p-0.5 text-xs">🔄</span> Strip All
+      <button onclick="stripAll()" class="strip-btn flex items-center gap-1.5">
+        <span class="bg-blue-500 text-white rounded p-0.5 text-xs">🔄</span> Strip All
       </button>
     </div>
 
-    <!-- Category Tabs Navigation -->
-    <div class="grid grid-cols-3 gap-2 mb-6">
-      <button onclick="switchTab('bibs')" id="tab-bibs" class="tab-btn active py-3 px-2 text-center text-sm md:text-base flex items-center justify-center gap-1">
-        🍼 Cute Bibs
-      </button>
-      <button onclick="switchTab('collars')" id="tab-collars" class="tab-btn py-3 px-2 text-center text-sm md:text-base flex items-center justify-center gap-1">
-        🔔 Collars
-      </button>
-      <button onclick="switchTab('hats')" id="tab-hats" class="tab-btn py-3 px-2 text-center text-sm md:text-base flex items-center justify-center gap-1">
+    <!-- Category Tabs -->
+    <div class="grid grid-cols-2 gap-3 mb-5">
+      <button onclick="switchTab('hats')" id="tab-hats" class="nav-btn nav-btn-inactive py-2.5 px-3 flex items-center justify-center gap-2">
         🎀 Bows & Hats
       </button>
+      <button onclick="switchTab('bibs')" id="tab-bibs" class="nav-btn nav-btn-active py-2.5 px-3 flex items-center justify-center gap-2">
+        🍼 Cute Bibs & Collars
+      </button>
     </div>
 
-    <!-- Avatar Character Preview Stage -->
-    <div class="bg-gradient-to-b from-pink-50 to-white rounded-3xl p-4 mb-6 border-2 border-pink-100 flex flex-col items-center justify-center relative min-h-[260px]">
-      <svg id="cat-avatar" viewBox="0 0 300 300" class="w-56 h-56 filter drop-shadow-md">
-        <!-- Cat Body -->
+    <!-- Live Preview Stage -->
+    <div class="bg-gradient-to-b from-pink-50 to-white rounded-3xl p-3 mb-5 border border-pink-100 flex items-center justify-center min-h-[220px]">
+      <svg id="cat-avatar" viewBox="0 0 300 300" class="w-48 h-48 filter drop-shadow-sm">
+        <!-- Body & Paws -->
         <ellipse cx="150" cy="210" rx="60" ry="55" fill="#ffd5b5" stroke="#e08b52" stroke-width="4" />
         <ellipse cx="118" cy="255" rx="16" ry="10" fill="#fff" stroke="#e08b52" stroke-width="3" />
         <ellipse cx="182" cy="255" rx="16" ry="10" fill="#fff" stroke="#e08b52" stroke-width="3" />
 
-        <!-- Cat Head -->
+        <!-- Head -->
         <ellipse cx="150" cy="120" rx="70" ry="55" fill="#ffd5b5" stroke="#e08b52" stroke-width="4" />
         
         <!-- Ears -->
@@ -149,8 +148,8 @@
         <polygon points="150,122 146,117 154,117" fill="#ff8080" />
         <path d="M 143 126 Q 150 132 150 126 Q 150 132 157 126" fill="none" stroke="#2d3748" stroke-width="2" stroke-linecap="round" />
 
-        <!-- ACCESORIES DYNAMIC LAYERS -->
-        <!-- Layer 1: Large Chest Bibs (Covers Front Chest Area) -->
+        <!-- Accessories Layers -->
+        <!-- Layer 1: Large Chest Bibs -->
         <g id="layer-bib"></g>
         <!-- Layer 2: Neck Collars & Bells -->
         <g id="layer-collar"></g>
@@ -159,9 +158,9 @@
       </svg>
     </div>
 
-    <!-- Items List Grid -->
-    <div id="items-grid" class="grid grid-cols-2 gap-4 max-h-[320px] overflow-y-auto pr-1 custom-scroll">
-      <!-- Generated items via JS -->
+    <!-- Items Grid Container -->
+    <div id="items-grid" class="grid grid-cols-2 gap-3 max-h-[300px] overflow-y-auto pr-1 custom-scroll">
+      <!-- Generated via JS -->
     </div>
 
   </div>
@@ -170,48 +169,44 @@
     let currentTab = 'bibs';
     let equipped = { bib: null, collar: null, head: null };
 
-    // Item Collections (Fully English, 10 Items per category)
+    // Item Databases
     const itemsData = {
-      // Large Chest Covering Bibs (10 Items)
       bibs: [
-        { id: 'b1', name: 'Strawberry Big Bib', price: 0, icon: '🍓', svg: `<path d="M 95 155 Q 150 140 205 155 C 215 220, 185 255, 150 255 C 115 255, 85 220, 95 155 Z" fill="#ff4d6d" stroke="#c9184a" stroke-width="3"/><path d="M 95 155 Q 150 170 205 155 Q 150 140 95 155 Z" fill="#fff" stroke="#c9184a" stroke-width="2"/><circle cx="130" cy="185" r="3" fill="#fff"/><circle cx="170" cy="185" r="3" fill="#fff"/><circle cx="150" cy="215" r="3" fill="#fff"/><circle cx="125" cy="220" r="3" fill="#fff"/><circle cx="175" cy="220" r="3" fill="#fff"/>` },
-        { id: 'b2', name: 'Pastel Bear Bib', price: 15, icon: '🧸', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 190 260, 150 260 C 110 260, 80 225, 90 155 Z" fill="#fde2e4" stroke="#ffb3c1" stroke-width="3"/><circle cx="150" cy="205" r="24" fill="#fff"/><circle cx="141" cy="200" r="3" fill="#555"/><circle cx="159" cy="200" r="3" fill="#555"/><ellipse cx="150" cy="210" rx="7" ry="4" fill="#ffb3c1"/>` },
-        { id: 'b3', name: 'Duckie Splash Bib', price: 20, icon: '🐤', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 230, 185 255, 150 255 C 115 255, 80 230, 90 155 Z" fill="#ffea00" stroke="#ffd000" stroke-width="3"/><circle cx="150" cy="200" r="16" fill="#fff"/><circle cx="150" cy="200" r="12" fill="#ffea00"/><circle cx="145" cy="195" r="2" fill="#000"/><path d="M 148 200 Q 155 200 152 205 Z" fill="#ff7b00"/>` },
-        { id: 'b4', name: 'Lace Flower Bib', price: 25, icon: '🌸', svg: `<path d="M 85 155 Q 150 140 215 155 C 225 235, 185 265, 150 265 C 115 265, 75 235, 85 155 Z" fill="#ffffff" stroke="#ffb7c5" stroke-width="3"/><path d="M 90 165 Q 150 255 210 165" fill="none" stroke="#ffb7c5" stroke-width="2" stroke-dasharray="4,4"/><circle cx="150" cy="205" r="14" fill="#ffb7c5"/><circle cx="150" cy="205" r="5" fill="#fff"/>` },
-        { id: 'b5', name: 'Dino Green Bib', price: 20, icon: '🦖', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#70e000" stroke="#38b000" stroke-width="3"/><path d="M 120 175 L 130 235 L 140 175 L 150 235 L 160 175 L 170 235 L 180 175" fill="none" stroke="#fff" stroke-width="4"/>` },
-        { id: 'b6', name: 'Sailor Blue Bib', price: 30, icon: '⚓', svg: `<path d="M 85 155 L 215 155 L 195 250 L 150 215 L 105 250 Z" fill="#184e77" stroke="#1e6091" stroke-width="3"/><path d="M 95 160 L 205 160 L 190 235 L 150 205 L 110 235 Z" fill="none" stroke="#fff" stroke-width="3"/>` },
-        { id: 'b7', name: 'Sunshine Yellow Bib', price: 35, icon: '🌈', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#ffbc42" stroke="#d81159" stroke-width="3"/><path d="M 110 185 Q 150 225 190 185" fill="none" stroke="#ff595e" stroke-width="5"/><path d="M 115 195 Q 150 233 185 195" fill="none" stroke="#ffca3a" stroke-width="5"/><path d="M 120 205 Q 150 241 180 205" fill="none" stroke="#8ac926" stroke-width="5"/>` },
-        { id: 'b8', name: 'Froggy Green Bib', price: 25, icon: '🐸', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#52b788" stroke="#2d6a4f" stroke-width="3"/><circle cx="130" cy="190" r="10" fill="#fff"/><circle cx="130" cy="190" r="4" fill="#000"/><circle cx="170" cy="190" r="10" fill="#fff"/><circle cx="170" cy="190" r="4" fill="#000"/><path d="M 135 215 Q 150 225 165 215" fill="none" stroke="#2d6a4f" stroke-width="3"/>` },
-        { id: 'b9', name: 'Midnight Star Bib', price: 40, icon: '⭐', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#2b2d42" stroke="#8d99ae" stroke-width="3"/><polygon points="150,180 154,193 168,193 157,201 161,214 150,205 139,214 143,201 132,193 146,193" fill="#ffd166"/>` },
-        { id: 'b10', name: 'Royal Velvet Bib', price: 50, icon: '👑', svg: `<path d="M 85 155 Q 150 140 215 155 C 225 235, 185 260, 150 260 C 115 260, 75 235, 85 155 Z" fill="#7209b7" stroke="#3f37c9" stroke-width="3"/><path d="M 85 155 Q 150 175 215 155" fill="none" stroke="#ffd700" stroke-width="5"/><circle cx="150" cy="215" r="12" fill="#ffd700"/><circle cx="150" cy="215" r="6" fill="#f72585"/>` }
-      ],
+        // Large Chest Bibs
+        { id: 'b1', type: 'bib', name: 'Strawberry Bib', price: 0, icon: '🍓', svg: `<path d="M 95 155 Q 150 140 205 155 C 215 220, 185 255, 150 255 C 115 255, 85 220, 95 155 Z" fill="#ff4d6d" stroke="#c9184a" stroke-width="3"/><path d="M 95 155 Q 150 170 205 155 Q 150 140 95 155 Z" fill="#fff" stroke="#c9184a" stroke-width="2"/><circle cx="130" cy="185" r="3" fill="#fff"/><circle cx="170" cy="185" r="3" fill="#fff"/><circle cx="150" cy="215" r="3" fill="#fff"/><circle cx="125" cy="220" r="3" fill="#fff"/><circle cx="175" cy="220" r="3" fill="#fff"/>` },
+        { id: 'b2', type: 'bib', name: 'Pastel Bear Bib', price: 15, icon: '🧸', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 190 260, 150 260 C 110 260, 80 225, 90 155 Z" fill="#fde2e4" stroke="#ffb3c1" stroke-width="3"/><circle cx="150" cy="205" r="24" fill="#fff"/><circle cx="141" cy="200" r="3" fill="#555"/><circle cx="159" cy="200" r="3" fill="#555"/><ellipse cx="150" cy="210" rx="7" ry="4" fill="#ffb3c1"/>` },
+        { id: 'b3', type: 'bib', name: 'Duckie Splash Bib', price: 20, icon: '🐤', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 230, 185 255, 150 255 C 115 255, 80 230, 90 155 Z" fill="#ffea00" stroke="#ffd000" stroke-width="3"/><circle cx="150" cy="200" r="16" fill="#fff"/><circle cx="150" cy="200" r="12" fill="#ffea00"/><circle cx="145" cy="195" r="2" fill="#000"/><path d="M 148 200 Q 155 200 152 205 Z" fill="#ff7b00"/>` },
+        { id: 'b4', type: 'bib', name: 'Lace Flower Bib', price: 25, icon: '🌸', svg: `<path d="M 85 155 Q 150 140 215 155 C 225 235, 185 265, 150 265 C 115 265, 75 235, 85 155 Z" fill="#ffffff" stroke="#ffb7c5" stroke-width="3"/><path d="M 90 165 Q 150 255 210 165" fill="none" stroke="#ffb7c5" stroke-width="2" stroke-dasharray="4,4"/><circle cx="150" cy="205" r="14" fill="#ffb7c5"/><circle cx="150" cy="205" r="5" fill="#fff"/>` },
+        { id: 'b5', type: 'bib', name: 'Dino Green Bib', price: 20, icon: '🦖', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#70e000" stroke="#38b000" stroke-width="3"/><path d="M 120 175 L 130 235 L 140 175 L 150 235 L 160 175 L 170 235 L 180 175" fill="none" stroke="#fff" stroke-width="4"/>` },
+        { id: 'b6', type: 'bib', name: 'Sailor Blue Bib', price: 30, icon: '⚓', svg: `<path d="M 85 155 L 215 155 L 195 250 L 150 215 L 105 250 Z" fill="#184e77" stroke="#1e6091" stroke-width="3"/><path d="M 95 160 L 205 160 L 190 235 L 150 205 L 110 235 Z" fill="none" stroke="#fff" stroke-width="3"/>` },
+        { id: 'b7', type: 'bib', name: 'Sunshine Yellow Bib', price: 35, icon: '🌈', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#ffbc42" stroke="#d81159" stroke-width="3"/><path d="M 110 185 Q 150 225 190 185" fill="none" stroke="#ff595e" stroke-width="5"/><path d="M 115 195 Q 150 233 185 195" fill="none" stroke="#ffca3a" stroke-width="5"/><path d="M 120 205 Q 150 241 180 205" fill="none" stroke="#8ac926" stroke-width="5"/>` },
+        { id: 'b8', type: 'bib', name: 'Froggy Green Bib', price: 25, icon: '🐸', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#52b788" stroke="#2d6a4f" stroke-width="3"/><circle cx="130" cy="190" r="10" fill="#fff"/><circle cx="130" cy="190" r="4" fill="#000"/><circle cx="170" cy="190" r="10" fill="#fff"/><circle cx="170" cy="190" r="4" fill="#000"/><path d="M 135 215 Q 150 225 165 215" fill="none" stroke="#2d6a4f" stroke-width="3"/>` },
+        { id: 'b9', type: 'bib', name: 'Midnight Star Bib', price: 40, icon: '⭐', svg: `<path d="M 90 155 Q 150 140 210 155 C 220 225, 185 255, 150 255 C 115 255, 80 225, 90 155 Z" fill="#2b2d42" stroke="#8d99ae" stroke-width="3"/><polygon points="150,180 154,193 168,193 157,201 161,214 150,205 139,214 143,201 132,193 146,193" fill="#ffd166"/>` },
+        { id: 'b10', type: 'bib', name: 'Royal Velvet Bib', price: 50, icon: '👑', svg: `<path d="M 85 155 Q 150 140 215 155 C 225 235, 185 260, 150 260 C 115 260, 75 235, 85 155 Z" fill="#7209b7" stroke="#3f37c9" stroke-width="3"/><path d="M 85 155 Q 150 175 215 155" fill="none" stroke="#ffd700" stroke-width="5"/><circle cx="150" cy="215" r="12" fill="#ffd700"/><circle cx="150" cy="215" r="6" fill="#f72585"/>` },
 
-      // Neck Collars & Bells (10 Items)
-      collars: [
-        { id: 'c1', name: 'Polka Dot Collar', price: 20, icon: '🎀', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ef233c" stroke-width="12" stroke-linecap="round"/><circle cx="118" cy="160" r="2.5" fill="#fff"/><circle cx="138" cy="166" r="2.5" fill="#fff"/><circle cx="162" cy="166" r="2.5" fill="#fff"/><circle cx="182" cy="160" r="2.5" fill="#fff"/>` },
-        { id: 'c2', name: 'Golden Bell Collar', price: 30, icon: '🔔', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#d90429" stroke-width="10" stroke-linecap="round"/><circle cx="150" cy="173" r="12" fill="#ffb703" stroke="#fb8500" stroke-width="2"/><circle cx="150" cy="177" r="2.5" fill="#000"/>` },
-        { id: 'c3', name: 'Pearl Necklace', price: 30, icon: '🦪', svg: `<circle cx="103" cy="157" r="6" fill="#fff" stroke="#ddd"/><circle cx="116" cy="162" r="6" fill="#fff" stroke="#ddd"/><circle cx="130" cy="166" r="6" fill="#fff" stroke="#ddd"/><circle cx="150" cy="168" r="7" fill="#fff" stroke="#ddd"/><circle cx="170" cy="166" r="6" fill="#fff" stroke="#ddd"/><circle cx="184" cy="162" r="6" fill="#fff" stroke="#ddd"/><circle cx="197" cy="157" r="6" fill="#fff" stroke="#ddd"/>` },
-        { id: 'c4', name: 'Gentleman Bowtie', price: 25, icon: '👔', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#023e8a" stroke-width="9" stroke-linecap="round"/><polygon points="135,165 150,173 135,181" fill="#0077b6"/><polygon points="165,165 150,173 165,181" fill="#0077b6"/><rect x="146" y="168" width="8" height="10" rx="2" fill="#03045e"/>` },
-        { id: 'c5', name: 'Pink Scarf Collar', price: 20, icon: '📐', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ff4d6d" stroke-width="8"/><polygon points="130,165 170,165 150,195" fill="#ff758f"/><circle cx="150" cy="177" r="3" fill="#fff"/>` },
-        { id: 'c6', name: 'Spiked Rock Collar', price: 35, icon: '⚡', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#212529" stroke-width="12" stroke-linecap="round"/><polygon points="118,155 121,145 124,157" fill="#e9ecef"/><polygon points="138,162 141,150 144,164" fill="#e9ecef"/><polygon points="162,162 165,150 168,164" fill="#e9ecef"/><polygon points="182,155 185,145 188,157" fill="#e9ecef"/>` },
-        { id: 'c7', name: 'Emerald Charm Collar', price: 25, icon: '💎', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#38b000" stroke-width="10" stroke-linecap="round"/><polygon points="150,167 158,177 150,187 142,177" fill="#70e000" stroke="#007200" stroke-width="1.5"/>` },
-        { id: 'c8', name: 'Daisy Flower Collar', price: 20, icon: '🌼', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ffb703" stroke-width="8"/><circle cx="150" cy="171" r="10" fill="#fff"/><circle cx="150" cy="171" r="4" fill="#fb8500"/>` },
-        { id: 'c9', name: 'Heart Charm Collar', price: 30, icon: '💖', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ff0a54" stroke-width="9" stroke-linecap="round"/><path d="M 150 171 C 150 165, 142 165, 142 171 C 142 178, 150 183, 150 186 C 150 183, 158 178, 158 171 C 158 165, 150 165, 150 171 Z" fill="#ff477e"/>` },
-        { id: 'c10', name: 'Silver Chime Collar', price: 15, icon: '🎐', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#4a5568" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="173" r="10" fill="#e2e8f0" stroke="#a0aec0" stroke-width="2"/>` }
+        // Collars & Bells
+        { id: 'c1', type: 'collar', name: 'Polka Dot Collar', price: 20, icon: '🎀', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ef233c" stroke-width="12" stroke-linecap="round"/><circle cx="118" cy="160" r="2.5" fill="#fff"/><circle cx="138" cy="166" r="2.5" fill="#fff"/><circle cx="162" cy="166" r="2.5" fill="#fff"/><circle cx="182" cy="160" r="2.5" fill="#fff"/>` },
+        { id: 'c2', type: 'collar', name: 'Golden Bell Collar', price: 30, icon: '🔔', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#d90429" stroke-width="10" stroke-linecap="round"/><circle cx="150" cy="173" r="12" fill="#ffb703" stroke="#fb8500" stroke-width="2"/><circle cx="150" cy="177" r="2.5" fill="#000"/>` },
+        { id: 'c3', type: 'collar', name: 'Pearl Necklace', price: 30, icon: '🦪', svg: `<circle cx="103" cy="157" r="6" fill="#fff" stroke="#ddd"/><circle cx="116" cy="162" r="6" fill="#fff" stroke="#ddd"/><circle cx="130" cy="166" r="6" fill="#fff" stroke="#ddd"/><circle cx="150" cy="168" r="7" fill="#fff" stroke="#ddd"/><circle cx="170" cy="166" r="6" fill="#fff" stroke="#ddd"/><circle cx="184" cy="162" r="6" fill="#fff" stroke="#ddd"/><circle cx="197" cy="157" r="6" fill="#fff" stroke="#ddd"/>` },
+        { id: 'c4', type: 'collar', name: 'Gentleman Bowtie', price: 25, icon: '👔', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#023e8a" stroke-width="9" stroke-linecap="round"/><polygon points="135,165 150,173 135,181" fill="#0077b6"/><polygon points="165,165 150,173 165,181" fill="#0077b6"/><rect x="146" y="168" width="8" height="10" rx="2" fill="#03045e"/>` },
+        { id: 'c5', type: 'collar', name: 'Pink Scarf Collar', price: 20, icon: '📐', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ff4d6d" stroke-width="8"/><polygon points="130,165 170,165 150,195" fill="#ff758f"/><circle cx="150" cy="177" r="3" fill="#fff"/>` },
+        { id: 'c6', type: 'collar', name: 'Spiked Rock Collar', price: 35, icon: '⚡', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#212529" stroke-width="12" stroke-linecap="round"/><polygon points="118,155 121,145 124,157" fill="#e9ecef"/><polygon points="138,162 141,150 144,164" fill="#e9ecef"/><polygon points="162,162 165,150 168,164" fill="#e9ecef"/><polygon points="182,155 185,145 188,157" fill="#e9ecef"/>` },
+        { id: 'c7', type: 'collar', name: 'Emerald Charm Collar', price: 25, icon: '💎', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#38b000" stroke-width="10" stroke-linecap="round"/><polygon points="150,167 158,177 150,187 142,177" fill="#70e000" stroke="#007200" stroke-width="1.5"/>` },
+        { id: 'c8', type: 'collar', name: 'Daisy Flower Collar', price: 20, icon: '🌼', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ffb703" stroke-width="8"/><circle cx="150" cy="171" r="10" fill="#fff"/><circle cx="150" cy="171" r="4" fill="#fb8500"/>` },
+        { id: 'c9', type: 'collar', name: 'Heart Charm Collar', price: 30, icon: '💖', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#ff0a54" stroke-width="9" stroke-linecap="round"/><path d="M 150 171 C 150 165, 142 165, 142 171 C 142 178, 150 183, 150 186 C 150 183, 158 178, 158 171 C 158 165, 150 165, 150 171 Z" fill="#ff477e"/>` },
+        { id: 'c10', type: 'collar', name: 'Silver Chime Collar', price: 15, icon: '🎐', svg: `<path d="M 98 155 Q 150 175 202 155" fill="none" stroke="#4a5568" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="173" r="10" fill="#e2e8f0" stroke="#a0aec0" stroke-width="2"/>` }
       ],
-
-      // Head Accessories (10 Items)
       hats: [
-        { id: 'h1', name: 'Red Ribbon Bow', price: 0, icon: '🎀', svg: `<path d="M 120 50 Q 100 35 125 25 Q 150 45 150 50 Q 150 45 175 25 Q 200 35 180 50 Z" fill="#ff0a54"/><circle cx="150" cy="48" r="7" fill="#ff477e"/>` },
-        { id: 'h2', name: 'Party Cone Hat', price: 15, icon: '🥳', svg: `<polygon points="150,10 120,65 180,65" fill="#ffb703"/><circle cx="150" cy="10" r="6" fill="#ff0a54"/><line x1="120" y1="65" x2="180" y2="65" stroke="#8ecae6" stroke-width="6"/>` },
-        { id: 'h3', name: 'Golden Crown', price: 40, icon: '👑', svg: `<path d="M 125 65 L 120 30 L 135 45 L 150 20 L 165 45 L 180 30 L 175 65 Z" fill="#ffb703" stroke="#fb8500" stroke-width="2"/><circle cx="120" cy="28" r="3" fill="#e63946"/><circle cx="150" cy="18" r="3" fill="#e63946"/><circle cx="180" cy="28" r="3" fill="#e63946"/>` },
-        { id: 'h4', name: 'Froggy Beanie', price: 25, icon: '🐸', svg: `<path d="M 105 65 C 105 30, 195 30, 195 65 Z" fill="#70e000"/><circle cx="125" cy="32" r="10" fill="#70e000"/><circle cx="125" cy="32" r="4" fill="#fff"/><circle cx="175" cy="32" r="10" fill="#70e000"/><circle cx="175" cy="32" r="4" fill="#fff"/>` },
-        { id: 'h5', name: 'Witch Hat', price: 30, icon: '🧙‍♀️', svg: `<polygon points="150,5 115,60 185,60" fill="#2b2d42"/><ellipse cx="150" cy="62" rx="45" ry="8" fill="#1d3557"/><rect x="130" y="52" width="40" height="8" fill="#e63946"/>` },
-        { id: 'h6', name: 'Chef Top Hat', price: 20, icon: '🧑‍🍳', svg: `<path d="M 125 65 L 125 40 C 110 35, 120 15, 140 20 C 150 10, 170 15, 170 25 C 185 25, 185 40, 175 40 L 175 65 Z" fill="#ffffff" stroke="#ddd" stroke-width="2"/>` },
-        { id: 'h7', name: 'Angel Halo', price: 35, icon: '😇', svg: `<ellipse cx="150" cy="25" rx="35" ry="8" fill="none" stroke="#ffbe0b" stroke-width="5"/>` },
-        { id: 'h8', name: 'Bear Headband', price: 20, icon: '🐻', svg: `<path d="M 100 65 Q 150 40 200 65" fill="none" stroke="#212529" stroke-width="4"/><circle cx="110" cy="50" r="14" fill="#b08968"/><circle cx="110" cy="50" r="8" fill="#ede0d4"/><circle cx="190" cy="50" r="14" fill="#b08968"/><circle cx="190" cy="50" r="8" fill="#ede0d4"/>` },
-        { id: 'h9', name: 'Flower Clip', price: 15, icon: '🌸', svg: `<circle cx="180" cy="55" r="8" fill="#ffb7c5"/><circle cx="192" cy="60" r="8" fill="#ffb7c5"/><circle cx="188" cy="72" r="8" fill="#ffb7c5"/><circle cx="173" cy="72" r="8" fill="#ffb7c5"/><circle cx="168" cy="60" r="8" fill="#ffb7c5"/><circle cx="180" cy="64" r="5" fill="#fff"/>` },
-        { id: 'h10', name: 'Pirate Bandana', price: 25, icon: '🏴‍☠️', svg: `<path d="M 90 70 C 95 30, 205 30, 210 70 Z" fill="#d90429"/><circle cx="150" cy="50" r="5" fill="#fff"/>` }
+        { id: 'h1', type: 'head', name: 'Red Ribbon Bow', price: 0, icon: '🎀', svg: `<path d="M 120 50 Q 100 35 125 25 Q 150 45 150 50 Q 150 45 175 25 Q 200 35 180 50 Z" fill="#ff0a54"/><circle cx="150" cy="48" r="7" fill="#ff477e"/>` },
+        { id: 'h2', type: 'head', name: 'Party Cone Hat', price: 15, icon: '🥳', svg: `<polygon points="150,10 120,65 180,65" fill="#ffb703"/><circle cx="150" cy="10" r="6" fill="#ff0a54"/><line x1="120" y1="65" x2="180" y2="65" stroke="#8ecae6" stroke-width="6"/>` },
+        { id: 'h3', type: 'head', name: 'Golden Crown', price: 40, icon: '👑', svg: `<path d="M 125 65 L 120 30 L 135 45 L 150 20 L 165 45 L 180 30 L 175 65 Z" fill="#ffb703" stroke="#fb8500" stroke-width="2"/><circle cx="120" cy="28" r="3" fill="#e63946"/><circle cx="150" cy="18" r="3" fill="#e63946"/><circle cx="180" cy="28" r="3" fill="#e63946"/>` },
+        { id: 'h4', type: 'head', name: 'Froggy Beanie', price: 25, icon: '🐸', svg: `<path d="M 105 65 C 105 30, 195 30, 195 65 Z" fill="#70e000"/><circle cx="125" cy="32" r="10" fill="#70e000"/><circle cx="125" cy="32" r="4" fill="#fff"/><circle cx="175" cy="32" r="10" fill="#70e000"/><circle cx="175" cy="32" r="4" fill="#fff"/>` },
+        { id: 'h5', type: 'head', name: 'Witch Hat', price: 30, icon: '🧙‍♀️', svg: `<polygon points="150,5 115,60 185,60" fill="#2b2d42"/><ellipse cx="150" cy="62" rx="45" ry="8" fill="#1d3557"/><rect x="130" y="52" width="40" height="8" fill="#e63946"/>` },
+        { id: 'h6', type: 'head', name: 'Chef Top Hat', price: 20, icon: '🧑‍🍳', svg: `<path d="M 125 65 L 125 40 C 110 35, 120 15, 140 20 C 150 10, 170 15, 170 25 C 185 25, 185 40, 175 40 L 175 65 Z" fill="#ffffff" stroke="#ddd" stroke-width="2"/>` },
+        { id: 'h7', type: 'head', name: 'Angel Halo', price: 35, icon: '😇', svg: `<ellipse cx="150" cy="25" rx="35" ry="8" fill="none" stroke="#ffbe0b" stroke-width="5"/>` },
+        { id: 'h8', type: 'head', name: 'Bear Headband', price: 20, icon: '🐻', svg: `<path d="M 100 65 Q 150 40 200 65" fill="none" stroke="#212529" stroke-width="4"/><circle cx="110" cy="50" r="14" fill="#b08968"/><circle cx="110" cy="50" r="8" fill="#ede0d4"/><circle cx="190" cy="50" r="14" fill="#b08968"/><circle cx="190" cy="50" r="8" fill="#ede0d4"/>` },
+        { id: 'h9', type: 'head', name: 'Flower Clip', price: 15, icon: '🌸', svg: `<circle cx="180" cy="55" r="8" fill="#ffb7c5"/><circle cx="192" cy="60" r="8" fill="#ffb7c5"/><circle cx="188" cy="72" r="8" fill="#ffb7c5"/><circle cx="173" cy="72" r="8" fill="#ffb7c5"/><circle cx="168" cy="60" r="8" fill="#ffb7c5"/><circle cx="180" cy="64" r="5" fill="#fff"/>` },
+        { id: 'h10', type: 'head', name: 'Pirate Bandana', price: 25, icon: '🏴‍☠️', svg: `<path d="M 90 70 C 95 30, 205 30, 210 70 Z" fill="#d90429"/><circle cx="150" cy="50" r="5" fill="#fff"/>` }
       ]
     };
 
@@ -220,20 +215,19 @@
       grid.innerHTML = '';
       
       const items = itemsData[currentTab];
-      const categoryKey = currentTab === 'bibs' ? 'bib' : currentTab === 'collars' ? 'collar' : 'head';
 
       items.forEach(item => {
-        const isEquipped = equipped[categoryKey] && equipped[categoryKey].id === item.id;
+        const isEquipped = equipped[item.type] && equipped[item.type].id === item.id;
         
         const card = document.createElement('div');
-        card.className = `item-card p-5 flex flex-col items-center justify-between cursor-pointer ${isEquipped ? 'equipped' : ''}`;
-        card.onclick = () => selectItem(categoryKey, item);
+        card.className = `item-card p-4 flex flex-col items-center justify-between cursor-pointer ${isEquipped ? 'selected' : ''}`;
+        card.onclick = () => selectItem(item.type, item);
 
         card.innerHTML = `
-          <div class="text-4xl mb-3">${item.icon}</div>
-          <div class="text-base font-bold text-gray-800 text-center mb-3">${item.name}</div>
+          <div class="text-3xl my-1">${item.icon}</div>
+          <div class="text-sm font-bold text-gray-800 text-center my-1">${item.name}</div>
           
-          <div class="price-badge">
+          <div class="fish-badge">
             <span>🐟</span>
             <span>${item.price}</span>
           </div>
@@ -245,16 +239,20 @@
 
     function switchTab(tab) {
       currentTab = tab;
-      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
-      document.getElementById(`tab-${tab}`).classList.add('active');
+      document.querySelectorAll('.nav-btn').forEach(b => {
+        b.classList.remove('nav-btn-active');
+        b.classList.add('nav-btn-inactive');
+      });
+      document.getElementById(`tab-${tab}`).classList.add('nav-btn-active');
+      document.getElementById(`tab-${tab}`).classList.remove('nav-btn-inactive');
       renderGrid();
     }
 
-    function selectItem(category, item) {
-      if (equipped[category] && equipped[category].id === item.id) {
-        equipped[category] = null;
+    function selectItem(type, item) {
+      if (equipped[type] && equipped[type].id === item.id) {
+        equipped[type] = null;
       } else {
-        equipped[category] = item;
+        equipped[type] = item;
       }
       
       updateAvatarLayers();
@@ -273,7 +271,7 @@
       renderGrid();
     }
 
-    // Initial Launch
+    // Initialize
     renderGrid();
   </script>
 </body>
