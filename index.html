@@ -1,347 +1,440 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat - Modern Eco Edition</title>
+    <title>Energy Cat - พิทักษ์พลังงานกับน้องแมวเทา</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Mitr:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@500;700;800&display=swap" rel="stylesheet">
     <style>
-        body {
-            font-family: 'Plus Jakarta Sans', sans-serif;
-            background: linear-gradient(135deg, #0F172A 0%, #064E3B 50%, #022C22 100%);
-            min-h: 100vh;
-            user-select: none;
+        * {
+            font-family: 'Mitr', 'Plus Jakarta Sans', sans-serif;
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.85);
-            backdrop-filter: blur(16px);
-            -webkit-backdrop-filter: blur(16px);
-            border: 1px solid rgba(255, 255, 255, 0.4);
+        /* พื้นหลังพาสเทลน่ารัก สบายตา */
+        body {
+            background: linear-gradient(135deg, #FFF5F7 0%, #E0F2FE 50%, #ECFDF5 100%);
+            min-height: 100vh;
+            user-select: none;
+            overflow-x: hidden;
+        }
+
+        /* Glassmorphism สไตล์พาสเทลนุ่มนวล */
+        .cute-card {
+            background: rgba(255, 255, 255, 0.92);
+            backdrop-filter: blur(20px);
+            -webkit-backdrop-filter: blur(20px);
+            border: 3px solid #FBCFE8;
+            box-shadow: 0 15px 35px -5px rgba(244, 114, 182, 0.2), 0 8px 10px -6px rgba(56, 189, 248, 0.1);
+        }
+
+        .cute-card-inner {
+            background: linear-gradient(180deg, #FFFFFF 0%, #FFF1F2 100%);
+            border: 2px solid #FCE7F3;
         }
 
         .glass-modal {
-            background: rgba(15, 23, 42, 0.75);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
+            background: rgba(15, 23, 42, 0.65);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
         }
 
+        /* Animation ดุ๊กดิ๊กน่ารัก */
         @keyframes tailWag {
             0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(18deg); }
+            50% { transform: rotate(20deg); }
         }
         .animate-tail {
-            transform-origin: bottom left;
+            transform-origin: 15px 65px;
             animation: tailWag 1.8s ease-in-out infinite;
+        }
+
+        @keyframes earTwitch {
+            0%, 90%, 100% { transform: rotate(0deg); }
+            93% { transform: rotate(-8deg); }
+            96% { transform: rotate(8deg); }
+        }
+        .animate-ear-left {
+            transform-origin: 30px 20px;
+            animation: earTwitch 4s ease-in-out infinite;
         }
 
         @keyframes catBreathe {
             0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-4px) scale(1.02); }
+            50% { transform: translateY(-5px) scale(1.02, 0.98); }
         }
         .animate-breathe {
-            animation: catBreathe 3.5s ease-in-out infinite;
+            animation: catBreathe 3s ease-in-out infinite;
         }
 
-        @keyframes floatUp {
-            0% { opacity: 1; transform: translateY(0) scale(0.9); }
-            100% { opacity: 0; transform: translateY(-60px) scale(1.1); }
+        @keyframes floatBg {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-12px) rotate(5deg); }
+        }
+        .animate-float {
+            animation: floatBg 4s ease-in-out infinite;
+        }
+
+        @keyframes floatUpText {
+            0% { opacity: 1; transform: translateY(0) scale(0.8); }
+            50% { transform: translateY(-35px) scale(1.2); }
+            100% { opacity: 0; transform: translateY(-60px) scale(1); }
         }
         .float-text {
             position: absolute;
-            animation: floatUp 0.9s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+            animation: floatUpText 1.1s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards;
             pointer-events: none;
-            font-weight: 800;
+            font-weight: 700;
+            text-shadow: 0 2px 4px rgba(0,0,0,0.1);
         }
 
-        /* Custom Scrollbar */
-        ::-webkit-scrollbar {
-            width: 6px;
+        .tab-content {
+            display: none;
         }
-        ::-webkit-scrollbar-track {
-            background: rgba(0, 0, 0, 0.05);
-            border-radius: 10px;
+        .tab-content.active {
+            display: block;
+            animation: fadeIn 0.3s ease-out;
         }
-        ::-webkit-scrollbar-thumb {
-            background: rgba(16, 185, 129, 0.3);
-            border-radius: 10px;
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
         }
+
+        /* ปุ่มน่ารัก นุ่มฟู */
+        .btn-cute {
+            transition: all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+            box-shadow: 0 4px 0 0 rgba(0,0,0,0.1);
+        }
+        .btn-cute:active {
+            transform: translateY(3px);
+            box-shadow: 0 1px 0 0 rgba(0,0,0,0.1);
+        }
+
+        ::-webkit-scrollbar { width: 6px; }
+        ::-webkit-scrollbar-track { background: #FDE8E8; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #F472B6; border-radius: 10px; }
     </style>
 </head>
-<body class="flex justify-center items-center min-h-screen p-3 md:p-6 text-slate-800">
+<body class="flex justify-center items-center min-h-screen p-3 md:p-6 relative">
 
-    <!-- Custom In-App Notification Toast (No More Browser Alert) -->
+    <!-- ฟองอากาศ/ดาวตกแต่งพื้นหลังน่ารัก -->
+    <div class="fixed inset-0 pointer-events-none overflow-hidden z-0">
+        <div class="absolute top-10 left-10 text-3xl opacity-40 animate-float" style="animation-delay: 0s;">🌸</div>
+        <div class="absolute top-1/4 right-12 text-2xl opacity-40 animate-float" style="animation-delay: 1s;">✨</div>
+        <div class="absolute bottom-20 left-16 text-3xl opacity-40 animate-float" style="animation-delay: 2s;">🍃</div>
+        <div class="absolute bottom-12 right-20 text-3xl opacity-40 animate-float" style="animation-delay: 1.5s;">☁️</div>
+    </div>
+
+    <!-- Notification Toast แบบน่ารัก -->
     <div id="toastNotification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-5">
-        <div class="glass-card bg-emerald-900/90 text-white px-5 py-3 rounded-2xl shadow-2xl border border-emerald-400/30 flex items-center gap-3">
-            <span id="toastIcon" class="text-xl">✨</span>
-            <span id="toastMessage" class="text-xs font-bold tracking-wide">Success Notification!</span>
+        <div class="bg-white/95 text-pink-600 px-6 py-3 rounded-full shadow-lg border-2 border-pink-300 flex items-center gap-3 font-bold text-sm">
+            <span id="toastIcon" class="text-2xl">💖</span>
+            <span id="toastMessage">การแจ้งเตือนสุดน่ารัก</span>
         </div>
     </div>
 
-    <!-- Main Container -->
-    <div class="glass-card rounded-[32px] shadow-2xl border border-white/50 w-full max-w-md p-5 flex flex-col gap-4 relative overflow-hidden">
+    <!-- Main Container App -->
+    <div class="cute-card rounded-[42px] w-full max-w-md h-[740px] flex flex-col justify-between relative z-10 overflow-hidden p-5 border-4">
         
-        <!-- Top Navigation: Anonymous Alias & Stats -->
-        <div class="flex justify-between items-center bg-white/60 p-3.5 rounded-2xl border border-emerald-100 shadow-sm">
-            <div class="flex items-center gap-2.5">
-                <div class="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-400 to-teal-600 flex items-center justify-center text-white text-lg shadow-md shadow-emerald-500/20">
-                    🐾
+        <!-- Header Zone: User Pseudonym & Quick Stats -->
+        <div class="bg-gradient-to-r from-pink-100 via-purple-100 to-sky-100 p-3 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
+            <div class="flex items-center gap-3">
+                <div class="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-2xl shadow-sm border border-pink-200">
+                    🐱
                 </div>
                 <div>
-                    <p class="text-[10px] tracking-wider font-extrabold text-emerald-600 uppercase">ECO AGENT</p>
-                    <button onclick="openAliasModal()" class="text-xs font-extrabold text-slate-800 hover:text-emerald-600 flex items-center gap-1 transition">
-                        <span id="displayAlias">Silent Saver #0000</span>
-                        <span class="text-[10px] text-slate-400">✏️</span>
+                    <p class="text-[10px] tracking-widest font-extrabold text-pink-400 uppercase">ECO AGENT</p>
+                    <button onclick="openAliasModal()" class="text-xs font-bold text-slate-700 hover:text-pink-500 flex items-center gap-1 transition">
+                        <span id="displayAlias">เหมียวซ่า #0000</span>
+                        <span class="text-[11px] text-pink-400">✏️</span>
                     </button>
                 </div>
             </div>
             
-            <button onclick="toggleLeaderboard()" class="bg-amber-500 hover:bg-amber-600 active:scale-95 text-white text-xs font-bold px-3 py-2 rounded-xl shadow-md shadow-amber-500/20 transition flex items-center gap-1.5">
-                <span>🏆</span> Ranks
-            </button>
-        </div>
-
-        <!-- Dashboard Stats Grid -->
-        <div class="grid grid-cols-2 gap-3">
-            <div class="bg-gradient-to-br from-amber-50 to-orange-50/60 border border-amber-200/60 rounded-2xl p-3 shadow-sm flex items-center gap-3">
-                <div class="w-10 h-10 rounded-xl bg-amber-500/10 flex items-center justify-center text-2xl">🐟</div>
-                <div>
-                    <p class="text-[10px] text-amber-600/80 font-extrabold tracking-wide uppercase">Fish Points</p>
-                    <p id="fishCount" class="text-2xl font-black text-amber-600 leading-none">0</p>
-                </div>
-            </div>
-
-            <div class="bg-gradient-to-br from-emerald-50 to-teal-50/60 border border-emerald-200/60 rounded-2xl p-3 shadow-sm flex flex-col justify-center">
-                <div class="flex justify-between items-center mb-1.5">
-                    <span class="text-[10px] text-emerald-700 font-extrabold tracking-wide uppercase">⚡ Cat Energy</span>
-                    <span id="energyText" class="text-xs font-extrabold text-emerald-800">100/100</span>
-                </div>
-                <div class="w-full bg-emerald-200/60 h-2.5 rounded-full overflow-hidden p-0.5 border border-emerald-300/40">
-                    <div id="energyBar" class="bg-gradient-to-r from-emerald-500 to-teal-400 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
-                </div>
+            <div class="flex items-center gap-1.5 bg-white/90 px-3.5 py-1.5 rounded-2xl border border-amber-200 shadow-sm">
+                <span class="text-xl">🐟</span>
+                <span id="fishCount" class="text-sm font-extrabold text-amber-500">0</span>
             </div>
         </div>
 
-        <!-- Cat Display Stage -->
-        <div id="catStage" class="relative bg-gradient-to-b from-emerald-50/80 via-teal-50/40 to-white/90 rounded-3xl p-4 flex flex-col items-center justify-center border border-emerald-100 shadow-inner min-h-[190px] cursor-pointer group" onclick="petCat(event)">
+        <!-- MAIN TAB PAGES AREA -->
+        <div class="flex-grow overflow-y-auto py-3">
             
-            <div id="effectLayer" class="absolute inset-0 pointer-events-none"></div>
+            <!-- PAGE 1: HOME (CAT CARE) -->
+            <div id="tab-home" class="tab-content active space-y-3.5">
+                <!-- Energy Bar -->
+                <div class="bg-white/90 border-2 border-emerald-200 rounded-2xl p-3 shadow-sm">
+                    <div class="flex justify-between items-center mb-1.5">
+                        <span class="text-xs text-emerald-600 font-bold flex items-center gap-1">
+                            <span>⚡</span> พลังงานน้องแมว
+                        </span>
+                        <span id="energyText" class="text-xs font-extrabold text-emerald-600">100/100</span>
+                    </div>
+                    <div class="w-full bg-emerald-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-emerald-200">
+                        <div id="energyBar" class="bg-gradient-to-r from-emerald-400 to-teal-300 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+                    </div>
+                </div>
 
-            <div class="animate-breathe relative">
-                <svg width="130" height="130" viewBox="0 0 100 100" class="drop-shadow-xl transition-transform duration-300 group-hover:scale-105">
-                    <path class="animate-tail" d="M 25 75 Q 10 70 15 50 Q 18 45 22 55" stroke="#059669" stroke-width="6" fill="none" stroke-linecap="round" />
-                    <polygon points="25,35 32,12 48,28" fill="#10B981" />
-                    <polygon points="27,33 33,16 45,28" fill="#6EE7B7" />
-                    <polygon points="75,35 68,12 52,28" fill="#10B981" />
-                    <polygon points="73,33 67,16 55,28" fill="#6EE7B7" />
-                    <ellipse cx="50" cy="65" rx="30" ry="22" fill="#34D399" />
-                    <circle cx="50" cy="45" r="28" fill="#34D399" />
-                    <circle cx="50" cy="45" r="26" fill="#6EE7B7" />
-                    <circle cx="34" cy="50" r="4" fill="#F472B6" opacity="0.6" />
-                    <circle cx="66" cy="50" r="4" fill="#F472B6" opacity="0.6" />
-                    <circle cx="38" cy="42" r="3.5" fill="#064E3B" />
-                    <circle cx="39" cy="41" r="1" fill="#FFFFFF" />
-                    <circle cx="62" cy="42" r="3.5" fill="#064E3B" />
-                    <circle cx="63" cy="41" r="1" fill="#FFFFFF" />
-                    <polygon points="50,48 47,51 53,51" fill="#047857" />
-                    <path d="M 45 53 Q 50 57 55 53" stroke="#047857" stroke-width="1.5" fill="none" stroke-linecap="round" />
+                <!-- Cute Gray Tabby Cat SVG Stage -->
+                <div id="catStage" class="relative bg-gradient-to-b from-sky-50 via-pink-50 to-amber-50 rounded-3xl p-3 flex flex-col items-center justify-center border-2 border-pink-100 shadow-inner h-[300px] cursor-pointer group" onclick="petCat(event)">
+                    <div id="effectLayer" class="absolute inset-0 pointer-events-none"></div>
 
-                    <!-- Accessories -->
-                    <g id="acc-bow" class="hidden">
-                        <path d="M 42 20 Q 50 25 58 20 Q 50 15 42 20 Z" fill="#EF4444" />
-                        <circle cx="50" cy="18" r="3" fill="#B91C1C" />
-                    </g>
-                    <g id="acc-glasses" class="hidden">
-                        <circle cx="38" cy="42" r="6" stroke="#1E293B" stroke-width="1.5" fill="none" />
-                        <circle cx="62" cy="42" r="6" stroke="#1E293B" stroke-width="1.5" fill="none" />
-                        <line x1="44" y1="42" x2="56" y2="42" stroke="#1E293B" stroke-width="1.5" />
-                    </g>
-                </svg>
+                    <div class="animate-breathe relative flex items-center justify-center">
+                        <svg width="200" height="200" viewBox="0 0 100 100" class="drop-shadow-xl transition-transform duration-300 group-hover:scale-105">
+                            <!-- หางม้วนลายแถบ -->
+                            <g class="animate-tail">
+                                <path d="M 22 72 Q 5 65 10 42 Q 14 36 20 50" stroke="#94A3B8" stroke-width="7.5" stroke-linecap="round" fill="none" />
+                                <path d="M 16 64 Q 10 60 12 53" stroke="#475569" stroke-width="2.5" fill="none" />
+                                <path d="M 13 52 Q 10 46 14 43" stroke="#475569" stroke-width="2.5" fill="none" />
+                            </g>
+
+                            <!-- หูซ้ายขวา -->
+                            <g class="animate-ear-left">
+                                <polygon points="22,38 28,12 46,28" fill="#94A3B8" />
+                                <polygon points="25,35 30,16 42,27" fill="#F472B6" opacity="0.65" />
+                            </g>
+                            <g>
+                                <polygon points="78,38 72,12 54,28" fill="#94A3B8" />
+                                <polygon points="75,35 70,16 58,27" fill="#F472B6" opacity="0.65" />
+                            </g>
+
+                            <!-- ตัวแมว -->
+                            <ellipse cx="50" cy="68" rx="28" ry="21" fill="#94A3B8" />
+                            <!-- ลายข้างลำตัว -->
+                            <path d="M 32 64 Q 40 67 32 72" stroke="#475569" stroke-width="2" fill="none" stroke-linecap="round" />
+                            <path d="M 68 64 Q 60 67 68 72" stroke="#475569" stroke-width="2" fill="none" stroke-linecap="round" />
+
+                            <!-- พุงแมวสีขาวนุ่ม -->
+                            <ellipse cx="50" cy="70" rx="18" ry="14" fill="#F1F5F9" />
+
+                            <!-- หัวแมว -->
+                            <circle cx="50" cy="45" r="27" fill="#94A3B8" />
+                            <circle cx="50" cy="47" r="24" fill="#CBD5E1" />
+
+                            <!-- ลาย M หน้าผาก -->
+                            <path d="M 42 25 L 46 33 L 50 27 L 54 33 L 58 25" stroke="#334155" stroke-width="2.2" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+
+                            <!-- ลายข้างแก้ม -->
+                            <path d="M 25 43 L 32 45" stroke="#475569" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 24 48 L 30 49" stroke="#475569" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 75 43 L 68 45" stroke="#475569" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 76 48 L 70 49" stroke="#475569" stroke-width="1.8" stroke-linecap="round" />
+
+                            <!-- แก้มชมพู -->
+                            <ellipse cx="34" cy="52" rx="4.5" ry="3.5" fill="#F472B6" opacity="0.6" />
+                            <ellipse cx="66" cy="52" rx="4.5" ry="3.5" fill="#F472B6" opacity="0.6" />
+
+                            <!-- ตาหวานปิ๊งๆ -->
+                            <circle cx="38" cy="44" r="4.2" fill="#0F172A" />
+                            <circle cx="62" cy="44" r="4.2" fill="#0F172A" />
+                            <circle cx="36.5" cy="42.2" r="1.6" fill="#FFFFFF" />
+                            <circle cx="60.5" cy="42.2" r="1.6" fill="#FFFFFF" />
+                            <circle cx="39.5" cy="45.5" r="0.9" fill="#FFFFFF" />
+                            <circle cx="63.5" cy="45.5" r="0.9" fill="#FFFFFF" />
+
+                            <!-- จมูกและปากยิ้ม -->
+                            <polygon points="50,48.5 47.5,51.5 52.5,51.5" fill="#FB7185" />
+                            <path d="M 45 53.5 Q 50 57.5 55 53.5" stroke="#334155" stroke-width="1.8" fill="none" stroke-linecap="round" />
+
+                            <!-- หมวกใบไม้ Eco (อุปกรณ์เสริม) -->
+                            <g id="acc-leaf" class="hidden">
+                                <path d="M 50 18 Q 62 8 58 2 Q 46 8 50 18 Z" fill="#22C55E" />
+                                <path d="M 50 18 Q 54 10 58 2" stroke="#15803D" stroke-width="1" fill="none" />
+                            </g>
+
+                            <!-- โบว์สีแดง (อุปกรณ์เสริม) -->
+                            <g id="acc-bow" class="hidden">
+                                <path d="M 40 21 Q 50 26 60 21 Q 50 16 40 21 Z" fill="#EF4444" />
+                                <circle cx="50" cy="19" r="3" fill="#B91C1C" />
+                            </g>
+
+                            <!-- แว่นตาสุดเท่ (อุปกรณ์เสริม) -->
+                            <g id="acc-glasses" class="hidden">
+                                <circle cx="38" cy="44" r="6.5" stroke="#0F172A" stroke-width="2" fill="none" />
+                                <circle cx="62" cy="44" r="6.5" stroke="#0F172A" stroke-width="2" fill="none" />
+                                <line x1="44.5" y1="44" x2="55.5" y2="44" stroke="#0F172A" stroke-width="2" />
+                            </g>
+                        </svg>
+                    </div>
+                    <p class="text-xs font-bold text-pink-500 mt-2 bg-white/80 px-3 py-1 rounded-full border border-pink-200">
+                        ✨ แตะตัวน้องแมวเพื่อลูบหัว (+1⚡)
+                    </p>
+                </div>
+
+                <!-- Feed & Rest Actions -->
+                <div class="grid grid-cols-2 gap-3">
+                    <button onclick="feedCat()" class="btn-cute bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white font-extrabold py-3 px-2 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-sm">
+                        <span class="text-base">🍱</span> ให้อาหาร (-5⚡/+10🐟)
+                    </button>
+                    <button onclick="restCat()" class="btn-cute bg-gradient-to-r from-teal-400 to-emerald-400 hover:from-teal-500 hover:to-emerald-500 text-white font-extrabold py-3 px-2 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-sm">
+                        <span class="text-base">😴</span> พักผ่อน (+30⚡)
+                    </button>
+                </div>
             </div>
-            <p class="text-[10px] font-bold text-emerald-600/70 mt-1">Tap cat to pet ❤️</p>
+
+            <!-- PAGE 2: MISSIONS -->
+            <div id="tab-missions" class="tab-content space-y-3">
+                <div class="bg-gradient-to-br from-emerald-100/70 to-teal-100/70 border-2 border-emerald-200 rounded-3xl p-4">
+                    <div class="flex items-center gap-2 mb-1">
+                        <span class="text-xl">🌱</span>
+                        <p class="text-xs font-extrabold text-emerald-800 uppercase tracking-wider">ภารกิจถ่ายรูปยืนยันพลังงาน</p>
+                    </div>
+                    <p class="text-[11px] font-medium text-slate-600 mb-3">ถ่ายภาพการประหยัดไฟจริงในออฟฟิศเพื่อรับแต้มปลาและพลังงาน!</p>
+
+                    <div class="space-y-2.5 text-xs">
+                        <button onclick="triggerMissionUpload('ปิดไฟ/จอคอมที่ไม่ใช้งาน', 15, 20)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-bold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">💡 ปิดไฟ / หน้าจอคอม</span>
+                            <span class="text-emerald-600 font-extrabold">+15🐟 / +20⚡</span>
+                        </button>
+                        <button onclick="triggerMissionUpload('ปรับแอร์ออฟฟิศ 25°C', 20, 30)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-bold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">🌡️ ตั้งแอร์ 25 องศา</span>
+                            <span class="text-emerald-600 font-extrabold">+20🐟 / +30⚡</span>
+                        </button>
+                        <button onclick="triggerMissionUpload('ถอดปลั๊กเครื่องใช้ไฟฟ้าไม่ได้ใช้', 10, 15)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-bold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">🔌 ถอดปลั๊กเมื่อเลิกใช้</span>
+                            <span class="text-emerald-600 font-extrabold">+10🐟 / +15⚡</span>
+                        </button>
+                        <button onclick="triggerMissionUpload('เดินขึ้นบันไดแทนลิฟต์', 10, 15)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-bold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">🚶 เดินขึ้นบันไดแทนลิฟต์</span>
+                            <span class="text-emerald-600 font-extrabold">+10🐟 / +15⚡</span>
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 3: MINI-GAME -->
+            <div id="tab-game" class="tab-content space-y-3">
+                <div class="bg-white rounded-3xl p-4 border-2 border-sky-200 shadow-sm flex flex-col justify-between h-[380px]">
+                    <div>
+                        <div class="flex items-center gap-2 mb-1">
+                            <span class="text-xl">🎣</span>
+                            <h3 class="font-extrabold text-sm text-sky-800">เกมจับปลาน้อยพาเพลิน</h3>
+                        </div>
+                        <p class="text-[11px] font-medium text-slate-500">กดจับปลาที่โผล่มาให้เร็วที่สุดภายใน 10 วินาที!</p>
+                    </div>
+
+                    <div id="gameBox" class="relative bg-gradient-to-b from-sky-100 to-blue-50 rounded-2xl border-2 border-sky-200 h-56 overflow-hidden flex items-center justify-center">
+                        <p id="gameStartText" class="text-xs font-bold text-sky-600 bg-white/80 px-4 py-2 rounded-full border border-sky-200">กดปุ่มเริ่มเล่นด้านล่างได้เลย!</p>
+                        <button id="targetFish" onclick="catchFish()" class="hidden absolute text-4xl transition-all duration-150 active:scale-75 hover:scale-110">🐟</button>
+                    </div>
+
+                    <div class="flex justify-between items-center">
+                        <p class="text-xs font-bold text-slate-600">จับได้แล้ว: <span id="gameScore" class="text-amber-500 font-black text-lg">0</span> ตัว</p>
+                        <button id="startGameBtn" onclick="startMiniGame()" class="btn-cute bg-gradient-to-r from-sky-400 to-blue-500 hover:from-sky-500 hover:to-blue-600 text-white text-xs font-extrabold px-5 py-2.5 rounded-xl shadow-md border-2 border-white">
+                            เริ่มเล่นเกม (10 วินาที)
+                        </button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- PAGE 4: RANKS & SHOP -->
+            <div id="tab-ranks" class="tab-content space-y-3.5">
+                <!-- Shop Section -->
+                <div class="bg-white rounded-3xl p-3.5 border-2 border-purple-200 shadow-sm">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl">🛒</span>
+                        <p class="text-xs font-extrabold text-purple-900">ร้านค้าแต่งตัวน้องแมว</p>
+                    </div>
+                    <div class="grid grid-cols-3 gap-2">
+                        <div class="border-2 border-purple-100 rounded-2xl p-2 bg-purple-50/50 flex flex-col items-center gap-1">
+                            <span class="text-2xl">🍃</span>
+                            <span class="text-[10px] font-bold text-purple-800">หมวกใบไม้</span>
+                            <button id="btn-buy-leaf" onclick="buyItem('leaf', 20)" class="btn-cute bg-purple-500 text-white text-[10px] font-extrabold px-2 py-1 rounded-lg w-full">20 🐟</button>
+                        </div>
+                        <div class="border-2 border-purple-100 rounded-2xl p-2 bg-purple-50/50 flex flex-col items-center gap-1">
+                            <span class="text-2xl">🎀</span>
+                            <span class="text-[10px] font-bold text-purple-800">โบว์สีแดง</span>
+                            <button id="btn-buy-bow" onclick="buyItem('bow', 30)" class="btn-cute bg-purple-500 text-white text-[10px] font-extrabold px-2 py-1 rounded-lg w-full">30 🐟</button>
+                        </div>
+                        <div class="border-2 border-purple-100 rounded-2xl p-2 bg-purple-50/50 flex flex-col items-center gap-1">
+                            <span class="text-2xl">👓</span>
+                            <span class="text-[10px] font-bold text-purple-800">แว่นตาสุดเท่</span>
+                            <button id="btn-buy-glasses" onclick="buyItem('glasses', 50)" class="btn-cute bg-purple-500 text-white text-[10px] font-extrabold px-2 py-1 rounded-lg w-full">50 🐟</button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Leaderboard Section -->
+                <div class="bg-white rounded-3xl p-3.5 border-2 border-pink-200 shadow-sm">
+                    <div class="flex items-center gap-2 mb-2">
+                        <span class="text-xl">🏆</span>
+                        <p class="text-xs font-extrabold text-pink-900">ตารางอันดับฮีโร่ประหยัดไฟ</p>
+                    </div>
+                    <div class="overflow-y-auto max-h-[160px]">
+                        <table class="w-full text-left text-xs">
+                            <thead>
+                                <tr class="border-b border-pink-100 text-pink-400 font-extrabold text-[10px]">
+                                    <th class="p-1.5">อันดับ</th>
+                                    <th class="p-1.5">ฉายาผู้เล่น</th>
+                                    <th class="p-1.5 text-right">แต้มปลา 🐟</th>
+                                </tr>
+                            </thead>
+                            <tbody id="leaderboardRows"></tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+
         </div>
 
-        <!-- Real Office Missions Section -->
-        <div class="bg-gradient-to-br from-emerald-500/10 to-teal-500/10 border border-emerald-300/50 rounded-2xl p-3.5 shadow-sm">
-            <div class="flex justify-between items-center mb-2.5">
-                <p class="text-[11px] font-black text-emerald-900 uppercase flex items-center gap-1.5 tracking-wider">
-                    <span>🌱</span> Photo Proof Save Energy
-                </p>
-                <span class="text-[9px] font-bold bg-emerald-100 text-emerald-700 px-2 py-0.5 rounded-full">Proof Needed</span>
-            </div>
-
-            <!-- Missions Buttons -->
-            <div class="grid grid-cols-1 gap-2 text-xs">
-                <button onclick="triggerMissionUpload('Turned off unused lights/monitors', 15, 20)" class="bg-white hover:bg-emerald-50 active:scale-98 text-slate-700 font-bold py-2 px-3 border border-emerald-200/80 rounded-xl transition flex justify-between items-center shadow-sm">
-                    <span class="flex items-center gap-1.5">💡 Turn Off Light / Monitor</span>
-                    <span class="text-emerald-600 font-extrabold">+15🐟 / +20⚡</span>
-                </button>
-                <button onclick="triggerMissionUpload('Set AC to 25°C', 20, 30)" class="bg-white hover:bg-emerald-50 active:scale-98 text-slate-700 font-bold py-2 px-3 border border-emerald-200/80 rounded-xl transition flex justify-between items-center shadow-sm">
-                    <span class="flex items-center gap-1.5">🌡️ Keep AC at 25°C</span>
-                    <span class="text-emerald-600 font-extrabold">+20🐟 / +30⚡</span>
-                </button>
-                <button onclick="triggerMissionUpload('Unplugged unused devices', 10, 15)" class="bg-white hover:bg-emerald-50 active:scale-98 text-slate-700 font-bold py-2 px-3 border border-emerald-200/80 rounded-xl transition flex justify-between items-center shadow-sm">
-                    <span class="flex items-center gap-1.5">🔌 Unplug Idle Electronics</span>
-                    <span class="text-emerald-600 font-extrabold">+10🐟 / +15⚡</span>
-                </button>
-            </div>
-        </div>
-
-        <!-- Action Grid Buttons -->
-        <div class="grid grid-cols-2 gap-2.5">
-            <button onclick="feedCat()" class="bg-amber-500 hover:bg-amber-600 active:scale-95 text-white font-extrabold py-2.5 rounded-2xl shadow-md shadow-amber-500/20 transition text-xs flex items-center justify-center gap-1.5">
-                <span>🍱</span> Feed (-5⚡/+10🐟)
+        <!-- BOTTOM NAVIGATION TABS -->
+        <div class="bg-white/90 p-2 rounded-3xl border-2 border-pink-200 grid grid-cols-4 gap-1.5 shrink-0 shadow-md">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2 rounded-2xl text-pink-500 bg-pink-100/80 font-extrabold text-[11px] transition">
+                <span class="text-lg">🏠</span> หน้าหลัก
             </button>
-            <button onclick="restCat()" class="bg-teal-600 hover:bg-teal-700 active:scale-95 text-white font-extrabold py-2.5 rounded-2xl shadow-md shadow-teal-600/20 transition text-xs flex items-center justify-center gap-1.5">
-                <span>😴</span> Sleep (+30⚡)
+            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-extrabold text-[11px] transition">
+                <span class="text-lg">🌱</span> ภารกิจ
             </button>
-        </div>
-
-        <!-- Mini-Game & Shop Navigation Buttons -->
-        <div class="grid grid-cols-2 gap-2.5">
-            <button onclick="toggleMiniGame()" class="bg-emerald-600 hover:bg-emerald-700 active:scale-95 text-white font-extrabold py-2.5 rounded-2xl shadow-md shadow-emerald-600/20 transition text-xs flex items-center justify-center gap-1.5">
-                <span>🎣</span> Catch Fish Game
+            <button onclick="switchTab('game')" id="nav-game" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-extrabold text-[11px] transition">
+                <span class="text-lg">🎣</span> มินิเกม
             </button>
-            <button onclick="toggleShop()" class="bg-purple-600 hover:bg-purple-700 active:scale-95 text-white font-extrabold py-2.5 rounded-2xl shadow-md shadow-purple-600/20 transition text-xs flex items-center justify-center gap-1.5">
-                <span>🛒</span> Accessory Shop
+            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-extrabold text-[11px] transition">
+                <span class="text-lg">🏆</span> อันดับ
             </button>
         </div>
 
     </div>
 
-    <!-- Hidden File Input for Mission Photo Proof -->
+    <!-- Hidden Input สำหรับการแนบรูปถ่าย -->
     <input type="file" id="photoInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
 
     <!-- Photo Verification Modal -->
-    <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-40">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border border-white/50 animate-breathe">
+    <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-pink-200">
             <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-1.5">
-                📸 Verify Photo Proof
+                <span>📸</span> ยืนยันภาพถ่ายภารกิจ
             </h3>
-            <p id="modalMissionName" class="text-xs font-semibold text-emerald-700 bg-emerald-50 p-2 rounded-xl border border-emerald-100">
-                Mission: Turn Off Lights
-            </p>
-            <div class="w-full h-40 bg-slate-100 rounded-2xl border-2 border-dashed border-slate-300 overflow-hidden flex items-center justify-center relative">
+            <p id="modalMissionName" class="text-xs font-bold text-emerald-700 bg-emerald-50 p-2.5 rounded-2xl border border-emerald-200">ชื่อภารกิจ</p>
+            <div class="w-full h-44 bg-slate-50 rounded-2xl border-2 border-dashed border-pink-300 overflow-hidden flex items-center justify-center">
                 <img id="photoPreview" class="w-full h-full object-cover hidden" />
-                <span id="uploadPlaceholder" class="text-xs font-bold text-slate-400">Clicking camera...</span>
+                <span id="uploadPlaceholder" class="text-xs font-bold text-slate-400">กำลังโหลดรูปภาพ...</span>
             </div>
             <div class="flex gap-2">
-                <button onclick="closePhotoModal()" class="w-1/2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold py-2.5 rounded-xl transition">
-                    Cancel
-                </button>
-                <button onclick="submitMissionWithPhoto()" class="w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 rounded-xl transition shadow-md shadow-emerald-600/20">
-                    Confirm & Earn
-                </button>
+                <button onclick="closePhotoModal()" class="btn-cute w-1/2 bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-2xl">ยกเลิก</button>
+                <button onclick="submitMissionWithPhoto()" class="btn-cute w-1/2 bg-emerald-500 text-white text-xs font-bold py-2.5 rounded-2xl shadow-md border-2 border-white">ส่งหลักฐาน</button>
             </div>
         </div>
     </div>
 
-    <!-- Custom Edit Alias Modal -->
-    <div id="aliasModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-40">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border border-white/50">
+    <!-- Edit Alias Modal -->
+    <div id="aliasModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-pink-200">
             <h3 class="font-extrabold text-sm text-slate-800 flex items-center gap-1.5">
-                ✏️ Change Anonymous Alias
+                <span>✏️</span> เปลี่ยนฉายาแฝง
             </h3>
-            <p class="text-[11px] text-slate-500 font-medium">Choose a pseudonym to hide your real identity on the leaderboard.</p>
-            <input type="text" id="aliasInput" maxlength="18" placeholder="e.g. Green Ninja Cat" class="w-full bg-slate-50 border border-slate-300 rounded-xl px-3 py-2 text-xs font-bold text-slate-800 focus:outline-none focus:border-emerald-500" />
+            <input type="text" id="aliasInput" maxlength="18" placeholder="เช่น เหมียวซ่าประหยัดไฟ" class="w-full bg-slate-50 border-2 border-pink-200 rounded-2xl px-3.5 py-2.5 text-xs font-bold text-slate-800 focus:outline-none focus:border-pink-400" />
             <div class="flex gap-2">
-                <button onclick="closeAliasModal()" class="w-1/2 bg-slate-200 hover:bg-slate-300 text-slate-700 text-xs font-bold py-2.5 rounded-xl transition">
-                    Cancel
-                </button>
-                <button onclick="saveAlias()" class="w-1/2 bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold py-2.5 rounded-xl transition shadow-md shadow-emerald-600/20">
-                    Save Alias
-                </button>
+                <button onclick="closeAliasModal()" class="btn-cute w-1/2 bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-2xl">ยกเลิก</button>
+                <button onclick="saveAlias()" class="btn-cute w-1/2 bg-pink-500 text-white text-xs font-bold py-2.5 rounded-2xl border-2 border-white">บันทึก</button>
             </div>
         </div>
     </div>
 
-    <!-- Leaderboard Modal -->
-    <div id="leaderboardModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-40">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-sm flex flex-col justify-between max-h-[85vh] shadow-2xl border border-white/50">
-            <div class="flex justify-between items-center mb-2">
-                <h3 class="font-extrabold text-base text-slate-800 flex items-center gap-2">
-                    <span>🏆</span> Eco Energy Leaderboard
-                </h3>
-                <button onclick="toggleLeaderboard()" class="text-slate-400 font-bold text-lg hover:text-slate-600">✕</button>
-            </div>
-            <p class="text-[11px] text-slate-500 font-semibold mb-3">Ranking by Eco Fish Points (Anonymous Pseudonyms)</p>
-
-            <div class="bg-slate-50 border border-slate-200/80 rounded-2xl p-2 flex-grow overflow-y-auto max-h-[320px]">
-                <table class="w-full text-left text-xs">
-                    <thead>
-                        <tr class="border-b border-slate-200 text-slate-500 font-extrabold text-[10px] uppercase">
-                            <th class="p-2">Rank</th>
-                            <th class="p-2">Agent Alias</th>
-                            <th class="p-2 text-right">Fish 🐟</th>
-                        </tr>
-                    </thead>
-                    <tbody id="leaderboardRows"></tbody>
-                </table>
-            </div>
-
-            <button onclick="toggleLeaderboard()" class="w-full bg-slate-800 hover:bg-slate-900 text-white text-xs font-bold py-2.5 rounded-xl mt-3 transition">
-                Close
-            </button>
-        </div>
-    </div>
-
-    <!-- Mini-Game Modal -->
-    <div id="miniGameModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-40">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col justify-between h-[360px] shadow-2xl border border-white/50">
-            <div class="flex justify-between items-center">
-                <h3 class="font-extrabold text-sm text-slate-800">🎣 Catch Fish Game</h3>
-                <button onclick="toggleMiniGame()" class="text-slate-400 font-bold text-lg hover:text-slate-600">✕</button>
-            </div>
-            
-            <div id="gameBox" class="relative bg-sky-50 rounded-2xl border border-sky-200 h-48 overflow-hidden flex items-center justify-center">
-                <p id="gameStartText" class="text-xs font-extrabold text-sky-600">Tap start below to play!</p>
-                <button id="targetFish" onclick="catchFish()" class="hidden absolute text-3xl transition-all duration-150 active:scale-75">🐟</button>
-            </div>
-
-            <div class="flex justify-between items-center">
-                <p class="text-xs font-extrabold text-slate-600">Caught: <span id="gameScore" class="text-amber-600 font-black text-sm">0</span></p>
-                <button id="startGameBtn" onclick="startMiniGame()" class="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-4 py-2 rounded-xl shadow-md">
-                    Start (10s)
-                </button>
-            </div>
-        </div>
-    </div>
-
-    <!-- Shop Modal -->
-    <div id="shopModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-40">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col justify-between shadow-2xl border border-white/50">
-            <div class="flex justify-between items-center mb-3">
-                <h3 class="font-extrabold text-sm text-slate-800">🛒 Accessory Shop</h3>
-                <button onclick="toggleShop()" class="text-slate-400 font-bold text-lg hover:text-slate-600">✕</button>
-            </div>
-
-            <div class="grid grid-cols-2 gap-3 mb-3">
-                <div class="border border-purple-200 rounded-2xl p-3 flex flex-col items-center gap-2 bg-purple-50/50">
-                    <span class="text-3xl">🎀</span>
-                    <p class="text-xs font-bold text-purple-900">Red Ribbon</p>
-                    <button id="btn-buy-bow" onclick="buyItem('bow', 30)" class="w-full bg-purple-600 text-white text-xs font-bold py-1.5 rounded-xl">
-                        Buy (30 🐟)
-                    </button>
-                </div>
-
-                <div class="border border-purple-200 rounded-2xl p-3 flex flex-col items-center gap-2 bg-purple-50/50">
-                    <span class="text-3xl">👓</span>
-                    <p class="text-xs font-bold text-purple-900">Cool Glasses</p>
-                    <button id="btn-buy-glasses" onclick="buyItem('glasses', 50)" class="w-full bg-purple-600 text-white text-xs font-bold py-1.5 rounded-xl">
-                        Buy (50 🐟)
-                    </button>
-                </div>
-            </div>
-
-            <button onclick="toggleShop()" class="w-full bg-slate-200 text-slate-700 text-xs font-bold py-2 rounded-xl">Close</button>
-        </div>
-    </div>
-
-    <!-- JavaScript Logic -->
+    <!-- JavaScript Engine -->
     <script>
-        // Web Audio API Synthesizer
+        // Web Audio Synthesizer (สร้างเสียงเอฟเฟกต์สดน่ารักๆ)
         const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
         function playSound(freq, type, duration) {
             try {
@@ -358,58 +451,65 @@
             } catch(e) {}
         }
 
-        // Custom In-App Toast System (Replaces browser alert)
-        function showToast(message, icon = '✨') {
+        function showToast(message, icon = '💖') {
             const toast = document.getElementById('toastNotification');
             document.getElementById('toastMessage').innerText = message;
             document.getElementById('toastIcon').innerText = icon;
-
             toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-5');
             toast.classList.add('opacity-100', 'translate-y-0');
-
             setTimeout(() => {
                 toast.classList.remove('opacity-100', 'translate-y-0');
                 toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-5');
-            }, 3000);
+            }, 2500);
         }
 
-        // Anonymous Aliases
-        const catAdjectives = ['Silent', 'Green', 'Eco', 'Solar', 'Power', 'Ninja', 'Cyber'];
-        const catNouns = ['Saver', 'Paws', 'Guardian', 'Agent', 'Whiskers', 'Ranger'];
+        // Tab Navigation
+        function switchTab(tabId) {
+            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+            document.querySelectorAll('.nav-btn').forEach(el => {
+                el.classList.remove('text-pink-500', 'bg-pink-100/80');
+                el.classList.add('text-slate-400');
+            });
+
+            document.getElementById(`tab-${tabId}`).classList.add('active');
+            const activeNav = document.getElementById(`nav-${tabId}`);
+            activeNav.classList.remove('text-slate-400');
+            activeNav.classList.add('text-pink-500', 'bg-pink-100/80');
+            playSound(500, 'sine', 0.1);
+        }
+
+        // Anonymous Aliases (ฉายาแฝงน่ารัก)
+        const catAdjectives = ['แมวเทา', 'เจ้าเหมียว', 'น้องมึน', 'เหมียวซ่า', 'พุ่มเทา', 'ก้อนขน'];
+        const catNouns = ['พิทักษ์ไฟ', 'นักประหยัด', 'จอมประหยัด', 'สายชิล', 'ฮีโร่', 'ตัวจี๊ด'];
 
         function generateRandomAlias() {
             const adj = catAdjectives[Math.floor(Math.random() * catAdjectives.length)];
             const noun = catNouns[Math.floor(Math.random() * catNouns.length)];
             const num = Math.floor(1000 + Math.random() * 9000);
-            return `${adj} ${noun} #${num}`;
+            return `${adj}${noun} #${num}`;
         }
 
-        let userAlias = localStorage.getItem('energycat_user_alias');
-        if (!userAlias) {
-            userAlias = generateRandomAlias();
-            localStorage.setItem('energycat_user_alias', userAlias);
-        }
+        let userAlias = localStorage.getItem('energycat_user_alias') || generateRandomAlias();
+        localStorage.setItem('energycat_user_alias', userAlias);
 
         let gameState = {
             fish: 10,
             energy: 100,
-            inventory: { bow: false, glasses: false },
-            equipped: { bow: false, glasses: false }
+            inventory: { leaf: false, bow: false, glasses: false },
+            equipped: { leaf: false, bow: false, glasses: false }
         };
 
         const samplePlayers = [
-            { alias: 'Eco Guardian #4810', fish: 280 },
-            { alias: 'Solar Whiskers #1029', fish: 210 },
-            { alias: 'Ninja Saver #9031', fish: 145 },
-            { alias: 'Cyber Paws #2284', fish: 80 }
+            { alias: 'เจ้าเหมียวพิทักษ์ไฟ #4810', fish: 280 },
+            { alias: 'แมวเทานักประหยัด #1029', fish: 210 },
+            { alias: 'ก้อนขนสายชิล #9031', fish: 145 },
+            { alias: 'เหมียวซ่าจอมประหยัด #2284', fish: 80 }
         ];
 
         function loadData() {
             document.getElementById('displayAlias').innerText = userAlias;
             const saved = localStorage.getItem('data_' + userAlias);
-            if (saved) {
-                gameState = JSON.parse(saved);
-            }
+            if (saved) gameState = JSON.parse(saved);
             updateUI();
         }
 
@@ -423,9 +523,11 @@
             document.getElementById('energyText').innerText = `${gameState.energy}/100`;
             document.getElementById('energyBar').style.width = `${gameState.energy}%`;
 
+            document.getElementById('acc-leaf').classList.toggle('hidden', !gameState.equipped.leaf);
             document.getElementById('acc-bow').classList.toggle('hidden', !gameState.equipped.bow);
             document.getElementById('acc-glasses').classList.toggle('hidden', !gameState.equipped.glasses);
 
+            updateShopButton('leaf', 20);
             updateShopButton('bow', 30);
             updateShopButton('glasses', 50);
 
@@ -435,11 +537,8 @@
         function renderLeaderboard() {
             let data = [...samplePlayers];
             const idx = data.findIndex(p => p.alias === userAlias);
-            if (idx >= 0) {
-                data[idx].fish = gameState.fish;
-            } else {
-                data.push({ alias: userAlias, fish: gameState.fish });
-            }
+            if (idx >= 0) data[idx].fish = gameState.fish;
+            else data.push({ alias: userAlias, fish: gameState.fish });
 
             data.sort((a, b) => b.fish - a.fish);
 
@@ -449,7 +548,7 @@
             data.forEach((p, index) => {
                 const isYou = p.alias === userAlias;
                 const tr = document.createElement('tr');
-                tr.className = `border-b border-slate-100 ${isYou ? 'bg-emerald-50 font-bold text-emerald-900' : 'text-slate-700'}`;
+                tr.className = `border-b border-pink-100 ${isYou ? 'bg-pink-50 font-bold text-pink-900' : 'text-slate-700'}`;
 
                 let rankBadge = `#${index + 1}`;
                 if (index === 0) rankBadge = '🥇';
@@ -457,9 +556,9 @@
                 if (index === 2) rankBadge = '🥉';
 
                 tr.innerHTML = `
-                    <td class="p-2 font-bold">${rankBadge}</td>
-                    <td class="p-2 flex items-center gap-1">${p.alias} ${isYou ? '<span class="text-[9px] bg-emerald-600 text-white px-1.5 py-0.5 rounded-full font-extrabold">YOU</span>' : ''}</td>
-                    <td class="p-2 text-right font-black text-amber-600">${p.fish}</td>
+                    <td class="p-1.5 font-bold">${rankBadge}</td>
+                    <td class="p-1.5 flex items-center gap-1">${p.alias} ${isYou ? '<span class="text-[8px] bg-pink-500 text-white px-1.5 py-0.5 rounded-full font-extrabold">คุณ</span>' : ''}</td>
+                    <td class="p-1.5 text-right font-black text-amber-500">${p.fish}</td>
                 `;
                 container.appendChild(tr);
             });
@@ -467,10 +566,9 @@
 
         // Photo Upload Mission Flow
         let currentActiveMission = null;
-
         function triggerMissionUpload(name, rewardFish, rewardEnergy) {
             currentActiveMission = { name, rewardFish, rewardEnergy };
-            document.getElementById('modalMissionName').innerText = `Mission: ${name}`;
+            document.getElementById('modalMissionName').innerText = `ภารกิจ: ${name}`;
             document.getElementById('photoPreview').classList.add('hidden');
             document.getElementById('uploadPlaceholder').classList.remove('hidden');
             document.getElementById('photoInput').click();
@@ -497,14 +595,12 @@
 
         function submitMissionWithPhoto() {
             if (!currentActiveMission) return;
-            
             playSound(600, 'sine', 0.2);
             gameState.fish += currentActiveMission.rewardFish;
             gameState.energy = Math.min(100, gameState.energy + currentActiveMission.rewardEnergy);
             saveData();
             closePhotoModal();
-
-            showToast(`Proof Verified! +${currentActiveMission.rewardFish} 🐟 & +${currentActiveMission.rewardEnergy}⚡ Energy!`, '🌿');
+            showToast(`ยืนยันรูปสำเร็จ! รับ +${currentActiveMission.rewardFish} 🐟 & +${currentActiveMission.rewardEnergy}⚡`, '🌿');
         }
 
         // Alias Modal Functions
@@ -512,11 +608,7 @@
             document.getElementById('aliasInput').value = userAlias;
             document.getElementById('aliasModal').classList.remove('hidden');
         }
-
-        function closeAliasModal() {
-            document.getElementById('aliasModal').classList.add('hidden');
-        }
-
+        function closeAliasModal() { document.getElementById('aliasModal').classList.add('hidden'); }
         function saveAlias() {
             const val = document.getElementById('aliasInput').value.trim();
             if (val) {
@@ -524,13 +616,13 @@
                 localStorage.setItem('energycat_user_alias', userAlias);
                 loadData();
                 closeAliasModal();
-                showToast(`Alias changed to "${userAlias}"`, '✏️');
+                showToast(`เปลี่ยนฉายาเป็น "${userAlias}" แล้ว`, '✏️');
             }
         }
 
         // Pet, Feed, Rest
         function petCat(e) {
-            playSound(700, 'sine', 0.15);
+            playSound(750, 'sine', 0.15);
             createFloatingEffect(e.clientX, e.clientY, "❤️ +1");
             gameState.energy = Math.min(100, gameState.energy + 1);
             saveData();
@@ -538,48 +630,43 @@
 
         function feedCat() {
             if (gameState.energy < 5) {
-                showToast('Not enough energy! Let the cat sleep first.', '⚠️');
+                showToast('พลังงานไม่พอ! ให้น้องแมวพักผ่อนก่อนนะ', '⚠️');
                 return;
             }
-            playSound(400, 'triangle', 0.1);
+            playSound(400, 'triangle', 0.12);
             gameState.energy -= 5;
             gameState.fish += 10;
             saveData();
-            showToast('Fed the cat! (-5⚡ / +10 🐟)', '🍱');
+            showToast('ให้อาหารน้องแมวแล้ว! (-5⚡ / +10 🐟)', '🍱');
         }
 
         function restCat() {
-            playSound(300, 'sine', 0.3);
+            playSound(320, 'sine', 0.25);
             gameState.energy = Math.min(100, gameState.energy + 30);
             saveData();
-            showToast('Cat rested well! (+30⚡)', '😴');
+            showToast('น้องแมวได้นอนพักผ่อนแล้ว! (+30⚡)', '😴');
         }
 
         function createFloatingEffect(x, y, text) {
             const stage = document.getElementById('catStage').getBoundingClientRect();
             const el = document.createElement('div');
-            el.className = 'float-text text-amber-500 text-sm';
+            el.className = 'float-text text-pink-500 font-extrabold text-sm';
             el.innerText = text;
             el.style.left = `${x - stage.left}px`;
             el.style.top = `${y - stage.top}px`;
             document.getElementById('effectLayer').appendChild(el);
-            setTimeout(() => el.remove(), 900);
+            setTimeout(() => el.remove(), 1000);
         }
-
-        // Modals
-        function toggleLeaderboard() { document.getElementById('leaderboardModal').classList.toggle('hidden'); }
-        function toggleMiniGame() { document.getElementById('miniGameModal').classList.toggle('hidden'); }
-        function toggleShop() { document.getElementById('shopModal').classList.toggle('hidden'); }
 
         // Shop System
         function updateShopButton(item, price) {
             const btn = document.getElementById(`btn-buy-${item}`);
             if (gameState.inventory[item]) {
-                btn.innerText = gameState.equipped[item] ? 'Unequip' : 'Equip';
-                btn.className = "w-full bg-emerald-600 text-white text-xs font-bold py-1.5 rounded-xl";
+                btn.innerText = gameState.equipped[item] ? 'ถอดออก' : 'สวมใส่';
+                btn.className = "btn-cute bg-emerald-500 text-white text-[10px] font-extrabold px-2 py-1 rounded-lg w-full";
             } else {
-                btn.innerText = `Buy (${price} 🐟)`;
-                btn.className = "w-full bg-purple-600 text-white text-xs font-bold py-1.5 rounded-xl";
+                btn.innerText = `${price} 🐟`;
+                btn.className = "btn-cute bg-purple-500 text-white text-[10px] font-extrabold px-2 py-1 rounded-lg w-full";
             }
         }
 
@@ -591,10 +678,10 @@
                     gameState.fish -= price;
                     gameState.inventory[item] = true;
                     gameState.equipped[item] = true;
-                    playSound(600, 'square', 0.2);
-                    showToast('Item purchased and equipped!', '🎉');
+                    playSound(650, 'square', 0.2);
+                    showToast('ซื้อและสวมใส่ชุดเรียบร้อย!', '🎉');
                 } else {
-                    showToast('Not enough fish points!', '❌');
+                    showToast('แต้มปลาไม่พอจ้า!', '❌');
                     return;
                 }
             }
@@ -612,7 +699,7 @@
             spawnFish();
             setTimeout(() => {
                 document.getElementById('targetFish').classList.add('hidden');
-                document.getElementById('gameStartText').innerText = `Time's up! +${gameScore * 2} 🐟`;
+                document.getElementById('gameStartText').innerText = `หมดเวลา! รับรางวัล +${gameScore * 2} 🐟`;
                 document.getElementById('gameStartText').classList.remove('hidden');
                 document.getElementById('startGameBtn').disabled = false;
                 
@@ -632,7 +719,7 @@
         }
 
         function catchFish() {
-            playSound(800, 'sine', 0.1);
+            playSound(850, 'sine', 0.08);
             gameScore++;
             document.getElementById('gameScore').innerText = gameScore;
             spawnFish();
