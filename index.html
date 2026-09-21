@@ -1,1136 +1,263 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="th">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat 3D - Cat Growth & Weight Battle</title>
-    <!-- Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@600;700;800&display=swap" rel="stylesheet">
-    <style>
-        * { font-family: 'Fredoka', 'Quicksand', sans-serif; }
-
-        body {
-            background: radial-gradient(circle at 50% 30%, #FFE5EC 0%, #FFC2D1 50%, #B5FFFC 100%);
-            min-height: 100vh;
-            user-select: none;
-            overflow-x: hidden;
-        }
-
-        /* Claymorphism Styling */
-        .clay-card {
-            background: rgba(255, 255, 255, 0.95);
-            border-radius: 44px;
-            box-shadow: 
-                0 25px 50px -12px rgba(255, 182, 193, 0.5),
-                inset 0 4px 12px rgba(255, 255, 255, 1),
-                inset 0 -6px 12px rgba(255, 154, 162, 0.2);
-            border: 5px solid #FFFFFF;
-        }
-
-        .clay-inner {
-            background: linear-gradient(180deg, #FFFDF9 0%, #FFF5F7 100%);
-            border-radius: 36px;
-            box-shadow: 
-                inset 0 6px 16px rgba(251, 113, 133, 0.15),
-                inset 0 -6px 12px rgba(255, 255, 255, 0.9);
-            border: 3.5px solid #FFE4E6;
-        }
-
-        .clay-btn {
-            border-radius: 24px;
-            transition: all 0.15s cubic-bezier(0.4, 0, 0.2, 1);
-            box-shadow: 
-                0 8px 0 0 rgba(225, 29, 72, 0.25),
-                0 12px 20px -4px rgba(244, 63, 94, 0.3),
-                inset 0 3px 6px rgba(255, 255, 255, 0.9);
-        }
-        .clay-btn:hover {
-            transform: translateY(-2px);
-            filter: brightness(1.05);
-        }
-        .clay-btn:active {
-            transform: translateY(5px);
-            box-shadow: 
-                0 3px 0 0 rgba(225, 29, 72, 0.25),
-                inset 0 2px 4px rgba(0, 0, 0, 0.1);
-        }
-
-        .glass-modal {
-            background: rgba(15, 23, 42, 0.7);
-            backdrop-filter: blur(14px);
-        }
-
-        /* Animations */
-        @keyframes breathe {
-            0%, 100% { transform: translateY(0) scale(1, 1); }
-            50% { transform: translateY(-8px) scale(1.03, 0.97); }
-        }
-        .animate-breathe { animation: breathe 3s ease-in-out infinite; }
-
-        @keyframes tailWag {
-            0%, 100% { transform: rotate(0deg); }
-            50% { transform: rotate(18deg); }
-        }
-        .animate-tail { transform-origin: 155px 165px; animation: tailWag 2s ease-in-out infinite; }
-
-        @keyframes floatHeart {
-            0% { opacity: 1; transform: translate(-50%, -50%) scale(0.6) translateY(0); }
-            100% { opacity: 0; transform: translate(-50%, -50%) scale(1.4) translateY(-80px); }
-        }
-        .heart-pop {
-            position: absolute;
-            pointer-events: none;
-            animation: floatHeart 0.9s ease-out forwards;
-            font-size: 28px;
-            z-index: 30;
-        }
-
-        @keyframes zzzFloat {
-            0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
-            50% { opacity: 1; transform: translate(16px, -22px) scale(1.2); }
-            100% { opacity: 0; transform: translate(32px, -45px) scale(0.8); }
-        }
-        .animate-zzz { animation: zzzFloat 2.4s infinite ease-in-out; }
-
-        .tab-content { display: none; }
-        .tab-content.active { display: block; animation: popIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1); }
-
-        @keyframes popIn {
-            from { opacity: 0; transform: scale(0.96) translateY(8px); }
-            to { opacity: 1; transform: scale(1) translateY(0); }
-        }
-
-        ::-webkit-scrollbar { width: 8px; }
-        ::-webkit-scrollbar-track { background: #FFF1F2; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: #FB7185; border-radius: 10px; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Bows & Chest Bibs Studio</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;600;700&family=Fredoka:wght@500;600;700&display=swap" rel="stylesheet">
+  <style>
+    body {
+      font-family: 'Fredoka', 'Kanit', sans-serif;
+      background-color: #fff4f7;
+    }
+    .clay-btn {
+      box-shadow: 0 6px 0 #e08298, 0 10px 15px rgba(255, 105, 180, 0.2);
+      transition: all 0.15s ease;
+    }
+    .clay-btn:active {
+      transform: translateY(4px);
+      box-shadow: 0 2px 0 #e08298, 0 4px 6px rgba(255, 105, 180, 0.2);
+    }
+    .clay-card {
+      background: #ffffff;
+      border: 3px solid #ffe1e9;
+      box-shadow: 0 8px 20px rgba(235, 110, 148, 0.12);
+      border-radius: 24px;
+    }
+    .tab-active {
+      background-color: #ff4785 !important;
+      color: white !important;
+      box-shadow: inset 0 -4px 0 rgba(0,0,0,0.15);
+    }
+  </style>
 </head>
-<body class="flex justify-center items-center min-h-screen p-3 md:p-6">
+<body class="min-h-screen flex items-center justify-center p-4">
 
-    <!-- Toast Notification -->
-    <div id="toastNotification" class="fixed top-6 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-6">
-        <div class="bg-slate-900/95 text-white px-7 py-3.5 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-3 font-extrabold text-sm tracking-wide">
-            <span id="toastIcon" class="text-2xl">✨</span>
-            <span id="toastMessage">Notification</span>
+  <div class="max-w-4xl w-full clay-card p-6 md:p-8 relative">
+    
+    <!-- Header -->
+    <div class="flex flex-wrap items-center justify-between gap-4 mb-6 pb-4 border-b-2 border-pink-100">
+      <div class="flex items-center gap-3">
+        <span class="text-4xl">🎀</span>
+        <div>
+          <h1 class="text-2xl md:text-3xl font-bold text-pink-900">Bows & Chest Bibs Studio</h1>
+          <p class="text-sm text-pink-500">แต่งตัวน้องแมวด้วยผ้ากันเปื้อนใหญ่เต็มอก และปลอกคอสุดน่ารัก</p>
         </div>
+      </div>
+      
+      <div class="flex items-center gap-3">
+        <div class="bg-amber-100 border-2 border-amber-300 rounded-full px-4 py-1.5 flex items-center gap-2">
+          <span>🐟</span>
+          <span id="fish-count" class="font-bold text-amber-800 text-lg">100</span>
+        </div>
+        <button onclick="stripAll()" class="bg-pink-100 hover:bg-pink-200 text-pink-700 font-bold px-4 py-2 rounded-2xl flex items-center gap-2 border-2 border-pink-200 transition">
+          🔄 Strip All
+        </button>
+      </div>
     </div>
 
-    <!-- Main Game Container -->
-    <div class="clay-card w-full max-w-md h-[860px] flex flex-col justify-between relative z-10 overflow-hidden p-5 border-4 border-white">
+    <div class="grid grid-cols-1 md:grid-cols-12 gap-6">
+      
+      <!-- Character Preview Stage -->
+      <div class="md:col-span-5 flex flex-col items-center justify-center bg-pink-50 rounded-3xl p-6 border-2 border-pink-100 relative min-h-[380px]">
         
-        <!-- Header Bar -->
-        <div class="bg-gradient-to-r from-rose-200 via-pink-200 to-amber-100 p-3.5 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
-            <div class="flex items-center gap-3">
-                <div class="w-12 h-12 rounded-2xl bg-white flex items-center justify-center text-3xl shadow-md border-2 border-pink-200 animate-bounce">
-                    🐱
-                </div>
-                <div>
-                    <div class="flex items-center gap-1.5">
-                        <span class="text-[10px] tracking-widest font-black text-rose-600 uppercase bg-white/80 px-2 py-0.5 rounded-full border border-rose-200">AGENT</span>
-                        <span id="totalUsersBadge" class="text-[10px] font-black bg-rose-500 text-white px-2.5 py-0.5 rounded-full shadow-sm">👥 0</span>
-                    </div>
-                    <div class="text-sm font-black text-slate-800 flex items-center gap-1.5 mt-0.5">
-                        <span id="displayUser">Guest Agent</span>
-                        <button onclick="logoutUser()" class="text-xs text-rose-600 hover:text-rose-800 font-extrabold underline ml-1">Logout</button>
-                    </div>
-                </div>
-            </div>
-            
-            <div class="flex items-center gap-2 bg-white px-4 py-2 rounded-2xl border-2 border-rose-300 shadow-sm">
-                <span class="text-2xl animate-pulse">🐟</span>
-                <span id="fishCount" class="text-base font-black text-rose-600 tracking-tight">0</span>
-            </div>
+        <!-- SVG Avatar Canvas -->
+        <svg id="cat-avatar" viewBox="0 0 300 320" class="w-64 h-64 filter drop-shadow-md">
+          <!-- Background Glow -->
+          <circle cx="150" cy="160" r="130" fill="#fff" opacity="0.6" />
+
+          <!-- Tail -->
+          <path d="M 210 230 C 260 210, 250 140, 220 130 C 210 125, 205 135, 212 145 C 230 160, 235 200, 195 220 Z" fill="#ffb07c" stroke="#e08b52" stroke-width="3" />
+
+          <!-- Body -->
+          <ellipse cx="150" cy="220" rx="65" ry="60" fill="#ffd5b5" stroke="#e08b52" stroke-width="4" />
+          <!-- Paws -->
+          <ellipse cx="115" cy="270" rx="18" ry="12" fill="#fff" stroke="#e08b52" stroke-width="3" />
+          <ellipse cx="185" cy="270" rx="18" ry="12" fill="#fff" stroke="#e08b52" stroke-width="3" />
+
+          <!-- Head -->
+          <ellipse cx="150" cy="120" rx="75" ry="60" fill="#ffd5b5" stroke="#e08b52" stroke-width="4" />
+          
+          <!-- Ears -->
+          <polygon points="85,80 70,20 115,55" fill="#ffd5b5" stroke="#e08b52" stroke-width="4" stroke-linejoin="round" />
+          <polygon points="90,75 78,32 110,58" fill="#ffb0b0" />
+          
+          <polygon points="215,80 230,20 185,55" fill="#ffd5b5" stroke="#e08b52" stroke-width="4" stroke-linejoin="round" />
+          <polygon points="210,75 222,32 190,58" fill="#ffb0b0" />
+
+          <!-- Eyes -->
+          <ellipse cx="120" cy="115" rx="8" ry="12" fill="#2d3748" />
+          <circle cx="118" cy="110" r="3" fill="#fff" />
+          <ellipse cx="180" cy="115" rx="8" ry="12" fill="#2d3748" />
+          <circle cx="178" cy="110" r="3" fill="#fff" />
+
+          <!-- Cheeks -->
+          <ellipse cx="100" cy="130" rx="10" ry="6" fill="#ff9999" opacity="0.6" />
+          <ellipse cx="200" cy="130" rx="10" ry="6" fill="#ff9999" opacity="0.6" />
+
+          <!-- Nose & Mouth -->
+          <polygon points="150,123 145,118 155,118" fill="#ff8080" />
+          <path d="M 142 128 Q 150 135 150 128 Q 150 135 158 128" fill="none" stroke="#2d3748" stroke-width="2.5" stroke-linecap="round" />
+
+          <!-- DYNAMIC ACCESORIES LAYER -->
+          <!-- 1. Large Bib Layer (Under Collar, Covers Chest Big Time) -->
+          <g id="layer-bib"></g>
+
+          <!-- 2. Collar & Bell Layer (Sits at Neck line) -->
+          <g id="layer-collar"></g>
+
+          <!-- 3. Headwear Layer (Bows & Hats) -->
+          <g id="layer-head"></g>
+        </svg>
+
+        <p class="text-xs text-pink-400 mt-2 font-medium">ลองเลือกชุดแต่งกายให้น้องแมวได้เลย!</p>
+      </div>
+
+      <!-- Item Selection Controls -->
+      <div class="md:col-span-7 flex flex-col">
+        
+        <!-- Category Nav -->
+        <div class="grid grid-cols-3 gap-2 mb-4">
+          <button onclick="switchTab('bibs')" id="tab-bibs" class="tab-btn tab-active py-2.5 px-2 rounded-2xl font-bold text-sm bg-pink-100 text-pink-600 transition text-center flex items-center justify-center gap-1">
+            🍼 ผ้ากันเปื้อนใหญ่ (10)
+          </button>
+          <button onclick="switchTab('collars')" id="tab-collars" class="tab-btn py-2.5 px-2 rounded-2xl font-bold text-sm bg-pink-100 text-pink-600 transition text-center flex items-center justify-center gap-1">
+            🔔 ปลอกคอ/กระดิ่ง (10)
+          </button>
+          <button onclick="switchTab('hats')" id="tab-hats" class="tab-btn py-2.5 px-2 rounded-2xl font-bold text-sm bg-pink-100 text-pink-600 transition text-center flex items-center justify-center gap-1">
+            🎀 โบว์/หมวก (10)
+          </button>
         </div>
 
-        <!-- MAIN CONTENT AREA -->
-        <div class="flex-grow overflow-y-auto py-3">
-            
-            <!-- PAGE 1: HOME (CAT CARE, LEVEL & WEIGHT GROWTH) -->
-            <div id="tab-home" class="tab-content active space-y-3">
-                
-                <!-- Cat Level & Weight Bar -->
-                <div class="bg-gradient-to-r from-purple-100 via-pink-100 to-rose-100 border-3 border-purple-300 rounded-3xl p-3 shadow-sm">
-                    <div class="flex justify-between items-center mb-1">
-                        <div class="flex items-center gap-1.5">
-                            <span class="text-sm font-black bg-purple-600 text-white px-2.5 py-0.5 rounded-full shadow-sm" id="catLevelBadge">LVL 1</span>
-                            <span class="text-xs font-black text-purple-900 tracking-wider" id="catTitleText">KITTEN</span>
-                        </div>
-                        <!-- Cat Weight Display -->
-                        <div class="flex items-center gap-1 bg-white px-3 py-1 rounded-full border-2 border-purple-300 shadow-sm">
-                            <span class="text-xs">⚖️</span>
-                            <span id="catWeightText" class="text-xs font-black text-purple-800">1.000 kg</span>
-                        </div>
-                    </div>
-                    
-                    <div class="flex justify-between items-center text-[11px] font-extrabold text-purple-800 my-1 px-1">
-                        <span>Growth Progress (EXP)</span>
-                        <span id="expText">0/50 EXP</span>
-                    </div>
-                    <div class="w-full bg-purple-200 h-3.5 rounded-full overflow-hidden p-0.5 border border-purple-300">
-                        <div id="expBar" class="bg-gradient-to-r from-purple-500 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 0%;"></div>
-                    </div>
-                </div>
-
-                <!-- Energy Progress Bar -->
-                <div class="bg-white border-3 border-rose-300 rounded-3xl p-3 shadow-sm">
-                    <div class="flex justify-between items-center mb-1">
-                        <span class="text-xs font-black text-rose-700 flex items-center gap-1.5 tracking-wider">
-                            <span class="text-base">⚡</span> CAT ENERGY
-                        </span>
-                        <span id="energyText" class="text-xs font-black bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded-full border border-rose-300">100/100</span>
-                    </div>
-                    <div class="w-full bg-rose-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-rose-200 shadow-inner">
-                        <div id="energyBar" class="bg-gradient-to-r from-rose-400 via-pink-500 to-rose-500 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
-                    </div>
-                </div>
-
-                <!-- Kawaii 3D Cat Stage Screen -->
-                <div id="catStage" class="relative clay-inner p-2 flex flex-col items-center justify-center border-3 border-pink-200 h-[310px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
-                    
-                    <!-- Background Decor -->
-                    <div class="absolute top-3 left-4 text-2xl opacity-80">☁️</div>
-                    <div class="absolute top-4 right-5 text-2xl opacity-80">✨</div>
-                    <div class="absolute bottom-10 left-5 text-2xl opacity-80">🥛</div>
-                    <div class="absolute bottom-8 right-6 text-2xl opacity-80">🐟</div>
-
-                    <!-- Sleep Zzz FX -->
-                    <div id="sleepEffect" class="hidden absolute top-6 right-12 z-20 pointer-events-none">
-                        <span class="text-3xl font-black text-indigo-500 animate-zzz inline-block">Zzz...</span>
-                    </div>
-
-                    <!-- CAT CONTAINER WITH DYNAMIC GROWTH SCALE -->
-                    <div id="catScaleWrapper" class="relative flex items-center justify-center transition-all duration-500 transform scale-100">
-                        <div class="animate-breathe relative flex items-center justify-center z-10 w-[230px] h-[230px]">
-                            
-                            <!-- ORIGINAL KAWAII 3D CAT SVG -->
-                            <svg width="230" height="230" viewBox="0 0 200 200" class="drop-shadow-2xl">
-                                <defs>
-                                    <radialGradient id="catBody3D" cx="35%" cy="30%" r="70%">
-                                        <stop offset="0%" stop-color="#FFFFFF"/>
-                                        <stop offset="55%" stop-color="#FFEAD5"/>
-                                        <stop offset="100%" stop-color="#FDCEAB"/>
-                                    </radialGradient>
-                                    <radialGradient id="earInner" cx="50%" cy="50%" r="50%">
-                                        <stop offset="0%" stop-color="#FFB6C1"/>
-                                        <stop offset="100%" stop-color="#FF69B4"/>
-                                    </radialGradient>
-                                </defs>
-
-                                <!-- Tail -->
-                                <g class="animate-tail">
-                                    <path d="M 140 145 C 175 140, 185 105, 170 85 C 158 70, 145 88, 152 105 C 158 118, 142 135, 132 138 Z" 
-                                          fill="#FCB584" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" stroke-linecap="round" />
-                                    <path d="M 160 92 Q 165 98 158 105" stroke="#5C2C16" stroke-width="4" stroke-linecap="round" fill="none"/>
-                                </g>
-
-                                <!-- Feet Layer -->
-                                <ellipse cx="65" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
-                                <ellipse cx="135" cy="168" rx="16" ry="10" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4.5"/>
-
-                                <!-- Body Shell -->
-                                <path d="M 50 120 C 42 155, 45 172, 65 172 C 85 172, 115 172, 135 172 C 155 172, 158 155, 150 120 Z" 
-                                      fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
-                                <ellipse cx="100" cy="148" rx="28" ry="20" fill="#FFFFFF" opacity="0.9"/>
-
-                                <!-- Raised Paws -->
-                                <ellipse cx="72" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
-                                <ellipse cx="128" cy="122" rx="11" ry="14" fill="#FFFFFF" stroke="#5C2C16" stroke-width="4"/>
-
-                                <!-- Head -->
-                                <path d="M 35 80 C 22 55, 42 22, 68 32 C 85 22, 115 22, 132 32 C 158 22, 178 55, 165 80 C 175 110, 155 128, 100 128 C 45 128, 25 110, 35 80 Z" 
-                                      fill="url(#catBody3D)" stroke="#5C2C16" stroke-width="4.5" stroke-linejoin="round" />
-
-                                <!-- Inner Ears -->
-                                <path d="M 48 42 C 43 32, 58 28, 64 36 Z" fill="url(#earInner)"/>
-                                <path d="M 152 42 C 157 32, 142 28, 136 36 Z" fill="url(#earInner)"/>
-
-                                <!-- Calico Patch -->
-                                <path d="M 35 80 C 30 60, 45 35, 62 34 C 52 55, 55 70, 58 82 Z" fill="#FB923C"/>
-
-                                <!-- Whiskers -->
-                                <path d="M 22 82 L 42 85 M 18 92 L 40 92 M 22 102 L 43 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
-                                <path d="M 178 82 L 158 85 M 182 92 L 160 92 M 178 102 L 157 97" stroke="#5C2C16" stroke-width="4" stroke-linecap="round"/>
-
-                                <!-- Awake Eyes & Face -->
-                                <g id="catEyesAwake">
-                                    <circle cx="72" cy="82" r="11" fill="#3B170B"/>
-                                    <circle cx="69" cy="78" r="4" fill="#FFFFFF"/>
-                                    <circle cx="75" cy="85" r="2" fill="#FFFFFF"/>
-                                    
-                                    <circle cx="128" cy="82" r="11" fill="#3B170B"/>
-                                    <circle cx="125" cy="78" r="4" fill="#FFFFFF"/>
-                                    <circle cx="131" cy="85" r="2" fill="#FFFFFF"/>
-
-                                    <ellipse cx="58" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
-                                    <ellipse cx="142" cy="94" rx="8" ry="4.5" fill="#FF4D6D" opacity="0.75"/>
-
-                                    <polygon points="100,88 96,84 104,84" fill="#FF4D6D"/>
-                                    <path d="M 92 92 Q 100 100 100 92 Q 100 100 108 92" stroke="#5C2C16" stroke-width="3.5" fill="none" stroke-linecap="round"/>
-                                </g>
-
-                                <!-- Sleeping Eyes -->
-                                <g id="catEyesSleep" class="hidden">
-                                    <path d="M 62 84 Q 72 94 82 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
-                                    <path d="M 118 84 Q 128 94 138 84" stroke="#5C2C16" stroke-width="4" fill="none" stroke-linecap="round"/>
-                                    <ellipse cx="58" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
-                                    <ellipse cx="142" cy="92" rx="7" ry="4" fill="#FF4D6D" opacity="0.6"/>
-                                    <path d="M 95 92 Q 100 96 105 92" stroke="#5C2C16" stroke-width="3" fill="none" stroke-linecap="round"/>
-                                </g>
-                            </svg>
-
-                            <!-- PERFECT FITTING BOWS & BIBS OVERLAYS -->
-                            <div class="cat-outfit-container absolute inset-0 pointer-events-none flex items-center justify-center z-20">
-                                <div class="slot-head absolute inset-0 flex items-center justify-center"></div>
-                                <div class="slot-bib absolute inset-0 flex items-center justify-center"></div>
-                            </div>
-                        </div>
-                    </div>
-
-                    <p id="catStatusLabel" class="text-xs font-black text-rose-600 mt-1 bg-white px-4 py-1.5 rounded-full border-2 border-rose-300 shadow-md z-10 tracking-wide">
-                        ✨ TAP TO PET (+1⚡ / +10g)
-                    </p>
-                </div>
-
-                <!-- Action Buttons -->
-                <div class="grid grid-cols-2 gap-3 pt-0.5">
-                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 via-orange-400 to-amber-500 text-white font-black py-3 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
-                        <span class="text-xl">🍱</span> FEED (-5🐟 / +15⚡ / +50g)
-                    </button>
-                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 via-purple-400 to-indigo-500 text-white font-black py-3 px-3 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-2 shadow-lg">
-                        <span class="text-xl">😴</span> REST (+30⚡ / +30g)
-                    </button>
-                </div>
-            </div>
-
-            <!-- PAGE 2: MISSIONS -->
-            <div id="tab-missions" class="tab-content space-y-3.5">
-                <div class="bg-gradient-to-br from-emerald-100 via-teal-100 to-emerald-200 border-3 border-emerald-300 rounded-3xl p-4 shadow-sm">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="text-2xl">🌱</span>
-                        <p class="text-sm font-black text-emerald-950 uppercase tracking-wide">Eco Missions (Photo Proof)</p>
-                    </div>
-                    <p class="text-xs font-extrabold text-emerald-800 mb-3.5">Complete real-world eco tasks to earn fish & weight boost!</p>
-
-                    <div class="space-y-3 text-xs font-black">
-                        <button onclick="openMissionUploadModal('Turn off lights / monitor', 15, 20, 0.080)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2 text-xs">💡 Turn Off Unused Lights</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+15🐟 / +80g</span>
-                        </button>
-                        <button onclick="openMissionUploadModal('Turn off AC when leaving room', 20, 30, 0.120)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2 text-xs">❄️ Turn Off Air Conditioner</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+20🐟 / +120g</span>
-                        </button>
-                        <button onclick="openMissionUploadModal('Unplug idle electronics', 10, 15, 0.050)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 py-3.5 px-4 border-2 border-emerald-300 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2 text-xs">🔌 Unplug Idle Electronics</span>
-                            <span class="bg-emerald-100 text-emerald-700 px-3 py-1 rounded-full border border-emerald-300 text-[11px]">+10🐟 / +50g</span>
-                        </button>
-                    </div>
-                </div>
-            </div>
-
-            <!-- PAGE 3: DRESS-UP STUDIO (HEADWEAR & CUTE CHEST BIBS) -->
-            <div id="tab-dressup" class="tab-content space-y-3.5">
-                <div class="bg-white rounded-3xl p-3.5 border-3 border-pink-300 shadow-sm flex flex-col h-[480px]">
-                    <div class="flex justify-between items-center mb-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">🎀</span>
-                            <h3 class="font-black text-sm text-pink-900">Bows & Chest Bibs Studio</h3>
-                        </div>
-                        <button onclick="resetOutfit()" class="text-[11px] font-black bg-rose-100 text-rose-700 hover:bg-rose-200 px-3 py-1 rounded-full border border-rose-300">
-                            🔄 Strip All
-                        </button>
-                    </div>
-
-                    <!-- Category Tabs -->
-                    <div class="grid grid-cols-2 gap-2 mb-2.5">
-                        <button onclick="switchDressCategory('head')" id="cat-head-btn" class="dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2.5 rounded-xl border border-pink-300 shadow-sm">
-                            🎀 Bows & Hats
-                        </button>
-                        <button onclick="switchDressCategory('bib')" id="cat-bib-btn" class="dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2.5 rounded-xl border border-pink-200">
-                            🍼 Cute Bibs & Collars
-                        </button>
-                    </div>
-
-                    <!-- Grid Scroll Area -->
-                    <div id="dressItemsGrid" class="flex-grow overflow-y-auto grid grid-cols-2 gap-2 p-1">
-                        <!-- Dynamic Cards Injected via JS -->
-                    </div>
-                </div>
-            </div>
-
-            <!-- PAGE 4: LEADERBOARD (RANKED BY CAT WEIGHT) -->
-            <div id="tab-ranks" class="tab-content space-y-3.5">
-                
-                <!-- WINNER BANNER -->
-                <div class="bg-gradient-to-r from-rose-400 via-pink-500 to-amber-400 rounded-3xl p-4 border-3 border-white shadow-lg text-white">
-                    <div class="flex items-center gap-2 mb-1">
-                        <span class="text-3xl animate-bounce">🏆</span>
-                        <div>
-                            <h4 class="text-xs font-black uppercase tracking-wider">Heavyweight Cat Champion</h4>
-                            <p class="text-[11px] font-extrabold text-rose-100">Ranked precisely by Cat Weight (kg)!</p>
-                        </div>
-                    </div>
-                    <div class="mt-3 pt-2.5 border-t border-white/30 flex justify-between items-center">
-                        <p class="text-xs font-black bg-black/25 px-3 py-1 rounded-full border border-white/20">
-                            👑 Rank #1: <span id="topPlayerNameDisplay" class="underline">Loading...</span>
-                        </p>
-                        <button id="claimRewardBtn" onclick="openClaimModal()" class="clay-btn bg-white text-rose-600 hover:bg-rose-50 text-xs font-black px-3.5 py-2 rounded-2xl shadow-md border-2 border-rose-200">
-                            🎁 CLAIM
-                        </button>
-                    </div>
-                </div>
-
-                <!-- Leaderboard Table -->
-                <div class="bg-white rounded-3xl p-3.5 border-3 border-rose-200 shadow-sm">
-                    <div class="flex items-center justify-between mb-2">
-                        <div class="flex items-center gap-2">
-                            <span class="text-2xl">📊</span>
-                            <p class="text-xs font-black text-rose-900 uppercase tracking-wide">Global Cat Weight Ranks</p>
-                        </div>
-                        <span id="totalPlayersCount" class="text-xs font-black bg-rose-100 text-rose-700 px-2.5 py-0.5 rounded-full">0 Players</span>
-                    </div>
-                    <div class="overflow-y-auto max-h-[170px]">
-                        <table class="w-full text-left text-xs">
-                            <thead>
-                                <tr class="border-b-2 border-rose-100 text-rose-600 font-black text-[10px] uppercase">
-                                    <th class="p-1.5">Rank</th>
-                                    <th class="p-1.5">Agent & Level</th>
-                                    <th class="p-1.5 text-right">Cat Weight ⚖️</th>
-                                </tr>
-                            </thead>
-                            <tbody id="leaderboardRows"></tbody>
-                        </table>
-                    </div>
-                </div>
-
-                <div class="text-center pt-1">
-                    <button onclick="openAdminModal()" class="text-xs font-extrabold text-slate-500 hover:text-rose-600 underline">
-                        ⚙️ Admin Panel (Export Winner Data CSV)
-                    </button>
-                </div>
-            </div>
-
+        <!-- Items Grid Container -->
+        <div id="items-grid" class="grid grid-cols-2 sm:grid-cols-2 gap-3 max-h-[340px] overflow-y-auto p-1 pr-2">
+          <!-- Items will be injected by JS -->
         </div>
 
-        <!-- NAVIGATION BAR -->
-        <div class="bg-white p-2.5 rounded-3xl border-3 border-rose-200 grid grid-cols-4 gap-2 shrink-0 shadow-lg">
-            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2.5 rounded-2xl text-rose-600 bg-rose-100 font-black text-xs">
-                <span class="text-xl">🏠</span> HOME
-            </button>
-            <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
-                <span class="text-xl">🌱</span> MISSIONS
-            </button>
-            <button onclick="switchTab('dressup')" id="nav-dressup" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
-                <span class="text-xl">🎀</span> STUDIO
-            </button>
-            <button onclick="switchTab('ranks')" id="nav-ranks" class="nav-btn flex flex-col items-center py-2.5 rounded-2xl text-slate-400 font-black text-xs">
-                <span class="text-xl">🏆</span> RANKS
-            </button>
-        </div>
+      </div>
 
     </div>
-
-    <!-- Hidden Photo Input -->
-    <input type="file" id="photoFileInput" accept="image/*" class="hidden" onchange="handlePhotoUpload(event)" />
-
-    <!-- MODAL 1: MISSION PHOTO PROOF -->
-    <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3.5 shadow-2xl border-4 border-emerald-300">
-            <h3 class="font-black text-base text-slate-800">📸 Attach Photo Proof</h3>
-            <p id="modalMissionName" class="text-xs font-black text-emerald-800 bg-emerald-50 p-3 rounded-2xl border border-emerald-200">Mission</p>
-            
-            <div onclick="triggerFileSelect()" class="w-full h-44 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-400 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
-                <img id="photoPreview" class="w-full h-full object-cover hidden" />
-                <div id="uploadPlaceholder" class="text-center p-3">
-                    <span class="text-4xl">📷</span>
-                    <p class="text-xs font-black text-emerald-700 mt-1">Tap to select photo</p>
-                </div>
-            </div>
-
-            <div class="flex gap-2">
-                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-3 rounded-2xl">Cancel</button>
-                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white">Submit Proof</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL 2: AUTHENTICATION -->
-    <div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-6 w-full max-w-xs flex flex-col gap-3.5 shadow-2xl border-4 border-rose-300">
-            <div class="text-center">
-                <span class="text-5xl">🔐</span>
-                <h3 id="authTitle" class="font-black text-lg text-slate-800 mt-1">Agent Login</h3>
-                <p class="text-xs font-bold text-slate-500">Sign in to save your cat progress!</p>
-            </div>
-
-            <div class="space-y-3 text-xs">
-                <div>
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Username</label>
-                    <input type="text" id="authUsername" placeholder="e.g. KittyHero99" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2.5 font-black text-slate-800 focus:outline-none mt-0.5" />
-                </div>
-                <div id="emailContainer" class="hidden">
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Email Address</label>
-                    <input type="email" id="authEmail" placeholder="cat@example.com" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2.5 font-black text-slate-800 focus:outline-none mt-0.5" />
-                </div>
-                <div>
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Password</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2.5 font-black text-slate-800 focus:outline-none mt-0.5" />
-                </div>
-            </div>
-
-            <button onclick="handleAuthSubmit()" id="authSubmitBtn" class="clay-btn w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs font-black py-3.5 rounded-2xl border-2 border-white mt-1">
-                LOG IN
-            </button>
-
-            <p class="text-center text-xs font-extrabold text-slate-500">
-                <span id="authToggleText">Need an account?</span>
-                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-rose-600 underline font-black ml-1">Register</button>
-            </p>
-        </div>
-    </div>
-
-    <!-- MODAL 3: CLAIM REWARD -->
-    <div id="claimModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-rose-300">
-            <div class="text-center">
-                <span class="text-4xl">👑🎁</span>
-                <h3 class="font-black text-base text-rose-600 mt-1">Winner Claim Form</h3>
-                <p class="text-xs font-bold text-slate-500">For Verified Heavyweight Champion #1</p>
-            </div>
-
-            <div class="space-y-2 text-xs font-black">
-                <div>
-                    <label class="text-slate-700 text-[10px] uppercase">Full Name</label>
-                    <input type="text" id="claimFullName" placeholder="John Doe" class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none" />
-                </div>
-                <div>
-                    <label class="text-slate-700 text-[10px] uppercase">Phone Number</label>
-                    <input type="text" id="claimPhone" placeholder="+1 234-567-890" class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none" />
-                </div>
-                <div>
-                    <label class="text-slate-700 text-[10px] uppercase">Shipping Address</label>
-                    <textarea id="claimAddress" rows="2" placeholder="Address..." class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none"></textarea>
-                </div>
-                <div>
-                    <label class="text-slate-700 text-[10px] uppercase">Confirm Password</label>
-                    <input type="password" id="claimConfirmPassword" placeholder="••••••••" class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none" />
-                </div>
-            </div>
-
-            <div class="flex gap-2 mt-1">
-                <button onclick="closeClaimModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-black py-2.5 rounded-2xl">Cancel</button>
-                <button onclick="submitWinnerClaim()" class="clay-btn w-1/2 bg-gradient-to-r from-rose-400 to-pink-500 text-white text-xs font-black py-2.5 rounded-2xl border-2 border-white">Submit</button>
-            </div>
-        </div>
-    </div>
-
-    <!-- MODAL 4: ADMIN PANEL -->
-    <div id="adminModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-sm flex flex-col gap-3.5 shadow-2xl border-4 border-rose-300">
-            <div class="flex justify-between items-center">
-                <h3 class="font-black text-base text-rose-900">⚙️ Admin Dashboard</h3>
-                <button onclick="closeAdminModal()" class="text-xs font-black text-slate-400">✕ CLOSE</button>
-            </div>
-
-            <div class="bg-rose-50 p-3 rounded-2xl border border-rose-200 text-xs font-black text-rose-900 flex justify-between items-center">
-                <span>Total Registered Accounts:</span>
-                <span id="adminTotalUsersCount" class="font-black text-lg text-rose-600">0</span>
-            </div>
-
-            <p class="text-xs font-black text-slate-700 uppercase">Winner Claim Requests:</p>
-            <div id="adminWinnersList" class="bg-slate-50 border border-slate-200 rounded-2xl p-3 max-h-36 overflow-y-auto space-y-2 text-xs">
-                <!-- Data -->
-            </div>
-
-            <button onclick="exportWinnersCSV()" class="clay-btn w-full bg-emerald-500 text-white text-xs font-black py-3.5 rounded-2xl border-2 border-white flex items-center justify-center gap-2">
-                <span>📥</span> Export Winners Data (CSV)
-            </button>
-        </div>
-    </div>
-
-    <!-- JavaScript Logic -->
-    <script>
-        const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
-        function playSound(freq, type, duration) {
-            try {
-                const osc = audioCtx.createOscillator();
-                const gain = audioCtx.createGain();
-                osc.type = type;
-                osc.frequency.setValueAtTime(freq, audioCtx.currentTime);
-                gain.gain.setValueAtTime(0.12, audioCtx.currentTime);
-                gain.gain.exponentialRampToValueAtTime(0.01, audioCtx.currentTime + duration);
-                osc.connect(gain);
-                gain.connect(audioCtx.destination);
-                osc.start();
-                osc.stop(audioCtx.currentTime + duration);
-            } catch(e) {}
-        }
-
-        function showToast(message, icon = '✨') {
-            const toast = document.getElementById('toastNotification');
-            document.getElementById('toastMessage').innerText = message;
-            document.getElementById('toastIcon').innerText = icon;
-            toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-6');
-            toast.classList.add('opacity-100', 'translate-y-0');
-            setTimeout(() => {
-                toast.classList.remove('opacity-100', 'translate-y-0');
-                toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-6');
-            }, 2500);
-        }
-
-        async function hashPassword(str) {
-            const buf = await crypto.subtle.digest("SHA-256", new TextEncoder().encode(str));
-            return Array.from(new Uint8Array(buf)).map(b => b.toString(16).padStart(2, '0')).join('');
-        }
-
-        let currentUser = null;
-        let authMode = 'login';
-        let isSleeping = false;
-
-        function getUsersDB() { return JSON.parse(localStorage.getItem('energycat_users_db') || '{}'); }
-        function saveUsersDB(db) { localStorage.setItem('energycat_users_db', JSON.stringify(db)); }
-
-        function toggleAuthMode() {
-            authMode = authMode === 'login' ? 'register' : 'login';
-            document.getElementById('authTitle').innerText = authMode === 'login' ? 'Agent Login' : 'New Registration';
-            document.getElementById('emailContainer').classList.toggle('hidden', authMode === 'login');
-            document.getElementById('authSubmitBtn').innerText = authMode === 'login' ? 'LOG IN' : 'REGISTER ACCOUNT';
-            document.getElementById('authToggleText').innerText = authMode === 'login' ? "Need an account?" : "Already registered?";
-            document.getElementById('authToggleBtn').innerText = authMode === 'login' ? 'Register' : 'Log In';
-        }
-
-        async function handleAuthSubmit() {
-            const username = document.getElementById('authUsername').value.trim();
-            const password = document.getElementById('authPassword').value.trim();
-            const email = document.getElementById('authEmail').value.trim();
-
-            if (!username || !password || (authMode === 'register' && !email)) {
-                showToast("Please fill out all fields!", "⚠️");
-                return;
-            }
-
-            const db = getUsersDB();
-            const passwordHash = await hashPassword(password);
-
-            if (authMode === 'register') {
-                if (db[username]) {
-                    showToast("Username already exists!", "❌");
-                    return;
-                }
-                db[username] = { 
-                    email, 
-                    passwordHash, 
-                    fish: 20, 
-                    energy: 100, 
-                    level: 1,
-                    weight: 1.000, // Starts at 1.000 kg
-                    exp: 0,
-                    equipped: { head: null, bib: null }, 
-                    unlocked: ['h1', 'b1'], 
-                    registeredAt: new Date().toISOString() 
-                };
-                saveUsersDB(db);
-                currentUser = username;
-                localStorage.setItem('energycat_current_session', currentUser);
-                document.getElementById('authModal').classList.add('hidden');
-                showToast(`Welcome Agent ${currentUser}!`, "🎉");
-                loadUserData();
-            } else {
-                if (!db[username] || db[username].passwordHash !== passwordHash) {
-                    showToast("Invalid credentials!", "❌");
-                    return;
-                }
-                currentUser = username;
-                localStorage.setItem('energycat_current_session', currentUser);
-                document.getElementById('authModal').classList.add('hidden');
-                showToast(`Welcome back Agent ${currentUser}!`, "🔓");
-                loadUserData();
-            }
-        }
-
-        function logoutUser() {
-            localStorage.removeItem('energycat_current_session');
-            currentUser = null;
-            document.getElementById('authModal').classList.remove('hidden');
-            showToast("Logged out", "🔒");
-        }
-
-        let gameState = { 
-            fish: 20, 
-            energy: 100, 
-            level: 1,
-            weight: 1.000,
-            exp: 0,
-            equipped: { head: null, bib: null },
-            unlocked: ['h1', 'b1'] 
-        };
-
-        const CAT_TITLES = [
-            "TINY KITTEN", "CHUBBY PAW", "FLUFFY CHONK", "HEAVY FELINE", "ROYAL CHONKER", 
-            "MEGA MEOW", "COSMIC CHONK", "GODLY CHONKER"
-        ];
-
-        function loadUserData() {
-            if (!currentUser) return;
-            const db = getUsersDB();
-            if (db[currentUser]) {
-                gameState.fish = db[currentUser].fish ?? 20;
-                gameState.energy = db[currentUser].energy ?? 100;
-                gameState.level = db[currentUser].level ?? 1;
-                gameState.weight = db[currentUser].weight ?? 1.000;
-                gameState.exp = db[currentUser].exp ?? 0;
-                gameState.equipped = db[currentUser].equipped || { head: null, bib: null };
-                gameState.unlocked = db[currentUser].unlocked || ['h1', 'b1'];
-            }
-            document.getElementById('displayUser').innerText = currentUser;
-            updateUI();
-            applyOutfitToCat();
-            updateCatGrowthVisuals();
-        }
-
-        function saveUserData() {
-            if (!currentUser) return;
-            const db = getUsersDB();
-            if (db[currentUser]) {
-                db[currentUser].fish = gameState.fish;
-                db[currentUser].energy = gameState.energy;
-                db[currentUser].level = gameState.level;
-                db[currentUser].weight = parseFloat(gameState.weight.toFixed(3));
-                db[currentUser].exp = gameState.exp;
-                db[currentUser].equipped = gameState.equipped;
-                db[currentUser].unlocked = gameState.unlocked;
-                saveUsersDB(db);
-            }
-            updateUI();
-            applyOutfitToCat();
-            updateCatGrowthVisuals();
-        }
-
-        function getRequiredExp(lvl) { return lvl * 50; }
-
-        function addExpAndWeight(expAmount, weightGrams) {
-            gameState.exp += expAmount;
-            gameState.weight += (weightGrams / 1000); // Convert grams to kg
-            let reqExp = getRequiredExp(gameState.level);
-
-            if (gameState.exp >= reqExp) {
-                gameState.exp -= reqExp;
-                gameState.level += 1;
-                playSound(900, 'triangle', 0.4);
-                showToast(`LEVEL UP! Cat reached LVL ${gameState.level}!`, '🌟');
-            }
-            saveUserData();
-        }
-
-        function updateCatGrowthVisuals() {
-            const wrapper = document.getElementById('catScaleWrapper');
-            // Scale increases slightly per weight
-            const scaleFactor = Math.min(1.3, 1 + (gameState.weight - 1) * 0.05);
-            wrapper.style.transform = `scale(${scaleFactor})`;
-
-            const titleIndex = Math.min(CAT_TITLES.length - 1, Math.floor((gameState.level - 1) / 2));
-            document.getElementById('catTitleText').innerText = CAT_TITLES[titleIndex];
-            document.getElementById('catLevelBadge').innerText = `LVL ${gameState.level}`;
-            document.getElementById('catWeightText').innerText = `${gameState.weight.toFixed(3)} kg`;
-            
-            const reqExp = getRequiredExp(gameState.level);
-            document.getElementById('expText').innerText = `${gameState.exp}/${reqExp} EXP`;
-            const percent = Math.min(100, (gameState.exp / reqExp) * 100);
-            document.getElementById('expBar').style.width = `${percent}%`;
-        }
-
-        function updateUI() {
-            document.getElementById('fishCount').innerText = gameState.fish;
-            document.getElementById('energyText').innerText = `${gameState.energy}/100`;
-            document.getElementById('energyBar').style.width = `${gameState.energy}%`;
-
-            const db = getUsersDB();
-            const allUsers = Object.keys(db);
-            document.getElementById('totalUsersBadge').innerText = `👥 ${allUsers.length}`;
-            document.getElementById('totalPlayersCount').innerText = `${allUsers.length} Players`;
-
-            renderLeaderboard();
-        }
-
-        function renderLeaderboard() {
-            const db = getUsersDB();
-            // RANKED BY CAT WEIGHT (KG) FOR UNIQUE AND EXACT CHAMPION WINNER
-            const playersList = Object.keys(db).map(username => ({
-                username,
-                weight: db[username].weight || 1.000,
-                level: db[username].level || 1
-            })).sort((a, b) => b.weight - a.weight);
-
-            const container = document.getElementById('leaderboardRows');
-            container.innerHTML = '';
-
-            const topPlayer = playersList[0];
-            document.getElementById('topPlayerNameDisplay').innerText = topPlayer ? `${topPlayer.username} (${topPlayer.weight.toFixed(3)}kg)` : 'None';
-
-            playersList.forEach((p, index) => {
-                const isYou = p.username === currentUser;
-                const tr = document.createElement('tr');
-                tr.className = `border-b border-rose-100 ${isYou ? 'bg-rose-50 font-black text-rose-900' : 'text-slate-700 font-bold'}`;
-
-                let rankBadge = `#${index + 1}`;
-                if (index === 0) rankBadge = '🥇';
-                if (index === 1) rankBadge = '🥈';
-                if (index === 2) rankBadge = '🥉';
-
-                tr.innerHTML = `
-                    <td class="p-1.5 font-black">${rankBadge}</td>
-                    <td class="p-1.5 flex items-center justify-between gap-1">
-                        <span>${p.username} ${isYou ? '<span class="text-[8px] bg-rose-500 text-white px-1 py-0.5 rounded-full font-black">YOU</span>' : ''}</span>
-                        <span class="text-[10px] bg-purple-100 text-purple-700 px-1.5 py-0.5 rounded-md font-extrabold">LVL ${p.level}</span>
-                    </td>
-                    <td class="p-1.5 text-right font-black text-purple-700">${p.weight.toFixed(3)} kg</td>
-                `;
-                container.appendChild(tr);
-            });
-        }
-
-        // ==========================================
-        // DRESS-UP SYSTEM (EXACT FIT BOWS & BIBS)
-        // ==========================================
-        const DRESS_ITEMS = {
-            head: [
-                { id: 'h1', name: 'Red Ribbon Bow', price: 0, icon: '🎀', render: '<span class="text-5xl -mt-[170px] ml-[2px]">🎀</span>' },
-                { id: 'h2', name: 'Pink Pastel Bow', price: 10, icon: '🌸', render: '<span class="text-5xl -mt-[170px] ml-[2px] filter hue-rotate-30">🎀</span>' },
-                { id: 'h3', name: 'Polka Dot Bow', price: 15, icon: '✨', render: '<span class="text-5xl -mt-[170px] ml-[2px] filter contrast-200">🎀</span>' },
-                { id: 'h4', name: 'Blue Silk Bow', price: 12, icon: '💙', render: '<span class="text-5xl -mt-[170px] ml-[2px] filter hue-rotate-180">🎀</span>' },
-                { id: 'h5', name: 'Royal Gold Crown', price: 25, icon: '👑', render: '<span class="text-5xl -mt-[180px] ml-[2px]">👑</span>' },
-                { id: 'h6', name: 'Party Hat', price: 10, icon: '🎉', render: '<span class="text-5xl -mt-[180px] ml-[2px]">🎉</span>' }
-            ],
-            bib: [
-                { id: 'b1', name: 'Strawberry Bib', price: 0, icon: '🍓', render: '<div class="mt-[65px] bg-red-100 border-2 border-red-400 rounded-b-2xl px-3 py-1 text-[11px] font-black text-red-600 shadow-md">🍓 Milk Bib</div>' },
-                { id: 'b2', name: 'Pastel Bear Bib', price: 15, icon: '🧸', render: '<div class="mt-[65px] bg-amber-100 border-2 border-amber-400 rounded-b-2xl px-3 py-1 text-[11px] font-black text-amber-700 shadow-md">🧸 Bear Bib</div>' },
-                { id: 'b3', name: 'Polka Dot Collar', price: 20, icon: '🎀', render: '<div class="mt-[62px] bg-pink-200 border-2 border-pink-500 rounded-full px-4 py-0.5 text-[10px] font-black text-pink-800 shadow-md">✨ Dot Collar</div>' },
-                { id: 'b4', name: 'Golden Bell Collar', price: 30, icon: '🔔', render: '<div class="mt-[62px] bg-amber-300 border-2 border-amber-600 rounded-full px-4 py-0.5 text-[10px] font-black text-amber-900 shadow-md">🔔 Bell Collar</div>' }
-            ]
-        };
-
-        let currentDressCategory = 'head';
-
-        function switchDressCategory(cat) {
-            currentDressCategory = cat;
-            document.querySelectorAll('.dress-tab-btn').forEach(btn => {
-                btn.className = "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-2.5 rounded-xl border border-pink-200";
-            });
-            const activeBtn = document.getElementById(`cat-${cat}-btn`);
-            activeBtn.className = "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-2.5 rounded-xl border border-pink-300 shadow-sm";
-            renderDressItems();
-        }
-
-        function renderDressItems() {
-            const grid = document.getElementById('dressItemsGrid');
-            grid.innerHTML = '';
-
-            DRESS_ITEMS[currentDressCategory].forEach(item => {
-                const isUnlocked = gameState.unlocked.includes(item.id);
-                const isEquipped = gameState.equipped[currentDressCategory] === item.id;
-
-                const card = document.createElement('div');
-                card.className = `p-2.5 rounded-2xl border-2 flex flex-col items-center justify-between transition-all cursor-pointer ${
-                    isEquipped ? 'bg-pink-100 border-pink-500 shadow-md scale-95' : 'bg-slate-50 border-pink-100 hover:border-pink-300'
-                }`;
-
-                card.onclick = () => handleItemSelect(item, currentDressCategory);
-
-                card.innerHTML = `
-                    <span class="text-3xl my-1">${item.icon}</span>
-                    <p class="text-[11px] font-black text-slate-800 text-center leading-tight mb-1.5">${item.name}</p>
-                    ${
-                        isEquipped 
-                            ? `<span class="bg-pink-500 text-white font-black text-[10px] px-2.5 py-0.5 rounded-full">Equipped</span>`
-                            : isUnlocked 
-                                ? `<span class="bg-emerald-100 text-emerald-700 font-black text-[10px] px-2.5 py-0.5 rounded-full border border-emerald-300">Equip</span>`
-                                : `<span class="bg-amber-400 text-slate-900 font-black text-[10px] px-2.5 py-0.5 rounded-full shadow-sm">🐟 ${item.price}</span>`
-                    }
-                `;
-                grid.appendChild(card);
-            });
-        }
-
-        function handleItemSelect(item, category) {
-            const isUnlocked = gameState.unlocked.includes(item.id);
-
-            if (!isUnlocked) {
-                if (gameState.fish >= item.price) {
-                    gameState.fish -= item.price;
-                    gameState.unlocked.push(item.id);
-                    gameState.equipped[category] = item.id;
-                    playSound(600, 'sine', 0.2);
-                    showToast(`Unlocked ${item.name}!`, '🎉');
-                    saveUserData();
-                    renderDressItems();
-                } else {
-                    showToast('Not enough fish! Complete missions to earn more', '⚠️');
-                }
-            } else {
-                if (gameState.equipped[category] === item.id) {
-                    gameState.equipped[category] = null;
-                    showToast(`Removed ${item.name}`, '👕');
-                } else {
-                    gameState.equipped[category] = item.id;
-                    playSound(700, 'sine', 0.15);
-                    showToast(`Equipped ${item.name}!`, '✨');
-                }
-                saveUserData();
-                renderDressItems();
-            }
-        }
-
-        function resetOutfit() {
-            gameState.equipped = { head: null, bib: null };
-            saveUserData();
-            renderDressItems();
-            showToast("Stripped all accessories!", "🧼");
-        }
-
-        function applyOutfitToCat() {
-            const headSlot = document.querySelector('.slot-head');
-            const bibSlot = document.querySelector('.slot-bib');
-
-            headSlot.innerHTML = '';
-            bibSlot.innerHTML = '';
-
-            if (gameState.equipped.head) {
-                const item = DRESS_ITEMS.head.find(i => i.id === gameState.equipped.head);
-                if (item) headSlot.innerHTML = item.render;
-            }
-            if (gameState.equipped.bib) {
-                const item = DRESS_ITEMS.bib.find(i => i.id === gameState.equipped.bib);
-                if (item) bibSlot.innerHTML = item.render;
-            }
-        }
-
-        let activeMissionData = null;
-
-        function openMissionUploadModal(name, rewardFish, rewardEnergy, rewardWeightKg) {
-            activeMissionData = { name, rewardFish, rewardEnergy, rewardWeightKg };
-            document.getElementById('modalMissionName').innerText = `Mission: ${name}`;
-            document.getElementById('photoPreview').classList.add('hidden');
-            document.getElementById('uploadPlaceholder').classList.remove('hidden');
-            document.getElementById('photoModal').classList.remove('hidden');
-        }
-
-        function triggerFileSelect() { document.getElementById('photoFileInput').click(); }
-
-        function handlePhotoUpload(e) {
-            const file = e.target.files[0];
-            if (file) {
-                const reader = new FileReader();
-                reader.onload = function(event) {
-                    const img = document.getElementById('photoPreview');
-                    img.src = event.target.result;
-                    img.classList.remove('hidden');
-                    document.getElementById('uploadPlaceholder').classList.add('hidden');
-                };
-                reader.readAsDataURL(file);
-            }
-        }
-
-        function closePhotoModal() {
-            document.getElementById('photoModal').classList.add('hidden');
-            document.getElementById('photoFileInput').value = '';
-        }
-
-        function submitMissionWithPhoto() {
-            const preview = document.getElementById('photoPreview');
-            if (preview.classList.contains('hidden') || !preview.src) {
-                showToast('Please attach photo proof first!', '⚠️');
-                return;
-            }
-            playSound(650, 'sine', 0.2);
-            gameState.fish += activeMissionData.rewardFish;
-            gameState.energy = Math.min(100, gameState.energy + activeMissionData.rewardEnergy);
-            addExpAndWeight(20, activeMissionData.rewardWeightKg * 1000);
-            saveUserData();
-            closePhotoModal();
-            showToast(`Verified! +${activeMissionData.rewardFish} 🐟 & +${activeMissionData.rewardWeightKg * 1000}g`, '🌿');
-        }
-
-        function setCatSleepState(sleep) {
-            isSleeping = sleep;
-            const awakeEyes = document.getElementById('catEyesAwake');
-            const sleepEyes = document.getElementById('catEyesSleep');
-            const zzz = document.getElementById('sleepEffect');
-            const label = document.getElementById('catStatusLabel');
-
-            if (sleep) {
-                awakeEyes.classList.add('hidden');
-                sleepEyes.classList.remove('hidden');
-                zzz.classList.remove('hidden');
-                label.innerText = "😴 SHH... KITTY IS TAKING A NAP!";
-                label.className = "text-xs font-black text-purple-700 mt-1 bg-purple-100 px-4 py-1.5 rounded-full border-2 border-purple-300 shadow-md z-10";
-            } else {
-                awakeEyes.classList.remove('hidden');
-                sleepEyes.classList.add('hidden');
-                zzz.classList.add('hidden');
-                label.innerText = "✨ TAP TO PET (+1⚡ / +10g)";
-                label.className = "text-xs font-black text-rose-600 mt-1 bg-white px-4 py-1.5 rounded-full border-2 border-rose-300 shadow-md z-10";
-            }
-        }
-
-        function spawnHeartFX(x, y) {
-            const stage = document.getElementById('catStage');
-            const rect = stage.getBoundingClientRect();
-            const heart = document.createElement('div');
-            heart.className = 'heart-pop';
-            heart.innerText = ['💖', '✨', '🌸', '💕'][Math.floor(Math.random() * 4)];
-            heart.style.left = `${x - rect.left}px`;
-            heart.style.top = `${y - rect.top}px`;
-            stage.appendChild(heart);
-            setTimeout(() => heart.remove(), 900);
-        }
-
-        function petCat(e) {
-            spawnHeartFX(e.clientX, e.clientY);
-            if (isSleeping) {
-                setCatSleepState(false);
-                showToast("Woke up the kitty!", "🐱");
-                return;
-            }
-            playSound(800, 'sine', 0.15);
-            gameState.energy = Math.min(100, gameState.energy + 1);
-            addExpAndWeight(2, 10); // +2 EXP, +10g
-        }
-
-        function feedCat() {
-            if (isSleeping) setCatSleepState(false);
-            if (gameState.energy >= 100) { showToast("Kitty is full!", "⚡"); return; }
-            if (gameState.fish < 5) { showToast('Not enough fish!', '⚠️'); return; }
-            playSound(450, 'triangle', 0.15);
-            gameState.fish -= 5;
-            gameState.energy = Math.min(100, gameState.energy + 15);
-            addExpAndWeight(10, 50); // +10 EXP, +50g
-            showToast('Fed kitty! (-5🐟 / +15⚡ / +50g)', '🍱');
-        }
-
-        function restCat() {
-            if (gameState.energy >= 100) { showToast("Energy is full!", "⚡"); return; }
-            playSound(350, 'sine', 0.3);
-            gameState.energy = Math.min(100, gameState.energy + 30);
-            addExpAndWeight(15, 30); // +15 EXP, +30g
-            setCatSleepState(true);
-            showToast('Kitty went to nap (+30⚡ / +30g)', '😴');
-        }
-
-        // Energy decay -1 per 3 mins
-        setInterval(() => {
-            if (currentUser && gameState.energy > 0) {
-                gameState.energy = Math.max(0, gameState.energy - 1);
-                saveUserData();
-            }
-        }, 180000);
-
-        function openClaimModal() { document.getElementById('claimModal').classList.remove('hidden'); }
-        function closeClaimModal() { document.getElementById('claimModal').classList.add('hidden'); }
-
-        async function submitWinnerClaim() {
-            const fullName = document.getElementById('claimFullName').value.trim();
-            const phone = document.getElementById('claimPhone').value.trim();
-            const address = document.getElementById('claimAddress').value.trim();
-            const confirmPass = document.getElementById('claimConfirmPassword').value.trim();
-
-            if (!fullName || !phone || !address || !confirmPass) {
-                showToast("Please fill all fields!", "⚠️");
-                return;
-            }
-
-            const db = getUsersDB();
-            const passHash = await hashPassword(confirmPass);
-            if (db[currentUser].passwordHash !== passHash) {
-                showToast("Incorrect password!", "❌");
-                return;
-            }
-
-            let winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
-            winners.push({ username: currentUser, fullName, phone, address, weight: gameState.weight, claimedAt: new Date().toISOString() });
-            localStorage.setItem('energycat_winners_claims', JSON.stringify(winners));
-
-            playSound(750, 'sine', 0.25);
-            closeClaimModal();
-            showToast("Claim request submitted! 🎁", "🎉");
-        }
-
-        function openAdminModal() {
-            const db = getUsersDB();
-            document.getElementById('adminTotalUsersCount').innerText = Object.keys(db).length;
-
-            const winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
-            const listContainer = document.getElementById('adminWinnersList');
-            listContainer.innerHTML = '';
-
-            if (winners.length === 0) {
-                listContainer.innerHTML = `<p class="text-slate-400 italic font-bold text-center py-2">No claim requests yet.</p>`;
-            } else {
-                winners.forEach(w => {
-                    const div = document.createElement('div');
-                    div.className = "bg-white p-2.5 rounded-xl border border-slate-200 shadow-sm";
-                    div.innerHTML = `
-                        <p class="font-black text-rose-900">🏆 ${w.username} (${w.weight.toFixed(3)}kg)</p>
-                        <p class="text-[11px] text-slate-600 font-bold">📞 ${w.phone} | 🏠 ${w.address}</p>
-                    `;
-                    listContainer.appendChild(div);
-                });
-            }
-
-            document.getElementById('adminModal').classList.remove('hidden');
-        }
-        function closeAdminModal() { document.getElementById('adminModal').classList.add('hidden'); }
-
-        function exportWinnersCSV() {
-            const winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
-            if (winners.length === 0) {
-                showToast("No winner data to export!", "⚠️");
-                return;
-            }
-
-            let csvContent = "data:text/csv;charset=utf-8,Username,Cat Weight (kg),Full Name,Phone,Address,Claim Date\n";
-            winners.forEach(w => {
-                csvContent += `"${w.username}","${w.weight}","${w.fullName}","${w.phone}","${w.address}","${w.claimedAt}"\n`;
-            });
-
-            const encodedUri = encodeURI(csvContent);
-            const link = document.createElement("a");
-            link.setAttribute("href", encodedUri);
-            link.setAttribute("download", `energy_cat_winners_${Date.now()}.csv`);
-            document.body.appendChild(link);
-            link.click();
-            document.body.removeChild(link);
-            showToast("CSV Exported!", "📥");
-        }
-
-        function switchTab(tabId) {
-            document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-            document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('text-rose-600', 'bg-rose-100');
-                el.classList.add('text-slate-400');
-            });
-
-            document.getElementById(`tab-${tabId}`).classList.add('active');
-            const activeNav = document.getElementById(`nav-${tabId}`);
-            activeNav.classList.remove('text-slate-400');
-            activeNav.classList.add('text-rose-600', 'bg-rose-100');
-
-            if (tabId === 'dressup') {
-                renderDressItems();
-            }
-
-            playSound(550, 'sine', 0.1);
-        }
-
-        // Init App Session
-        const sessionUser = localStorage.getItem('energycat_current_session');
-        if (sessionUser && getUsersDB()[sessionUser]) {
-            currentUser = sessionUser;
-            document.getElementById('authModal').classList.add('hidden');
-            loadUserData();
-        } else {
-            document.getElementById('authModal').classList.remove('hidden');
-        }
-    </script>
+  </div>
+
+  <script>
+    // App State
+    let currentTab = 'bibs';
+    let userFish = 100;
+    
+    let equipped = {
+      bib: null,
+      collar: null,
+      head: null
+    };
+
+    // Item Databases (10 Items per category)
+    const itemsData = {
+      bibs: [
+        { id: 'b1', name: 'Strawberry Big Bib', price: 0, icon: '🍓', svg: `<path d="M 95 160 Q 150 145 205 160 C 215 220, 185 260, 150 260 C 115 260, 85 220, 95 160 Z" fill="#ff4d6d" stroke="#c9184a" stroke-width="3"/><path d="M 95 160 Q 150 175 205 160 Q 150 145 95 160 Z" fill="#fff" stroke="#c9184a" stroke-width="2"/><circle cx="130" cy="190" r="3" fill="#fff"/><circle cx="170" cy="190" r="3" fill="#fff"/><circle cx="150" cy="220" r="3" fill="#fff"/><circle cx="125" cy="225" r="3" fill="#fff"/><circle cx="175" cy="225" r="3" fill="#fff"/>` },
+        { id: 'b2', name: 'Pastel Bear Bib', price: 15, icon: '🧸', svg: `<path d="M 90 160 Q 150 145 210 160 C 220 230, 190 265, 150 265 C 110 265, 80 230, 90 160 Z" fill="#fde2e4" stroke="#ffb3c1" stroke-width="3"/><circle cx="150" cy="210" r="25" fill="#fff"/><circle cx="140" cy="205" r="3" fill="#555"/><circle cx="160" cy="205" r="3" fill="#555"/><ellipse cx="150" cy="215" rx="8" ry="5" fill="#ffb3c1"/>` },
+        { id: 'b3', name: 'Duckie Splash Bib', price: 20, icon: '🐤', svg: `<path d="M 90 160 Q 150 145 210 160 C 220 235, 185 260, 150 260 C 115 260, 80 235, 90 160 Z" fill="#ffea00" stroke="#ffd000" stroke-width="3"/><circle cx="150" cy="205" r="16" fill="#fff"/><circle cx="150" cy="205" r="12" fill="#ffea00"/><circle cx="145" cy="200" r="2" fill="#000"/><path d="M 148 205 Q 155 205 152 210 Z" fill="#ff7b00"/>` },
+        { id: 'b4', name: 'Lace Flower Bib', price: 25, icon: '🌸', svg: `<path d="M 85 160 Q 150 145 215 160 C 225 240, 185 270, 150 270 C 115 270, 75 240, 85 160 Z" fill="#ffffff" stroke="#ffb7c5" stroke-width="3"/><path d="M 90 170 Q 150 260 210 170" fill="none" stroke="#ffb7c5" stroke-width="2" stroke-dasharray="4,4"/><circle cx="150" cy="210" r="15" fill="#ffb7c5"/><circle cx="150" cy="210" r="6" fill="#fff"/>` },
+        { id: 'b5', name: 'Dino Green Bib', price: 20, icon: '🦖', svg: `<path d="M 90 160 Q 150 145 210 160 C 220 230, 185 260, 150 260 C 115 260, 80 230, 90 160 Z" fill="#70e000" stroke="#38b000" stroke-width="3"/><path d="M 120 180 L 130 240 L 140 180 L 150 240 L 160 180 L 170 240 L 180 180" fill="none" stroke="#fff" stroke-width="4"/>` },
+        { id: 'b6', name: 'Sailor Collar Bib', price: 30, icon: '⚓', svg: `<path d="M 85 160 L 215 160 L 195 255 L 150 220 L 105 255 Z" fill="#184e77" stroke="#1e6091" stroke-width="3"/><path d="M 95 165 L 205 165 L 190 240 L 150 210 L 110 240 Z" fill="none" stroke="#fff" stroke-width="3"/>` },
+        { id: 'b7', name: 'Rainbow Sunshine Bib', price: 35, icon: '🌈', svg: `<path d="M 90 160 Q 150 145 210 160 C 220 230, 185 260, 150 260 C 115 260, 80 230, 90 160 Z" fill="#ffbc42" stroke="#d81159" stroke-width="3"/><path d="M 110 190 Q 150 230 190 190" fill="none" stroke="#ff595e" stroke-width="6"/><path d="M 115 200 Q 150 238 185 200" fill="none" stroke="#ffca3a" stroke-width="6"/><path d="M 120 210 Q 150 246 180 210" fill="none" stroke="#8ac926" stroke-width="6"/>` },
+        { id: 'b8', name: 'Sweet Froggy Bib', price: 25, icon: '🐸', svg: `<path d="M 90 160 Q 150 145 210 160 C 220 230, 185 260, 150 260 C 115 260, 80 230, 90 160 Z" fill="#52b788" stroke="#2d6a4f" stroke-width="3"/><circle cx="130" cy="195" r="10" fill="#fff"/><circle cx="130" cy="195" r="4" fill="#000"/><circle cx="170" cy="195" r="10" fill="#fff"/><circle cx="170" cy="195" r="4" fill="#000"/><path d="M 135 220 Q 150 230 165 220" fill="none" stroke="#2d6a4f" stroke-width="3"/>` },
+        { id: 'b9', name: 'Midnight Star Bib', price: 40, icon: '⭐', svg: `<path d="M 90 160 Q 150 145 210 160 C 220 230, 185 260, 150 260 C 115 260, 80 230, 90 160 Z" fill="#2b2d42" stroke="#8d99ae" stroke-width="3"/><polygon points="150,185 154,198 168,198 157,206 161,219 150,210 139,219 143,206 132,198 146,198" fill="#ffd166"/>` },
+        { id: 'b10', name: 'Royal Velvet Bib', price: 50, icon: '👑', svg: `<path d="M 85 160 Q 150 145 215 160 C 225 240, 185 265, 150 265 C 115 265, 75 240, 85 160 Z" fill="#7209b7" stroke="#3f37c9" stroke-width="3"/><path d="M 85 160 Q 150 180 215 160" fill="none" stroke="#ffd700" stroke-width="5"/><circle cx="150" cy="220" r="12" fill="#ffd700"/><circle cx="150" cy="220" r="6" fill="#f72585"/>` }
+      ],
+      collars: [
+        { id: 'c1', name: 'Golden Bell Collar', price: 10, icon: '🔔', svg: `<path d="M 100 160 Q 150 180 200 160" fill="none" stroke="#d90429" stroke-width="10" stroke-linecap="round"/><circle cx="150" cy="178" r="12" fill="#ffb703" stroke="#fb8500" stroke-width="2"/><circle cx="150" cy="182" r="2.5" fill="#000"/>` },
+        { id: 'c2', name: 'Polka Dot Red Collar', price: 15, icon: '🔴', svg: `<path d="M 100 160 Q 150 180 200 160" fill="none" stroke="#ef233c" stroke-width="12" stroke-linecap="round"/><circle cx="120" cy="165" r="2.5" fill="#fff"/><circle cx="140" cy="171" r="2.5" fill="#fff"/><circle cx="160" cy="171" r="2.5" fill="#fff"/><circle cx="180" cy="165" r="2.5" fill="#fff"/>` },
+        { id: 'c3', name: 'Pearl Necklace', price: 30, icon: '🦪', svg: `<circle cx="105" cy="162" r="6" fill="#fff" stroke="#ddd"/><circle cx="118" cy="167" r="6" fill="#fff" stroke="#ddd"/><circle cx="132" cy="171" r="6" fill="#fff" stroke="#ddd"/><circle cx="147" cy="173" r="7" fill="#fff" stroke="#ddd"/><circle cx="162" cy="171" r="6" fill="#fff" stroke="#ddd"/><circle cx="176" cy="167" r="6" fill="#fff" stroke="#ddd"/><circle cx="189" cy="162" r="6" fill="#fff" stroke="#ddd"/>` },
+        { id: 'c4', name: 'Blue Bowtie Collar', price: 20, icon: '👔', svg: `<path d="M 100 160 Q 150 180 200 160" fill="none" stroke="#023e8a" stroke-width="9" stroke-linecap="round"/><polygon points="135,170 150,178 135,186" fill="#0077b6"/><polygon points="165,170 150,178 165,186" fill="#0077b6"/><rect x="146" y="173" width="8" height="10" rx="2" fill="#03045e"/>` },
+        { id: 'c5', name: 'Pink Bandana Collar', price: 20, icon: '📐', svg: `<path d="M 100 160 Q 150 180 200 160" fill="none" stroke="#ff4d6d" stroke-width="8"/><polygon points="130,170 170,170 150,200" fill="#ff758f"/><circle cx="150" cy="182" r="3" fill="#fff"/>` },
+        { id: 'c6', name: 'Spiked Punk Collar', price: 35, icon: '⚡', svg: `<path d="M 100 160 Q 150 180 200 160" fill="none" stroke="#212529" stroke-width="12" stroke-linecap="round"/><polygon points="120,160 123,150 126,162" fill="#e9ecef"/><polygon points="140,167 143,155 146,169" fill="#e9ecef"/><polygon points="160,167 163,155 166,169" fill="#e9ecef"/><polygon points="180,160 183,150 186,162" fill="#e9ecef"/>` },
+        { id: 'c7', name: 'Emerald Charm Collar', price: 25, icon: '💎', svg: `<path d="M 100 160 Q 150 180 200 160" fill="none" stroke="#38b000" stroke-width="10" stroke-linecap="round"/><polygon points="150,172 158,182 150,192 142,182" fill="#70e000" stroke="#007200" stroke-width="1.5"/>` },
+        { id: 'c8', name: 'Flower Power Collar', price: 20, icon: '🌼', svg: `<path d="M 100 160 Q 150 180 200 160" fill="none" stroke="#ffb703" stroke-width="8"/><circle cx="150" cy="176" r="10" fill="#fff"/><circle cx="150" cy="176" r="4" fill="#fb8500"/>` },
+        { id: 'c9', name: 'Glow Heart Collar', price: 30, icon: '💖', svg: `<path d="M 100 160 Q 150 180 200 160" fill="none" stroke="#ff0a54" stroke-width="9" stroke-linecap="round"/><path d="M 150 176 C 150 170, 142 170, 142 176 C 142 183, 150 188, 150 191 C 150 188, 158 183, 158 176 C 158 170, 150 170, 150 176 Z" fill="#ff477e"/>` },
+        { id: 'c10', name: 'Silver Chime Collar', price: 15, icon: '🎐', svg: `<path d="M 100 160 Q 150 180 200 160" fill="none" stroke="#4a5568" stroke-width="9" stroke-linecap="round"/><circle cx="150" cy="178" r="10" fill="#e2e8f0" stroke="#a0aec0" stroke-width="2"/>` }
+      ],
+      hats: [
+        { id: 'h1', name: 'Classic Red Bow', price: 0, icon: '🎀', svg: `<path d="M 120 50 Q 100 35 125 25 Q 150 45 150 50 Q 150 45 175 25 Q 200 35 180 50 Z" fill="#ff0a54"/><circle cx="150" cy="48" r="7" fill="#ff477e"/>` },
+        { id: 'h2', name: 'Party Cone Hat', price: 15, icon: '🥳', svg: `<polygon points="150,10 120,65 180,65" fill="#ffb703"/><circle cx="150" cy="10" r="6" fill="#ff0a54"/><line x1="120" y1="65" x2="180" y2="65" stroke="#8ecae6" stroke-width="6"/>` },
+        { id: 'h3', name: 'Mini Crown', price: 40, icon: '👑', svg: `<path d="M 125 65 L 120 30 L 135 45 L 150 20 L 165 45 L 180 30 L 175 65 Z" fill="#ffb703" stroke="#fb8500" stroke-width="2"/><circle cx="120" cy="28" r="3" fill="#e63946"/><circle cx="150" cy="18" r="3" fill="#e63946"/><circle cx="180" cy="28" r="3" fill="#e63946"/>` },
+        { id: 'h4', name: 'Froggy Beanie', price: 25, icon: '🐸', svg: `<path d="M 105 65 C 105 30, 195 30, 195 65 Z" fill="#70e000"/><circle cx="125" cy="32" r="10" fill="#70e000"/><circle cx="125" cy="32" r="4" fill="#fff"/><circle cx="175" cy="32" r="10" fill="#70e000"/><circle cx="175" cy="32" r="4" fill="#fff"/>` },
+        { id: 'h5', name: 'Witch Hat', price: 30, icon: '🧙‍♀️', svg: `<polygon points="150,5 115,60 185,60" fill="#2b2d42"/><ellipse cx="150" cy="62" rx="45" ry="8" fill="#1d3557"/><rect x="130" y="52" width="40" height="8" fill="#e63946"/>` },
+        { id: 'h6', name: 'Chef Top Hat', price: 20, icon: '🧑‍🍳', svg: `<path d="M 125 65 L 125 40 C 110 35, 120 15, 140 20 C 150 10, 170 15, 170 25 C 185 25, 185 40, 175 40 L 175 65 Z" fill="#ffffff" stroke="#ddd" stroke-width="2"/>` },
+        { id: 'h7', name: 'Angel Halo', price: 35, icon: '😇', svg: `<ellipse cx="150" cy="25" rx="35" ry="8" fill="none" stroke="#ffbe0b" stroke-width="5"/>` },
+        { id: 'h8', name: 'Bear Ears Headband', price: 20, icon: '🐻', svg: `<path d="M 100 65 Q 150 40 200 65" fill="none" stroke="#212529" stroke-width="4"/><circle cx="110" cy="50" r="14" fill="#b08968"/><circle cx="110" cy="50" r="8" fill="#ede0d4"/><circle cx="190" cy="50" r="14" fill="#b08968"/><circle cx="190" cy="50" r="8" fill="#ede0d4"/>` },
+        { id: 'h9', name: 'Flower Clip', price: 15, icon: '🌸', svg: `<circle cx="180" cy="55" r="8" fill="#ffb7c5"/><circle cx="192" cy="60" r="8" fill="#ffb7c5"/><circle cx="188" cy="72" r="8" fill="#ffb7c5"/><circle cx="173" cy="72" r="8" fill="#ffb7c5"/><circle cx="168" cy="60" r="8" fill="#ffb7c5"/><circle cx="180" cy="64" r="5" fill="#fff"/>` },
+        { id: 'h10', name: 'Pirate Bandana', price: 25, icon: '🏴‍☠️', svg: `<path d="M 90 70 C 95 30, 205 30, 210 70 Z" fill="#d90429"/><circle cx="150" cy="50" r="5" fill="#fff"/>` }
+      ]
+    };
+
+    function renderGrid() {
+      const grid = document.getElementById('items-grid');
+      grid.innerHTML = '';
+      
+      const items = itemsData[currentTab];
+      const categoryKey = currentTab === 'bibs' ? 'bib' : currentTab === 'collars' ? 'collar' : 'head';
+
+      items.forEach(item => {
+        const isEquipped = equipped[categoryKey] && equipped[categoryKey].id === item.id;
+        
+        const card = document.createElement('div');
+        card.className = `clay-card p-3 flex flex-col items-center justify-between transition cursor-pointer relative overflow-hidden ${isEquipped ? 'border-pink-500 bg-pink-50/50' : 'hover:border-pink-300'}`;
+        card.onclick = () => selectItem(categoryKey, item);
+
+        card.innerHTML = `
+          <div class="text-3xl mb-1">${item.icon}</div>
+          <div class="text-xs font-bold text-gray-700 text-center line-clamp-1 mb-2">${item.name}</div>
+          
+          <button class="w-full py-1.5 px-2 rounded-xl text-xs font-bold transition flex items-center justify-center gap-1 ${
+            isEquipped 
+              ? 'bg-pink-500 text-white' 
+              : item.price === 0 
+                ? 'bg-green-400 text-white hover:bg-green-500' 
+                : 'bg-amber-300 text-amber-900 hover:bg-amber-400'
+          }">
+            ${isEquipped ? 'ถอดออก' : item.price === 0 ? 'ใส่เลย (ฟรี)' : `🐟 ${item.price}`}
+          </button>
+        `;
+
+        grid.appendChild(card);
+      });
+    }
+
+    function switchTab(tab) {
+      currentTab = tab;
+      document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('tab-active'));
+      document.getElementById(`tab-${tab}`).classList.add('tab-active');
+      renderGrid();
+    }
+
+    function selectItem(category, item) {
+      if (equipped[category] && equipped[category].id === item.id) {
+        // Unequip
+        equipped[category] = null;
+      } else {
+        // Equip
+        equipped[category] = item;
+      }
+      
+      updateAvatarLayers();
+      renderGrid();
+    }
+
+    function updateAvatarLayers() {
+      document.getElementById('layer-bib').innerHTML = equipped.bib ? equipped.bib.svg : '';
+      document.getElementById('layer-collar').innerHTML = equipped.collar ? equipped.collar.svg : '';
+      document.getElementById('layer-head').innerHTML = equipped.head ? equipped.head.svg : '';
+    }
+
+    function stripAll() {
+      equipped = { bib: null, collar: null, head: null };
+      updateAvatarLayers();
+      renderGrid();
+    }
+
+    // Initialize
+    renderGrid();
+  </script>
 </body>
 </html>
