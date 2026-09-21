@@ -3,16 +3,16 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat 3D: Kawaii Dress-Up & Weight Studio</title>
-    <!-- Three.js Library -->
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
-    <!-- Chart.js Library -->
+    <title>Eco Energy Cat 2D: Care, Eco-Missions & Leaderboard</title>
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Chart.js -->
     <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
     <!-- FontAwesome Icons -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;600;700&family=Nunito:wght@400;700&display=swap" rel="stylesheet">
-    
+
     <style>
         :root {
             --primary: #ff8fa3;
@@ -20,550 +20,327 @@
             --secondary: #8ac926;
             --accent: #ffca3a;
             --bg-soft: #fff0f5;
-            --card-bg: rgba(255, 255, 255, 0.9);
+            --card-bg: rgba(255, 255, 255, 0.95);
             --text-main: #4a4e69;
-            --radius-lg: 24px;
-            --radius-sm: 12px;
-            --shadow: 0 10px 25px rgba(255, 143, 163, 0.2);
-        }
-
-        * {
-            box-sizing: border-box;
-            margin: 0;
-            padding: 0;
-            font-family: 'Nunito', sans-serif;
-            user-select: none;
-        }
-
-        h1, h2, h3, .btn, .nav-btn, .logo-text {
-            font-family: 'Fredoka', sans-serif;
         }
 
         body {
+            font-family: 'Nunito', sans-serif;
             background: linear-gradient(135deg, #ffdee9 0%, #b5fffc 100%);
             min-height: 100vh;
             color: var(--text-main);
-            overflow-x: hidden;
-            display: flex;
-            flex-direction: column;
         }
 
-        /* --- Auth Page --- */
-        #auth-overlay {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #ff8fa3, #ff4d6d);
-            z-index: 1000;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            padding: 20px;
+        h1, h2, h3, .font-heading {
+            font-family: 'Fredoka', sans-serif;
         }
 
-        .auth-card {
-            background: white;
-            padding: 35px 30px;
-            border-radius: var(--radius-lg);
-            box-shadow: 0 15px 35px rgba(0,0,0,0.2);
-            width: 100%;
-            max-width: 420px;
-            text-align: center;
-        }
-
-        .auth-tabs {
-            display: flex;
-            gap: 10px;
-            margin-bottom: 25px;
-            background: #f0f0f0;
-            padding: 5px;
-            border-radius: var(--radius-sm);
-        }
-
-        .auth-tab {
-            flex: 1;
-            padding: 10px;
-            border: none;
-            background: transparent;
-            border-radius: 8px;
-            font-weight: bold;
-            cursor: pointer;
-            color: #777;
-            transition: all 0.3s ease;
-        }
-
-        .auth-tab.active {
-            background: white;
-            color: var(--primary-dark);
-            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-        }
-
-        .auth-form {
-            display: flex;
-            flex-direction: column;
-            gap: 12px;
-        }
-
-        .auth-form input, .auth-form select {
-            width: 100%;
-            padding: 12px 15px;
-            border: 2px solid #eee;
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            outline: none;
-            transition: border-color 0.3s;
-        }
-
-        .auth-form input:focus, .auth-form select:focus {
-            border-color: var(--primary);
-        }
-
-        .forgot-link {
-            text-align: right;
-            font-size: 0.85rem;
-            color: var(--primary-dark);
-            cursor: pointer;
-            text-decoration: underline;
-            margin-top: -5px;
-            margin-bottom: 5px;
-            display: block;
-        }
-
-        /* --- Navigation Bar --- */
-        navbar {
+        .kawaii-card {
             background: var(--card-bg);
+            border-radius: 24px;
+            box-shadow: 0 10px 25px rgba(255, 143, 163, 0.2);
             backdrop-filter: blur(10px);
-            padding: 15px 30px;
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            box-shadow: var(--shadow);
-            position: sticky;
-            top: 0;
-            z-index: 100;
         }
 
-        .logo {
-            display: flex;
-            align-items: center;
-            gap: 12px;
-            font-size: 1.5rem;
-            color: var(--primary-dark);
-        }
-
-        .nav-links {
-            display: flex;
-            gap: 15px;
-        }
-
-        .nav-btn {
-            background: transparent;
-            border: none;
-            padding: 10px 20px;
-            border-radius: var(--radius-sm);
-            cursor: pointer;
-            font-size: 1rem;
-            font-weight: 600;
-            color: var(--text-main);
-            transition: all 0.3s ease;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .nav-btn.active, .nav-btn:hover {
-            background: var(--primary);
-            color: white;
-            transform: translateY(-2px);
-        }
-
-        /* --- App Container --- */
-        .app-container {
-            display: flex;
-            flex: 1;
-            padding: 20px;
-            gap: 20px;
-            max-width: 1400px;
+        /* 2D Cat Avatar Custom Styling */
+        .cat-avatar-container {
+            position: relative;
+            width: 180px;
+            height: 180px;
             margin: 0 auto;
-            width: 100%;
-        }
-
-        .view-section {
-            display: none;
-            width: 100%;
-            gap: 20px;
-        }
-
-        .view-section.active {
-            display: flex;
-        }
-
-        /* --- Main 3D View & Canvas --- */
-        .cat-studio {
-            flex: 1;
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow);
-            position: relative;
-            min-height: 500px;
-            display: flex;
-            flex-direction: column;
-            overflow: hidden;
-        }
-
-        #canvas-container {
-            width: 100%;
-            height: 100%;
-            flex: 1;
-        }
-
-        .cat-status-overlay {
-            position: absolute;
-            top: 20px;
-            left: 20px;
-            background: rgba(255, 255, 255, 0.85);
-            padding: 15px 20px;
-            border-radius: var(--radius-sm);
-            backdrop-filter: blur(5px);
-            box-shadow: 0 4px 15px rgba(0,0,0,0.05);
-        }
-
-        .fish-counter {
-            position: absolute;
-            top: 20px;
-            right: 20px;
-            background: var(--accent);
-            color: #5c4300;
-            padding: 10px 20px;
-            border-radius: 50px;
-            font-weight: bold;
-            font-size: 1.2rem;
-            display: flex;
-            align-items: center;
-            gap: 8px;
-            box-shadow: 0 4px 15px rgba(255, 202, 58, 0.4);
-        }
-
-        /* --- Sidebar & Panels --- */
-        .sidebar {
-            width: 380px;
-            background: var(--card-bg);
-            border-radius: var(--radius-lg);
-            box-shadow: var(--shadow);
-            padding: 25px;
-            display: flex;
-            flex-direction: column;
-            gap: 20px;
-        }
-
-        .card {
-            background: white;
-            padding: 20px;
-            border-radius: var(--radius-sm);
-            box-shadow: 0 4px 10px rgba(0,0,0,0.03);
-        }
-
-        .btn {
-            background: var(--primary);
-            color: white;
-            border: none;
-            padding: 12px 20px;
-            border-radius: var(--radius-sm);
-            font-size: 1rem;
-            font-weight: bold;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            gap: 8px;
-        }
-
-        .btn:hover {
-            background: var(--primary-dark);
-            transform: translateY(-2px);
-            box-shadow: 0 5px 15px rgba(255, 77, 109, 0.3);
-        }
-
-        .btn-secondary {
-            background: var(--secondary);
-        }
-        .btn-secondary:hover {
-            background: #70a81d;
-        }
-
-        /* --- Closet Grid --- */
-        .closet-grid {
-            display: grid;
-            grid-template-columns: repeat(2, 1fr);
-            gap: 15px;
-            max-height: 400px;
-            overflow-y: auto;
-            padding: 5px;
-        }
-
-        .item-card {
             background: #fff;
-            border: 2px solid #eee;
-            border-radius: var(--radius-sm);
-            padding: 15px;
-            text-align: center;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            position: relative;
-        }
-
-        .item-card:hover {
-            border-color: var(--primary);
-            transform: scale(1.03);
-        }
-
-        .item-card.equipped {
-            border-color: var(--secondary);
-            background: #f4fce8;
-        }
-
-        .item-icon {
-            font-size: 2.5rem;
-            margin-bottom: 8px;
-        }
-
-        /* --- Log Form & Inputs --- */
-        .form-group {
+            border-radius: 50%;
+            border: 6px solid var(--primary);
             display: flex;
-            flex-direction: column;
-            gap: 8px;
-            margin-bottom: 15px;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.08);
         }
 
-        .form-group label {
-            font-weight: 600;
-            font-size: 0.9rem;
+        .cat-face {
+            font-size: 5.5rem;
+            transition: all 0.3s ease;
         }
 
-        .form-group input {
-            padding: 12px;
-            border: 2px solid #eee;
-            border-radius: var(--radius-sm);
-            outline: none;
-            font-size: 1rem;
+        .cat-accessory {
+            position: absolute;
+            top: 5px;
+            font-size: 2.8rem;
+            z-index: 10;
         }
 
-        /* Responsive Layout */
-        @media (max-width: 900px) {
-            .app-container { flex-direction: column; }
-            .sidebar { width: 100%; }
-            .view-section { flex-direction: column; }
+        .cat-glasses {
+            position: absolute;
+            top: 62px;
+            font-size: 2.5rem;
+            z-index: 11;
+        }
+
+        /* Energy Bar Animation */
+        .energy-progress {
+            transition: width 0.5s ease-in-out, background-color 0.5s ease;
         }
     </style>
 </head>
-<body>
+<body class="flex flex-col min-h-screen">
 
-    <!-- Auth System Overlay -->
-    <div id="auth-overlay">
-        <div class="auth-card">
-            <div style="font-size: 3rem; color: var(--primary-dark); margin-bottom: 10px;">
-                <i class="fa-solid fa-cat"></i>
-            </div>
-            <h2 style="margin-bottom: 15px; color: #333;">Energy Cat Studio</h2>
-            
-            <div class="auth-tabs" id="auth-tabs">
-                <button class="auth-tab active" onclick="switchAuthMode('login')">Login</button>
-                <button class="auth-tab" onclick="switchAuthMode('register')">Register</button>
+    <!-- AUTHENTICATION OVERLAY -->
+    <div id="auth-overlay" class="fixed inset-0 bg-pink-500 bg-opacity-90 z-50 flex items-center justify-center p-4">
+        <div class="bg-white rounded-3xl p-8 max-w-md w-full shadow-2xl text-center">
+            <div class="text-6xl text-pink-500 mb-3"><i class="fa-solid fa-cat"></i></div>
+            <h2 class="text-3xl font-heading text-gray-800 mb-2">Eco Energy Cat</h2>
+            <p class="text-sm text-gray-500 mb-6">Log in to care for your eco-pet & track green weight!</p>
+
+            <!-- Tabs -->
+            <div class="flex bg-gray-100 p-1 rounded-xl mb-6">
+                <button id="tab-login" onclick="switchAuth('login')" class="flex-1 py-2 font-bold rounded-lg bg-white text-pink-600 shadow-sm">Login</button>
+                <button id="tab-register" onclick="switchAuth('register')" class="flex-1 py-2 font-bold rounded-lg text-gray-500">Register</button>
             </div>
 
             <!-- Login Form -->
-            <form id="login-form" class="auth-form" onsubmit="handleLogin(event)">
-                <input type="text" id="login-username" placeholder="Username" required>
-                <input type="password" id="login-password" placeholder="Password" required>
-                <span class="forgot-link" onclick="switchAuthMode('forgot')">Forgot Password?</span>
-                <button type="submit" class="btn">Login & Play</button>
+            <form id="form-login" onsubmit="handleLogin(event)" class="space-y-4">
+                <input type="text" id="login-user" placeholder="Username" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
+                <input type="password" id="login-pass" placeholder="Password" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
+                <div class="text-right">
+                    <button type="button" onclick="switchAuth('forgot')" class="text-xs text-pink-500 underline font-semibold">Forgot Password?</button>
+                </div>
+                <button type="submit" class="w-full bg-pink-500 text-white font-bold py-3 rounded-xl hover:bg-pink-600 transition">Login & Play 🐾</button>
             </form>
 
             <!-- Register Form -->
-            <form id="register-form" class="auth-form" style="display: none;" onsubmit="handleRegister(event)">
-                <input type="text" id="reg-username" placeholder="Create Username" required>
-                <input type="password" id="reg-password" placeholder="Create Password" required>
-                <select id="reg-question" required>
+            <form id="form-register" onsubmit="handleRegister(event)" class="space-y-4 hidden">
+                <input type="text" id="reg-user" placeholder="Create Username" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
+                <input type="password" id="reg-pass" placeholder="Create Password" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
+                <select id="reg-question" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
                     <option value="" disabled selected>Select Security Question</option>
                     <option value="pet">What was your first pet's name?</option>
                     <option value="city">In what city were you born?</option>
-                    <option value="color">What is your favorite color?</option>
+                    <option value="school">What was the name of your first school?</option>
                 </select>
-                <input type="text" id="reg-answer" placeholder="Security Answer" required>
-                <button type="submit" class="btn btn-secondary">Create Account</button>
+                <input type="text" id="reg-answer" placeholder="Security Answer" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
+                <button type="submit" class="w-full bg-green-500 text-white font-bold py-3 rounded-xl hover:bg-green-600 transition">Create Account 🌿</button>
             </form>
 
             <!-- Forgot Password Form -->
-            <form id="forgot-form" class="auth-form" style="display: none;" onsubmit="handleResetPassword(event)">
-                <input type="text" id="forgot-username" placeholder="Your Username" required>
-                <select id="forgot-question" required>
+            <form id="form-forgot" onsubmit="handleForgot(event)" class="space-y-4 hidden">
+                <input type="text" id="forgot-user" placeholder="Your Username" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
+                <select id="forgot-question" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
                     <option value="" disabled selected>Select Security Question</option>
                     <option value="pet">What was your first pet's name?</option>
                     <option value="city">In what city were you born?</option>
-                    <option value="color">What is your favorite color?</option>
+                    <option value="school">What was the name of your first school?</option>
                 </select>
-                <input type="text" id="forgot-answer" placeholder="Security Answer" required>
-                <input type="password" id="forgot-new-password" placeholder="New Password" required>
-                <button type="submit" class="btn">Reset Password</button>
-                <span class="forgot-link" style="text-align:center; margin-top:10px;" onclick="switchAuthMode('login')">Back to Login</span>
+                <input type="text" id="forgot-answer" placeholder="Security Answer" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
+                <input type="password" id="forgot-newpass" placeholder="New Password" class="w-full p-3 border-2 border-gray-200 rounded-xl focus:border-pink-400 outline-none" required>
+                <button type="submit" class="w-full bg-yellow-500 text-white font-bold py-3 rounded-xl hover:bg-yellow-600 transition">Reset Password 🔑</button>
+                <button type="button" onclick="switchAuth('login')" class="text-xs text-gray-400 underline block mx-auto">Back to Login</button>
             </form>
         </div>
     </div>
 
-    <!-- Navigation Bar -->
-    <navbar>
-        <div class="logo">
-            <i class="fa-solid fa-cat"></i>
-            <span class="logo-text">Energy Cat 3D</span>
+    <!-- NAVBAR -->
+    <nav class="bg-white/80 backdrop-blur-md sticky top-0 z-40 px-6 py-4 shadow-sm flex justify-between items-center">
+        <div class="flex items-center gap-3 text-pink-500 font-heading text-2xl">
+            <i class="fa-solid fa-seedling text-green-500"></i>
+            <span>EcoCat Energy</span>
         </div>
-        <div class="nav-links">
-            <button class="nav-btn active" onclick="switchTab(event, 'studio')"><i class="fa-solid fa-house"></i> Studio</button>
-            <button class="nav-btn" onclick="switchTab(event, 'closet')"><i class="fa-solid fa-shirt"></i> Closet</button>
-            <button class="nav-btn" onclick="switchTab(event, 'weight')"><i class="fa-solid fa-weight-scale"></i> Tracker</button>
-            <button class="nav-btn" onclick="logout()" style="color: #ff4d6d;"><i class="fa-solid fa-right-from-bracket"></i></button>
+        <div class="flex gap-2">
+            <button onclick="navTo('home')" class="nav-btn bg-pink-500 text-white px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-cat"></i> Pet</button>
+            <button onclick="navTo('missions')" class="nav-btn text-gray-600 hover:bg-pink-100 px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-solar-panel"></i> Eco Proof</button>
+            <button onclick="navTo('wardrobe')" class="nav-btn text-gray-600 hover:bg-pink-100 px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-shirt"></i> Closet</button>
+            <button onclick="navTo('leaderboard')" class="nav-btn text-gray-600 hover:bg-pink-100 px-4 py-2 rounded-xl font-bold flex items-center gap-2"><i class="fa-solid fa-trophy"></i> Rank</button>
+            <button onclick="logout()" class="text-red-400 hover:text-red-600 px-3 py-2"><i class="fa-solid fa-right-from-bracket"></i></button>
         </div>
-    </navbar>
+    </nav>
 
-    <!-- App Main Container -->
-    <div class="app-container">
+    <!-- MAIN CONTENT CONTAINER -->
+    <main class="flex-1 max-w-5xl w-full mx-auto p-6">
 
-        <!-- TAB 1: STUDIO (3D Cat & Interact) -->
-        <div id="view-studio" class="view-section active">
-            <div class="cat-studio">
-                <div class="cat-status-overlay">
-                    <h3 id="cat-display-name">Energy Cat</h3>
-                    <p style="color: #666; font-size: 0.9rem;" id="cat-status-text">Status: Happy & Energetic!</p>
-                </div>
-                <div class="fish-counter">
-                    <i class="fa-solid fa-fish"></i>
-                    <span id="fish-count">0</span>
-                </div>
-                <div id="canvas-container"></div>
-            </div>
+        <!-- VIEW 1: 2D PET HOME -->
+        <section id="view-home" class="view-panel space-y-6">
+            <div class="grid md:grid-cols-3 gap-6">
+                <!-- 2D Cat Viewport -->
+                <div class="md:col-span-2 kawaii-card p-6 text-center flex flex-col justify-between items-center relative min-h-[380px]">
+                    <div class="w-full flex justify-between items-center">
+                        <div class="bg-yellow-400 text-yellow-900 font-bold px-4 py-2 rounded-full flex items-center gap-2 text-sm">
+                            <i class="fa-solid fa-fish"></i> <span id="display-fish">0</span> Fish Currency
+                        </div>
+                        <div class="text-xs text-gray-400">Decay: -1 Energy / 3 mins</div>
+                    </div>
 
-            <div class="sidebar">
-                <div class="card">
-                    <h3>Interactive Actions</h3>
-                    <p style="color: #777; font-size: 0.85rem; margin-bottom: 15px;">Interact with your cat to earn Fish Tokens!</p>
-                    <div style="display: flex; flex-direction: column; gap: 10px;">
-                        <button class="btn" onclick="interactCat('pet')"><i class="fa-solid fa-hand"></i> Pet Cat (+1 Fish)</button>
-                        <button class="btn btn-secondary" onclick="interactCat('feed')"><i class="fa-solid fa-bowl-food"></i> Feed Snack (+2 Fish)</button>
-                        <button class="btn" style="background: #7209b7;" onclick="interactCat('play')"><i class="fa-solid fa-baseball"></i> Play Toy (+3 Fish)</button>
+                    <!-- 2D Cat Visual -->
+                    <div class="cat-avatar-container my-4">
+                        <div id="cat-hat" class="cat-accessory"></div>
+                        <div id="cat-glasses" class="cat-glasses"></div>
+                        <div id="cat-emoji" class="cat-face">🐱</div>
+                    </div>
+
+                    <!-- Energy Bar -->
+                    <div class="w-full space-y-2">
+                        <div class="flex justify-between text-sm font-bold">
+                            <span>Energy Level</span>
+                            <span id="energy-text">100 / 100%</span>
+                        </div>
+                        <div class="w-full bg-gray-200 h-5 rounded-full overflow-hidden p-1">
+                            <div id="energy-bar" class="energy-progress bg-green-500 h-full rounded-full w-full"></div>
+                        </div>
+                        <p id="cat-mood" class="text-xs font-semibold text-gray-500">Mood: Energetic & Happy! ✨</p>
                     </div>
                 </div>
 
-                <div class="card">
-                    <h3>Quick Stats</h3>
-                    <p style="margin-top: 5px;"><strong>Weight:</strong> <span id="stat-weight">--</span> kg</p>
-                    <p style="margin-top: 5px;"><strong>Last Weight Log:</strong> <span id="stat-date">Never</span></p>
-                </div>
-            </div>
-        </div>
+                <!-- Pet Actions & Stats -->
+                <div class="space-y-6">
+                    <div class="kawaii-card p-6 space-y-3">
+                        <h3 class="font-heading text-lg text-gray-700">Care Actions</h3>
+                        <button onclick="careAction('feed')" class="w-full bg-pink-400 hover:bg-pink-500 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-bowl-food"></i> Feed Cat (+20 Energy)
+                        </button>
+                        <button onclick="careAction('play')" class="w-full bg-purple-400 hover:bg-purple-500 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-baseball"></i> Play Toy (+10 Energy, +2 Fish)
+                        </button>
+                        <button onclick="careAction('sleep')" class="w-full bg-indigo-400 hover:bg-indigo-500 text-white font-bold py-3 rounded-xl flex justify-center items-center gap-2 shadow-sm">
+                            <i class="fa-solid fa-bed"></i> Sleep Rest (+40 Energy)
+                        </button>
+                    </div>
 
-        <!-- TAB 2: CLOSET (Dress Up Shop) -->
-        <div id="view-closet" class="view-section">
-            <div class="cat-studio" style="min-height: 400px;">
-                <div class="fish-counter">
-                    <i class="fa-solid fa-fish"></i>
-                    <span id="closet-fish-count">0</span>
-                </div>
-                <div style="display:flex; justify-content:center; align-items:center; height:100%; font-size: 1.2rem; color: #888;">
-                    <p><i class="fa-solid fa-shirt" style="font-size: 3rem; margin-bottom: 10px; color: var(--primary); display:block; text-align:center;"></i> Customize Outfit in the Wardrobe</p>
-                </div>
-            </div>
-
-            <div class="sidebar">
-                <h3>Wardrobe Shop</h3>
-                <p style="color: #777; font-size: 0.85rem; margin-bottom: 15px;">Buy & equip accessories with Fish Tokens!</p>
-                
-                <div class="closet-grid" id="closet-items">
-                    <!-- Dynamic Closet Items will render here -->
-                </div>
-            </div>
-        </div>
-
-        <!-- TAB 3: WEIGHT TRACKER -->
-        <div id="view-weight" class="view-section">
-            <div class="cat-studio" style="padding: 20px;">
-                <h3>Weight Journey Graph</h3>
-                <div style="position: relative; flex: 1; width: 100%;">
-                    <canvas id="weightChart"></canvas>
-                </div>
-            </div>
-
-            <div class="sidebar">
-                <div class="card">
-                    <h3>Log New Weight</h3>
-                    <form onsubmit="logWeight(event)" style="margin-top: 15px;">
-                        <div class="form-group">
-                            <label>Current Weight (kg)</label>
-                            <input type="number" step="0.1" id="input-weight" placeholder="e.g. 65.5" required>
+                    <div class="kawaii-card p-6 space-y-2">
+                        <h3 class="font-heading text-lg text-gray-700">Personal Weight</h3>
+                        <div class="flex justify-between items-center text-sm">
+                            <span>Current Weight:</span>
+                            <span id="stat-weight" class="font-bold text-pink-500">-- kg</span>
                         </div>
-                        <button type="submit" class="btn btn-secondary"><i class="fa-solid fa-plus"></i> Save Weight (+10 Fish!)</button>
-                    </form>
-                </div>
-
-                <div class="card" style="flex:1; overflow-y:auto; max-height: 250px;">
-                    <h3>History Log</h3>
-                    <ul id="history-list" style="list-style: none; margin-top: 10px; display: flex; flex-direction: column; gap: 8px;">
-                        <!-- History Items -->
-                    </ul>
+                        <form onsubmit="logWeight(event)" class="flex gap-2 pt-2">
+                            <input type="number" step="0.1" id="input-weight" placeholder="kg" class="w-full p-2 border rounded-xl outline-none text-sm" required>
+                            <button type="submit" class="bg-green-500 text-white font-bold px-4 py-2 rounded-xl text-xs hover:bg-green-600">Log (+5 Fish)</button>
+                        </form>
+                    </div>
                 </div>
             </div>
-        </div>
+        </section>
 
-    </div>
+        <!-- VIEW 2: ECO PHOTO MISSIONS -->
+        <section id="view-missions" class="view-panel space-y-6 hidden">
+            <div class="kawaii-card p-6">
+                <h2 class="font-heading text-2xl text-green-600 mb-2">Eco-Photo Proof Missions</h2>
+                <p class="text-sm text-gray-500 mb-6">Complete green eco-activities, upload photo proof, and earn Fish Currency for your cat!</p>
 
-    <!-- JavaScript Application Logic -->
+                <div class="grid md:grid-cols-2 gap-4">
+                    <!-- Mission 1 -->
+                    <div class="border-2 border-green-100 bg-green-50/50 p-4 rounded-2xl space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-bold text-green-800">1. Unplug Unused Electronics</h3>
+                                <p class="text-xs text-gray-500">Save energy at home. Reward: +15 Fish 🐟</p>
+                            </div>
+                            <span class="text-2xl">🔌</span>
+                        </div>
+                        <input type="file" accept="image/*" id="file-m1" class="text-xs text-gray-500 w-full">
+                        <button onclick="submitMission('M1', 15)" class="w-full bg-green-500 text-white font-bold py-2 rounded-xl text-xs hover:bg-green-600">Upload & Claim Reward</button>
+                    </div>
+
+                    <!-- Mission 2 -->
+                    <div class="border-2 border-green-100 bg-green-50/50 p-4 rounded-2xl space-y-3">
+                        <div class="flex justify-between items-start">
+                            <div>
+                                <h3 class="font-bold text-green-800">2. Plant & Garden Care</h3>
+                                <p class="text-xs text-gray-500">Water plants or plant seeds. Reward: +20 Fish 🐟</p>
+                            </div>
+                            <span class="text-2xl">🌱</span>
+                        </div>
+                        <input type="file" accept="image/*" id="file-m2" class="text-xs text-gray-500 w-full">
+                        <button onclick="submitMission('M2', 20)" class="w-full bg-green-500 text-white font-bold py-2 rounded-xl text-xs hover:bg-green-600">Upload & Claim Reward</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 3: 2D WARDROBE SHOP -->
+        <section id="view-wardrobe" class="view-panel space-y-6 hidden">
+            <div class="kawaii-card p-6">
+                <h2 class="font-heading text-2xl text-pink-500 mb-4">2D Dress-Up Closet</h2>
+                <div class="grid grid-cols-2 md:grid-cols-4 gap-4" id="wardrobe-grid">
+                    <!-- Closet Items Injected dynamically -->
+                </div>
+            </div>
+        </section>
+
+        <!-- VIEW 4: WEIGHT LEADERBOARD -->
+        <section id="view-leaderboard" class="view-panel space-y-6 hidden">
+            <div class="kawaii-card p-6">
+                <h2 class="font-heading text-2xl text-purple-600 mb-4">Real Player Weight Leaderboard</h2>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left border-collapse">
+                        <thead>
+                            <tr class="border-b text-gray-400 text-xs uppercase">
+                                <th class="p-3">Rank</th>
+                                <th class="p-3">Player</th>
+                                <th class="p-3">Logged Weight</th>
+                                <th class="p-3">Fish Earned</th>
+                            </tr>
+                        </thead>
+                        <tbody id="leaderboard-body" class="divide-y text-sm font-semibold">
+                            <!-- Injected dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- JS SCRIPT LOGIC -->
     <script>
-        /* --- GLOBAL APP STATE --- */
-        let currentUser = null;
+        /* APP STATE */
+        let activeUser = null;
         let userData = {
             username: '',
             password: '',
             question: '',
             answer: '',
-            fish: 0,
-            weightLogs: [],
-            equipped: { hat: null, glasses: null }
+            energy: 100,
+            fish: 20,
+            weight: 0,
+            equippedHat: null,
+            equippedGlasses: null,
+            lastDecayTime: Date.now()
         };
 
-        // Items Catalog
-        const catalog = [
-            { id: 'hat_party', name: 'Party Hat', type: 'hat', price: 5, icon: '🎉', color: 0xff4d6d },
-            { id: 'hat_crown', name: 'Royal Crown', type: 'hat', price: 15, icon: '👑', color: 0xffca3a },
-            { id: 'glasses_sun', name: 'Cool Glasses', type: 'glasses', price: 10, icon: '🕶️', color: 0x111111 },
-            { id: 'hat_bow', name: 'Cute Bow', type: 'hat', price: 8, icon: '🎀', color: 0xff8fa3 }
+        const wardrobeCatalog = [
+            { id: 'party', name: 'Party Cone', type: 'hat', icon: '🎉', price: 10 },
+            { id: 'crown', name: 'Royal Crown', type: 'hat', icon: '👑', price: 25 },
+            { id: 'sunglasses', name: 'Cool Shades', type: 'glasses', icon: '🕶️', price: 15 },
+            { id: 'bow', name: 'Pink Bow', type: 'hat', icon: '🎀', price: 12 }
         ];
 
-        /* --- AUTHENTICATION & FORGOT PASSWORD SYSTEM --- */
-        function switchAuthMode(mode) {
-            document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
-            document.getElementById('login-form').style.display = 'none';
-            document.getElementById('register-form').style.display = 'none';
-            document.getElementById('forgot-form').style.display = 'none';
+        /* AUTH LOGIC */
+        function switchAuth(mode) {
+            document.getElementById('form-login').classList.add('hidden');
+            document.getElementById('form-register').classList.add('hidden');
+            document.getElementById('form-forgot').classList.add('hidden');
+            
+            document.getElementById('tab-login').className = "flex-1 py-2 font-bold rounded-lg text-gray-500";
+            document.getElementById('tab-register').className = "flex-1 py-2 font-bold rounded-lg text-gray-500";
 
-            if(mode === 'login') {
-                document.querySelectorAll('.auth-tab')[0].classList.add('active');
-                document.getElementById('login-form').style.display = 'flex';
-            } else if(mode === 'register') {
-                document.querySelectorAll('.auth-tab')[1].classList.add('active');
-                document.getElementById('register-form').style.display = 'flex';
-            } else if(mode === 'forgot') {
-                document.getElementById('forgot-form').style.display = 'flex';
+            if (mode === 'login') {
+                document.getElementById('form-login').classList.remove('hidden');
+                document.getElementById('tab-login').className = "flex-1 py-2 font-bold rounded-lg bg-white text-pink-600 shadow-sm";
+            } else if (mode === 'register') {
+                document.getElementById('form-register').classList.remove('hidden');
+                document.getElementById('tab-register').className = "flex-1 py-2 font-bold rounded-lg bg-white text-green-600 shadow-sm";
+            } else if (mode === 'forgot') {
+                document.getElementById('form-forgot').classList.remove('hidden');
             }
         }
 
         function handleRegister(e) {
             e.preventDefault();
-            const u = document.getElementById('reg-username').value.trim();
-            const p = document.getElementById('reg-password').value;
+            const u = document.getElementById('reg-user').value.trim();
+            const p = document.getElementById('reg-pass').value;
             const q = document.getElementById('reg-question').value;
             const a = document.getElementById('reg-answer').value.trim().toLowerCase();
 
-            if (localStorage.getItem('cat_user_' + u)) {
-                alert('Username already exists! Please choose another or Login.');
+            if (localStorage.getItem('ec_user_' + u)) {
+                alert('Username already exists!');
                 return;
             }
 
@@ -572,370 +349,250 @@
                 password: p,
                 question: q,
                 answer: a,
-                fish: 10, // Starter Gift
-                weightLogs: [],
-                equipped: { hat: null, glasses: null }
+                energy: 100,
+                fish: 20,
+                weight: 60.0,
+                equippedHat: null,
+                equippedGlasses: null,
+                lastDecayTime: Date.now()
             };
 
-            saveUserData();
-            loginUser(u);
+            saveData();
+            loginSuccess(u);
         }
 
         function handleLogin(e) {
             e.preventDefault();
-            const u = document.getElementById('login-username').value.trim();
-            const p = document.getElementById('login-password').value;
+            const u = document.getElementById('login-user').value.trim();
+            const p = document.getElementById('login-pass').value;
 
-            const saved = localStorage.getItem('cat_user_' + u);
-            if (!saved) {
-                alert('User not found! Please register.');
+            const stored = localStorage.getItem('ec_user_' + u);
+            if (!stored) {
+                alert('User not found!');
                 return;
             }
 
-            const data = JSON.parse(saved);
-            if (data.password !== p) {
+            const parsed = JSON.parse(stored);
+            if (parsed.password !== p) {
                 alert('Incorrect password!');
                 return;
             }
 
-            userData = data;
-            loginUser(u);
+            userData = parsed;
+            loginSuccess(u);
         }
 
-        function handleResetPassword(e) {
+        function handleForgot(e) {
             e.preventDefault();
-            const u = document.getElementById('forgot-username').value.trim();
+            const u = document.getElementById('forgot-user').value.trim();
             const q = document.getElementById('forgot-question').value;
             const a = document.getElementById('forgot-answer').value.trim().toLowerCase();
-            const newP = document.getElementById('forgot-new-password').value;
+            const newP = document.getElementById('forgot-newpass').value;
 
-            const saved = localStorage.getItem('cat_user_' + u);
-            if (!saved) {
-                alert('Username not found!');
+            const stored = localStorage.getItem('ec_user_' + u);
+            if (!stored) {
+                alert('User not found!');
                 return;
             }
 
-            const data = JSON.parse(saved);
-            if (data.question !== q || data.answer.toLowerCase() !== a) {
-                alert('Security question or answer does not match!');
+            const parsed = JSON.parse(stored);
+            if (parsed.question !== q || parsed.answer.toLowerCase() !== a) {
+                alert('Security question or answer incorrect!');
                 return;
             }
 
-            // Update Password
-            data.password = newP;
-            localStorage.setItem('cat_user_' + u, JSON.stringify(data));
-            
-            alert('Password successfully reset! Logging you in...');
-            userData = data;
-            loginUser(u);
+            parsed.password = newP;
+            localStorage.setItem('ec_user_' + u, JSON.stringify(parsed));
+            alert('Password successfully updated! Logging in...');
+            userData = parsed;
+            loginSuccess(u);
         }
 
-        function loginUser(username) {
-            currentUser = username;
-            document.getElementById('auth-overlay').style.display = 'none';
+        function loginSuccess(u) {
+            activeUser = u;
+            document.getElementById('auth-overlay').classList.add('hidden');
+            calculateEnergyDecay();
             updateUI();
-            initChart();
-            init3D();
+            setInterval(calculateEnergyDecay, 30000); // Check decay every 30s
         }
 
         function logout() {
             location.reload();
         }
 
-        function saveUserData() {
-            if (currentUser) {
-                localStorage.setItem('cat_user_' + currentUser, JSON.stringify(userData));
+        function saveData() {
+            if (activeUser) {
+                localStorage.setItem('ec_user_' + activeUser, JSON.stringify(userData));
             }
         }
 
-        /* --- UI & NAVIGATION --- */
-        function switchTab(e, tabId) {
-            document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
-            document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
+        /* ENERGY TIMED DECAY (1 point per 3 mins) */
+        function calculateEnergyDecay() {
+            const now = Date.now();
+            const elapsedMins = (now - userData.lastDecayTime) / (1000 * 60);
+            const loss = Math.floor(elapsedMins / 3);
 
-            if(e && e.currentTarget) {
-                e.currentTarget.classList.add('active');
-            }
-            document.getElementById('view-' + tabId).classList.add('active');
-
-            if(tabId === 'weight') {
-                renderChart();
+            if (loss > 0) {
+                userData.energy = Math.max(0, userData.energy - loss);
+                userData.lastDecayTime = now;
+                saveData();
+                updateUI();
             }
         }
 
+        /* UI UPDATE & EXPRESSIONS */
         function updateUI() {
-            document.getElementById('fish-count').innerText = userData.fish;
-            document.getElementById('closet-fish-count').innerText = userData.fish;
-            document.getElementById('cat-display-name').innerText = userData.username + "'s Cat";
+            document.getElementById('display-fish').innerText = userData.fish;
+            document.getElementById('energy-text').innerText = `${userData.energy} / 100%`;
+            document.getElementById('stat-weight').innerText = userData.weight ? `${userData.weight} kg` : '-- kg';
 
-            // Update Stats
-            if (userData.weightLogs && userData.weightLogs.length > 0) {
-                const latest = userData.weightLogs[userData.weightLogs.length - 1];
-                document.getElementById('stat-weight').innerText = latest.weight;
-                document.getElementById('stat-date').innerText = latest.date;
+            const bar = document.getElementById('energy-bar');
+            bar.style.width = userData.energy + '%';
+
+            const catEmoji = document.getElementById('cat-emoji');
+            const catMood = document.getElementById('cat-mood');
+
+            // Sad expression when Energy < 20%
+            if (userData.energy < 20) {
+                bar.className = 'energy-progress bg-red-500 h-full rounded-full';
+                catEmoji.innerText = '😿';
+                catMood.innerText = 'Mood: Sad & Hungry... (-20% Energy) 💔';
+            } else if (userData.energy < 60) {
+                bar.className = 'energy-progress bg-yellow-500 h-full rounded-full';
+                catEmoji.innerText = '🐱';
+                catMood.innerText = 'Mood: Normal / Needs a snack 🍃';
+            } else {
+                bar.className = 'energy-progress bg-green-500 h-full rounded-full';
+                catEmoji.innerText = '😸';
+                catMood.innerText = 'Mood: Energetic & Happy! ✨';
             }
 
-            renderCloset();
-            renderHistory();
+            // Equipped items
+            const hatItem = wardrobeCatalog.find(i => i.id === userData.equippedHat);
+            const glassItem = wardrobeCatalog.find(i => i.id === userData.equippedGlasses);
+            document.getElementById('cat-hat').innerText = hatItem ? hatItem.icon : '';
+            document.getElementById('cat-glasses').innerText = glassItem ? glassItem.icon : '';
+
+            renderWardrobe();
+            renderLeaderboard();
         }
 
-        /* --- INTERACTION & REWARDS --- */
-        function interactCat(action) {
-            let gain = 0;
-            let msg = '';
-            if(action === 'pet') { gain = 1; msg = 'Cat purrs happily!'; }
-            if(action === 'feed') { gain = 2; msg = 'Yummy! Cat enjoyed the treat.'; }
-            if(action === 'play') { gain = 3; msg = 'Cat did a playful flip!'; }
-
-            userData.fish += gain;
-            document.getElementById('cat-status-text').innerText = 'Status: ' + msg;
-            saveUserData();
+        /* CARE ACTIONS */
+        function careAction(type) {
+            if (type === 'feed') {
+                userData.energy = Math.min(100, userData.energy + 20);
+            } else if (type === 'play') {
+                userData.energy = Math.min(100, userData.energy + 10);
+                userData.fish += 2;
+            } else if (type === 'sleep') {
+                userData.energy = Math.min(100, userData.energy + 40);
+            }
+            saveData();
             updateUI();
-            animateCat();
         }
 
-        /* --- CLOSET & SHOP SYSTEM --- */
-        function renderCloset() {
-            const container = document.getElementById('closet-items');
-            container.innerHTML = '';
+        /* WEIGHT LOGGING */
+        function logWeight(e) {
+            e.preventDefault();
+            const w = parseFloat(document.getElementById('input-weight').value);
+            if (w) {
+                userData.weight = w;
+                userData.fish += 5;
+                document.getElementById('input-weight').value = '';
+                saveData();
+                updateUI();
+                alert('Weight logged! You earned +5 Fish 🐟');
+            }
+        }
 
-            catalog.forEach(item => {
-                const isEquipped = userData.equipped && userData.equipped[item.type] === item.id;
+        /* MISSION PHOTO PROOF */
+        function submitMission(mCode, reward) {
+            const input = document.getElementById(mCode === 'M1' ? 'file-m1' : 'file-m2');
+            if (input.files.length === 0) {
+                alert('Please select a photo proof first!');
+                return;
+            }
+            userData.fish += reward;
+            input.value = '';
+            saveData();
+            updateUI();
+            alert(`Proof uploaded! Mission completed. Claimed +${reward} Fish Currency! 🌿`);
+        }
+
+        /* WARDROBE SHOP */
+        function renderWardrobe() {
+            const grid = document.getElementById('wardrobe-grid');
+            grid.innerHTML = '';
+
+            wardrobeCatalog.forEach(item => {
+                const isHatEquipped = userData.equippedHat === item.id;
+                const isGlassEquipped = userData.equippedGlasses === item.id;
+                const isEquipped = isHatEquipped || isGlassEquipped;
+
                 const card = document.createElement('div');
-                card.className = `item-card ${isEquipped ? 'equipped' : ''}`;
+                card.className = `p-4 border-2 rounded-2xl text-center cursor-pointer transition ${isEquipped ? 'border-green-400 bg-green-50' : 'border-gray-100 bg-white'}`;
                 card.innerHTML = `
-                    <div class="item-icon">${item.icon}</div>
-                    <div style="font-weight:bold; font-size:0.9rem;">${item.name}</div>
-                    <div style="font-size:0.8rem; color:#888;">${item.price} Fish</div>
-                    <button class="btn" style="margin-top:8px; padding:6px; font-size:0.8rem;">
+                    <div class="text-4xl mb-2">${item.icon}</div>
+                    <div class="font-bold text-sm">${item.name}</div>
+                    <div class="text-xs text-yellow-600 mb-2">${item.price} Fish</div>
+                    <button class="w-full text-xs font-bold py-1 px-2 rounded-lg ${isEquipped ? 'bg-red-400 text-white' : 'bg-pink-400 text-white'}">
                         ${isEquipped ? 'Unequip' : 'Equip'}
                     </button>
                 `;
                 card.onclick = () => toggleEquip(item);
-                container.appendChild(card);
+                grid.appendChild(card);
             });
         }
 
         function toggleEquip(item) {
-            if (!userData.equipped) userData.equipped = { hat: null, glasses: null };
-
-            if (userData.equipped[item.type] === item.id) {
-                userData.equipped[item.type] = null;
-            } else {
-                if (userData.fish >= item.price || userData.equipped[item.type] === item.id) {
-                    userData.equipped[item.type] = item.id;
-                } else {
-                    alert('Not enough Fish Tokens!');
-                    return;
+            if (item.type === 'hat') {
+                if (userData.equippedHat === item.id) userData.equippedHat = null;
+                else {
+                    if (userData.fish >= item.price) userData.equippedHat = item.id;
+                    else return alert('Not enough Fish Currency!');
+                }
+            } else if (item.type === 'glasses') {
+                if (userData.equippedGlasses === item.id) userData.equippedGlasses = null;
+                else {
+                    if (userData.fish >= item.price) userData.equippedGlasses = item.id;
+                    else return alert('Not enough Fish Currency!');
                 }
             }
-            saveUserData();
+            saveData();
             updateUI();
-            update3DAccessories();
         }
 
-        /* --- WEIGHT TRACKER & CHART.JS --- */
-        let weightChartInstance = null;
+        /* LEADERBOARD */
+        function renderLeaderboard() {
+            const tbody = document.getElementById('leaderboard-body');
+            tbody.innerHTML = '';
 
-        function logWeight(e) {
-            e.preventDefault();
-            const val = parseFloat(document.getElementById('input-weight').value);
-            if (!val) return;
-
-            const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            if (!userData.weightLogs) userData.weightLogs = [];
-            
-            userData.weightLogs.push({ date: dateStr, weight: val });
-            userData.fish += 10; // Reward
-
-            document.getElementById('input-weight').value = '';
-            saveUserData();
-            updateUI();
-            renderChart();
-            alert('Weight logged! You earned +10 Fish Tokens! 🐟');
-        }
-
-        function renderHistory() {
-            const list = document.getElementById('history-list');
-            list.innerHTML = '';
-            if (!userData.weightLogs) return;
-
-            [...userData.weightLogs].reverse().forEach(log => {
-                const li = document.createElement('li');
-                li.style.cssText = 'background:#f9f9f9; padding:10px; border-radius:8px; display:flex; justify-content:space-between;';
-                li.innerHTML = `<span>${log.date}</span> <strong>${log.weight} kg</strong>`;
-                list.appendChild(li);
-            });
-        }
-
-        function initChart() {
-            const ctx = document.getElementById('weightChart').getContext('2d');
-            weightChartInstance = new Chart(ctx, {
-                type: 'line',
-                data: {
-                    labels: [],
-                    datasets: [{
-                        label: 'Weight (kg)',
-                        data: [],
-                        borderColor: '#ff4d6d',
-                        backgroundColor: 'rgba(255, 143, 163, 0.2)',
-                        fill: true,
-                        tension: 0.3,
-                        borderWidth: 3
-                    }]
-                },
-                options: {
-                    responsive: true,
-                    maintainAspectRatio: false,
-                    scales: { y: { beginAtZero: false } }
-                }
-            });
-        }
-
-        function renderChart() {
-            if (!weightChartInstance || !userData.weightLogs) return;
-            weightChartInstance.data.labels = userData.weightLogs.map(l => l.date);
-            weightChartInstance.data.datasets[0].data = userData.weightLogs.map(l => l.weight);
-            weightChartInstance.update();
-        }
-
-        /* --- THREE.JS 3D CAT ENGINE --- */
-        let scene, camera, renderer, catGroup;
-        let hatMesh = null, glassesMesh = null;
-        let isAnimating = false;
-
-        function init3D() {
-            const container = document.getElementById('canvas-container');
-            if (container.children.length > 0) return;
-
-            scene = new THREE.Scene();
-            camera = new THREE.PerspectiveCamera(45, container.clientWidth / container.clientHeight, 0.1, 1000);
-            camera.position.set(0, 2, 5);
-
-            renderer = new THREE.WebGLRenderer({ antialias: true, alpha: true });
-            renderer.setSize(container.clientWidth, container.clientHeight);
-            renderer.setPixelRatio(window.devicePixelRatio);
-            container.appendChild(renderer.domElement);
-
-            // Lighting
-            const ambientLight = new THREE.AmbientLight(0xffffff, 0.7);
-            scene.add(ambientLight);
-            const dirLight = new THREE.DirectionalLight(0xffffff, 0.8);
-            dirLight.position.set(5, 10, 7);
-            scene.add(dirLight);
-
-            // Build Cat
-            catGroup = new THREE.Group();
-
-            const catMaterial = new THREE.MeshToonMaterial({ color: 0xffa559 });
-            const darkMaterial = new THREE.MeshToonMaterial({ color: 0x222222 });
-
-            // Body
-            const bodyGeo = new THREE.SphereGeometry(0.8, 32, 32);
-            bodyGeo.scale(1, 1.2, 0.9);
-            const body = new THREE.Mesh(bodyGeo, catMaterial);
-            body.position.y = 0.8;
-            catGroup.add(body);
-
-            // Head
-            const headGeo = new THREE.SphereGeometry(0.65, 32, 32);
-            headGeo.scale(1.1, 0.9, 1);
-            const head = new THREE.Mesh(headGeo, catMaterial);
-            head.position.set(0, 1.8, 0.1);
-            catGroup.add(head);
-
-            // Ears
-            const earGeo = new THREE.ConeGeometry(0.2, 0.4, 16);
-            const earL = new THREE.Mesh(earGeo, catMaterial);
-            earL.position.set(-0.35, 2.35, 0.1);
-            earL.rotation.z = 0.2;
-            const earR = earL.clone();
-            earR.position.x = 0.35;
-            earR.rotation.z = -0.2;
-            catGroup.add(earL);
-            catGroup.add(earR);
-
-            // Eyes
-            const eyeGeo = new THREE.SphereGeometry(0.07, 16, 16);
-            const eyeL = new THREE.Mesh(eyeGeo, darkMaterial);
-            eyeL.position.set(-0.2, 1.85, 0.6);
-            const eyeR = eyeL.clone();
-            eyeR.position.x = 0.2;
-            catGroup.add(eyeL);
-            catGroup.add(eyeR);
-
-            scene.add(catGroup);
-
-            update3DAccessories();
-
-            // Animation Loop
-            function animate() {
-                requestAnimationFrame(animate);
-                if(!isAnimating) {
-                    catGroup.rotation.y += 0.005;
-                }
-                renderer.render(scene, camera);
-            }
-            animate();
-
-            window.addEventListener('resize', () => {
-                if (!container) return;
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
-            });
-        }
-
-        function animateCat() {
-            isAnimating = true;
-            let startY = catGroup.position.y;
-            let time = 0;
-            
-            let jumpInterval = setInterval(() => {
-                time += 0.2;
-                catGroup.position.y = startY + Math.sin(time) * 0.5;
-                catGroup.rotation.y += 0.2;
-
-                if (time >= Math.PI * 2) {
-                    clearInterval(jumpInterval);
-                    catGroup.position.y = startY;
-                    isAnimating = false;
-                }
-            }, 30);
-        }
-
-        function update3DAccessories() {
-            if (!catGroup) return;
-
-            if (hatMesh) { catGroup.remove(hatMesh); hatMesh = null; }
-            if (glassesMesh) { catGroup.remove(glassesMesh); glassesMesh = null; }
-
-            const equipped = userData.equipped;
-            if (!equipped) return;
-
-            // Render Hat
-            if (equipped.hat) {
-                const item = catalog.find(c => c.id === equipped.hat);
-                if (item) {
-                    const hatGeo = new THREE.ConeGeometry(0.3, 0.5, 16);
-                    const hatMat = new THREE.MeshToonMaterial({ color: item.color });
-                    hatMesh = new THREE.Mesh(hatGeo, hatMat);
-                    hatMesh.position.set(0, 2.5, 0.1);
-                    catGroup.add(hatMesh);
+            let players = [];
+            for (let i = 0; i < localStorage.length; i++) {
+                const key = localStorage.key(i);
+                if (key.startsWith('ec_user_')) {
+                    players.push(JSON.parse(localStorage.getItem(key)));
                 }
             }
 
-            // Render Glasses
-            if (equipped.glasses) {
-                const item = catalog.find(c => c.id === equipped.glasses);
-                if (item) {
-                    const glassGeo = new THREE.BoxGeometry(0.6, 0.15, 0.05);
-                    const glassMat = new THREE.MeshToonMaterial({ color: item.color });
-                    glassesMesh = new THREE.Mesh(glassGeo, glassMat);
-                    glassesMesh.position.set(0, 1.85, 0.65);
-                    catGroup.add(glassesMesh);
-                }
-            }
+            players.sort((a, b) => b.fish - a.fish);
+
+            players.forEach((p, idx) => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="p-3 font-bold text-gray-400">#${idx + 1}</td>
+                    <td class="p-3">${p.username} ${p.username === activeUser ? '(You)' : ''}</td>
+                    <td class="p-3">${p.weight ? p.weight + ' kg' : '--'}</td>
+                    <td class="p-3 text-yellow-600">${p.fish} 🐟</td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        /* NAVIGATION */
+        function navTo(viewId) {
+            document.querySelectorAll('.view-panel').forEach(p => p.classList.add('hidden'));
+            document.getElementById('view-' + viewId).classList.remove('hidden');
         }
     </script>
 </body>
