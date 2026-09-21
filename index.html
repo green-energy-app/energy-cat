@@ -123,7 +123,7 @@
                     </div>
                 </div>
 
-                <!-- Box Cat Stage Vector Graphic -->
+                <!-- Box Cat Stage Vector Graphic (Orange Tabby) -->
                 <div id="catStage" class="relative bg-gradient-to-b from-amber-50 via-orange-50 to-pink-50 rounded-3xl p-3 flex flex-col items-center justify-center border-2 border-amber-200 shadow-inner h-[290px] cursor-pointer group" onclick="petCat(event)">
                     
                     <!-- Sleep Floating Zzz Effect -->
@@ -135,7 +135,8 @@
                         <svg width="220" height="210" viewBox="0 0 100 100" class="drop-shadow-xl transition-transform duration-300 group-hover:scale-105">
                             
                             <!-- Cat Tail Outside Box -->
-                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#CBD5E1" stroke-width="7" fill="none" stroke-linecap="round" />
+                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#D97706" stroke-width="7" fill="none" stroke-linecap="round" />
+                            <path d="M 75 42 L 79 46" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
 
                             <!-- Cardboard Box Back Flaps -->
                             <polygon points="12,48 50,38 88,48 50,56" fill="#D97706" />
@@ -145,51 +146,62 @@
                             <!-- Cat Body & Head Sitting inside Box -->
                             <!-- Ears -->
                             <g class="animate-ear-left">
-                                <polygon points="22,34 28,6 48,24" fill="#E2E8F0" />
+                                <polygon points="22,34 28,6 48,24" fill="#F59E0B" />
                                 <polygon points="25,30 30,12 43,23" fill="#F472B6" opacity="0.65" />
+                                <polygon points="24,25 27,15 35,22" fill="#78350F" />
                             </g>
                             <g class="animate-ear-right">
-                                <polygon points="78,34 72,6 52,24" fill="#E2E8F0" />
+                                <polygon points="78,34 72,6 52,24" fill="#F59E0B" />
                                 <polygon points="75,30 70,12 57,23" fill="#F472B6" opacity="0.65" />
+                                <polygon points="76,25 73,15 65,22" fill="#78350F" />
                             </g>
 
                             <!-- Head Circle -->
-                            <circle cx="50" cy="40" r="30" fill="#F1F5F9" />
+                            <circle cx="50" cy="40" r="30" fill="#F59E0B" />
+                            <ellipse cx="50" cy="45" rx="20" ry="16" fill="#FEF3C7" />
 
-                            <!-- Gray Fur Patch on Head -->
-                            <path d="M 32 18 Q 50 14 62 26 Q 50 28 32 18 Z" fill="#94A3B8" />
+                            <!-- Orange Tabby Stripes on Head -->
+                            <path d="M 46 12 L 50 22 L 54 12" stroke="#78350F" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
+                            <path d="M 38 16 L 42 24" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
+                            <path d="M 62 16 L 58 24" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
 
                             <!-- Cheeks Blush -->
-                            <ellipse cx="32" cy="46" rx="5" ry="3.5" fill="#F472B6" opacity="0.65" />
-                            <ellipse cx="68" cy="46" rx="5" ry="3.5" fill="#F472B6" opacity="0.65" />
+                            <ellipse cx="30" cy="44" rx="5" ry="3.5" fill="#F472B6" opacity="0.65" />
+                            <ellipse cx="70" cy="44" rx="5" ry="3.5" fill="#F472B6" opacity="0.65" />
 
-                            <!-- AWAKE EYES (Anime Sparkle) -->
+                            <!-- AWAKE EYES (Big Cute Anime Eyes) -->
                             <g id="catEyesAwake">
-                                <circle cx="36" cy="38" r="5" fill="#0F172A" />
-                                <circle cx="64" cy="38" r="5" fill="#0F172A" />
-                                <circle cx="34" cy="36" r="2" fill="#FFFFFF" />
-                                <circle cx="62" cy="36" r="2" fill="#FFFFFF" />
+                                <circle cx="35" cy="38" r="6" fill="#0F172A" />
+                                <circle cx="65" cy="38" r="6" fill="#0F172A" />
+                                <circle cx="33" cy="36" r="2.5" fill="#FFFFFF" />
+                                <circle cx="63" cy="36" r="2.5" fill="#FFFFFF" />
+                                <circle cx="36" cy="40" r="1" fill="#FFFFFF" />
+                                <circle cx="66" cy="40" r="1" fill="#FFFFFF" />
                             </g>
 
                             <!-- SLEEPING EYES (Closed Arcs) -->
                             <g id="catEyesSleep" class="hidden">
-                                <path d="M 31 39 Q 36 44 41 39" stroke="#0F172A" stroke-width="2.2" fill="none" stroke-linecap="round" />
-                                <path d="M 59 39 Q 64 44 69 39" stroke="#0F172A" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                                <path d="M 30 39 Q 35 44 40 39" stroke="#0F172A" stroke-width="2.2" fill="none" stroke-linecap="round" />
+                                <path d="M 60 39 Q 65 44 70 39" stroke="#0F172A" stroke-width="2.2" fill="none" stroke-linecap="round" />
                             </g>
 
                             <!-- Whiskers -->
-                            <path d="M 18 38 L 27 40" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 17 44 L 26 44" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 82 38 L 73 40" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 83 44 L 74 44" stroke="#64748B" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 18 38 L 27 40" stroke="#78350F" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 17 44 L 26 44" stroke="#78350F" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 82 38 L 73 40" stroke="#78350F" stroke-width="1.8" stroke-linecap="round" />
+                            <path d="M 83 44 L 74 44" stroke="#78350F" stroke-width="1.8" stroke-linecap="round" />
 
                             <!-- Nose & Mouth -->
-                            <polygon points="50,43 47,46 53,46" fill="#FB7185" />
-                            <path d="M 44 48 Q 50 52 56 48" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round" />
+                            <polygon points="50,42 47,45 53,45" fill="#FB7185" />
+                            <path d="M 44 46 Q 50 52 56 46" stroke="#334155" stroke-width="2" fill="none" stroke-linecap="round" />
+
+                            <!-- Gold Bell Collar -->
+                            <path d="M 36 56 Q 50 62 64 56" stroke="#EF4444" stroke-width="3" fill="none" stroke-linecap="round" />
+                            <circle cx="50" cy="60" r="4" fill="#FBBF24" stroke="#B45309" stroke-width="1" />
 
                             <!-- Front Paws Resting on Box Edge -->
-                            <ellipse cx="36" cy="56" rx="6" ry="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
-                            <ellipse cx="64" cy="56" rx="6" ry="4" fill="#FFFFFF" stroke="#CBD5E1" stroke-width="1" />
+                            <ellipse cx="36" cy="58" rx="6" ry="4" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1" />
+                            <ellipse cx="64" cy="58" rx="6" ry="4" fill="#FEF3C7" stroke="#F59E0B" stroke-width="1" />
 
                             <!-- Cardboard Box Front Body -->
                             <polygon points="12,52 50,62 88,52 88,88 50,96 12,88" fill="#F59E0B" />
@@ -713,6 +725,10 @@
                 showToast("Woke up the cat!", "🐱");
                 return;
             }
+            if (gameState.energy >= 100) {
+                showToast("Cat energy is already full! (100/100)", "⚡");
+                return;
+            }
             playSound(750, 'sine', 0.15);
             gameState.energy = Math.min(100, gameState.energy + 1);
             saveUserData();
@@ -720,6 +736,10 @@
 
         function feedCat() {
             if (isSleeping) setCatSleepState(false);
+            if (gameState.energy >= 100) {
+                showToast("Cat energy is already full! Cannot feed.", "⚡");
+                return;
+            }
             if (gameState.fish < 5) { showToast('Not enough fish! Complete missions first.', '⚠️'); return; }
             playSound(400, 'triangle', 0.12);
             gameState.fish -= 5;
@@ -729,12 +749,24 @@
         }
 
         function restCat() {
+            if (gameState.energy >= 100) {
+                showToast("Cat energy is already full! Cannot rest.", "⚡");
+                return;
+            }
             playSound(320, 'sine', 0.3);
             gameState.energy = Math.min(100, gameState.energy + 30);
             saveUserData();
             setCatSleepState(true);
             showToast('Cat went to sleep (+30⚡)', '😴');
         }
+
+        // AUTOMATIC ENERGY DECAY: -1 Energy every 5 minutes (300,000ms)
+        setInterval(() => {
+            if (currentUser && gameState.energy > 0) {
+                gameState.energy = Math.max(0, gameState.energy - 1);
+                saveUserData();
+            }
+        }, 300000);
 
         function openClaimModal() {
             const db = getUsersDB();
