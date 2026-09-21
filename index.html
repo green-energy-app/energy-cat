@@ -3,55 +3,85 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Energy Cat - Kawaii Edition</title>
+    <title>Energy Cat 3D - Kawaii Doodle Edition</title>
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@600;700;800;900&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@400;500;600;700&family=Quicksand:wght@500;600;700&display=swap" rel="stylesheet">
     <style>
-        * { font-family: 'Plus Jakarta Sans', sans-serif; }
+        * { font-family: 'Fredoka', 'Quicksand', sans-serif; }
 
         body {
-            background: linear-gradient(135deg, #FFF5F5 0%, #FEF3C7 50%, #FCE7F3 100%);
-            background-image: radial-gradient(#F59E0B 0.75px, transparent 0.75px), radial-gradient(#F59E0B 0.75px, #FFF5F5 0.75px);
-            background-size: 30px 30px;
-            background-position: 0 0, 15px 15px;
+            background: linear-gradient(135deg, #FFDEE9 0%, #B5FFFC 100%);
             min-height: 100vh;
             user-select: none;
             overflow-x: hidden;
         }
 
-        .cute-card {
-            background: rgba(255, 255, 255, 0.96);
-            backdrop-filter: blur(20px);
-            border: 4px solid #FDE68A;
-            box-shadow: 0 20px 40px -10px rgba(217, 119, 6, 0.2);
+        /* 3D Soft Claymorphism Styling */
+        .clay-card {
+            background: #FFFFFF;
+            border-radius: 42px;
+            box-shadow: 
+                20px 20px 60px rgba(0, 0, 0, 0.08),
+                -20px -20px 60px rgba(255, 255, 255, 0.9),
+                inset 4px 4px 10px rgba(255, 255, 255, 0.9),
+                inset -4px -4px 10px rgba(0, 0, 0, 0.03);
+            border: 4px solid #FFF1F2;
+        }
+
+        .clay-inner {
+            background: #FFFDF9;
+            border-radius: 32px;
+            box-shadow: 
+                inset 6px 6px 14px rgba(225, 175, 175, 0.2),
+                inset -6px -6px 14px rgba(255, 255, 255, 0.9);
+            border: 3px solid #FFE4E6;
+        }
+
+        .clay-btn {
+            border-radius: 22px;
+            transition: all 0.15s ease-in-out;
+            box-shadow: 
+                0 8px 0 0 rgba(180, 83, 9, 0.2),
+                inset 0 2px 4px rgba(255, 255, 255, 0.8);
+        }
+        .clay-btn:active {
+            transform: translateY(4px);
+            box-shadow: 
+                0 2px 0 0 rgba(180, 83, 9, 0.2),
+                inset 0 1px 2px rgba(0, 0, 0, 0.1);
         }
 
         .glass-modal {
-            background: rgba(15, 23, 42, 0.75);
+            background: rgba(30, 27, 75, 0.65);
             backdrop-filter: blur(12px);
         }
 
-        @keyframes earTwitch {
-            0%, 90%, 100% { transform: rotate(0deg); }
-            93% { transform: rotate(-8deg); }
-            96% { transform: rotate(8deg); }
-        }
-        .animate-ear-left { transform-origin: 30px 20px; animation: earTwitch 4s ease-in-out infinite; }
-        .animate-ear-right { transform-origin: 70px 20px; animation: earTwitch 4s ease-in-out infinite 0.2s; }
-
-        @keyframes catBreathe {
+        /* Animations */
+        @keyframes breathe {
             0%, 100% { transform: translateY(0) scale(1); }
-            50% { transform: translateY(-3px) scale(1.01, 0.99); }
+            50% { transform: translateY(-5px) scale(1.02, 0.98); }
         }
-        .animate-breathe { animation: catBreathe 3s ease-in-out infinite; }
+        .animate-breathe { animation: breathe 3.2s ease-in-out infinite; }
 
-        @keyframes sleepFloat {
-            0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
-            50% { opacity: 1; transform: translate(12px, -20px) scale(1.1); }
-            100% { opacity: 0; transform: translate(25px, -40px) scale(0.8); }
+        @keyframes tailWag {
+            0%, 100% { transform: rotate(0deg); }
+            50% { transform: rotate(14deg); }
         }
-        .animate-zzz { animation: sleepFloat 2.5s infinite ease-in-out; }
+        .animate-tail { transform-origin: 66px 72px; animation: tailWag 2.2s ease-in-out infinite; }
+
+        @keyframes zzzFloat {
+            0% { opacity: 0; transform: translate(0, 0) scale(0.6); }
+            50% { opacity: 1; transform: translate(14px, -20px) scale(1.1); }
+            100% { opacity: 0; transform: translate(28px, -40px) scale(0.8); }
+        }
+        .animate-zzz { animation: zzzFloat 2.6s infinite ease-in-out; }
+
+        @keyframes floatSlow {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            50% { transform: translateY(-8px) rotate(4deg); }
+        }
+        .animate-float-slow { animation: floatSlow 4s ease-in-out infinite; }
 
         .tab-content { display: none; }
         .tab-content.active { display: block; animation: fadeIn 0.25s ease-out; }
@@ -61,212 +91,192 @@
             to { opacity: 1; transform: translateY(0); }
         }
 
-        .btn-cute {
-            transition: all 0.15s cubic-bezier(0.34, 1.56, 0.64, 1);
-            box-shadow: 0 4px 0 0 rgba(180, 83, 9, 0.2);
-        }
-        .btn-cute:active { transform: translateY(3px); box-shadow: 0 1px 0 0 rgba(180, 83, 9, 0.2); }
-
         ::-webkit-scrollbar { width: 6px; }
-        ::-webkit-scrollbar-track { background: #FEF3C7; border-radius: 10px; }
-        ::-webkit-scrollbar-thumb { background: #F59E0B; border-radius: 10px; }
+        ::-webkit-scrollbar-track { background: #FFF1F2; border-radius: 10px; }
+        ::-webkit-scrollbar-thumb { background: #FB7185; border-radius: 10px; }
     </style>
 </head>
-<body class="flex justify-center items-center min-h-screen p-3 md:p-6 relative">
+<body class="flex justify-center items-center min-h-screen p-3 md:p-6">
 
-    <!-- Notification Toast -->
+    <!-- Toast Notification -->
     <div id="toastNotification" class="fixed top-5 left-1/2 -translate-x-1/2 z-50 transition-all duration-300 opacity-0 pointer-events-none transform -translate-y-5">
-        <div class="bg-slate-900/90 text-white px-6 py-3 rounded-full shadow-2xl border-2 border-amber-300 flex items-center gap-3 font-extrabold text-xs tracking-wide">
+        <div class="bg-slate-900/90 text-white px-6 py-3 rounded-full shadow-2xl border-2 border-pink-300 flex items-center gap-3 font-extrabold text-xs tracking-wide">
             <span id="toastIcon" class="text-xl">✨</span>
             <span id="toastMessage">Notification</span>
         </div>
     </div>
 
     <!-- Main Container App -->
-    <div class="cute-card rounded-[42px] w-full max-w-md h-[760px] flex flex-col justify-between relative z-10 overflow-hidden p-5">
+    <div class="clay-card w-full max-w-md h-[800px] flex flex-col justify-between relative z-10 overflow-hidden p-5">
         
         <!-- Header Zone -->
-        <div class="bg-gradient-to-r from-amber-100 via-orange-100 to-pink-100 p-3 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
+        <div class="bg-gradient-to-r from-pink-100 via-rose-100 to-amber-100 p-3 rounded-3xl border-2 border-white shadow-sm flex justify-between items-center shrink-0">
             <div class="flex items-center gap-3">
-                <div class="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-2xl shadow-sm border border-amber-200">
-                    📦
+                <div class="w-11 h-11 rounded-2xl bg-white flex items-center justify-center text-2xl shadow-sm border border-pink-200">
+                    🐱
                 </div>
                 <div>
                     <div class="flex items-center gap-1.5">
-                        <span class="text-[9px] tracking-widest font-black text-amber-600 uppercase">VERIFIED AGENT</span>
-                        <span id="totalUsersBadge" class="text-[9px] font-extrabold bg-white/80 px-2 py-0.5 rounded-full text-amber-800 border border-amber-200">👥 0</span>
+                        <span class="text-[9px] tracking-widest font-black text-rose-600 uppercase">VERIFIED AGENT</span>
+                        <span id="totalUsersBadge" class="text-[9px] font-extrabold bg-white/90 px-2 py-0.5 rounded-full text-rose-800 border border-rose-200">👥 0</span>
                     </div>
                     <div class="text-xs font-black text-slate-800 flex items-center gap-1">
                         <span id="displayUser">Guest Agent</span>
-                        <button onclick="logoutUser()" class="text-[10px] text-amber-600 hover:underline font-bold ml-1">🔒 Logout</button>
+                        <button onclick="logoutUser()" class="text-[10px] text-rose-600 hover:underline font-bold ml-1">🔒 Logout</button>
                     </div>
                 </div>
             </div>
             
-            <div class="flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-2xl border border-amber-200 shadow-sm">
+            <div class="flex items-center gap-1.5 bg-white px-3.5 py-1.5 rounded-2xl border border-rose-200 shadow-sm">
                 <span class="text-xl">🐟</span>
-                <span id="fishCount" class="text-sm font-black text-amber-500">0</span>
+                <span id="fishCount" class="text-sm font-black text-rose-500">0</span>
             </div>
         </div>
 
         <!-- MAIN PAGES AREA -->
         <div class="flex-grow overflow-y-auto py-3">
             
-            <!-- PAGE 1: HOME (CAT CARE) -->
+            <!-- PAGE 1: HOME (CAT CARE & SCREEN) -->
             <div id="tab-home" class="tab-content active space-y-3.5">
-                <div class="bg-white border-2 border-emerald-200 rounded-2xl p-3 shadow-sm">
+                <!-- Energy Bar -->
+                <div class="bg-white border-2 border-rose-200 rounded-2xl p-3 shadow-sm">
                     <div class="flex justify-between items-center mb-1.5">
-                        <span class="text-xs text-emerald-700 font-extrabold flex items-center gap-1">
+                        <span class="text-xs text-rose-700 font-black flex items-center gap-1">
                             <span>⚡</span> CAT ENERGY
                         </span>
-                        <span id="energyText" class="text-xs font-black text-emerald-700">100/100</span>
+                        <span id="energyText" class="text-xs font-black text-rose-700">100/100</span>
                     </div>
-                    <div class="w-full bg-emerald-100 h-3.5 rounded-full overflow-hidden p-0.5 border border-emerald-200">
-                        <div id="energyBar" class="bg-gradient-to-r from-emerald-400 to-teal-300 h-full rounded-full transition-all duration-500" style="width: 100%;"></div>
+                    <div class="w-full bg-rose-100 h-4 rounded-full overflow-hidden p-0.5 border border-rose-200 shadow-inner">
+                        <div id="energyBar" class="bg-gradient-to-r from-rose-400 to-pink-500 h-full rounded-full transition-all duration-500 shadow-sm" style="width: 100%;"></div>
                     </div>
                 </div>
 
-                <!-- Box Cat Stage Vector Graphic (High Quality Kawaii Art) -->
-                <div id="catStage" class="relative bg-gradient-to-b from-amber-50 via-orange-50 to-pink-50 rounded-3xl p-3 flex flex-col items-center justify-center border-2 border-amber-200 shadow-inner h-[290px] cursor-pointer group" onclick="petCat(event)">
+                <!-- 3D Cute Cat Game Screen (Doodle Cat Style + Rich Decorations) -->
+                <div id="catStage" class="relative clay-inner p-3 flex flex-col items-center justify-center border-2 border-pink-200 h-[310px] cursor-pointer group overflow-hidden" onclick="petCat(event)">
                     
+                    <!-- RICH SCREEN DECORATIONS -->
+                    <div class="absolute top-3 left-4 text-2xl animate-float-slow opacity-80">☁️</div>
+                    <div class="absolute top-5 right-5 text-xl animate-bounce opacity-70">✨</div>
+                    <div class="absolute top-12 left-8 text-sm opacity-60">⭐</div>
+                    <div class="absolute bottom-12 left-5 text-2xl animate-pulse opacity-75">🥛</div>
+                    <div class="absolute bottom-10 right-6 text-xl opacity-80">🐟</div>
+                    <div class="absolute top-20 right-8 text-sm opacity-50">🌸</div>
+
                     <!-- Sleep Floating Zzz Effect -->
-                    <div id="sleepEffect" class="hidden absolute top-6 right-12 z-20 pointer-events-none">
-                        <span class="text-2xl font-black text-indigo-400 animate-zzz inline-block">Zzz...</span>
+                    <div id="sleepEffect" class="hidden absolute top-6 right-10 z-20 pointer-events-none">
+                        <span class="text-2xl font-black text-indigo-500 animate-zzz inline-block">Zzz...</span>
                     </div>
 
-                    <div class="animate-breathe relative flex items-center justify-center mt-2">
-                        <svg width="230" height="220" viewBox="0 0 100 100" class="drop-shadow-xl transition-transform duration-300 group-hover:scale-105">
+                    <!-- Doodle Kawaii Cat SVG Vector Vector Art (Directly based on reference image) -->
+                    <div class="animate-breathe relative flex items-center justify-center z-10">
+                        <svg width="230" height="230" viewBox="0 0 100 100" class="drop-shadow-xl transition-transform duration-300 group-hover:scale-105">
                             <defs>
-                                <radialGradient id="blushGlow" cx="50%" cy="50%" r="50%">
-                                    <stop offset="0%" stop-color="#FB7185" stop-opacity="0.6"/>
-                                    <stop offset="100%" stop-color="#FB7185" stop-opacity="0"/>
+                                <radialGradient id="doodleBodyGrad" cx="40%" cy="30%" r="70%">
+                                    <stop offset="0%" stop-color="#FFFDF9"/>
+                                    <stop offset="100%" stop-color="#F2E6D8"/>
                                 </radialGradient>
-                                <linearGradient id="boxGrad" x1="0%" y1="0%" x2="0%" y2="100%">
-                                    <stop offset="0%" stop-color="#FCD34D"/>
-                                    <stop offset="100%" stop-color="#F59E0B"/>
-                                </linearGradient>
                             </defs>
-                            
-                            <!-- Cat Tail Outside Box -->
-                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#E11D48" stroke-width="0" fill="none" />
-                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#5A3E2B" stroke-width="6" fill="none" stroke-linecap="round" />
-                            <path d="M 72 65 Q 88 50 82 35 Q 76 25 78 40" stroke="#F59E0B" stroke-width="3.5" fill="none" stroke-linecap="round" />
-                            
-                            <!-- Cardboard Box Back Flaps -->
-                            <polygon points="12,48 50,38 88,48 50,56" fill="#D97706" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
-                            <polygon points="12,48 30,32 50,38" fill="#B45309" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
-                            <polygon points="88,48 70,32 50,38" fill="#B45309" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
 
-                            <!-- Cat Body & Head Sitting inside Box -->
-                            <!-- Ears -->
-                            <g class="animate-ear-left">
-                                <polygon points="20,34 27,4 48,24" fill="#F59E0B" stroke="#5A3E2B" stroke-width="2" stroke-linejoin="round" />
-                                <polygon points="24,28 29,10 43,23" fill="#F472B6" opacity="0.8" />
-                                <polygon points="22,23 25,12 33,20" fill="#78350F" />
-                            </g>
-                            <g class="animate-ear-right">
-                                <polygon points="80,34 73,4 52,24" fill="#F59E0B" stroke="#5A3E2B" stroke-width="2" stroke-linejoin="round" />
-                                <polygon points="76,28 71,10 57,23" fill="#F472B6" opacity="0.8" />
-                                <polygon points="78,23 75,12 67,20" fill="#78350F" />
+                            <!-- Tail (Cute Curved Dark Brown Outline + Cream Patch) -->
+                            <g class="animate-tail">
+                                <path d="M 66 68 C 82 66, 88 50, 80 40 C 73 34, 68 44, 71 52 C 73 58, 64 64, 62 66 Z" 
+                                      fill="#FED7AA" stroke="#4A2211" stroke-width="3" stroke-linejoin="round" stroke-linecap="round" />
                             </g>
 
-                            <!-- Head Circle -->
-                            <circle cx="50" cy="40" r="30" fill="#F59E0B" stroke="#5A3E2B" stroke-width="2" />
-                            <ellipse cx="50" cy="46" rx="20" ry="15" fill="#FEF3C7" />
+                            <!-- Main Body (Cream Side Patch & Front White) -->
+                            <path d="M 28 58 C 24 72, 25 88, 33 88 C 42 88, 58 88, 67 88 C 75 88, 76 72, 72 58 Z" 
+                                  fill="url(#doodleBodyGrad)" stroke="#4A2211" stroke-width="3.2" stroke-linejoin="round" />
+                            <!-- Body Right Cream Color Patch -->
+                            <path d="M 58 58 C 66 62, 73 70, 71 85 C 67 87, 60 88, 58 88 Z" fill="#FED7AA" />
 
-                            <!-- Orange Tabby Stripes on Head -->
-                            <path d="M 46 12 L 50 22 L 54 12" stroke="#78350F" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
-                            <path d="M 37 16 L 42 24" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
-                            <path d="M 63 16 L 58 24" stroke="#78350F" stroke-width="2" stroke-linecap="round" />
+                            <!-- Cute Paw Lines (Chubby Resting Feet) -->
+                            <path d="M 32 80 C 33 86, 38 86, 39 80" stroke="#4A2211" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            <path d="M 61 80 C 62 86, 67 86, 68 80" stroke="#4A2211" stroke-width="2.5" stroke-linecap="round" fill="none" />
 
-                            <!-- Soft Blush Cheeks -->
-                            <circle cx="28" cy="44" r="6" fill="url(#blushGlow)" />
-                            <circle cx="72" cy="44" r="6" fill="url(#blushGlow)" />
+                            <!-- Front Hands Raised Up (Super Kawaii Doodle Hands) -->
+                            <path d="M 33 55 C 31 46, 42 45, 40 56 Z" fill="#FFFDF9" stroke="#4A2211" stroke-width="2.8" stroke-linejoin="round" />
+                            <path d="M 67 55 C 69 46, 58 45, 60 56 Z" fill="#FFFDF9" stroke="#4A2211" stroke-width="2.8" stroke-linejoin="round" />
 
-                            <!-- AWAKE EYES (Kawaii Eyes) -->
+                            <!-- Head Shell (Broad Cute Chubby Shape) -->
+                            <path d="M 18 38 C 12 28, 22 10, 35 15 C 45 10, 55 10, 65 15 C 78 10, 88 28, 82 38 C 88 52, 78 62, 50 62 C 22 62, 12 52, 18 38 Z" 
+                                  fill="#FED7AA" stroke="#4A2211" stroke-width="3.2" stroke-linejoin="round" />
+
+                            <!-- White Forehead & Face Triangle Patch -->
+                            <path d="M 50 25 L 18 45 C 22 58, 78 58, 82 45 Z" fill="#FFFDF9" />
+
+                            <!-- Ear Detail Inner Lines -->
+                            <path d="M 27 18 C 29 16, 32 17, 33 19" stroke="#4A2211" stroke-width="2.5" stroke-linecap="round" fill="none" />
+                            <path d="M 73 18 C 71 16, 68 17, 67 19" stroke="#4A2211" stroke-width="2.5" stroke-linecap="round" fill="none" />
+
+                            <!-- Whiskers (3 on Left, 3 on Right) -->
+                            <path d="M 12 40 L 22 42" stroke="#4A2211" stroke-width="2.8" stroke-linecap="round" />
+                            <path d="M 10 46 L 21 46" stroke="#4A2211" stroke-width="2.8" stroke-linecap="round" />
+                            <path d="M 13 52 L 23 49" stroke="#4A2211" stroke-width="2.8" stroke-linecap="round" />
+
+                            <path d="M 88 40 L 78 42" stroke="#4A2211" stroke-width="2.8" stroke-linecap="round" />
+                            <path d="M 90 46 L 79 46" stroke="#4A2211" stroke-width="2.8" stroke-linecap="round" />
+                            <path d="M 87 52 L 77 49" stroke="#4A2211" stroke-width="2.8" stroke-linecap="round" />
+
+                            <!-- AWAKE EYES (Simple Cute Dark Brown Dots & Open 'w' Mouth) -->
                             <g id="catEyesAwake">
-                                <circle cx="34" cy="38" r="6.5" fill="#5A3E2B" />
-                                <circle cx="66" cy="38" r="6.5" fill="#5A3E2B" />
-                                <circle cx="32" cy="35.5" r="2.8" fill="#FFFFFF" />
-                                <circle cx="64" cy="35.5" r="2.8" fill="#FFFFFF" />
-                                <circle cx="35.5" cy="40" r="1.2" fill="#FFFFFF" />
-                                <circle cx="67.5" cy="40" r="1.2" fill="#FFFFFF" />
+                                <circle cx="38" cy="42" r="2.8" fill="#4A2211" />
+                                <circle cx="62" cy="42" r="2.8" fill="#4A2211" />
+                                <!-- Cute Blush Cheek Spots -->
+                                <ellipse cx="32" cy="46" rx="3" ry="1.8" fill="#FB7185" opacity="0.6" />
+                                <ellipse cx="68" cy="46" rx="3" ry="1.8" fill="#FB7185" opacity="0.6" />
+                                <!-- Happy 'w' Mouth -->
+                                <path d="M 44 43 Q 47 48 50 44 Q 53 48 56 43" stroke="#4A2211" stroke-width="2.5" fill="none" stroke-linecap="round" stroke-linejoin="round" />
                             </g>
 
-                            <!-- SLEEPING EYES (Closed Arcs) -->
+                            <!-- SLEEPING EYES -->
                             <g id="catEyesSleep" class="hidden">
-                                <path d="M 29 39 Q 34 45 39 39" stroke="#5A3E2B" stroke-width="2.5" fill="none" stroke-linecap="round" />
-                                <path d="M 61 39 Q 66 45 71 39" stroke="#5A3E2B" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                                <path d="M 34 43 Q 38 47 42 43" stroke="#4A2211" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                                <path d="M 58 43 Q 62 47 66 43" stroke="#4A2211" stroke-width="2.5" fill="none" stroke-linecap="round" />
+                                <path d="M 47 46 Q 50 48 53 46" stroke="#4A2211" stroke-width="2" fill="none" stroke-linecap="round" />
                             </g>
-
-                            <!-- Whiskers -->
-                            <path d="M 16 38 L 26 40" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 15 44 L 25 44" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 84 38 L 74 40" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
-                            <path d="M 85 44 L 75 44" stroke="#5A3E2B" stroke-width="1.8" stroke-linecap="round" />
-
-                            <!-- Nose & Open Mouth -->
-                            <polygon points="50,42 47,45 53,45" fill="#FB7185" stroke="#5A3E2B" stroke-width="0.8" />
-                            <path d="M 44 46 Q 50 54 56 46 Z" fill="#FB7185" stroke="#5A3E2B" stroke-width="1.5" stroke-linejoin="round" />
-
-                            <!-- Gold Bell Collar -->
-                            <path d="M 36 56 Q 50 62 64 56" stroke="#EF4444" stroke-width="3.5" fill="none" stroke-linecap="round" />
-                            <circle cx="50" cy="60" r="4.5" fill="#FBBF24" stroke="#5A3E2B" stroke-width="1.2" />
-                            <circle cx="48.5" cy="58.5" r="1" fill="#FFFFFF" />
-
-                            <!-- Front Paws Resting on Box Edge -->
-                            <ellipse cx="36" cy="58" rx="6.5" ry="4.5" fill="#FEF3C7" stroke="#5A3E2B" stroke-width="1.5" />
-                            <ellipse cx="64" cy="58" rx="6.5" ry="4.5" fill="#FEF3C7" stroke="#5A3E2B" stroke-width="1.5" />
-
-                            <!-- Cardboard Box Front Body -->
-                            <polygon points="12,52 50,62 88,52 88,88 50,96 12,88" fill="url(#boxGrad)" stroke="#5A3E2B" stroke-width="2" stroke-linejoin="round" />
-                            <polygon points="12,52 50,62 50,96 12,88" fill="#D97706" opacity="0.25" />
-                            <!-- Box Tape Decor & Heart Sticker -->
-                            <polygon points="44,61 56,64 56,95 44,93" fill="#FEF3C7" opacity="0.8" stroke="#5A3E2B" stroke-width="1" />
-                            <path d="M 28 72 C 28 69, 24 67, 22 70 C 20 67, 16 69, 16 72 C 16 76, 22 79, 22 79 C 22 79, 28 76, 28 72 Z" fill="#F472B6" stroke="#5A3E2B" stroke-width="1" />
                         </svg>
                     </div>
 
-                    <p id="catStatusLabel" class="text-xs font-black text-amber-700 mt-1 bg-white/90 px-3.5 py-1 rounded-full border border-amber-200">
-                        ✨ Tap cat to pet (+1⚡ Energy)
+                    <p id="catStatusLabel" class="text-xs font-black text-rose-700 mt-2 bg-white/95 px-4 py-1.5 rounded-full border border-rose-200 shadow-sm z-10">
+                        ✨ Tap to Pet Kitty (+1⚡ Energy)
                     </p>
                 </div>
 
                 <!-- Feed & Rest Actions -->
                 <div class="grid grid-cols-2 gap-3">
-                    <button onclick="feedCat()" class="btn-cute bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white font-black py-3 px-2 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-sm">
+                    <button onclick="feedCat()" class="clay-btn bg-gradient-to-r from-amber-400 to-orange-400 hover:from-amber-500 hover:to-orange-500 text-white font-black py-3 px-2 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-sm">
                         <span class="text-base">🍱</span> Feed (-5🐟 / +15⚡)
                     </button>
-                    <button onclick="restCat()" class="btn-cute bg-gradient-to-r from-indigo-400 to-purple-400 hover:from-indigo-500 hover:to-purple-500 text-white font-black py-3 px-2 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-sm">
-                        <span class="text-base">😴</span> Rest / Sleep (+30⚡)
+                    <button onclick="restCat()" class="clay-btn bg-gradient-to-r from-indigo-400 to-purple-400 hover:from-indigo-500 hover:to-purple-500 text-white font-black py-3 px-2 rounded-2xl border-2 border-white text-xs flex items-center justify-center gap-1.5 shadow-sm">
+                        <span class="text-base">😴</span> Rest (+30⚡)
                     </button>
                 </div>
             </div>
 
             <!-- PAGE 2: MISSIONS -->
             <div id="tab-missions" class="tab-content space-y-3">
-                <div class="bg-gradient-to-br from-emerald-100/80 to-teal-100/80 border-2 border-emerald-200 rounded-3xl p-4">
+                <div class="bg-gradient-to-br from-emerald-100/90 to-teal-100/90 border-2 border-emerald-200 rounded-3xl p-4 shadow-sm">
                     <div class="flex items-center gap-2 mb-1">
                         <span class="text-xl">🌱</span>
-                        <p class="text-xs font-black text-emerald-900 uppercase tracking-wider">Photo Proof Eco Missions</p>
+                        <p class="text-xs font-black text-emerald-900 uppercase tracking-wider">Eco Missions (Photo Proof)</p>
                     </div>
-                    <p class="text-[11px] font-bold text-slate-600 mb-3">Upload real photo proof to earn fish points!</p>
+                    <p class="text-[11px] font-bold text-slate-600 mb-3">Upload photo proof to earn fish rewards!</p>
 
                     <div class="space-y-2.5 text-xs">
-                        <button onclick="openMissionUploadModal('Turned off unused lights/monitors', 15, 20)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2">💡 Turn Off Lights / Monitor</span>
+                        <button onclick="openMissionUploadModal('Turn off lights / monitor', 15, 20)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">💡 Turn Off Unused Lights</span>
                             <span class="text-emerald-600 font-black">+15🐟 / +20⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('Turn Off AC After Room Use', 20, 30)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2">❄️ Turn Off AC After Room Use</span>
+                        <button onclick="openMissionUploadModal('Turn off AC when leaving room', 20, 30)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">❄️ Turn Off Air Conditioner</span>
                             <span class="text-emerald-600 font-black">+20🐟 / +30⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('Unplugged idle electronics', 10, 15)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2">🔌 Unplug Electronics</span>
+                        <button onclick="openMissionUploadModal('Unplug electronics', 10, 15)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">🔌 Unplug Idle Electronics</span>
                             <span class="text-emerald-600 font-black">+10🐟 / +15⚡</span>
                         </button>
-                        <button onclick="openMissionUploadModal('Took stairs instead of lift', 10, 15)" class="btn-cute w-full bg-white hover:bg-emerald-50 text-slate-700 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
-                            <span class="flex items-center gap-2">🚶 Use Stairs Instead of Lift</span>
+                        <button onclick="openMissionUploadModal('Use stairs instead of elevator', 10, 15)" class="clay-btn w-full bg-white hover:bg-emerald-50 text-slate-800 font-extrabold py-3 px-3.5 border-2 border-emerald-200 rounded-2xl flex justify-between items-center shadow-sm">
+                            <span class="flex items-center gap-2">🚶 Take Stairs vs Elevator</span>
                             <span class="text-emerald-600 font-black">+10🐟 / +15⚡</span>
                         </button>
                     </div>
@@ -275,66 +285,66 @@
 
             <!-- PAGE 3: MINI-GAME -->
             <div id="tab-game" class="tab-content space-y-3">
-                <div class="bg-white rounded-3xl p-4 border-2 border-sky-200 shadow-sm flex flex-col justify-between h-[380px]">
+                <div class="bg-white rounded-3xl p-4 border-2 border-sky-200 shadow-sm flex flex-col justify-between h-[410px]">
                     <div>
                         <div class="flex items-center gap-2 mb-1">
                             <span class="text-xl">🎣</span>
-                            <h3 class="font-black text-sm text-sky-800">Catch Fish Speed Game</h3>
+                            <h3 class="font-black text-sm text-sky-800">Fish Catch Speed Game!</h3>
                         </div>
-                        <p class="text-[11px] font-bold text-slate-500">Tap appearing fish fast in 10 seconds!</p>
+                        <p class="text-[11px] font-bold text-slate-500">Tap appearing fish as fast as you can in 10s!</p>
                     </div>
 
-                    <div id="gameBox" class="relative bg-gradient-to-b from-sky-100 to-blue-50 rounded-2xl border-2 border-sky-200 h-56 overflow-hidden flex items-center justify-center">
-                        <p id="gameStartText" class="text-xs font-black text-sky-600 bg-white px-4 py-2 rounded-full border border-sky-200">Tap Start Button Below!</p>
+                    <div id="gameBox" class="relative bg-gradient-to-b from-sky-100 to-blue-50 rounded-2xl border-2 border-sky-200 h-64 overflow-hidden flex items-center justify-center">
+                        <p id="gameStartText" class="text-xs font-black text-sky-600 bg-white/90 px-4 py-2 rounded-full border border-sky-200 shadow-sm">Click Start Game below to begin!</p>
                         <button id="targetFish" onclick="catchFish()" class="hidden absolute text-4xl transition-all duration-150 active:scale-75">🐟</button>
                     </div>
 
                     <div class="flex justify-between items-center">
-                        <p class="text-xs font-extrabold text-slate-600">Caught: <span id="gameScore" class="text-amber-500 font-black text-lg">0</span></p>
-                        <button id="startGameBtn" onclick="startMiniGame()" class="btn-cute bg-gradient-to-r from-sky-400 to-blue-500 text-white text-xs font-black px-5 py-2.5 rounded-xl shadow-md border-2 border-white">
+                        <p class="text-xs font-extrabold text-slate-600">Caught: <span id="gameScore" class="text-rose-500 font-black text-lg">0</span> fish</p>
+                        <button id="startGameBtn" onclick="startMiniGame()" class="clay-btn bg-gradient-to-r from-sky-400 to-blue-500 text-white text-xs font-black px-5 py-2.5 rounded-xl shadow-md border-2 border-white">
                             Start Game (10s)
                         </button>
                     </div>
                 </div>
             </div>
 
-            <!-- PAGE 4: RANKS & SHOP -->
+            <!-- PAGE 4: RANKS & REWARDS -->
             <div id="tab-ranks" class="tab-content space-y-3.5">
                 
                 <!-- WINNER BANNER -->
-                <div class="bg-gradient-to-r from-amber-400 via-orange-400 to-pink-500 rounded-3xl p-3.5 border-2 border-white shadow-md text-white">
+                <div class="bg-gradient-to-r from-rose-400 via-pink-400 to-amber-400 rounded-3xl p-3.5 border-2 border-white shadow-md text-white">
                     <div class="flex items-center gap-2 mb-1">
                         <span class="text-2xl animate-bounce">🏆</span>
                         <div>
-                            <h4 class="text-xs font-black uppercase tracking-wider">Monthly Winner Announcement</h4>
-                            <p class="text-[10px] font-extrabold text-amber-100">Top verified player wins monthly reward!</p>
+                            <h4 class="text-xs font-black uppercase tracking-wider">Monthly Leaderboard Winner</h4>
+                            <p class="text-[10px] font-extrabold text-rose-100">#1 Top player wins exclusive monthly reward!</p>
                         </div>
                     </div>
                     <div class="mt-2.5 pt-2 border-t border-white/30 flex justify-between items-center">
                         <p class="text-[10px] font-extrabold bg-black/20 px-2.5 py-1 rounded-full">
                             👑 Rank #1: <span id="topPlayerNameDisplay" class="underline">Loading...</span>
                         </p>
-                        <button id="claimRewardBtn" onclick="openClaimModal()" class="btn-cute bg-white text-pink-600 hover:bg-pink-50 text-[10px] font-black px-3 py-1.5 rounded-xl shadow-sm border border-pink-200">
+                        <button id="claimRewardBtn" onclick="openClaimModal()" class="clay-btn bg-white text-rose-600 hover:bg-rose-50 text-[10px] font-black px-3 py-1.5 rounded-xl shadow-sm border border-rose-200">
                             🎁 Claim Reward
                         </button>
                     </div>
                 </div>
 
                 <!-- Leaderboard Section -->
-                <div class="bg-white rounded-3xl p-3 border-2 border-amber-200 shadow-sm">
+                <div class="bg-white rounded-3xl p-3 border-2 border-rose-200 shadow-sm">
                     <div class="flex items-center justify-between mb-2">
                         <div class="flex items-center gap-2">
                             <span class="text-xl">📊</span>
-                            <p class="text-xs font-black text-amber-900">Verified Players Leaderboard</p>
+                            <p class="text-xs font-black text-rose-900">Registered Players Leaderboard</p>
                         </div>
                         <span id="totalPlayersCount" class="text-[10px] font-black text-slate-500">0 Players</span>
                     </div>
-                    <div class="overflow-y-auto max-h-[160px]">
+                    <div class="overflow-y-auto max-h-[170px]">
                         <table class="w-full text-left text-xs">
                             <thead>
-                                <tr class="border-b border-amber-100 text-amber-500 font-black text-[10px] uppercase">
+                                <tr class="border-b border-rose-100 text-rose-500 font-black text-[10px] uppercase">
                                     <th class="p-1.5">Rank</th>
-                                    <th class="p-1.5">Player Username</th>
+                                    <th class="p-1.5">Agent</th>
                                     <th class="p-1.5 text-right">Fish 🐟</th>
                                 </tr>
                             </thead>
@@ -345,8 +355,8 @@
 
                 <!-- Admin Action Footer -->
                 <div class="text-center pt-1">
-                    <button onclick="openAdminModal()" class="text-[10px] font-bold text-slate-400 hover:text-amber-600 underline">
-                        ⚙️ Admin Control Panel (Export Winners)
+                    <button onclick="openAdminModal()" class="text-[10px] font-bold text-slate-400 hover:text-rose-600 underline">
+                        ⚙️ Admin Panel (Export Winners CSV)
                     </button>
                 </div>
             </div>
@@ -354,8 +364,8 @@
         </div>
 
         <!-- NAVIGATION TABS -->
-        <div class="bg-white p-2 rounded-3xl border-2 border-amber-200 grid grid-cols-4 gap-1.5 shrink-0 shadow-md">
-            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2 rounded-2xl text-amber-600 bg-amber-100 font-black text-[11px]">
+        <div class="bg-white p-2 rounded-3xl border-2 border-rose-200 grid grid-cols-4 gap-1.5 shrink-0 shadow-md">
+            <button onclick="switchTab('home')" id="nav-home" class="nav-btn active flex flex-col items-center py-2 rounded-2xl text-rose-600 bg-rose-100 font-black text-[11px]">
                 <span class="text-lg">🏠</span> Home
             </button>
             <button onclick="switchTab('missions')" id="nav-missions" class="nav-btn flex flex-col items-center py-2 rounded-2xl text-slate-400 font-black text-[11px]">
@@ -377,7 +387,7 @@
     <!-- MODAL 1: PHOTO PROOF UPLOAD -->
     <div id="photoModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
         <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-emerald-300">
-            <h3 class="font-black text-sm text-slate-800">📸 Verify Photo Proof</h3>
+            <h3 class="font-black text-sm text-slate-800">📸 Attach Photo Proof</h3>
             <p id="modalMissionName" class="text-xs font-bold text-emerald-700 bg-emerald-50 p-2.5 rounded-2xl border border-emerald-200">Mission</p>
             
             <div onclick="triggerFileSelect()" class="w-full h-44 bg-slate-50 rounded-2xl border-2 border-dashed border-emerald-300 overflow-hidden flex flex-col items-center justify-center cursor-pointer hover:bg-emerald-50/50 transition">
@@ -389,102 +399,102 @@
             </div>
 
             <div class="flex gap-2">
-                <button onclick="closePhotoModal()" class="btn-cute w-1/2 bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-2xl">Cancel</button>
-                <button onclick="submitMissionWithPhoto()" class="btn-cute w-1/2 bg-emerald-500 text-white text-xs font-bold py-2.5 rounded-2xl border-2 border-white">Confirm</button>
+                <button onclick="closePhotoModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-2xl">Cancel</button>
+                <button onclick="submitMissionWithPhoto()" class="clay-btn w-1/2 bg-emerald-500 text-white text-xs font-bold py-2.5 rounded-2xl border-2 border-white">Submit Proof</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL 2: AUTHENTICATION (LOGIN / REGISTER) -->
     <div id="authModal" class="fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-6 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-amber-300">
+        <div class="bg-white rounded-3xl p-6 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-rose-300">
             <div class="text-center">
                 <span class="text-4xl">🔐</span>
-                <h3 id="authTitle" class="font-black text-base text-slate-800 mt-1">Player Login</h3>
-                <p class="text-[11px] font-bold text-slate-500">Sign in to protect your score & rewards!</p>
+                <h3 id="authTitle" class="font-black text-base text-slate-800 mt-1">Agent Login</h3>
+                <p class="text-[11px] font-bold text-slate-500">Sign in to save your energy progress!</p>
             </div>
 
             <div class="space-y-2.5 text-xs">
                 <div>
                     <label class="font-black text-slate-700 text-[10px] uppercase">Username</label>
-                    <input type="text" id="authUsername" placeholder="e.g. AshCat99" class="w-full bg-slate-50 border-2 border-amber-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
+                    <input type="text" id="authUsername" placeholder="e.g. KittyHero99" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
                 </div>
                 <div id="emailContainer" class="hidden">
                     <label class="font-black text-slate-700 text-[10px] uppercase">Email Address</label>
-                    <input type="email" id="authEmail" placeholder="cat@example.com" class="w-full bg-slate-50 border-2 border-amber-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
+                    <input type="email" id="authEmail" placeholder="cat@example.com" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
                 </div>
                 <div>
                     <label class="font-black text-slate-700 text-[10px] uppercase">Password</label>
-                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-slate-50 border-2 border-amber-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
+                    <input type="password" id="authPassword" placeholder="••••••••" class="w-full bg-slate-50 border-2 border-rose-200 rounded-xl px-3 py-2 font-bold text-slate-800 focus:outline-none mt-0.5" />
                 </div>
             </div>
 
-            <button onclick="handleAuthSubmit()" id="authSubmitBtn" class="btn-cute w-full bg-gradient-to-r from-amber-500 to-orange-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white mt-1">
+            <button onclick="handleAuthSubmit()" id="authSubmitBtn" class="clay-btn w-full bg-gradient-to-r from-rose-500 to-pink-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white mt-1">
                 Log In
             </button>
 
             <p class="text-center text-[11px] font-extrabold text-slate-500">
-                <span id="authToggleText">Don't have an account?</span>
-                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-amber-600 underline font-black ml-1">Register</button>
+                <span id="authToggleText">Need an account?</span>
+                <button onclick="toggleAuthMode()" id="authToggleBtn" class="text-rose-600 underline font-black ml-1">Register</button>
             </p>
         </div>
     </div>
 
     <!-- MODAL 3: CLAIM REWARD FOR WINNER -->
     <div id="claimModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-amber-300">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-xs flex flex-col gap-3 shadow-2xl border-4 border-rose-300">
             <div class="text-center">
                 <span class="text-4xl">👑🎁</span>
-                <h3 class="font-black text-base text-amber-600 mt-1">Winner Claiming Form</h3>
-                <p class="text-[11px] font-bold text-slate-500 mt-0.5">Verified Rank #1 player submission</p>
+                <h3 class="font-black text-base text-rose-600 mt-1">Winner Claim Form</h3>
+                <p class="text-[11px] font-bold text-slate-500 mt-0.5">Exclusive for Verified Rank #1 Player</p>
             </div>
 
             <div class="space-y-2 text-xs">
                 <div>
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Full Real Name</label>
-                    <input type="text" id="claimFullName" placeholder="Firstname Lastname" class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
+                    <label class="font-black text-slate-700 text-[10px] uppercase">Full Name</label>
+                    <input type="text" id="claimFullName" placeholder="John Doe" class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
                 </div>
                 <div>
                     <label class="font-black text-slate-700 text-[10px] uppercase">Phone Number</label>
-                    <input type="text" id="claimPhone" placeholder="081-XXX-XXXX" class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
+                    <input type="text" id="claimPhone" placeholder="+1 234-567-890" class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
                 </div>
                 <div>
                     <label class="font-black text-slate-700 text-[10px] uppercase">Shipping Address</label>
-                    <textarea id="claimAddress" rows="2" placeholder="House No, Street, City..." class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none"></textarea>
+                    <textarea id="claimAddress" rows="2" placeholder="Street address, city, zip code..." class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none"></textarea>
                 </div>
                 <div>
-                    <label class="font-black text-slate-700 text-[10px] uppercase">Confirm Account Password</label>
-                    <input type="password" id="claimConfirmPassword" placeholder="••••••••" class="w-full bg-amber-50/50 border-2 border-amber-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
+                    <label class="font-black text-slate-700 text-[10px] uppercase">Confirm Password</label>
+                    <input type="password" id="claimConfirmPassword" placeholder="••••••••" class="w-full bg-rose-50/50 border-2 border-rose-200 rounded-xl px-3 py-1.5 font-bold text-slate-800 focus:outline-none" />
                 </div>
             </div>
 
             <div class="flex gap-2 mt-1">
-                <button onclick="closeClaimModal()" class="btn-cute w-1/2 bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-2xl">Cancel</button>
-                <button onclick="submitWinnerClaim()" class="btn-cute w-1/2 bg-gradient-to-r from-amber-400 to-orange-500 text-white text-xs font-black py-2.5 rounded-2xl border-2 border-white">Submit Info</button>
+                <button onclick="closeClaimModal()" class="clay-btn w-1/2 bg-slate-200 text-slate-700 text-xs font-bold py-2.5 rounded-2xl">Cancel</button>
+                <button onclick="submitWinnerClaim()" class="clay-btn w-1/2 bg-gradient-to-r from-rose-400 to-pink-500 text-white text-xs font-black py-2.5 rounded-2xl border-2 border-white">Submit</button>
             </div>
         </div>
     </div>
 
     <!-- MODAL 4: ADMIN DASHBOARD (EXPORT CSV) -->
     <div id="adminModal" class="hidden fixed inset-0 glass-modal flex items-center justify-center p-4 z-50">
-        <div class="bg-white rounded-3xl p-5 w-full max-w-sm flex flex-col gap-3 shadow-2xl border-4 border-amber-300">
+        <div class="bg-white rounded-3xl p-5 w-full max-w-sm flex flex-col gap-3 shadow-2xl border-4 border-rose-300">
             <div class="flex justify-between items-center">
-                <h3 class="font-black text-sm text-amber-900">⚙️ Admin Control Panel</h3>
+                <h3 class="font-black text-sm text-rose-900">⚙️ Admin Dashboard</h3>
                 <button onclick="closeAdminModal()" class="text-xs font-bold text-slate-400">✕ Close</button>
             </div>
 
-            <div class="bg-amber-50 p-3 rounded-2xl border border-amber-200 text-xs font-bold text-amber-900 flex justify-between items-center">
+            <div class="bg-rose-50 p-3 rounded-2xl border border-rose-200 text-xs font-bold text-rose-900 flex justify-between items-center">
                 <span>Total Registered Accounts:</span>
-                <span id="adminTotalUsersCount" class="font-black text-lg text-amber-600">0</span>
+                <span id="adminTotalUsersCount" class="font-black text-lg text-rose-600">0</span>
             </div>
 
-            <p class="text-[11px] font-black text-slate-700 uppercase">Monthly Verified Claimed Winners:</p>
+            <p class="text-[11px] font-black text-slate-700 uppercase">Winner Claim Requests:</p>
             <div id="adminWinnersList" class="bg-slate-50 border border-slate-200 rounded-2xl p-2.5 max-h-36 overflow-y-auto space-y-1.5 text-xs">
                 <!-- Winners Rendered Here -->
             </div>
 
-            <button onclick="exportWinnersCSV()" class="btn-cute w-full bg-emerald-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white flex items-center justify-center gap-2">
-                <span>📥</span> Export Winner Claims (CSV / Excel)
+            <button onclick="exportWinnersCSV()" class="clay-btn w-full bg-emerald-500 text-white text-xs font-black py-3 rounded-2xl border-2 border-white flex items-center justify-center gap-2">
+                <span>📥</span> Export Winners Data (CSV)
             </button>
         </div>
     </div>
@@ -533,10 +543,10 @@
 
         function toggleAuthMode() {
             authMode = authMode === 'login' ? 'register' : 'login';
-            document.getElementById('authTitle').innerText = authMode === 'login' ? 'Player Login' : 'Create Account';
+            document.getElementById('authTitle').innerText = authMode === 'login' ? 'Agent Login' : 'New Agent Registration';
             document.getElementById('emailContainer').classList.toggle('hidden', authMode === 'login');
             document.getElementById('authSubmitBtn').innerText = authMode === 'login' ? 'Log In' : 'Register Account';
-            document.getElementById('authToggleText').innerText = authMode === 'login' ? "Don't have an account?" : "Already registered?";
+            document.getElementById('authToggleText').innerText = authMode === 'login' ? "Need an account?" : "Already registered?";
             document.getElementById('authToggleBtn').innerText = authMode === 'login' ? 'Register' : 'Log In';
         }
 
@@ -546,7 +556,7 @@
             const email = document.getElementById('authEmail').value.trim();
 
             if (!username || !password || (authMode === 'register' && !email)) {
-                showToast("Please fill in all required fields!", "⚠️");
+                showToast("Please fill out all fields!", "⚠️");
                 return;
             }
 
@@ -563,17 +573,17 @@
                 currentUser = username;
                 localStorage.setItem('energycat_current_session', currentUser);
                 document.getElementById('authModal').classList.add('hidden');
-                showToast(`Welcome, ${currentUser}! Registered successfully.`, "🎉");
+                showToast(`Welcome Agent ${currentUser}! Registered successfully`, "🎉");
                 loadUserData();
             } else {
                 if (!db[username] || db[username].passwordHash !== passwordHash) {
-                    showToast("Invalid Username or Password!", "❌");
+                    showToast("Invalid username or password!", "❌");
                     return;
                 }
                 currentUser = username;
                 localStorage.setItem('energycat_current_session', currentUser);
                 document.getElementById('authModal').classList.add('hidden');
-                showToast(`Welcome back, ${currentUser}!`, "🔓");
+                showToast(`Welcome back Agent ${currentUser}!`, "🔓");
                 loadUserData();
             }
         }
@@ -582,7 +592,7 @@
             localStorage.removeItem('energycat_current_session');
             currentUser = null;
             document.getElementById('authModal').classList.remove('hidden');
-            showToast("Logged out successfully.", "🔒");
+            showToast("Logged out successfully", "🔒");
         }
 
         let gameState = { fish: 10, energy: 100 };
@@ -648,7 +658,7 @@
             playersList.forEach((p, index) => {
                 const isYou = p.username === currentUser;
                 const tr = document.createElement('tr');
-                tr.className = `border-b border-amber-100 ${isYou ? 'bg-amber-50 font-bold text-amber-900' : 'text-slate-700'}`;
+                tr.className = `border-b border-rose-100 ${isYou ? 'bg-rose-50 font-bold text-rose-900' : 'text-slate-700'}`;
 
                 let rankBadge = `#${index + 1}`;
                 if (index === 0) rankBadge = '🥇';
@@ -657,8 +667,8 @@
 
                 tr.innerHTML = `
                     <td class="p-1.5 font-bold">${rankBadge}</td>
-                    <td class="p-1.5 flex items-center gap-1">${p.username} ${isYou ? '<span class="text-[8px] bg-amber-500 text-white px-1.5 py-0.5 rounded-full font-black">YOU</span>' : ''}</td>
-                    <td class="p-1.5 text-right font-black text-amber-500">${p.fish}</td>
+                    <td class="p-1.5 flex items-center gap-1">${p.username} ${isYou ? '<span class="text-[8px] bg-rose-500 text-white px-1.5 py-0.5 rounded-full font-black">YOU</span>' : ''}</td>
+                    <td class="p-1.5 text-right font-black text-rose-500">${p.fish}</td>
                 `;
                 container.appendChild(tr);
             });
@@ -709,10 +719,10 @@
             gameState.energy = Math.min(100, gameState.energy + activeMissionData.rewardEnergy);
             saveUserData();
             closePhotoModal();
-            showToast(`Proof Verified! +${activeMissionData.rewardFish} 🐟 & +${activeMissionData.rewardEnergy}⚡`, '🌿');
+            showToast(`Proof verified! +${activeMissionData.rewardFish} 🐟 & +${activeMissionData.rewardEnergy}⚡`, '🌿');
         }
 
-        // REAL CAT SLEEPING MECHANIC
+        // CAT SLEEPING MECHANIC
         function setCatSleepState(sleep) {
             isSleeping = sleep;
             const awakeEyes = document.getElementById('catEyesAwake');
@@ -724,25 +734,25 @@
                 awakeEyes.classList.add('hidden');
                 sleepEyes.classList.remove('hidden');
                 zzz.classList.remove('hidden');
-                label.innerText = "😴 Shh... Cat is sleeping soundly!";
-                label.className = "text-xs font-black text-purple-700 mt-1 bg-purple-100 px-3.5 py-1 rounded-full border border-purple-200";
+                label.innerText = "😴 Shh... Kitty is taking a cozy nap!";
+                label.className = "text-xs font-black text-purple-700 mt-2 bg-purple-100 px-4 py-1.5 rounded-full border border-purple-200 shadow-sm z-10";
             } else {
                 awakeEyes.classList.remove('hidden');
                 sleepEyes.classList.add('hidden');
                 zzz.classList.add('hidden');
-                label.innerText = "✨ Tap cat to pet (+1⚡ Energy)";
-                label.className = "text-xs font-black text-amber-700 mt-1 bg-white/90 px-3.5 py-1 rounded-full border border-amber-200";
+                label.innerText = "✨ Tap to Pet Kitty (+1⚡ Energy)";
+                label.className = "text-xs font-black text-rose-700 mt-2 bg-white/95 px-4 py-1.5 rounded-full border border-rose-200 shadow-sm z-10";
             }
         }
 
         function petCat(e) {
             if (isSleeping) {
                 setCatSleepState(false);
-                showToast("Woke up the cat!", "🐱");
+                showToast("Woke up the kitty!", "🐱");
                 return;
             }
             if (gameState.energy >= 100) {
-                showToast("Cat energy is already full! (100/100)", "⚡");
+                showToast("Kitty energy is already maxed! (100/100)", "⚡");
                 return;
             }
             playSound(750, 'sine', 0.15);
@@ -753,7 +763,7 @@
         function feedCat() {
             if (isSleeping) setCatSleepState(false);
             if (gameState.energy >= 100) {
-                showToast("Cat energy is already full! Cannot feed.", "⚡");
+                showToast("Kitty is full! Max energy reached.", "⚡");
                 return;
             }
             if (gameState.fish < 5) { showToast('Not enough fish! Complete missions first.', '⚠️'); return; }
@@ -761,22 +771,22 @@
             gameState.fish -= 5;
             gameState.energy = Math.min(100, gameState.energy + 15);
             saveUserData();
-            showToast('Fed the cat! (-5🐟 / +15⚡)', '🍱');
+            showToast('Fed kitty yummy food (-5🐟 / +15⚡)', '🍱');
         }
 
         function restCat() {
             if (gameState.energy >= 100) {
-                showToast("Cat energy is already full! Cannot rest.", "⚡");
+                showToast("Energy is full! No rest needed.", "⚡");
                 return;
             }
             playSound(320, 'sine', 0.3);
             gameState.energy = Math.min(100, gameState.energy + 30);
             saveUserData();
             setCatSleepState(true);
-            showToast('Cat went to sleep (+30⚡)', '😴');
+            showToast('Kitty went to nap (+30⚡)', '😴');
         }
 
-        // AUTOMATIC ENERGY DECAY: -1 Energy every 5 minutes (300,000ms)
+        // AUTOMATIC ENERGY DECAY: -1 Energy every 5 mins (300,000ms)
         setInterval(() => {
             if (currentUser && gameState.energy > 0) {
                 gameState.energy = Math.max(0, gameState.energy - 1);
@@ -789,7 +799,7 @@
             const playersList = Object.keys(db).map(u => ({ username: u, fish: db[u].fish || 0 })).sort((a, b) => b.fish - a.fish);
             
             if (playersList.length > 0 && playersList[0].username !== currentUser) {
-                showToast("Only Rank #1 verified player can claim!", "🔒");
+                showToast("Only Rank #1 player can claim reward!", "🔒");
                 return;
             }
             document.getElementById('claimModal').classList.remove('hidden');
@@ -803,14 +813,14 @@
             const confirmPass = document.getElementById('claimConfirmPassword').value.trim();
 
             if (!fullName || !phone || !address || !confirmPass) {
-                showToast("Please fill in all claim details!", "⚠️");
+                showToast("Please complete all shipping details!", "⚠️");
                 return;
             }
 
             const db = getUsersDB();
             const passHash = await hashPassword(confirmPass);
             if (db[currentUser].passwordHash !== passHash) {
-                showToast("Incorrect Account Password!", "❌");
+                showToast("Incorrect password!", "❌");
                 return;
             }
 
@@ -820,7 +830,7 @@
 
             playSound(700, 'sine', 0.25);
             closeClaimModal();
-            showToast("Winner claim verified & submitted successfully! 🎁", "🎉");
+            showToast("Winner claim request submitted! 🎁", "🎉");
         }
 
         function openAdminModal() {
@@ -832,13 +842,13 @@
             listContainer.innerHTML = '';
 
             if (winners.length === 0) {
-                listContainer.innerHTML = `<p class="text-slate-400 italic font-bold text-center py-2">No winner claims submitted yet.</p>`;
+                listContainer.innerHTML = `<p class="text-slate-400 italic font-bold text-center py-2">No reward claims submitted yet.</p>`;
             } else {
                 winners.forEach(w => {
                     const div = document.createElement('div');
                     div.className = "bg-white p-2 rounded-xl border border-slate-200 shadow-sm";
                     div.innerHTML = `
-                        <p class="font-black text-amber-900">🏆 ${w.username} (${w.fullName})</p>
+                        <p class="font-black text-rose-900">🏆 ${w.username} (${w.fullName})</p>
                         <p class="text-[10px] text-slate-600">📞 ${w.phone} | 🏠 ${w.address}</p>
                     `;
                     listContainer.appendChild(div);
@@ -852,7 +862,7 @@
         function exportWinnersCSV() {
             const winners = JSON.parse(localStorage.getItem('energycat_winners_claims') || '[]');
             if (winners.length === 0) {
-                showToast("No winner claims data to export!", "⚠️");
+                showToast("No winner data to export!", "⚠️");
                 return;
             }
 
@@ -868,20 +878,20 @@
             document.body.appendChild(link);
             link.click();
             document.body.removeChild(link);
-            showToast("Winners CSV exported successfully!", "📥");
+            showToast("CSV exported successfully!", "📥");
         }
 
         function switchTab(tabId) {
             document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
             document.querySelectorAll('.nav-btn').forEach(el => {
-                el.classList.remove('text-amber-600', 'bg-amber-100');
+                el.classList.remove('text-rose-600', 'bg-rose-100');
                 el.classList.add('text-slate-400');
             });
 
             document.getElementById(`tab-${tabId}`).classList.add('active');
             const activeNav = document.getElementById(`nav-${tabId}`);
             activeNav.classList.remove('text-slate-400');
-            activeNav.classList.add('text-amber-600', 'bg-amber-100');
+            activeNav.classList.add('text-rose-600', 'bg-rose-100');
             playSound(500, 'sine', 0.1);
         }
 
