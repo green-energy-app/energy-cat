@@ -225,6 +225,7 @@
             border-radius: var(--radius-sm);
             backdrop-filter: blur(5px);
             box-shadow: 0 4px 15px rgba(0,0,0,0.05);
+            z-index: 10;
         }
 
         .fish-counter {
@@ -241,6 +242,7 @@
             align-items: center;
             gap: 8px;
             box-shadow: 0 4px 15px rgba(255, 202, 58, 0.4);
+            z-index: 10;
         }
 
         /* --- Sidebar & Panels --- */
@@ -418,9 +420,9 @@
             <span class="logo-text">Energy Cat 3D</span>
         </div>
         <div class="nav-links">
-            <button class="nav-btn active" onclick="switchTab(event, 'studio')"><i class="fa-solid fa-house"></i> Studio</button>
-            <button class="nav-btn" onclick="switchTab(event, 'closet')"><i class="fa-solid fa-shirt"></i> Closet</button>
-            <button class="nav-btn" onclick="switchTab(event, 'weight')"><i class="fa-solid fa-weight-scale"></i> Tracker</button>
+            <button class="nav-btn active" onclick="switchTab('studio')"><i class="fa-solid fa-house"></i> Studio</button>
+            <button class="nav-btn" onclick="switchTab('closet')"><i class="fa-solid fa-shirt"></i> Closet</button>
+            <button class="nav-btn" onclick="switchTab('weight')"><i class="fa-solid fa-weight-scale"></i> Tracker</button>
             <button class="nav-btn" onclick="logout()" style="color: #ff4d6d;"><i class="fa-solid fa-right-from-bracket"></i></button>
         </div>
     </navbar>
@@ -468,8 +470,9 @@
                     <i class="fa-solid fa-fish"></i>
                     <span id="closet-fish-count">0</span>
                 </div>
-                <div style="display:flex; justify-content:center; align-items:center; height:100%; font-size: 1.2rem; color: #888;">
-                    <p><i class="fa-solid fa-shirt" style="font-size: 3rem; margin-bottom: 10px; color: var(--primary); display:block; text-align:center;"></i> Customize Outfit in the Wardrobe</p>
+                <div style="display:flex; flex-direction:column; justify-content:center; align-items:center; height:100%; font-size: 1.2rem; color: #888;">
+                    <i class="fa-solid fa-shirt" style="font-size: 3.5rem; margin-bottom: 15px; color: var(--primary);"></i>
+                    <p>Customize accessories in the shop panel!</p>
                 </div>
             </div>
 
@@ -487,7 +490,7 @@
         <div id="view-weight" class="view-section">
             <div class="cat-studio" style="padding: 20px;">
                 <h3>Weight Journey Graph</h3>
-                <div style="position: relative; flex: 1; width: 100%;">
+                <div style="position: relative; flex: 1; width: 100%; min-height: 300px;">
                     <canvas id="weightChart"></canvas>
                 </div>
             </div>
@@ -537,7 +540,7 @@
             { id: 'hat_bow', name: 'Cute Bow', type: 'hat', price: 8, icon: '🎀', color: 0xff8fa3 }
         ];
 
-        /* --- AUTHENTICATION & FORGOT PASSWORD SYSTEM --- */
+        /* --- AUTHENTICATION SYSTEM --- */
         function switchAuthMode(mode) {
             document.querySelectorAll('.auth-tab').forEach(t => t.classList.remove('active'));
             document.getElementById('login-form').style.display = 'none';
@@ -621,7 +624,6 @@
                 return;
             }
 
-            // Update Password
             data.password = newP;
             localStorage.setItem('cat_user_' + u, JSON.stringify(data));
             
@@ -649,13 +651,11 @@
         }
 
         /* --- UI & NAVIGATION --- */
-        function switchTab(e, tabId) {
+        function switchTab(tabId) {
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
             document.querySelectorAll('.view-section').forEach(sec => sec.classList.remove('active'));
 
-            if(e && e.currentTarget) {
-                e.currentTarget.classList.add('active');
-            }
+            event.currentTarget.classList.add('active');
             document.getElementById('view-' + tabId).classList.add('active');
 
             if(tabId === 'weight') {
@@ -668,8 +668,7 @@
             document.getElementById('closet-fish-count').innerText = userData.fish;
             document.getElementById('cat-display-name').innerText = userData.username + "'s Cat";
 
-            // Update Stats
-            if (userData.weightLogs && userData.weightLogs.length > 0) {
+            if (userData.weightLogs.length > 0) {
                 const latest = userData.weightLogs[userData.weightLogs.length - 1];
                 document.getElementById('stat-weight').innerText = latest.weight;
                 document.getElementById('stat-date').innerText = latest.date;
@@ -679,19 +678,47 @@
             renderHistory();
         }
 
-        /* --- INTERACTION & REWARDS --- */
+        /* --- INTERACTION & ANIMATION --- */
+        let isJumping = false;
         function interactCat(action) {
             let gain = 0;
             let msg = '';
             if(action === 'pet') { gain = 1; msg = 'Cat purrs happily!'; }
             if(action === 'feed') { gain = 2; msg = 'Yummy! Cat enjoyed the treat.'; }
-            if(action === 'play') { gain = 3; msg = 'Cat did a playful flip!'; }
+            if(action === 'play') { 
+                gain = 3; 
+                msg = 'Cat did a playful jump!'; 
+                triggerJumpAnimation();
+            }
 
             userData.fish += gain;
             document.getElementById('cat-status-text').innerText = 'Status: ' + msg;
             saveUserData();
             updateUI();
-            animateCat();
+        }
+
+        function triggerJumpAnimation() {
+            if (isJumping || !catGroup) return;
+            isJumping = true;
+            let startY = catGroup.position.y;
+            let targetY = startY + 0.8;
+            let up = true;
+
+            let jumpInterval = setInterval(() => {
+                if (up) {
+                    catGroup.position.y += 0.08;
+                    catGroup.rotation.y += 0.2;
+                    if (catGroup.position.y >= targetY) up = false;
+                } else {
+                    catGroup.position.y -= 0.08;
+                    catGroup.rotation.y += 0.2;
+                    if (catGroup.position.y <= startY) {
+                        catGroup.position.y = startY;
+                        clearInterval(jumpInterval);
+                        isJumping = false;
+                    }
+                }
+            }, 16);
         }
 
         /* --- CLOSET & SHOP SYSTEM --- */
@@ -700,7 +727,7 @@
             container.innerHTML = '';
 
             catalog.forEach(item => {
-                const isEquipped = userData.equipped && userData.equipped[item.type] === item.id;
+                const isEquipped = userData.equipped[item.type] === item.id;
                 const card = document.createElement('div');
                 card.className = `item-card ${isEquipped ? 'equipped' : ''}`;
                 card.innerHTML = `
@@ -717,12 +744,10 @@
         }
 
         function toggleEquip(item) {
-            if (!userData.equipped) userData.equipped = { hat: null, glasses: null };
-
             if (userData.equipped[item.type] === item.id) {
                 userData.equipped[item.type] = null;
             } else {
-                if (userData.fish >= item.price || userData.equipped[item.type] === item.id) {
+                if (userData.fish >= item.price) {
                     userData.equipped[item.type] = item.id;
                 } else {
                     alert('Not enough Fish Tokens!');
@@ -743,10 +768,8 @@
             if (!val) return;
 
             const dateStr = new Date().toLocaleDateString('en-US', { month: 'short', day: 'numeric' });
-            if (!userData.weightLogs) userData.weightLogs = [];
-            
             userData.weightLogs.push({ date: dateStr, weight: val });
-            userData.fish += 10; // Reward
+            userData.fish += 10;
 
             document.getElementById('input-weight').value = '';
             saveUserData();
@@ -758,11 +781,9 @@
         function renderHistory() {
             const list = document.getElementById('history-list');
             list.innerHTML = '';
-            if (!userData.weightLogs) return;
-
             [...userData.weightLogs].reverse().forEach(log => {
                 const li = document.createElement('li');
-                li.style.cssText = 'background:#f9f9f9; padding:10px; border-radius:8px; display:flex; justify-content:space-between;';
+                li.style.cssText = 'background:#f9f9f9; padding:10px; border-radius:8px; display:flex; justify-content:space-between; font-size:0.9rem;';
                 li.innerHTML = `<span>${log.date}</span> <strong>${log.weight} kg</strong>`;
                 list.appendChild(li);
             });
@@ -793,7 +814,7 @@
         }
 
         function renderChart() {
-            if (!weightChartInstance || !userData.weightLogs) return;
+            if (!weightChartInstance) return;
             weightChartInstance.data.labels = userData.weightLogs.map(l => l.date);
             weightChartInstance.data.datasets[0].data = userData.weightLogs.map(l => l.weight);
             weightChartInstance.update();
@@ -802,7 +823,6 @@
         /* --- THREE.JS 3D CAT ENGINE --- */
         let scene, camera, renderer, catGroup;
         let hatMesh = null, glassesMesh = null;
-        let isAnimating = false;
 
         function init3D() {
             const container = document.getElementById('canvas-container');
@@ -824,7 +844,7 @@
             dirLight.position.set(5, 10, 7);
             scene.add(dirLight);
 
-            // Build Cat
+            // Build Cat Model
             catGroup = new THREE.Group();
 
             const catMaterial = new THREE.MeshToonMaterial({ color: 0xffa559 });
@@ -866,75 +886,54 @@
 
             scene.add(catGroup);
 
-            update3DAccessories();
-
             // Animation Loop
             function animate() {
                 requestAnimationFrame(animate);
-                if(!isAnimating) {
+                if (!isJumping) {
                     catGroup.rotation.y += 0.005;
                 }
                 renderer.render(scene, camera);
             }
             animate();
 
+            update3DAccessories();
+
+            // Handle Resize
             window.addEventListener('resize', () => {
-                if (!container) return;
-                camera.aspect = container.clientWidth / container.clientHeight;
-                camera.updateProjectionMatrix();
-                renderer.setSize(container.clientWidth, container.clientHeight);
-            });
-        }
-
-        function animateCat() {
-            isAnimating = true;
-            let startY = catGroup.position.y;
-            let time = 0;
-            
-            let jumpInterval = setInterval(() => {
-                time += 0.2;
-                catGroup.position.y = startY + Math.sin(time) * 0.5;
-                catGroup.rotation.y += 0.2;
-
-                if (time >= Math.PI * 2) {
-                    clearInterval(jumpInterval);
-                    catGroup.position.y = startY;
-                    isAnimating = false;
+                if (container && renderer && camera) {
+                    camera.aspect = container.clientWidth / container.clientHeight;
+                    camera.updateProjectionMatrix();
+                    renderer.setSize(container.clientWidth, container.clientHeight);
                 }
-            }, 30);
+            });
         }
 
         function update3DAccessories() {
             if (!catGroup) return;
 
+            // Remove existing accessories
             if (hatMesh) { catGroup.remove(hatMesh); hatMesh = null; }
             if (glassesMesh) { catGroup.remove(glassesMesh); glassesMesh = null; }
 
-            const equipped = userData.equipped;
-            if (!equipped) return;
-
-            // Render Hat
-            if (equipped.hat) {
-                const item = catalog.find(c => c.id === equipped.hat);
-                if (item) {
+            // Add Hat
+            if (userData.equipped.hat) {
+                const hatData = catalog.find(i => i.id === userData.equipped.hat);
+                if (hatData) {
                     const hatGeo = new THREE.ConeGeometry(0.3, 0.5, 16);
-                    const hatMat = new THREE.MeshToonMaterial({ color: item.color });
+                    const hatMat = new THREE.MeshToonMaterial({ color: hatData.color });
                     hatMesh = new THREE.Mesh(hatGeo, hatMat);
                     hatMesh.position.set(0, 2.5, 0.1);
                     catGroup.add(hatMesh);
                 }
             }
 
-            // Render Glasses
-            if (equipped.glasses) {
-                const item = catalog.find(c => c.id === equipped.glasses);
-                if (item) {
-                    const glassGeo = new THREE.BoxGeometry(0.6, 0.15, 0.05);
-                    const glassMat = new THREE.MeshToonMaterial({ color: item.color });
-                    glassesMesh = new THREE.Mesh(glassGeo, glassMat);
-                    glassesMesh.position.set(0, 1.85, 0.65);
-                    catGroup.add(glassesMesh);
-                }
+            // Add Glasses
+            if (userData.equipped.glasses) {
+                const glassGeo = new THREE.BoxGeometry(0.6, 0.15, 0.1);
+                const glassMat = new THREE.MeshToonMaterial({ color: 0x111111 });
+                glassesMesh = new THREE.Mesh(glassGeo, glassMat);
+                glassesMesh.position.set(0, 1.85, 0.65);
+                catGroup.add(glassesMesh);
             }
         }
     </script>
