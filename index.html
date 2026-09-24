@@ -432,720 +432,394 @@ body{
   </div>
 </div>
 
+<!-- FIREBASE SDK INJECTION -->
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-app-compat.js"></script>
+<script src="https://www.gstatic.com/firebasejs/9.22.1/firebase-database-compat.js"></script>
+
 <script>
 /* ============================================================
-   ENERGY CAT STUDIO — engine
-   Local: accounts + credentials (localStorage, never uploaded)
-   Cloud: public leaderboard profile (shared db, cross-device)
+   ENERGY CAT STUDIO — Firebase Realtime Sync Engine
    ============================================================ */
+
+// ตั้งค่าโปรเจกต์ Firebase energy-cat
+const firebaseConfig = {
+  databaseURL: "https://energy-cat-default-rtdb.firebaseio.com"
+};
+
+if (!firebase.apps.length) {
+  firebase.initializeApp(firebaseConfig);
+}
+const database = firebase.database();
 
 const DB_KEY   = 'ENERGY_CAT_ACCOUNTS_V3';
 const SESS_KEY = 'ENERGY_CAT_ACTIVE_USER';
 
-const ENERGY_MS = 3 * 60 * 1000;  // -1 energy each 3 real minutes
-const SLEEP_MS  = 4 * 60 * 1000;  // -1 sleep   each 4 real minutes
-const LOW = 20;
-
-/* ---- Wardrobe ---- */
-const dressItems = {
-  head: [
-    { id:'h1',  name:'Red Bow',        price:10, icon:'🎀', html:'<span style="font-size:36px;position:absolute;top:12px;left:45px;transform:rotate(-15deg)">🎀</span>' },
-    { id:'h2',  name:'Golden Crown',   price:20, icon:'👑', html:'<span style="font-size:32px;position:absolute;top:6px;left:70px">👑</span>' },
-    { id:'h3',  name:'Party Hat',      price:15, icon:'🎉', html:'<span style="font-size:34px;position:absolute;top:4px;left:68px">🎉</span>' },
-    { id:'h4',  name:'Graduation Cap', price:25, icon:'🎓', html:'<span style="font-size:34px;position:absolute;top:4px;left:66px">🎓</span>' },
-    { id:'h5',  name:'Flower Crown',   price:15, icon:'🌸', html:'<span style="font-size:32px;position:absolute;top:12px;left:66px">🌸</span>' },
-    { id:'h6',  name:'Bear Ears',      price:12, icon:'🐻', html:'<span style="font-size:32px;position:absolute;top:8px;left:68px">🐻</span>' },
-    { id:'h7',  name:'Witch Hat',      price:18, icon:'🧙‍♀️', html:'<span style="font-size:36px;position:absolute;top:2px;left:65px">🧙‍♀️</span>' },
-    { id:'h8',  name:'Chef Hat',       price:15, icon:'👨‍🍳', html:'<span style="font-size:36px;position:absolute;top:0px;left:68px">👨‍🍳</span>' },
-    { id:'h9',  name:'Cowboy Hat',     price:18, icon:'🤠', html:'<span style="font-size:34px;position:absolute;top:6px;left:66px">🤠</span>' },
-    { id:'h10', name:'Santa Hat',      price:15, icon:'🎅', html:'<span style="font-size:36px;position:absolute;top:2px;left:68px">🎅</span>' }
-  ],
-  apron: [
-    { id:'a1',  name:'Strawberry Apron', price:15, icon:'🍓', c:'#FF4D6D' },
-    { id:'a2',  name:'Bee Bib',          price:15, icon:'🐝', c:'#FFCA3A' },
-    { id:'a3',  name:'Star Bib',         price:12, icon:'⭐', c:'#FFD166' },
-    { id:'a4',  name:'Heart Apron',      price:15, icon:'💖', c:'#FF8FA3' },
-    { id:'a5',  name:'Fish Bib',         price:18, icon:'🐟', c:'#4EA8DE' },
-    { id:'a6',  name:'Flower Apron',     price:15, icon:'🌻', c:'#8AC926' },
-    { id:'a7',  name:'Clover Apron',     price:12, icon:'🍀', c:'#52B788' },
-    { id:'a8',  name:'Ribbon Bib',       price:15, icon:'🎀', c:'#F72585' },
-    { id:'a9',  name:'Paw Print Bib',    price:20, icon:'🐾', c:'#B5179E' },
-    { id:'a10', name:'Rainbow Apron',    price:22, icon:'🌈', c:'linear-gradient(90deg,#ffadad,#ffd6a5,#fdffb6,#caffbf,#9bf6ff,#a0c4ff,#bdb2ff)' }
-  ]
-};
-dressItems.apron.forEach(it => {
-  it.html = '<div style="position:absolute;top:110px;left:50px;width:100px;height:50px;background:'+it.c+
-            ';border:3px solid #5C2C16;border-radius:12px 12px 24px 24px;display:flex;align-items:center;justify-content:center;font-size:24px;box-shadow:0 4px 6px rgba(0,0,0,.15);z-index:25">'+it.icon+'</div>';
-});
-
-/* ---- State ---- */
-let accounts = {};
 let currentUser = null;
-let currentDressCategory = 'head';
-let activeMission = null;
-
-let cloud = null;                 // db namespace or null
-let cloudReady = false;
-let cloudPlayers = [];            // [{username,catName,weight,level,updatedAt}]
-let cloudUnsub = null;
-let cloudPending = false;
-
+let userData = null;
 let isResting = false;
-let restTimer = null;
-let restGained = 0;
+let restInterval = null;
+let activeDressCategory = 'head';
+let activePendingMission = null;
 
-/* ---- Boot ---- */
+// โหลดข้อมูลบัญชีทั้งหมด
+function getLocalAccounts() {
+  return JSON.parse(localStorage.getItem(DB_KEY) || '{}');
+}
+
+function saveLocalAccounts(accs) {
+  localStorage.setItem(DB_KEY, JSON.stringify(accs));
+}
+
+// เริ่มต้นแอป
 window.addEventListener('DOMContentLoaded', () => {
-  loadAccounts();
-  checkAutoLogin();
-  setInterval(tickLoop, 15000);
-  refreshNotifyButton();
-  renderLeaderboard();
-  initCloud();               // resolves later; page works without it
-});
-
-window.addEventListener('storage', () => {
-  loadAccounts();
-  if (currentUser && accounts[currentUser]) { updateUI(); renderDressUpGrid(); }
-  renderLeaderboard();
-});
-
-document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) { applyDecay(); updateUI(); }
-});
-
-function cur(){ return currentUser ? accounts[currentUser] : null; }
-
-/* ---- Storage ---- */
-function loadAccounts(){
-  try { accounts = JSON.parse(localStorage.getItem(DB_KEY) || '{}'); }
-  catch(e){ accounts = {}; }
-  Object.values(accounts).forEach(migrate);
-}
-function saveAccounts(){
-  try { localStorage.setItem(DB_KEY, JSON.stringify(accounts)); } catch(e){}
-}
-function migrate(a){
-  const now = Date.now();
-  if (typeof a.sleep  !== 'number') a.sleep = 100;
-  if (typeof a.energy !== 'number') a.energy = 100;
-  if (!a.lastEnergyTick) a.lastEnergyTick = a.lastDecayTime || now;
-  if (!a.lastSleepTick)  a.lastSleepTick  = a.lastDecayTime || now;
-  if (!a.flags) a.flags = { energyLow:false, sleepLow:false };
-  if (!a.unlockedItems) a.unlockedItems = [];
-  if (!a.equipped) a.equipped = { head:null, apron:null };
-  if (typeof a.contactInfo !== 'string') a.contactInfo = '';
-  delete a.lastDecayTime;
-}
-
-/* ============ AUTH ============ */
-function switchAuthTab(tab){
-  ['loginForm','registerForm','forgotForm','syncForm'].forEach(id => document.getElementById(id).classList.add('hidden'));
-  const box = document.getElementById('authTabsContainer');
-  const lb = document.getElementById('authTabLogin'), rb = document.getElementById('authTabRegister');
-  const on  = "w-1/2 py-1.5 text-xs font-black rounded-xl bg-rose-500 text-white shadow-sm transition";
-  const off = "w-1/2 py-1.5 text-xs font-black rounded-xl text-rose-700 transition";
-  if (tab === 'login')      { box.classList.remove('hidden'); lb.className = on; rb.className = off; document.getElementById('loginForm').classList.remove('hidden'); }
-  else if (tab === 'register'){ box.classList.remove('hidden'); rb.className = on; lb.className = off; document.getElementById('registerForm').classList.remove('hidden'); }
-  else { box.classList.add('hidden'); document.getElementById(tab === 'forgot' ? 'forgotForm' : 'syncForm').classList.remove('hidden'); }
-}
-
-function handleRegister(e){
-  e.preventDefault();
-  loadAccounts();
-  const username = document.getElementById('regUsername').value.trim();
-  const catName  = document.getElementById('regCatName').value.trim();
-  if (!username || !catName) return;
-  if (accounts[username]) { showToast('❌ Username already exists!', '⚠️'); return; }
-  if (cloudPlayers.some(p => (p.username||'').toLowerCase() === username.toLowerCase())) {
-    showToast('❌ That username is taken online!', '⚠️'); return;
-  }
-  const now = Date.now();
-  accounts[username] = {
-    username, catName,
-    password: document.getElementById('regPassword').value,
-    question: document.getElementById('regSecurityQuestion').value,
-    answer: document.getElementById('regSecurityAnswer').value.trim().toLowerCase(),
-    fish:100, weight:2.00, level:1, exp:0, energy:100, sleep:100,
-    contactInfo:'', joinedAt: now,
-    lastEnergyTick: now, lastSleepTick: now,
-    flags:{ energyLow:false, sleepLow:false },
-    unlockedItems:[], equipped:{ head:null, apron:null }
-  };
-  saveAccounts();
-  pushCloudProfile(accounts[username]);
-  showToast('✨ Account created! Please login.', '🎉');
-  switchAuthTab('login');
-  document.getElementById('registerForm').reset();
-}
-
-function handleLogin(e){
-  e.preventDefault();
-  loadAccounts();
-  const username = document.getElementById('loginUsername').value.trim();
-  const password = document.getElementById('loginPassword').value;
-  if (!accounts[username] || accounts[username].password !== password) {
-    showToast('❌ Invalid username or password', '⚠️'); return;
-  }
-  currentUser = username;
-  try { localStorage.setItem(SESS_KEY, username); } catch(e){}
-  document.getElementById('authModal').classList.add('hidden');
-  document.getElementById('loginForm').reset();
-  initUserSession();
-  showToast('Welcome back, ' + username + '!', '😸');
-}
-
-function handleForgotPassword(e){
-  e.preventDefault();
-  loadAccounts();
-  const username = document.getElementById('forgotUsername').value.trim();
-  const acc = accounts[username];
-  if (!acc) { showToast('❌ Username not found', '⚠️'); return; }
-  if (acc.question !== document.getElementById('forgotSecurityQuestion').value ||
-      acc.answer   !== document.getElementById('forgotSecurityAnswer').value.trim().toLowerCase()) {
-    showToast('❌ Incorrect security question or answer', '⚠️'); return;
-  }
-  acc.password = document.getElementById('forgotNewPassword').value;
-  saveAccounts();
-  showToast('🔑 Password reset! Please login.', '✨');
-  switchAuthTab('login');
-  document.getElementById('forgotForm').reset();
-}
-
-function exportAccountKey(){
-  const acc = cur(); if (!acc) return;
-  const key = btoa(unescape(encodeURIComponent(JSON.stringify(acc))));
-  copyText(key, '📋 Account Sync Key copied!', '🔑');
-}
-
-function handleImportData(e){
-  e.preventDefault();
-  try {
-    const obj = JSON.parse(decodeURIComponent(escape(atob(document.getElementById('syncDataInput').value.trim()))));
-    if (!obj.username || !obj.password) throw new Error('bad');
-    migrate(obj);
-    loadAccounts();
-    accounts[obj.username] = obj;
-    saveAccounts();
-    pushCloudProfile(obj);
-    showToast('📲 Account imported! Please login.', '✨');
-    switchAuthTab('login');
-    document.getElementById('syncForm').reset();
-  } catch(err){ showToast('❌ Invalid Sync Key Data!', '⚠️'); }
-}
-
-function logout(){
-  stopRest(false);
-  try { localStorage.removeItem(SESS_KEY); } catch(e){}
-  currentUser = null;
-  document.getElementById('authModal').classList.remove('hidden');
-  switchAuthTab('login');
-  showToast('Logged out successfully', '👋');
-}
-
-function checkAutoLogin(){
-  let s = null;
-  try { s = localStorage.getItem(SESS_KEY); } catch(e){}
-  if (s && accounts[s]) {
-    currentUser = s;
+  renderWardrobeCatalog();
+  const activeUser = localStorage.getItem(SESS_KEY);
+  const accs = getLocalAccounts();
+  
+  if (activeUser && accs[activeUser]) {
+    currentUser = activeUser;
+    userData = accs[activeUser];
     document.getElementById('authModal').classList.add('hidden');
-    initUserSession();
+    updateUI();
   } else {
     document.getElementById('authModal').classList.remove('hidden');
   }
+
+  // ซิงค์ Leaderboard Realtime จาก Firebase
+  database.ref('leaderboard').on('value', (snapshot) => {
+    const data = snapshot.val() || {};
+    renderLeaderboard(data);
+    document.getElementById('cloudStatus').innerText = '🟢 Cloud Online';
+    document.getElementById('cloudStatus').className = 'text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300';
+  }, (error) => {
+    document.getElementById('cloudStatus').innerText = '🔴 Offline';
+  });
+
+  // Loop ลด Energy ตามเวลา
+  setInterval(passiveEnergyDrain, 15000);
+});
+
+// ส่งข้อมูล Leaderboard ขึ้น Firebase
+function syncUserToFirebase() {
+  if (!currentUser || !userData) return;
+  database.ref('leaderboard/' + currentUser).set({
+    username: currentUser,
+    catName: userData.catName,
+    weight: parseFloat(userData.weight || 2.0).toFixed(2),
+    level: userData.level || 1,
+    lastUpdate: Date.now()
+  });
 }
 
-function initUserSession(){
-  applyDecay();
+function updateUI() {
+  if (!userData) return;
+
+  document.getElementById('displayUser').innerText = currentUser;
+  document.getElementById('displayCatName').innerText = userData.catName;
+  document.getElementById('fishCount').innerText = userData.fish;
+  
+  document.getElementById('catLevelBadge').innerText = `LVL ${userData.level}`;
+  document.getElementById('catWeightBadge').innerText = `⚖️ ${parseFloat(userData.weight).toFixed(2)} kg`;
+  
+  const maxExp = userData.level * 50;
+  document.getElementById('expText').innerText = `${userData.exp}/${maxExp} EXP`;
+  document.getElementById('expBar').style.width = `${Math.min(100, (userData.exp / maxExp) * 100)}%`;
+
+  document.getElementById('energyText').innerText = `${userData.energy}/100`;
+  document.getElementById('energyBar').style.width = `${userData.energy}%`;
+
+  document.getElementById('sleepText').innerText = `${userData.sleep}/100`;
+  document.getElementById('sleepBar').style.width = `${userData.sleep}%`;
+
+  // อัปเดตการแต่งตัว
+  renderEquippedItems();
+
+  // เซฟลง LocalStorage + Firebase
+  const accs = getLocalAccounts();
+  accs[currentUser] = userData;
+  saveLocalAccounts(accs);
+  syncUserToFirebase();
+}
+
+function showToast(msg, icon = '✨') {
+  const t = document.getElementById('toastNotification');
+  document.getElementById('toastIcon').innerText = icon;
+  document.getElementById('toastMessage').innerText = msg;
+  t.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-6');
+  setTimeout(() => {
+    t.classList.add('opacity-0', 'pointer-events-none', '-translate-y-6');
+  }, 2500);
+}
+
+// ระบบ Auth
+function switchAuthTab(tab) {
+  ['loginForm', 'registerForm', 'syncForm', 'forgotForm'].forEach(id => document.getElementById(id).classList.add('hidden'));
+  if (tab === 'login') document.getElementById('loginForm').classList.remove('hidden');
+  if (tab === 'register') document.getElementById('registerForm').classList.remove('hidden');
+  if (tab === 'sync') document.getElementById('syncForm').classList.remove('hidden');
+  if (tab === 'forgot') document.getElementById('forgotForm').classList.remove('hidden');
+}
+
+function handleLogin(e) {
+  e.preventDefault();
+  const u = document.getElementById('loginUsername').value.trim();
+  const p = document.getElementById('loginPassword').value;
+  const accs = getLocalAccounts();
+
+  if (accs[u] && accs[u].password === p) {
+    currentUser = u;
+    userData = accs[u];
+    localStorage.setItem(SESS_KEY, u);
+    document.getElementById('authModal').classList.add('hidden');
+    updateUI();
+    showToast(`Welcome back ${u}!`, '🐱');
+  } else {
+    showToast('Invalid Username or Password', '❌');
+  }
+}
+
+function handleRegister(e) {
+  e.preventDefault();
+  const u = document.getElementById('regUsername').value.trim();
+  const c = document.getElementById('regCatName').value.trim();
+  const p = document.getElementById('regPassword').value;
+  const q = document.getElementById('regSecurityQuestion').value;
+  const a = document.getElementById('regSecurityAnswer').value.trim().toLowerCase();
+
+  const accs = getLocalAccounts();
+  if (accs[u]) {
+    showToast('Username already exists!', '⚠️');
+    return;
+  }
+
+  accs[u] = {
+    password: p,
+    catName: c,
+    secQuestion: q,
+    secAnswer: a,
+    fish: 100,
+    level: 1,
+    exp: 0,
+    weight: 2.00,
+    energy: 100,
+    sleep: 100,
+    outfit: { head: null, apron: null }
+  };
+
+  saveLocalAccounts(accs);
+  currentUser = u;
+  userData = accs[u];
+  localStorage.setItem(SESS_KEY, u);
+  document.getElementById('authModal').classList.add('hidden');
   updateUI();
-  renderDressUpGrid();
-  renderLeaderboard();
-  pushCloudProfile();
+  showToast('Account Created!', '🎉');
 }
 
-/* ============ OFFLINE TIMESTAMP DECAY ============ */
-function applyDecay(){
-  const acc = cur(); if (!acc) return;
-  const now = Date.now();
+function logout() {
+  localStorage.removeItem(SESS_KEY);
+  location.reload();
+}
 
-  const eLoss = Math.floor((now - acc.lastEnergyTick) / ENERGY_MS);
-  if (eLoss > 0) { acc.energy = Math.max(0, acc.energy - eLoss); acc.lastEnergyTick += eLoss * ENERGY_MS; }
+// ระบบให้อาหาร และ พักผ่อน
+function feedCat() {
+  if (userData.fish < 5) {
+    showToast('Not enough fish! Do missions.', '🐟');
+    return;
+  }
+  userData.fish -= 5;
+  userData.weight += 0.15;
+  userData.exp += 10;
 
+  const maxExp = userData.level * 50;
+  if (userData.exp >= maxExp) {
+    userData.level += 1;
+    userData.exp = 0;
+    showToast(`Level Up! LVL ${userData.level}`, '🎉');
+  } else {
+    showToast('Fed Mikan! +0.15kg', '🍱');
+  }
+  updateUI();
+}
+
+function toggleRest() {
+  isResting = !isResting;
+  const btnLabel = document.getElementById('restBtnLabel');
+  const sleepFx = document.getElementById('sleepEffect');
+
+  if (isResting) {
+    btnLabel.innerText = 'Wake Up ☀️';
+    sleepFx.classList.remove('hidden');
+    restInterval = setInterval(() => {
+      if (userData.sleep < 100) {
+        userData.sleep = Math.min(100, userData.sleep + 5);
+        updateUI();
+      }
+    }, 2000);
+  } else {
+    btnLabel.innerText = 'Rest (💤 fills slowly)';
+    sleepFx.classList.add('hidden');
+    clearInterval(restInterval);
+  }
+}
+
+function passiveEnergyDrain() {
+  if (!userData) return;
   if (!isResting) {
-    const sLoss = Math.floor((now - acc.lastSleepTick) / SLEEP_MS);
-    if (sLoss > 0) { acc.sleep = Math.max(0, acc.sleep - sLoss); acc.lastSleepTick += sLoss * SLEEP_MS; }
+    userData.energy = Math.max(0, userData.energy - 1);
+    userData.sleep = Math.max(0, userData.sleep - 1);
+    updateUI();
   }
-
-  if (eLoss > 0 || (!isResting)) saveAccounts();
-  checkLowAlerts(acc);
 }
 
-function tickLoop(){
-  applyDecay();
+// ระบบ Tab
+function switchTab(tab) {
+  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
+  document.querySelectorAll('.nav-btn').forEach(el => {
+    el.classList.remove('active', 'text-rose-600', 'bg-rose-100');
+    el.classList.add('text-slate-400');
+  });
+
+  document.getElementById(`tab-${tab}`).classList.add('active');
+  const nav = document.getElementById(`nav-${tab}`);
+  nav.classList.add('active', 'text-rose-600', 'bg-rose-100');
+  nav.classList.remove('text-slate-400');
+}
+
+// ตู้เสื้อผ้า (Wardrobe Catalog)
+const WARDROBE = {
+  head: [
+    { id: 'crown', name: '👑 Royal Crown' },
+    { id: 'bow', name: '🎀 Pink Bow' },
+    { id: 'hat', name: '🎩 Top Hat' }
+  ],
+  apron: [
+    { id: 'bell', name: '🔔 Golden Bell' },
+    { id: 'scarf', name: '🧣 Red Scarf' }
+  ]
+};
+
+function renderWardrobeCatalog() {
+  const container = document.getElementById('dressItemsGrid');
+  container.innerHTML = '';
+  WARDROBE[activeDressCategory].forEach(item => {
+    const btn = document.createElement('button');
+    btn.className = 'clay-btn bg-rose-50 border border-pink-200 p-2 rounded-xl text-xs font-black text-rose-800 flex items-center justify-between shadow-sm';
+    btn.innerHTML = `<span>${item.name}</span><span class="text-[10px] bg-rose-500 text-white px-2 py-0.5 rounded-full">Wear</span>`;
+    btn.onclick = () => wearItem(activeDressCategory, item.id);
+    container.appendChild(btn);
+  });
+}
+
+function switchDressCategory(cat) {
+  activeDressCategory = cat;
+  document.querySelectorAll('.dress-tab-btn').forEach(b => {
+    b.className = 'dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200';
+  });
+  document.getElementById(`cat-${cat}-btn`).className = 'dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300';
+  renderWardrobeCatalog();
+}
+
+function wearItem(category, itemId) {
+  if (!userData) return;
+  userData.outfit = userData.outfit || {};
+  userData.outfit[category] = itemId;
   updateUI();
+  showToast(`Equipped ${itemId}`, '👗');
 }
 
-/* ============ NOTIFICATIONS ============ */
-function notifySupported(){ try { return typeof Notification !== 'undefined'; } catch(e){ return false; } }
-
-function refreshNotifyButton(){
-  const btn = document.getElementById('notifyBtn');
-  if (!notifySupported()) { btn.innerText = '🔕'; btn.title = 'Notifications not available here'; return; }
-  btn.innerText = Notification.permission === 'granted' ? '🔔' : '🔕';
-}
-
-function enableNotifications(){
-  if (!notifySupported()) { showToast('⚠️ Notifications not supported in this view', '🔕'); return; }
-  if (Notification.permission === 'granted') { showToast('🔔 Low-stat alerts are already on', '✅'); return; }
-  Notification.requestPermission().then(p => {
-    refreshNotifyButton();
-    showToast(p === 'granted' ? '🔔 Alerts enabled! We will warn you under 20%' : '🔕 Alerts stay off', p === 'granted' ? '✅' : '👌');
-  }).catch(() => showToast('⚠️ Could not request permission', '🔕'));
-}
-
-function fireNotification(title, body){
-  if (!notifySupported() || Notification.permission !== 'granted') return;
-  try { new Notification(title, { body: body, tag: 'energy-cat', icon: '' }); } catch(e){}
-}
-
-function checkLowAlerts(acc){
-  let changed = false;
-  if (acc.energy < LOW && !acc.flags.energyLow) {
-    acc.flags.energyLow = true; changed = true;
-    fireNotification('😿 ' + acc.catName + ' is hungry!', 'Energy is at ' + acc.energy + '%. Feed your cat or run an eco mission.');
-  } else if (acc.energy >= LOW + 5 && acc.flags.energyLow) { acc.flags.energyLow = false; changed = true; }
-
-  if (acc.sleep < LOW && !acc.flags.sleepLow) {
-    acc.flags.sleepLow = true; changed = true;
-    fireNotification('💤 ' + acc.catName + ' is sleepy!', 'Sleep is at ' + acc.sleep + '%. Tap Rest to let your cat nap.');
-  } else if (acc.sleep >= LOW + 5 && acc.flags.sleepLow) { acc.flags.sleepLow = false; changed = true; }
-
-  if (changed) saveAccounts();
-}
-
-/* ============ UI ============ */
-function updateUI(){
-  const acc = cur(); if (!acc) return;
-
-  document.getElementById('displayUser').innerText = acc.username;
-  document.getElementById('displayCatName').innerText = acc.catName;
-  document.getElementById('fishCount').innerText = acc.fish;
-  document.getElementById('catLevelBadge').innerText = 'LVL ' + acc.level;
-  document.getElementById('catWeightBadge').innerText = '⚖️ ' + acc.weight.toFixed(2) + ' kg';
-  document.getElementById('expText').innerText = acc.exp + '/50 EXP';
-  document.getElementById('expBar').style.width = Math.min(100, (acc.exp / 50) * 100) + '%';
-
-  document.getElementById('energyText').innerText = acc.energy + '/100';
-  document.getElementById('energyBar').style.width = acc.energy + '%';
-  document.getElementById('sleepText').innerText = Math.round(acc.sleep) + '/100';
-  document.getElementById('sleepBar').style.width = acc.sleep + '%';
-
-  const awake = document.getElementById('catEyesAwake');
-  const sad   = document.getElementById('catEyesSad');
-  const asleep= document.getElementById('catEyesSleep');
-  const banner= document.getElementById('sadWarningBanner');
-  const zzz   = document.getElementById('sleepEffect');
-  const breath= document.getElementById('catBreath');
-
-  awake.classList.add('hidden'); sad.classList.add('hidden'); asleep.classList.add('hidden');
-
-  if (isResting) {
-    asleep.classList.remove('hidden');
-    zzz.classList.remove('hidden');
-    breath.classList.add('animate-breathe-slow'); breath.classList.remove('animate-breathe');
-    banner.classList.add('hidden');
-    document.getElementById('catStatusLabel').innerText = '💤 Sleeping… ' + Math.round(acc.sleep) + '%';
-  } else {
-    zzz.classList.add('hidden');
-    breath.classList.remove('animate-breathe-slow'); breath.classList.add('animate-breathe');
-    const lowE = acc.energy < LOW, lowS = acc.sleep < LOW;
-    if (lowE || lowS) {
-      sad.classList.remove('hidden');
-      banner.classList.remove('hidden');
-      document.getElementById('sadWarningText').innerText =
-        lowE && lowS ? 'Energy & Sleep below 20%! Your cat is hungry and exhausted!'
-        : lowE ? 'Energy below 20%! Your cat is hungry and sad!'
-        : 'Sleep below 20%! Your cat is exhausted and sad!';
-      document.getElementById('catStatusLabel').innerText = lowE && !lowS ? '😿 Hungry & Sad… (Low Energy!)'
-        : (!lowE && lowS ? '😿 Sleepy & Sad… (Low Sleep!)' : '😿 Hungry, sleepy & sad…');
-    } else {
-      awake.classList.remove('hidden');
-      banner.classList.add('hidden');
-      document.getElementById('catStatusLabel').innerText = '✨ Tap Cat to Show Love 💕';
-    }
-  }
-
-  updateRestButton();
-  renderEquippedOverlay();
-}
-
-function updateRestButton(){
-  const acc = cur();
-  const label = document.getElementById('restBtnLabel');
-  const btn = document.getElementById('restBtn');
-  if (!acc) return;
-  if (isResting) {
-    label.innerText = 'Sleeping… ' + Math.round(acc.sleep) + '% (tap to wake)';
-    btn.className = 'clay-btn bg-gradient-to-r from-slate-500 to-indigo-600 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md';
-  } else {
-    label.innerText = 'Rest (💤 fills slowly)';
-    btn.className = 'clay-btn bg-gradient-to-r from-indigo-400 to-purple-400 text-white font-black py-2 px-1 border-2 border-white text-xs flex items-center justify-center gap-1 shadow-md';
-  }
-}
-
-function renderEquippedOverlay(){
-  const acc = cur(); if (!acc) return;
-  const h = document.getElementById('slot-head'), a = document.getElementById('slot-apron');
-  h.innerHTML = ''; a.innerHTML = '';
-  if (acc.equipped.head)  { const it = dressItems.head.find(i => i.id === acc.equipped.head);   if (it) h.innerHTML = it.html; }
-  if (acc.equipped.apron) { const it = dressItems.apron.find(i => i.id === acc.equipped.apron); if (it) a.innerHTML = it.html; }
-}
-
-/* ============ ACTIONS ============ */
-function addExp(pts){
-  const acc = cur();
-  acc.exp += pts;
-  while (acc.exp >= 50) {
-    acc.level += 1; acc.exp -= 50; acc.fish += 20;
-    showToast('🎉 Level Up! Level ' + acc.level + '! Earned +20 🐟 Fish!', '🌟');
-  }
-  saveAccounts();
-}
-
-function petCat(e){
-  if (!currentUser) return;
-  const stage = document.getElementById('catStage');
-  const rect = stage.getBoundingClientRect();
-  const heart = document.createElement('div');
-  heart.className = 'heart-pop';
-  heart.innerText = isResting ? '💤' : '💖';
-  heart.style.left = (e.clientX - rect.left) + 'px';
-  heart.style.top  = (e.clientY - rect.top) + 'px';
-  stage.appendChild(heart);
-  setTimeout(() => heart.remove(), 900);
-}
-
-function feedCat(){
-  const acc = cur(); if (!acc) return;
-  if (isResting) { showToast('💤 Your cat is asleep — wake it first!', '😴'); return; }
-  if (acc.energy >= 100) { showToast('❌ Cat is full! Energy already 100%.', '🥣'); return; }
-  if (acc.fish < 5) { showToast('❌ Not enough Fish tokens!', '🐟'); return; }
-  acc.fish -= 5;
-  acc.weight += 0.15;
-  acc.energy = Math.min(100, acc.energy + 15);
-  acc.lastEnergyTick = Date.now();
-  addExp(10);
-  saveAccounts(); checkLowAlerts(acc); updateUI(); queueCloudPush();
-  showToast('🍱 Yum! Fed your cat (+0.15kg / +15⚡)', '😋');
-}
-
-/* ---- Gradual, time-based rest ---- */
-function toggleRest(){ isResting ? stopRest(true) : startRest(); }
-
-function startRest(){
-  const acc = cur(); if (!acc) return;
-  if (acc.sleep >= 100) { showToast('⚡ Sleep meter is already full!', '😴'); return; }
-  isResting = true; restGained = 0;
-  acc.lastSleepTick = Date.now();
+function resetOutfit() {
+  if (!userData) return;
+  userData.outfit = { head: null, apron: null };
   updateUI();
-  showToast('😴 ' + acc.catName + ' curled up for a nap…', '💤');
-  restTimer = setInterval(restTick, 800);
+  showToast('Outfit Reset', '🔄');
 }
 
-function restTick(){
-  const acc = cur();
-  if (!acc) { stopRest(false); return; }
-  acc.sleep = Math.min(100, acc.sleep + 2);
-  acc.lastSleepTick = Date.now();
-  restGained += 2;
-  document.getElementById('sleepText').innerText = Math.round(acc.sleep) + '/100';
-  document.getElementById('sleepBar').style.width = acc.sleep + '%';
-  document.getElementById('catStatusLabel').innerText = '💤 Sleeping… ' + Math.round(acc.sleep) + '%';
-  updateRestButton();
-  if (acc.sleep >= 100) { stopRest(true, true); }
+function renderEquippedItems() {
+  const hSlot = document.getElementById('slot-head');
+  const aSlot = document.getElementById('slot-apron');
+  hSlot.innerHTML = '';
+  aSlot.innerHTML = '';
+
+  if (userData.outfit?.head === 'crown') hSlot.innerHTML = '<span class="absolute top-2 left-[86px] text-3xl z-30">👑</span>';
+  if (userData.outfit?.head === 'bow') hSlot.innerHTML = '<span class="absolute top-4 left-[88px] text-2xl z-30">🎀</span>';
+  if (userData.outfit?.head === 'hat') hSlot.innerHTML = '<span class="absolute top-1 left-[86px] text-3xl z-30">🎩</span>';
+
+  if (userData.outfit?.apron === 'bell') aSlot.innerHTML = '<span class="absolute top-[108px] left-[90px] text-xl z-30">🔔</span>';
+  if (userData.outfit?.apron === 'scarf') aSlot.innerHTML = '<span class="absolute top-[105px] left-[88px] text-xl z-30">🧣</span>';
 }
 
-function stopRest(reward, full){
-  if (restTimer) { clearInterval(restTimer); restTimer = null; }
-  if (!isResting) return;
-  isResting = false;
-  const acc = cur();
-  if (acc && reward && restGained > 0) {
-    const gain = Math.min(0.05, 0.05 * (restGained / 100));
-    acc.weight += gain;
-    addExp(5);
-    showToast(full ? '🌞 Fully rested! 💤 100% (+' + gain.toFixed(2) + 'kg)' : '🌞 Woke up! 💤 ' + Math.round(acc.sleep) + '% (+' + gain.toFixed(2) + 'kg)', '✨');
-    queueCloudPush();
+// Leaderboard Render
+function renderLeaderboard(data) {
+  const list = Object.values(data).sort((a, b) => b.weight - a.weight);
+  const tbody = document.getElementById('leaderboardRows');
+  tbody.innerHTML = '';
+
+  document.getElementById('totalPlayersCount').innerText = `👥 ${list.length} Users`;
+
+  if (list.length > 0) {
+    document.getElementById('monthlyChampionName').innerText = `${list[0].catName} (${list[0].username})`;
   }
-  restGained = 0;
-  saveAccounts();
-  if (acc) checkLowAlerts(acc);
-  updateUI();
+
+  list.forEach((p, idx) => {
+    const tr = document.createElement('tr');
+    tr.className = 'border-b border-rose-50 font-bold text-slate-700 text-[11px]';
+    tr.innerHTML = `
+      <td class="p-1 font-black ${idx === 0 ? 'text-amber-500' : ''}">#${idx + 1}</td>
+      <td class="p-1">${p.catName} <span class="text-[9px] text-slate-400">(${p.username})</span></td>
+      <td class="p-1 text-right text-purple-700 font-black">${p.weight} kg</td>
+    `;
+    tbody.appendChild(tr);
+  });
 }
 
-/* ============ ECO MISSIONS ============ */
-function openMissionUploadModal(name, fish, energy, sleep){
-  if (!currentUser) return;
-  activeMission = { name, fish, energy, sleep };
-  document.getElementById('modalMissionName').innerText = 'Mission: ' + name;
-  document.getElementById('photoPreview').classList.add('hidden');
-  document.getElementById('uploadPlaceholder').classList.remove('hidden');
+function petCat(e) {
+  showToast('Purrr... 💕', '😸');
+}
+
+// Modal อัปโหลดภารกิจ
+function openMissionUploadModal(title, f, e, s) {
+  activePendingMission = { title, f, e, s };
+  document.getElementById('modalMissionName').innerText = title;
   document.getElementById('photoModal').classList.remove('hidden');
 }
-function closePhotoModal(){ document.getElementById('photoModal').classList.add('hidden'); activeMission = null; }
-function triggerFileSelect(){ document.getElementById('photoFileInput').click(); }
-function handlePhotoUpload(e){
-  const file = e.target.files[0]; if (!file) return;
-  const reader = new FileReader();
-  reader.onload = ev => {
-    const img = document.getElementById('photoPreview');
-    img.src = ev.target.result;
-    img.classList.remove('hidden');
-    document.getElementById('uploadPlaceholder').classList.add('hidden');
-  };
-  reader.readAsDataURL(file);
-}
-function submitMissionWithPhoto(){
-  if (document.getElementById('photoPreview').classList.contains('hidden')) {
-    showToast('⚠️ Please choose a photo proof first!', '📷'); return;
-  }
-  const acc = cur(); if (!acc || !activeMission) return;
-  acc.fish   += activeMission.fish;
-  acc.energy  = Math.min(100, acc.energy + activeMission.energy);
-  acc.sleep   = Math.min(100, acc.sleep  + activeMission.sleep);
-  acc.lastEnergyTick = acc.lastSleepTick = Date.now();
-  addExp(20);
-  const m = activeMission;
-  saveAccounts(); checkLowAlerts(acc); updateUI(); closePhotoModal(); queueCloudPush();
-  document.getElementById('photoFileInput').value = '';
-  showToast('🌱 Mission done! +' + m.fish + '🐟 +' + m.energy + '⚡ +' + m.sleep + '💤', '🎉');
+
+function closePhotoModal() {
+  document.getElementById('photoModal').classList.add('hidden');
 }
 
-/* ============ DRESS UP ============ */
-function switchDressCategory(cat){
-  currentDressCategory = cat;
-  const on  = "dress-tab-btn active bg-pink-500 text-white font-black text-xs py-1.5 rounded-xl border border-pink-300";
-  const off = "dress-tab-btn bg-pink-100 text-pink-700 font-black text-xs py-1.5 rounded-xl border border-pink-200";
-  document.getElementById('cat-head-btn').className  = cat === 'head'  ? on : off;
-  document.getElementById('cat-apron-btn').className = cat === 'apron' ? on : off;
-  renderDressUpGrid();
+function triggerFileSelect() {
+  document.getElementById('photoFileInput').click();
 }
 
-function renderDressUpGrid(){
-  const acc = cur(); if (!acc) return;
-  const grid = document.getElementById('dressItemsGrid');
-  grid.innerHTML = '';
-  dressItems[currentDressCategory].forEach(item => {
-    const unlocked = acc.unlockedItems.includes(item.id);
-    const equipped = acc.equipped[currentDressCategory] === item.id;
-    const card = document.createElement('div');
-    card.className = 'p-2 rounded-xl border-2 flex flex-col items-center justify-between transition ' + (equipped ? 'bg-pink-100 border-pink-500' : 'bg-slate-50 border-rose-100');
-    card.innerHTML =
-      '<div class="text-2xl my-0.5">' + item.icon + '</div>' +
-      '<div class="text-[10px] font-black text-slate-800 text-center truncate w-full">' + item.name + '</div>' +
-      '<div class="mt-1 w-full">' + (
-        equipped ? '<button onclick="unequipItem(\'' + currentDressCategory + '\')" class="clay-btn w-full bg-rose-500 text-white font-black text-[9px] py-1 rounded-lg">Unequip</button>'
-        : unlocked ? '<button onclick="equipItem(\'' + currentDressCategory + '\',\'' + item.id + '\')" class="clay-btn w-full bg-emerald-500 text-white font-black text-[9px] py-1 rounded-lg">Equip</button>'
-        : '<button onclick="buyItem(\'' + currentDressCategory + '\',\'' + item.id + '\',' + item.price + ')" class="clay-btn w-full bg-amber-400 text-slate-900 font-black text-[9px] py-1 rounded-lg">Buy (' + item.price + '🐟)</button>'
-      ) + '</div>';
-    grid.appendChild(card);
-  });
-}
-
-function buyItem(cat, id, price){
-  const acc = cur();
-  if (acc.fish < price) { showToast('❌ Not enough Fish tokens!', '🐟'); return; }
-  acc.fish -= price;
-  acc.unlockedItems.push(id);
-  acc.equipped[cat] = id;
-  saveAccounts(); updateUI(); renderDressUpGrid();
-  showToast('🛍️ Outfit purchased and equipped!', '✨');
-}
-function equipItem(cat, id){ const a = cur(); a.equipped[cat] = id; saveAccounts(); updateUI(); renderDressUpGrid(); showToast('✨ Outfit equipped!', '👗'); }
-function unequipItem(cat){ const a = cur(); a.equipped[cat] = null; saveAccounts(); updateUI(); renderDressUpGrid(); showToast('🔄 Outfit unequipped', '👕'); }
-function resetOutfit(){ const a = cur(); a.equipped.head = null; a.equipped.apron = null; saveAccounts(); updateUI(); renderDressUpGrid(); showToast('🔄 All outfits removed!', '✨'); }
-
-/* ============ CLOUD LEADERBOARD (shared db) ============ */
-function slug(name){
-  const s = String(name).toLowerCase().replace(/[^a-z0-9_\-.~:@+]/g, '-').slice(0, 60);
-  return s || 'player';
-}
-
-async function initCloud(){
-  try {
-    if (!window.claude || typeof window.claude.use !== 'function') { setCloudStatus('offline'); return; }
-    cloud = await window.claude.use('db');
-  } catch(e){ cloud = null; }
-  if (!cloud) { setCloudStatus('offline'); return; }
-  cloudReady = true;
-  setCloudStatus('online');
-  subscribeCloud();
-  pushCloudProfile();
-}
-
-function subscribeCloud(){
-  if (!cloud || cloudUnsub) return;
-  try {
-    cloudUnsub = cloud.collection('players').orderBy('weight', 'desc').limit(300).onSnapshot(
-      snap => {
-        cloudPlayers = snap.docs.map(d => {
-          const v = d.data() || {};
-          return {
-            username: String(v.username || d.id),
-            catName:  String(v.catName || 'Cat'),
-            weight:   Number(v.weight) || 0,
-            level:    Number(v.level) || 1,
-            updatedAt: Number(v.updatedAt) || 0
-          };
-        });
-        setCloudStatus('online');
-        renderLeaderboard();
-      },
-      err => { cloudUnsub = null; setCloudStatus(err && err.code === 'revoked' ? 'offline' : 'offline'); renderLeaderboard(); }
-    );
-  } catch(e){ setCloudStatus('offline'); }
-}
-
-function queueCloudPush(){
-  if (cloudPending) return;
-  cloudPending = true;
-  setTimeout(() => { cloudPending = false; pushCloudProfile(); }, 1200);
-}
-
-async function pushCloudProfile(account){
-  const acc = account || cur();
-  if (!cloud || !acc) return;
-  try {
-    await cloud.doc('players/' + slug(acc.username)).set({
-      username: acc.username,
-      catName:  acc.catName,
-      weight:   Number(acc.weight.toFixed(2)),
-      level:    acc.level,
-      joinedAt: acc.joinedAt || Date.now(),
-      updatedAt: Date.now()
-    });
-  } catch(e){
-    if (e && (e.code === 'invalid_argument' || e.code === 'revoked')) setCloudStatus('readonly');
+function handlePhotoUpload(e) {
+  const file = e.target.files[0];
+  if (file) {
+    const reader = new FileReader();
+    reader.onload = (evt) => {
+      document.getElementById('photoPreview').src = evt.target.result;
+      document.getElementById('photoPreview').classList.remove('hidden');
+      document.getElementById('uploadPlaceholder').classList.add('hidden');
+    };
+    reader.readAsDataURL(file);
   }
 }
 
-function setCloudStatus(mode){
-  const el = document.getElementById('cloudStatus');
-  if (!el) return;
-  if (mode === 'online')        { el.className = 'text-[9px] font-black px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-700 border border-emerald-300'; el.innerText = '🌐 Live — synced across devices'; }
-  else if (mode === 'readonly') { el.className = 'text-[9px] font-black px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-300';   el.innerText = '👁️ Live (read-only view)'; }
-  else                          { el.className = 'text-[9px] font-black px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 border border-slate-200';   el.innerText = '📴 Offline — this device only'; }
+function submitMissionWithPhoto() {
+  if (!activePendingMission) return;
+  userData.fish += activePendingMission.f;
+  userData.energy = Math.min(100, userData.energy + activePendingMission.e);
+  userData.sleep = Math.min(100, userData.sleep + activePendingMission.s);
+  
+  updateUI();
+  closePhotoModal();
+  showToast(`Mission Done! +${activePendingMission.f}🐟`, '🎉');
 }
 
-/* Merge cloud players with local accounts (local wins only for fresher own data) */
-function mergedPlayers(){
-  const map = new Map();
-  cloudPlayers.forEach(p => map.set(p.username.toLowerCase(), Object.assign({ source:'cloud' }, p)));
-  Object.values(accounts).forEach(a => {
-    const k = a.username.toLowerCase();
-    const existing = map.get(k);
-    const local = { username:a.username, catName:a.catName, weight:a.weight, level:a.level, source:'local' };
-    if (!existing) map.set(k, local);
-    else if (a.username === currentUser && a.weight > existing.weight) map.set(k, Object.assign({}, existing, local));
-  });
-  return Array.from(map.values()).sort((a,b) => b.weight - a.weight);
-}
-
-function renderLeaderboard(){
-  const rows = document.getElementById('leaderboardRows');
-  if (!rows) return;
-  loadAccounts();
-  const list = mergedPlayers();
-  document.getElementById('totalPlayersCount').innerText = '👥 ' + list.length + (list.length === 1 ? ' User' : ' Users');
-  rows.innerHTML = '';
-
-  const champEl = document.getElementById('monthlyChampionName');
-  const formBox = document.getElementById('winnerContactFormBox');
-  if (list.length) {
-    const champ = list[0];
-    champEl.innerText = champ.username + ' (Cat: ' + champ.catName + ' — ' + champ.weight.toFixed(2) + 'kg)';
-    if (currentUser && champ.username === currentUser) {
-      formBox.classList.remove('hidden');
-      const acc = cur();
-      if (acc && acc.contactInfo) document.getElementById('championContactInput').value = acc.contactInfo;
-    } else formBox.classList.add('hidden');
-  } else {
-    champEl.innerText = 'No registered players yet';
-    formBox.classList.add('hidden');
-  }
-
-  list.forEach((p, i) => {
-    const me = p.username === currentUser;
-    const tr = document.createElement('tr');
-    tr.className = 'border-b border-rose-50 ' + (me ? 'bg-pink-50 font-black' : '');
-    tr.innerHTML =
-      '<td class="p-1 font-black text-rose-600">#' + (i + 1) + '</td>' +
-      '<td class="p-1"><div class="font-black text-slate-800"></div><div class="text-[9px] text-purple-600 font-bold"></div></td>' +
-      '<td class="p-1 text-right font-black text-purple-900">' + p.weight.toFixed(2) + ' kg</td>';
-    const cells = tr.querySelectorAll('td div');
-    cells[0].textContent = p.username + (me ? ' ⭐' : '') + (p.source === 'cloud' ? ' 🌐' : '');
-    cells[1].textContent = 'Cat: ' + p.catName;
-    rows.appendChild(tr);
-  });
-}
-
-function copyPlayerList(){
-  const list = mergedPlayers();
-  if (!list.length) { showToast('⚠️ No players to copy yet', '📋'); return; }
-  const lines = ['Energy Cat Studio — Registered Players (' + list.length + ')',
-                 'Exported: ' + new Date().toLocaleString(), ''];
-  list.forEach((p, i) => lines.push('#' + (i + 1) + '\t' + p.username + '\tCat: ' + p.catName + '\tLvl ' + p.level + '\t' + p.weight.toFixed(2) + ' kg'));
-  copyText(lines.join('\n'), '📋 Player list copied (' + list.length + ' users)', '✅');
-}
-
-function copyText(text, okMsg, icon){
-  const helper = document.getElementById('copyHelper');
-  helper.value = text;
-  const done = () => showToast(okMsg, icon || '📋');
-  if (navigator.clipboard && navigator.clipboard.writeText) {
-    navigator.clipboard.writeText(text).then(done).catch(() => legacyCopy(helper, done));
-  } else legacyCopy(helper, done);
-}
-function legacyCopy(helper, done){
-  try {
-    helper.style.left = '0'; helper.style.position = 'fixed'; helper.style.opacity = '0';
-    helper.select(); helper.setSelectionRange(0, helper.value.length);
-    const ok = document.execCommand('copy');
-    helper.style.left = '-9999px';
-    ok ? done() : showToast('⚠️ Press Ctrl/Cmd+C to copy', '📋');
-  } catch(e){ showToast('⚠️ Copy blocked by browser', '📋'); }
-}
-
-function handleSaveContactInfo(e){
-  e.preventDefault();
-  const acc = cur(); if (!acc) return;
-  acc.contactInfo = document.getElementById('championContactInput').value.trim();
-  saveAccounts();
-  showToast('📩 Champion contact details saved on this device!', '🎉');
-}
-
-/* ============ NAV + TOAST ============ */
-function switchTab(tab){
-  document.querySelectorAll('.tab-content').forEach(el => el.classList.remove('active'));
-  document.querySelectorAll('.nav-btn').forEach(b => b.className = 'nav-btn flex flex-col items-center py-1.5 rounded-xl text-slate-400 font-black text-[10px]');
-  document.getElementById('tab-' + tab).classList.add('active');
-  document.getElementById('nav-' + tab).className = 'nav-btn active flex flex-col items-center py-1.5 rounded-xl text-rose-600 bg-rose-100 font-black text-[10px]';
-  if (tab === 'dressup') renderDressUpGrid();
-  if (tab === 'ranks')   { renderLeaderboard(); if (cloudReady && !cloudUnsub) subscribeCloud(); }
-}
-
-let toastTimer = null;
-function showToast(msg, icon){
-  const toast = document.getElementById('toastNotification');
-  document.getElementById('toastMessage').innerText = msg;
-  document.getElementById('toastIcon').innerText = icon || '✨';
-  toast.classList.remove('opacity-0', 'pointer-events-none', '-translate-y-6');
-  toast.classList.add('opacity-100', 'translate-y-0');
-  if (toastTimer) clearTimeout(toastTimer);
-  toastTimer = setTimeout(() => {
-    toast.classList.remove('opacity-100', 'translate-y-0');
-    toast.classList.add('opacity-0', 'pointer-events-none', '-translate-y-6');
-  }, 2600);
+function exportAccountKey() {
+  if (!currentUser) return;
+  const key = btoa(JSON.stringify({ u: currentUser, p: userData.password }));
+  navigator.clipboard.writeText(key);
+  showToast('Sync Key copied to clipboard!', '🔑');
 }
 </script>
 </body>
